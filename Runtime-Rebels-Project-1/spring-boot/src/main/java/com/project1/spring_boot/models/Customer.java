@@ -6,6 +6,11 @@ import jakarta.persistence.Id;
 
 public class Customer {
 
+    /* This is the standard format we follow:
+        Strings, Integers, etc
+        Constructor
+        Getters and setters
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int customerId;
@@ -26,5 +31,5 @@ public class Customer {
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
     }
-    
+
 }
