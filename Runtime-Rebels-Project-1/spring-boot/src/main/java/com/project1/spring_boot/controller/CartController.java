@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project1.spring_boot.models.Cart;
-import com.project1.spring_boot.models.CartRepository;
+import com.project1.spring_boot.repository.CartRepository;
 
 import jakarta.servlet.http.HttpServletResponse;
 
