@@ -1,11 +1,22 @@
 package com.project1.spring_boot.models;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
-@Entity(name="CART")
+@Entity(name = "CART")
 public class Cart {
-    private int cartId;
-    private int customerId;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int cartId; // Primary Key
+
+    @ManyToOne
+    @JoinColumn(name = "customerId")
+    private Customer customerId; // Foreign Key - Refers to the primary key (pointer)
 
     public Cart() {
     }
@@ -14,17 +25,15 @@ public class Cart {
         return cartId;
     }
 
-    public int getCustomerId() {
-        return customerId;
-    }
-
     public void setCartId(int cartId) {
         this.cartId = cartId;
     }
 
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
+    public Customer getCustomerId() {
+        return customerId;
     }
 
-
+    public void setCustomerId(Customer customerId) {
+        this.customerId = customerId;
+    }
 }
