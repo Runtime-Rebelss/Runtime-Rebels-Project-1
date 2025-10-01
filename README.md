@@ -9,5 +9,10 @@ Ecommerce website project
 
 ## Running the Program:
 - Create an account on MongoDB, and then send me your username!
-- Start the MongoDB with the VS extension (MongoDB for VS Code), or 
+### VS Code:
+- Download MongoDB for VS Code extension.
+- Open the extension, press connect and a window will open, type: `mongodb+srv://<db_username>:<db_password>@runtimerebels.otltnjb.mongodb.net/`, replace `<db_username>` and `<db_password>` with your username and password, then press enter.
+- Run `ShoppingCartApplication.java` and in your browser, type http://localhost:8080
+### IntelliJ:
+- d
 - Run `ShoppingCartApplication.java` and in your brower, type in http://localhost:8080
