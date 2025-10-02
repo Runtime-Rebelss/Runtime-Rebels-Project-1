@@ -1,39 +1,38 @@
 package com.project1.spring_boot.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import java.time.LocalDateTime;
 
-@Entity(name = "CART")
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+// @Document() specifies the collection name
+
+@Document("Cart")
 public class Cart {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int cartId; // Primary Key
+    private int id;
 
-    @ManyToOne
-    @JoinColumn(name = "customerId")
-    private Customer customerId; // Foreign Key - Refers to the primary key (pointer)
+    private LocalDateTime createdAt = LocalDateTime.now();
 
-    public Cart() {
+    public Cart(int id, LocalDateTime createdAt) {
+        this.id = id;
+        this.createdAt = createdAt;
     }
 
-    public int getCartId() {
-        return cartId;
+    public int getId() {
+        return id;
     }
 
-    public void setCartId(int cartId) {
-        this.cartId = cartId;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public Customer getCustomerId() {
-        return customerId;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCustomerId(Customer customerId) {
-        this.customerId = customerId;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
+
 }
