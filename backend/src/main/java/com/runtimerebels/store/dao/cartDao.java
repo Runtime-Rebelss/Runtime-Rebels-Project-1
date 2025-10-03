@@ -1,8 +1,9 @@
-package com.project1.spring_boot.dao;
+package com.runtimerebels.store.dao;
 
-import com.project1.spring_boot.models.Cart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import com.runtimerebels.store.models.Cart;
 
 @Repository
 public class cartDao {

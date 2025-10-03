@@ -1,4 +1,4 @@
-package com.project1.spring_boot.models;
+package com.runtimerebels.store.models;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

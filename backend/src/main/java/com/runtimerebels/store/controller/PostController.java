@@ -1,4 +1,4 @@
-package com.project1.spring_boot.controller;
+package com.runtimerebels.store.controller;
 
 import java.io.IOException;
 import java.util.List;
@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.project1.spring_boot.models.Post;
-import com.project1.spring_boot.models.PostRepository;
+import com.runtimerebels.store.models.Post;
+import com.runtimerebels.store.models.PostRepository;
 
 import jakarta.servlet.http.HttpServletResponse;
 
