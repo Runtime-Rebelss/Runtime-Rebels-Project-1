@@ -1,0 +1,73 @@
+Index: backend/.gitignore
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>HELP.md\r\ntarget/\r\n.mvn/wrapper/maven-wrapper.jar\r\n!**/src/main/**/target/\r\n!**/src/test/**/target/\r\n\r\n# --- Maven (Spring Boot backend) ---\r\nbackend/target/\r\n\r\n### STS ###\r\n.apt_generated\r\n.classpath\r\n.factorypath\r\n.project\r\n.settings\r\n.springBeans\r\n.sts4-cache\r\n\r\n### IntelliJ IDEA ###\r\n.idea\r\n*.iws\r\n*.iml\r\n*.ipr\r\n\r\n### NetBeans ###\r\n/nbproject/private/\r\n/nbbuild/\r\n/dist/\r\n/nbdist/\r\n/.nb-gradle/\r\nbuild/\r\n!**/src/main/**/build/\r\n!**/src/test/**/build/\r\n\r\n### VS Code ###\r\n.vscode/\r\n
+===================================================================
+diff --git a/backend/.gitignore b/backend/.gitignore
+--- a/backend/.gitignore	(revision 78ef2da1720f2f05b164391b0489bede12d5991a)
++++ b/backend/.gitignore	(date 1759525488319)
+@@ -1,36 +1,15 @@
+-HELP.md
+-target/
+-.mvn/wrapper/maven-wrapper.jar
+-!**/src/main/**/target/
+-!**/src/test/**/target/
++# --- IDE ---
++.idea/
++.vscode/
++*.iml
+ 
+ # --- Maven (Spring Boot backend) ---
+ backend/target/
+ 
+-### STS ###
+-.apt_generated
+-.classpath
+-.factorypath
+-.project
+-.settings
+-.springBeans
+-.sts4-cache
+-
+-### IntelliJ IDEA ###
+-.idea
+-*.iws
+-*.iml
+-*.ipr
++# --- Node (React frontend) ---
++frontend/node_modules/
++frontend/.env
+ 
+-### NetBeans ###
+-/nbproject/private/
+-/nbbuild/
+-/dist/
+-/nbdist/
+-/.nb-gradle/
+-build/
+-!**/src/main/**/build/
+-!**/src/test/**/build/
+-
+-### VS Code ###
+-.vscode/
++# --- OS system files ---
++.DS_Store
++Thumbs.db
+\ No newline at end of file
+Index: .idea/dataSources.local.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"dataSourceStorageLocal\" created-in=\"IU-252.26830.84\">\r\n    <data-source name=\"@runtimerebels.otltnjb.mongodb.net\" uuid=\"867aaeda-735a-4e53-8f12-2c35441330d2\">\r\n      <database-info product=\"Mongo DB\" version=\"8.0.13\" jdbc-version=\"4.2\" driver-name=\"MongoDB JDBC Driver\" driver-version=\"1.20\" dbms=\"MONGO\" exact-version=\"8.0.13\" exact-driver-version=\"1.20\" />\r\n      <case-sensitivity plain-identifiers=\"mixed\" quoted-identifiers=\"mixed\" />\r\n      <secret-storage>master_key</secret-storage>\r\n      <user-name>Hlocke124</user-name>\r\n      <schema-mapping>\r\n        <introspection-scope>\r\n          <node kind=\"schema\">\r\n            <name qname=\"@\" />\r\n            <name qname=\"runtimerebels\" />\r\n          </node>\r\n        </introspection-scope>\r\n      </schema-mapping>\r\n    </data-source>\r\n  </component>\r\n</project>
+===================================================================
+diff --git a/.idea/dataSources.local.xml b/.idea/dataSources.local.xml
+--- a/.idea/dataSources.local.xml	(revision 78ef2da1720f2f05b164391b0489bede12d5991a)
++++ b/.idea/dataSources.local.xml	(date 1759525204586)
+@@ -2,7 +2,7 @@
+ <project version="4">
+   <component name="dataSourceStorageLocal" created-in="IU-252.26830.84">
+     <data-source name="@runtimerebels.otltnjb.mongodb.net" uuid="867aaeda-735a-4e53-8f12-2c35441330d2">
+-      <database-info product="Mongo DB" version="8.0.13" jdbc-version="4.2" driver-name="MongoDB JDBC Driver" driver-version="1.20" dbms="MONGO" exact-version="8.0.13" exact-driver-version="1.20" />
++      <database-info product="Mongo DB" version="8.0.14" jdbc-version="4.2" driver-name="MongoDB JDBC Driver" driver-version="1.20" dbms="MONGO" exact-version="8.0.14" exact-driver-version="1.20" />
+       <case-sensitivity plain-identifiers="mixed" quoted-identifiers="mixed" />
+       <secret-storage>master_key</secret-storage>
+       <user-name>Hlocke124</user-name>
