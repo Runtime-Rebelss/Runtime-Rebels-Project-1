@@ -1,4 +1,4 @@
-package com.project1.spring_boot.models;
+package com.runtimerebels.store.models;
 
 import jakarta.persistence.*;
 import java.util.*;

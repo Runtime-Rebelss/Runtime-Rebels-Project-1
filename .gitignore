@@ -1,5 +1,6 @@
-# --- IntelliJ / IDE ---
+# --- IDE ---
 .idea/
+.vscode/
 *.iml
 
 # --- Maven (Spring Boot backend) ---

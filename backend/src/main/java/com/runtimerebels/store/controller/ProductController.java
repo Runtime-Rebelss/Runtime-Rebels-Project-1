@@ -1,9 +1,10 @@
-package com.project1.spring_boot.controller;
-import com.project1.spring_boot.dao.ProductRepository;
-import com.project1.spring_boot.models.Product;
+package com.runtimerebels.store.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import com.runtimerebels.store.dao.ProductRepository;
+import com.runtimerebels.store.models.Product;
 
 import java.util.List;
 /**

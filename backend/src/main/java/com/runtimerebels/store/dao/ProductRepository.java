@@ -1,6 +1,7 @@
-package com.project1.spring_boot.dao;
-import com.project1.spring_boot.models.Product;
+package com.runtimerebels.store.dao;
 import org.springframework.data.mongodb.repository.MongoRepository;
+
+import com.runtimerebels.store.models.Product;
 
 import java.math.BigDecimal;
 import java.util.List;
