@@ -1,4 +1,4 @@
-package com.project1.spring_boot;
+package com.runtimerebels.store;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
