@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.runtimerebels.store.models.Cart;
 
 @Repository
-public class cartDao {
+public class CartDao {
     
 }
