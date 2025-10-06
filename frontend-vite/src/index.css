@@ -3,7 +3,3 @@
 @plugin "daisyui" {
     themes: retro --default;
 }
-
-.inset-top-white-shadow {
-  box-shadow: inset 0 8px 16px -8px white;
-}
