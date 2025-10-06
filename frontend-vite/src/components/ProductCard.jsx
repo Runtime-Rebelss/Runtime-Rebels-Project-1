@@ -21,7 +21,8 @@ function ProductCard({ product }) {
             <div className="card-body flex-auto">
                 <h2 className="card-title flex text-base-content">{product.name}</h2>
                 <div className="card-actions flex justify-between items-center mt-4 relative"> {/*lg:absolute lg:bottom-4 lg:right-4 lg:flex lg:flex-col lg:items-end lg:gap-2*/}
-                    <div className="font-normal text-2xl">${product.price}</div>
+                    <div className="font-normal text-2xl">${Number(product.price).toFixed(2)}
+                    </div>
                     <button className="btn btn-soft btn-primary rounded-full gap-2">
                         <ShoppingBag />
                         <span>Add to Bag</span>
