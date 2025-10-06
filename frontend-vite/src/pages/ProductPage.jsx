@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router";
-import toast from "react-hot-toast";
-import api from "../lib/axios";
+import React, { useEffect, useState } from 'react'
+import { useParams, useNavigate } from 'react-router'
+import toast from 'react-hot-toast'
+
+import api from '../lib/axios'
+import Navbar from '../components/Navbar'
 
 const ProductPage = () => {
     const { id } = useParams();
@@ -25,26 +27,35 @@ const ProductPage = () => {
         fetchProduct();
     }, [id]);
 
-    if (loading) return <div className="p-6 text-center">Loading...</div>;
+  if (loading) {
+    return (
+        <div className="flex items-center justify-center h-screen">
+            <span className="loading loading-spinner loading-xl"></span>
+        </div>
+    )
+  }
+
     if (!product) return <div className="p-6 text-center">Product not found</div>;
 
     return (
-        <div className="max-w-6xl mx-auto p-6 flex flex-col lg:flex-row gap-10">
-            {/* Image */}
-            <div className="flex-1 flex items-center justify-center">
-                <img
-                    src={product.imageUrl}
-                    alt={product.name}
-                    className="max-w-sm w-full h-auto object-contain"
-                />
-            </div>
+        <div>
+            <Navbar />
+            <div className="max-w-6xl mx-auto p-6 flex flex-col lg:flex-row gap-10">
+                {/* Image */}
+                <div className="flex-1 flex items-center justify-center">
+                    <img
+                        src={product.imageUrl}
+                        alt={product.name}
+                        className="max-w-sm w-full h-auto object-contain"
+                    />
+                </div>
 
-            {/* Info */}
-            <div className="flex-1 flex flex-col justify-center">
-                {/* Category */}
-                <p className="text-gray-500 uppercase text-sm tracking-wide mb-2">
-                    {product.category}
-                </p>
+                {/* Info */}
+                <div className="flex-1 flex flex-col justify-center">
+                    {/* Category */}
+                    <p className="text-gray-500 uppercase text-sm tracking-wide mb-2">
+                        {product.category}
+                    </p>
 
                 {/* Name */}
                 <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
@@ -72,6 +83,7 @@ const ProductPage = () => {
                 >
                     ← Back to Products
                 </button>
+                </div>
             </div>
         </div>
     );

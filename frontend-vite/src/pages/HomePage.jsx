@@ -29,21 +29,25 @@ const HomePage = () => {
     }, []);
 
     if (loading) {
-        return <span className="loading loading-spinner loading-xl"></span>;
+        return (
+            <div className="flex items-center justify-center h-screen">
+                <span className="loading loading-spinner loading-xl"></span>
+            </div>
+        )
     }
 
     return (
         <div>
             <Navbar />
             <div className="container mx-auto mt-8">
-            <h1 className="text-3xl font-bold mb-6">Welcome to scamazon</h1>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {products.map(product => (
-                    <ProductCard key={product._id} product={product} />
-                ))}
+                <h1 className="text-3xl font-bold mb-6">Welcome to scamazon</h1>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    {products.map(product => (
+                        <ProductCard key={product._id} product={product} />
+                    ))}
+                </div>
             </div>
         </div>
-    </div>
   )
 }
 
