@@ -1,0 +1,15 @@
+# --- IDE ---
+.idea/
+.vscode/
+*.iml
+
+# --- Maven (Spring Boot backend) ---
+backend/target/
+
+# --- Node (React frontend) ---
+frontend/node_modules/
+frontend/.env
+
+# --- OS system files ---
+.DS_Store
+Thumbs.db
