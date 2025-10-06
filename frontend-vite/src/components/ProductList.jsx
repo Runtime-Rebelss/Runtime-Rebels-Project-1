@@ -1,15 +1,33 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import toast from 'react-hot-toast';
+
+import api from '../lib/axios';
 
 function ProductList() {
     const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch('http://localhost:8080/products')
-            .then(response => response.json())
-            .then(data => setProducts(data))
-            .catch(error => console.error('Error fetching products:', error));
+        const fetchProducts = async () => {
+            try {
+                const response = await api.get('/products');
+                setProducts(response.data);
+            } catch (error) {
+                console.error("Error fetching products:", error);
+                toast.error("Failed to load products!");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProducts();
     }, []);
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+    
 
     return (
         <div>
@@ -17,7 +35,7 @@ function ProductList() {
             <ul>
                 {products.map(product => (
                     <li key={product.id}>
-                        <Link to={`/product/${product.id}`}>{product.name}</Link>
+                        <Link to={`/products/${product.id}`}>{product.name}</Link>
                     </li>
                 ))}
             </ul>

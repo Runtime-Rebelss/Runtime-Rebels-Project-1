@@ -11,27 +11,29 @@ import java.util.List;
  * ProductController - REST API for managing products.
  *
  * Endpoints implemented:
- * - GET /products        : Get all products
- * - GET /products/{id}   : Get a single product by ID
- * - POST /products       : Create a new product
+ * - GET /api/products        : Get all products
+ * - GET /api/products/{id}   : Get a single product by ID
+ * - POST /api/products       : Create a new product
  *
  * Extra endpoints (not required for Product Details, but useful for full CRUD):
- * - PUT /products/{id}   : Update an existing product
- * - DELETE /products/{id}: Delete a product
+ * - PUT /api/products/{id}   : Update an existing product
+ * - DELETE /api/products/{id} : Delete a product
  */
 
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping("/api/products")
 public class ProductController {
     @Autowired
     private ProductRepository productRepository;
 
+    // Get all products
     @GetMapping
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
 
+    // Get a single product by ID
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable String id) {
         return productRepository.findById(id)
@@ -39,11 +41,13 @@ public class ProductController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // Create a new product
     @PostMapping
     public Product createProduct(@RequestBody Product product) {
         return productRepository.save(product);
     }
 
+    // Update an existing product
     @PutMapping("/{id}")
     public ResponseEntity<Product> updateProduct(@PathVariable String id, @RequestBody Product productDetails) {
         return productRepository.findById(id)
@@ -57,6 +61,7 @@ public class ProductController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // Delete a product
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable String id) {
         return productRepository.findById(id)
