@@ -7,7 +7,7 @@ const Navbar = () => {
 
     return (
         <div className="navbar bg-base-100 shadow-sm px-4 sticky top-0 z-50">
-            {/* LEFT side: dropdown (only on small screens) */}
+            {/* LEFT — Dropdown for small screens */}
             <div className="navbar-start lg:hidden">
                 <div className="dropdown">
                     <div tabIndex={0} role="button" className="btn btn-ghost">
@@ -39,7 +39,7 @@ const Navbar = () => {
                 </div>
             </div>
 
-            {/* CENTER / LOGO */}
+            {/* CENTER — Logo (moves center on small, left on large) */}
             <div className="navbar-center lg:navbar-start">
                 <Link
                     to="/"
@@ -49,8 +49,8 @@ const Navbar = () => {
                 </Link>
             </div>
 
-            {/* CENTER categories (only on large screens) */}
-            <div className="hidden lg:block absolute left-1/2 transform -translate-x-1/2">
+            {/* CENTER (on large screens) — Category menu */}
+            <div className="absolute left-1/2 transform -translate-x-1/2 hidden lg:block">
                 <ul className="menu menu-horizontal px-1">
                     {categories.map((cat) => (
                         <li key={cat}>
@@ -65,26 +65,33 @@ const Navbar = () => {
                 </ul>
             </div>
 
-            {/* RIGHT side: search + cart */}
+            {/* RIGHT — Search + Cart */}
             <div className="navbar-end gap-2">
-                <div className="form-control hidden sm:flex">
-                    <div className="input-group">
-                        <input
-                            type="text"
-                            placeholder="Search products..."
-                            className="input input-bordered w-36 sm:w-48 md:w-64"
-                        />
-                        <button className="btn btn-square btn-primary">
-                            <Search className="h-5 w-5 text-white" />
-                        </button>
+                {/*  search text box only visible on large screen */}
+                <div className="hidden lg:flex">
+                    <div className="form-control">
+                        <div className="input-group">
+                            <input
+                                type="text"
+                                placeholder="Search products..."
+                                className="input input-bordered w-48 xl:w-64"
+                            />
+                            <button className="btn btn-square btn-primary">
+                                <Search className="h-5 w-5 text-white" />
+                            </button>
+                        </div>
                     </div>
                 </div>
 
+                {/*  ensures search icon is always visible */}
+                <button className="btn btn-ghost btn-circle lg:hidden">
+                    <Search className="h-5 w-5" />
+                </button>
+
+                {/* Cart icon */}
                 <Link to="/cart" className="btn btn-ghost btn-circle">
                     <div className="indicator">
                         <ShoppingCart className="h-6 w-6" />
-                        {/* optional badge */}
-                        {/* <span className="badge badge-sm indicator-item">2</span> */}
                     </div>
                 </Link>
             </div>
