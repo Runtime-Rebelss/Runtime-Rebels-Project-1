@@ -4,35 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="42b23da8-878f-492e-ac51-b1bd0a52d22f" name="Changes" comment="Completely revamped file names">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/dao/CartItemRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/requestResponse/CartResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/97747fd1-acca-4e23-beea-e23a30594de5.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/97747fd1-acca-4e23-beea-e23a30594de5.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/CartController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/CartController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/ProductController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/ProductController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/Cart.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/Cart.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/CartProduct.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/CartItem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/repository/CartProductRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/dao/CartRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/repository/ProductRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/dao/ProductRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/service/CartService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/service/CartService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/service/CartServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/service/CartServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/StoreApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/StoreApplication.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/controller/CartController.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/controller/CartController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/controller/ProductController.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/controller/ProductController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/models/Cart.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/models/Cart.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/models/CartProduct.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/models/Product.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/models/Product.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/repository/CartProductRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/repository/ProductRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/repository/ProductRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/service/CartService.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/service/CartService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/service/CartServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/service/CartServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/test-classes/com/CartController.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/test-classes/com/CartController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/test-classes/com/example/spring_boot/ApplicationTests.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/test-classes/com/example/spring_boot/ApplicationTests.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/test-classes/com/project1/spring_boot/ApplicationTests.class" beforeDir="false" />
-    </list>
+    <list default="true" id="42b23da8-878f-492e-ac51-b1bd0a52d22f" name="Changes" comment="Added new front end code." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -86,47 +58,47 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.ShoppingCartApplication.executor": "Run",
-    "Docker.spring-boot/docker-compose.yaml: Compose Deployment.executor": "Run",
-    "JavaScript Debug.index.html.executor": "Run",
-    "Maven.spring-boot [install].executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Node.js.AddToCartButton.jsx.executor": "Run",
-    "Node.js.App.js.executor": "Run",
-    "Node.js.App.jsx.executor": "Run",
-    "Node.js.ProductList.jsx.executor": "Run",
-    "Node.js.main.jsx.executor": "Run",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Spring Boot.ShoppingCartApplication.executor": "Run",
-    "Spring Boot.StoreApplication.executor": "Run",
-    "git-widget-placeholder": "shopping-cart-henry",
-    "junie.onboarding.icon.badge.shown": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/wlock/OneDrive/Documents/Runtime-Rebels-Project-1.2",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "to.speed.mode.migration.done": "true",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.ShoppingCartApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.spring-boot/docker-compose.yaml: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;JavaScript Debug.index.html.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.spring-boot [install].executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Node.js.AddToCartButton.jsx.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.App.js.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.App.jsx.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.ProductList.jsx.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.main.jsx.executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Spring Boot.ShoppingCartApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.StoreApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;shopping-cart-henry&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/wlock/OneDrive/Documents/Runtime-Rebels-Project-1.2&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mongo"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mongo&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\wlock\OneDrive\Documents\Runtime-Rebels-Project-1.2" />
@@ -134,15 +106,6 @@
   </component>
   <component name="RunManager" selected="Spring Boot.StoreApplication">
     <configuration name="index.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/Runtime-Rebels-Project-1.2/frontend-vite/index.html" useBuiltInWebServerPort="true">
-      <method v="2" />
-    </configuration>
-    <configuration default="true" type="JetRunConfigurationType">
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <option name="filePath" />
       <method v="2" />
     </configuration>
     <configuration name="AddToCartButton.jsx" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="AddToCartButton.jsx" typescript-loader="bundled" working-dir="$PROJECT_DIR$/frontend-vite/src/components">
@@ -239,7 +202,7 @@
       <workItem from="1759879377303" duration="1552000" />
       <workItem from="1759881071679" duration="394000" />
       <workItem from="1759881481564" duration="1791000" />
-      <workItem from="1760033545420" duration="17587000" />
+      <workItem from="1760033545420" duration="18340000" />
     </task>
     <task id="LOCAL-00001" summary="Updated Code">
       <option name="closed" value="true" />
@@ -281,7 +244,23 @@
       <option name="project" value="LOCAL" />
       <updated>1759527587809</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Added &quot;Add to Cart&quot; API endpoint (POST/cart)&quot;">
+      <option name="closed" value="true" />
+      <created>1760051658086</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1760051658086</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Added new front end code.">
+      <option name="closed" value="true" />
+      <created>1760051732037</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1760051732037</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -327,6 +306,8 @@
     <MESSAGE value="Updated Code" />
     <MESSAGE value="Adjusted code" />
     <MESSAGE value="Completely revamped file names" />
-    <option name="LAST_COMMIT_MESSAGE" value="Completely revamped file names" />
+    <MESSAGE value="Added &quot;Add to Cart&quot; API endpoint (POST/cart)&quot;" />
+    <MESSAGE value="Added new front end code." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added new front end code." />
   </component>
 </project>
