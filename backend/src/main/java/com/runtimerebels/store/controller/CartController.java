@@ -1,71 +1,57 @@
 package com.runtimerebels.store.controller;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.runtimerebels.store.models.Cart;
-import com.runtimerebels.store.models.CartProduct;
-import com.runtimerebels.store.repository.CartProductRepository;
+
 import com.runtimerebels.store.service.CartServiceImpl;
 
-import jakarta.servlet.http.HttpServletResponse;
+import com.runtimerebels.store.dao.CartRepository;
+import com.runtimerebels.store.dao.CartItemRepository;
+import com.runtimerebels.store.dao.ProductRepository;
 
 @RestController
+@RequestMapping("/carts")
 public class CartController {
 
-    @RequestMapping(value = "/add-to-cart")
-    public void addToCart(HttpServletResponse session) throws IOException {
-        session.sendRedirect("/swagger-ui.html");
-    }
+    @Autowired
+    private CartRepository cartRepository;
 
     @Autowired
-    private CartProductRepository repo;
+    private ProductRepository productRepository;
+
+    @Autowired
+    private CartItemRepository cartItemRepository;
 
     @Autowired
     private CartServiceImpl cartService;
 
-    @GetMapping("carts")
-    public List<Cart> getAllCarts() {
-        return repo.findAll();
+    // Get all carts
+    @GetMapping
+    public List<Cart> getAllCart() { return cartRepository.findAll(); }
+
+    // Get cart by unique ID
+    @GetMapping("/{cartId}")
+    public ResponseEntity<Cart> getCartById(@PathVariable String cartId) {
+        return cartRepository.findById(cartId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    // POST - Sends data to the server to create or update a resource
-
-    // @PostMapping("cart")
-    // public Cart addCart(@RequestBody Cart cart) {
-    //     return repo.save(cart);
-    // }
+    // Makes shopping cart
+//    @PostMapping
+//    public ResponseEntity<Cart> createCart(@RequestBody Cart cart) {
+//        Cart savedCart = cartService.createCart(cart);
+//        return new ResponseEntity<>(savedCart, HttpStatus.CREATED);
+//    }
 
     // Create "Add to Cart" API endpoint (POST/cart)
-
-    @PostMapping("/cart")
-    public ResponseEntity<Cart> addItemToCart(@RequestParam String userId, @RequestBody CartProduct cartProduct) {
-        Cart updatedCart = cartService.addItemToCart(userId, cartProduct);
-        return new ResponseEntity<>(updatedCart, HttpStatus.OK);
+    @PostMapping("/add/{cartId}/{productId}")
+    public Cart addToCart(@PathVariable String cartId, @PathVariable String productId, @RequestParam Integer quantity) {
+        return this.cartService.addItemToCart(cartId, productId, quantity);
     }
-
-    // @GetMapping("/")
-    // public ResponseEntity<Integer> count(HttpSession session) {
-    //     Integer counter = (Integer) session.getAttribute("count");
-
-    //     if (counter == null) {
-    //         counter = 1;
-    //     } else {
-    //         counter++;
-    //     }
-
-    //     session.setAttribute("count", counter);
-
-    //     return ResponseEntity.ok(counter);
-    // }
 }

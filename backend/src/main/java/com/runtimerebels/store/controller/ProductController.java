@@ -1,5 +1,5 @@
 package com.runtimerebels.store.controller;
-import com.runtimerebels.store.repository.ProductRepository;
+import com.runtimerebels.store.dao.ProductRepository;
 import com.runtimerebels.store.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

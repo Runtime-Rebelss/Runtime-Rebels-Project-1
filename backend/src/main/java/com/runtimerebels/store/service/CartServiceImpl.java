@@ -1,45 +1,110 @@
 package com.runtimerebels.store.service;
 
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
+import com.runtimerebels.store.models.Product;
+import com.runtimerebels.store.dao.CartItemRepository;
+import com.runtimerebels.store.dao.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.runtimerebels.store.models.Cart;
-import com.runtimerebels.store.models.CartProduct;
-import com.runtimerebels.store.repository.CartProductRepository;
+import com.runtimerebels.store.models.CartItem;
+import com.runtimerebels.store.dao.CartRepository;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
 @Service
-public class CartServiceImpl {
-
+public class CartServiceImpl implements CartService {
     @Autowired
-    private CartProductRepository repo;
+    private CartRepository cartRepository;
+    @Autowired
+    private ProductRepository productRepository;
+    @Autowired
+    private CartItemRepository cartItemRepository;
 
-    public Cart addItemToCart(String userId, CartProduct newItem) {
-        // Check if there is an already existing cart for a user
-        Optional<Cart> existingCart = repo.findByUserId(userId);
-        Cart cart;
+    public Cart createCart(@RequestBody Cart cartId) { return cartRepository.save(cartId); }
 
-        // Check if the existing cart is present
-        if (existingCart.isPresent()) {
-            cart = existingCart.get();
-            Optional<CartProduct> existingItem = cart.getCartProducts().stream()
-                .filter(item -> item.getCartProductId().equals(newItem.getCartProductId()))
-                .findFirst();
+    public Cart addItemToCart(@PathVariable String cartId, @PathVariable String productId, @RequestParam Integer quantity) {
 
-            if (existingItem.isPresent()) {
-                // if item does exist -> update quantity in cart
-                //existingItem.get().set
-                System.out.println("Placeholder");
-            } else {
-                cart.getCartProducts().add(newItem);
-            }
-        // else if not an existing cart, create new one
+        Cart cart = this.cartRepository.findById(cartId).orElse(null);
+        Product product = productRepository.findById(productId).orElse(null);
+        LocalDateTime createdAt = LocalDateTime.now();
+
+        // Need to check if a product has the same id, update the quantity of product
+
+        // If cart existence doesn't exist, create one
+        if (cart == null) {
+            // Update quantity
+            List<CartItem> cartItems = new ArrayList<>();
+            // Create new cart item
+            CartItem savedCartItem = this.cartItemRepository.save(
+                    CartItem.builder()
+                            .id(cartId)
+                            .product(product)
+                            .quantity(quantity)
+                            .build()
+            );
+            cartItems.add(savedCartItem);
+
+            // Creates new cart item and add to new cart
+            // Save the new cart into database
+            Cart savedCart = this.cartRepository.save(Cart.builder().cartItems(cartItems).build());
+
+            return Cart.builder()
+                    .cartId(savedCart.getCartId())
+                    .createdAt(createdAt)
+                    .cartItems(savedCart.getCartItems())
+                    .build();
+
         } else {
-            cart = new Cart();
-            cart.setUserId(userId);
-            cart.getCartProducts().add(newItem);
-        }
-        return repo.save(cart);
-    }
+            // Check if product already exists in one of the cart items
+            if (cart.getCartItems() != null) {
+                for (CartItem cartItem : cart.getCartItems()) {
+                    assert product != null;
+                    if (Objects.equals(cartItem.getProduct().getId(), product.getId())) {
+                        // If product exists add 1 to the quantity of the product (Not working atm)
+                        cartItem.setQuantity(cartItem.getQuantity() + quantity);
 
+                        this.cartRepository.save(cart);
+
+                        return Cart.builder()
+                                .cartId(cart.getCartId())
+                                .userId(cart.getUserId())
+                                .createdAt(createdAt)
+                                .cartItems(cart.getCartItems())
+                                .build();
+                    }
+                }
+            }
+            // If product doesn't exist
+            // Create a new cart item with product and quantity as 1
+            CartItem savedCartItem = this.cartItemRepository.save(
+                    CartItem.builder()
+                            .product(product)
+                            .quantity(quantity)
+                            .build()
+            );
+            // Add the Cart item in the Cart
+            if (cart.getCartItems() != null) {
+                cart.getCartItems().add(savedCartItem);
+            } else {
+                List<CartItem> cartItems = new ArrayList<>();
+                cartItems.add(savedCartItem);
+                cart.setCartItems(cartItems);
+            }
+            // Returns the cart items
+            this.cartRepository.save(cart);
+            return Cart.builder()
+                    .cartId(cart.getCartId())
+                    .userId(cart.getUserId())
+                    .createdAt(createdAt)
+                    .cartItems(cart.getCartItems())
+                    .build();
+        }
+    }
 }

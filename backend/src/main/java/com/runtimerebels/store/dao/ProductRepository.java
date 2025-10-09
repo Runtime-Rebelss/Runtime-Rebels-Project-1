@@ -1,4 +1,4 @@
-package com.runtimerebels.store.repository;
+package com.runtimerebels.store.dao;
 import com.runtimerebels.store.models.Product;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
