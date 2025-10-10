@@ -40,7 +40,7 @@ const HomePage = () => {
             <Hero />
 
             {/* 🧩 PRODUCT GRID */}
-            <div className="container mx-auto mt-8">
+            <div className="container mx-auto mt-8 mb-8">
                 <h1 className="text-3xl font-bold mb-6 text-center">
                     Featured Products
                 </h1>
