@@ -9,11 +9,13 @@ import com.runtimerebels.store.models.Product;
 import com.runtimerebels.store.dao.CartItemRepository;
 import com.runtimerebels.store.dao.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.runtimerebels.store.models.Cart;
 import com.runtimerebels.store.models.CartItem;
 import com.runtimerebels.store.dao.CartRepository;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,11 +29,18 @@ public class CartServiceImpl implements CartService {
     @Autowired
     private CartItemRepository cartItemRepository;
 
+//    @GetMapping("/{id}")
+//    public ResponseEntity<Cart> getCartById(@PathVariable String id) {
+//        return cartRepository.findById(id)
+//                .map(ResponseEntity::ok)
+//                .orElse(ResponseEntity.notFound().build());
+//    }
+
     public Cart createCart(@RequestBody Cart cartId) { return cartRepository.save(cartId); }
 
-    public Cart addItemToCart(@PathVariable String cartId, @PathVariable String productId, @RequestParam Integer quantity) {
-
-        Cart cart = this.cartRepository.findById(cartId).orElse(null);
+    public Cart addItemToCart(@PathVariable String productId, @RequestParam Integer quantity) {
+        // Need to change to userId
+        Cart cart = this.cartRepository.findById(productId).orElse(null);
         Product product = productRepository.findById(productId).orElse(null);
         LocalDateTime createdAt = LocalDateTime.now();
 
@@ -44,7 +53,6 @@ public class CartServiceImpl implements CartService {
             // Create new cart item
             CartItem savedCartItem = this.cartItemRepository.save(
                     CartItem.builder()
-                            .id(cartId)
                             .product(product)
                             .quantity(quantity)
                             .build()
@@ -71,7 +79,6 @@ public class CartServiceImpl implements CartService {
                         cartItem.setQuantity(cartItem.getQuantity() + quantity);
 
                         this.cartRepository.save(cart);
-
                         return Cart.builder()
                                 .cartId(cart.getCartId())
                                 .userId(cart.getUserId())

@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.*;
 
 import com.runtimerebels.store.models.Cart;
 
-import com.runtimerebels.store.service.CartServiceImpl;
+import com.runtimerebels.store.service.CartService;
 
 import com.runtimerebels.store.dao.CartRepository;
 import com.runtimerebels.store.dao.CartItemRepository;
 import com.runtimerebels.store.dao.ProductRepository;
 
 @RestController
-@RequestMapping("/carts")
+@RequestMapping("/api/carts")
 public class CartController {
 
     @Autowired
@@ -28,7 +28,7 @@ public class CartController {
     private CartItemRepository cartItemRepository;
 
     @Autowired
-    private CartServiceImpl cartService;
+    private CartService cartService;
 
     // Get all carts
     @GetMapping
@@ -42,16 +42,9 @@ public class CartController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // Makes shopping cart
-//    @PostMapping
-//    public ResponseEntity<Cart> createCart(@RequestBody Cart cart) {
-//        Cart savedCart = cartService.createCart(cart);
-//        return new ResponseEntity<>(savedCart, HttpStatus.CREATED);
-//    }
-
     // Create "Add to Cart" API endpoint (POST/cart)
-    @PostMapping("/add/{cartId}/{productId}")
-    public Cart addToCart(@PathVariable String cartId, @PathVariable String productId, @RequestParam Integer quantity) {
-        return this.cartService.addItemToCart(cartId, productId, quantity);
+    @PostMapping("/add/{productId}")
+    public Cart addToCart(@PathVariable String productId, @RequestParam Integer quantity) {
+        return cartService.addItemToCart(productId, quantity);
     }
 }

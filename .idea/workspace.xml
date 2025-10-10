@@ -4,7 +4,34 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="42b23da8-878f-492e-ac51-b1bd0a52d22f" name="Changes" comment="Added new front end code." />
+    <list default="true" id="42b23da8-878f-492e-ac51-b1bd0a52d22f" name="Changes" comment="Added new front end code.">
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/config/DataSeeder.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/config/WebConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-vite/src/pages/ShoppingCart.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/CartController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/CartController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/ProductController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/ProductController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/Product.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/service/CartService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/service/CartService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/service/CartServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/service/CartServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/StoreApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/StoreApplication.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/controller/CartController.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/controller/CartController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/controller/ProductController.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/controller/ProductController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/models/Cart.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/models/Cart.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/models/Product.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/models/Product.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/service/CartService.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/service/CartService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/service/CartServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/service/CartServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/AddToCartButton.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/ProductDetails.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/ProductDetails.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/ProductList.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/ProductList.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/main.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/main.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/tailwind.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/tailwind.config.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -14,8 +41,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Interface" />
-        <option value="Class" />
         <option value="JSX File" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -54,6 +81,9 @@
   &quot;associatedIndex&quot;: 2
 }</component>
   <component name="ProjectId" id="33ZAnFzxprPQ2NTLYM4W6s28ukY" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -203,6 +233,9 @@
       <workItem from="1759881071679" duration="394000" />
       <workItem from="1759881481564" duration="1791000" />
       <workItem from="1760033545420" duration="18340000" />
+      <workItem from="1760052315657" duration="204000" />
+      <workItem from="1760052664746" duration="2015000" />
+      <workItem from="1760054704408" duration="6561000" />
     </task>
     <task id="LOCAL-00001" summary="Updated Code">
       <option name="closed" value="true" />
@@ -260,7 +293,15 @@
       <option name="project" value="LOCAL" />
       <updated>1760051732037</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Added new front end code.">
+      <option name="closed" value="true" />
+      <created>1760052443053</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1760052443053</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
