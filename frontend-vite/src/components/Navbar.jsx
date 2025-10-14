@@ -87,7 +87,7 @@ const Navbar = () => {
                 <button className="btn btn-ghost btn-circle lg:hidden">
                     <Search className="h-5 w-5" />
                 </button>
-
+                {/* Need to update cart UI when item added */}
                 {/* CartPage icon */}
                 <Link to="/cart" className="btn btn-ghost btn-circle">
                     <div className="indicator">
