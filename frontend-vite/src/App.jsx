@@ -1,19 +1,22 @@
 import { Routes, Route } from "react-router-dom";
-import ProductList from "./components/ProductList.jsx";
-import ProductDetails from "./components/ProductDetails.jsx";
-import AddToCartButton from "./components/AddToCartButton.jsx";
+
+import ProductPage from "./pages/ProductPage";
+import HomePage from "./pages/HomePage";
+import CartPage from "./pages/CartPage";
+//import LoginPage from "./pages/Auth/LoginPage.jsx";
+//import SignUpPage from "./pages/Auth/SignUpPage.jsx";
 
 function App() {
     return (
-        <>
-            <h1>Hello from Vite + React 🚀</h1>
-            {/* <button className="btn btn-soft btn-error">Error</button> */}
+        <div className="relative h-full w-full">
+            <div className="absolute inset-0 -z-10 h-full w-full items-center px-5 py-24 bg-base-100" />
             <Routes>
-                <Route path="/" element={<ProductList />} />
-                <Route path="/products/:id" element={<ProductDetails />} />
-                <Route path="/cart/add/:productId" element={<AddToCartButton />} />
+                <Route path="/" element={<HomePage />} />
+                <Route path="/product/:id" element={<ProductPage />} />
+                <Route path="/cart" element={<CartPage />} />
+
             </Routes>
-        </>
+        </div>
     );
 }
 

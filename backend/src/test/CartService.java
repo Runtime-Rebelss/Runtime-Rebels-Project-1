@@ -12,7 +12,7 @@ public interface CartService {
 
 //    public List<CartItem> getCartItems();
 //    public ResponseEntity<Cart> getCartById(String id);
-      public Cart addItemToCart(String productId, Integer quantity);
+      public Cart addItemToCart(String cartId, String productId, Integer quantity);
 //    public CartItem deleteCartItem(int id);
 
 }
