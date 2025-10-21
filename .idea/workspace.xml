@@ -6,16 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="42b23da8-878f-492e-ac51-b1bd0a52d22f" name="Changes" comment="Updated Add to Cart API and added CartPage frontend">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/StoreApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/StoreApplication.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/controller/CartController.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/controller/CartController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/controller/ProductController.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/controller/ProductController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/models/Cart.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/models/Cart.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/models/Product.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/models/Product.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/test-classes/com/CartController.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/test-classes/com/CartController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/test-classes/com/example/spring_boot/ApplicationTests.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/test-classes/com/example/spring_boot/ApplicationTests.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/Navbar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/Navbar.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/CartController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/CartController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/requestResponse/CartResponse.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/CartPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/CartPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/ProductPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/ProductPage.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,12 +39,12 @@
     &quot;assignee&quot;: &quot;Hlocke124&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/Hlocke124/Runtime-Rebels-Project-1.git",
-    "accountId": "c092b729-09e8-4a5f-870e-9563811d8a5e"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Hlocke124/Runtime-Rebels-Project-1.git&quot;,
+    &quot;accountId&quot;: &quot;c092b729-09e8-4a5f-870e-9563811d8a5e&quot;
   }
-}]]></component>
+}</component>
   <component name="KubernetesApiPersistence">{}</component>
   <component name="KubernetesApiProvider">{
   &quot;isMigrated&quot;: true
@@ -97,7 +90,7 @@
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;Spring Boot.ShoppingCartApplication.executor&quot;: &quot;Run&quot;,
     &quot;Spring Boot.StoreApplication.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;shopping-cart-henry&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;d091aa58&quot;,
     &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/wlock/OneDrive/Documents/Runtime-Rebels-Final/Runtime-Rebels-Project-1&quot;,
@@ -201,8 +194,8 @@
       <item itemvalue="Node.js.App.jsx" />
       <item itemvalue="Node.js.ProductList.jsx" />
       <item itemvalue="Node.js.main.jsx" />
-      <item itemvalue="Spring Boot.Unnamed" />
       <item itemvalue="Spring Boot.StoreApplication" />
+      <item itemvalue="Spring Boot.Unnamed" />
     </list>
     <recent_temporary>
       <list>
@@ -263,6 +256,10 @@
       <workItem from="1760394891590" duration="26000" />
       <workItem from="1760394930033" duration="3395000" />
       <workItem from="1760405225765" duration="5026000" />
+      <workItem from="1760461856096" duration="667000" />
+      <workItem from="1760467285709" duration="10000" />
+      <workItem from="1760467655857" duration="7000" />
+      <workItem from="1761088416236" duration="480000" />
     </task>
     <task id="LOCAL-00001" summary="Updated Code">
       <option name="closed" value="true" />

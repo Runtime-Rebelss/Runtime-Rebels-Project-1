@@ -298,15 +298,15 @@ const CartPage = () => {
                     <div className="card bg-base-100 border border-base-300">
                         <div className="card-body items-center text-center">
                             <div className="avatar placeholder mb-4">
-                                <div className="bg-base-200 text-base-content rounded-full w-24">
+                                <div className="indicator">
                                     <ShoppingBag className="w-10 h-10" />
                                 </div>
                             </div>
                             <h3 className="card-title font-normal">Your cart is empty</h3>
                             <p className="text-base-content/70">Browse products and add something you like.</p>
                             <div className="card-actions mt-4">
-                                <button onClick={() => navigate('/collections')} className="btn btn-primary">
-                                    Explore Collections
+                                <button onClick={() => navigate('/')} className="btn btn-primary">
+                                    Explore Products
                                 </button>
                             </div>
                         </div>
@@ -429,7 +429,7 @@ const CartPage = () => {
                                         >
                                             Proceed to Checkout
                                         </button>
-                                        <button className="btn btn-outline w-full" onClick={() => navigate('/collections')}>
+                                        <button className="btn btn-outline w-full" onClick={() => navigate('/')}>
                                             Continue Shopping
                                         </button>
                                         {isGuest && (

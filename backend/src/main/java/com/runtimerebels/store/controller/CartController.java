@@ -1,6 +1,7 @@
 package com.runtimerebels.store.controller;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -119,6 +120,36 @@ public class CartController {
         cart.setProductIds(products);
         cart.setQuantity(quantities);
         cart.setTotalPrice(totalPrices);
+
+        cartRepository.save(cart);
+        return new ResponseEntity<>(cart, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/remove")
+    public ResponseEntity<Cart> removeItem(@RequestParam String userId, @RequestParam String productId) {
+        Optional<Cart> optionalCart = cartRepository.findByUserId(userId);
+        if (optionalCart.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        Cart cart = optionalCart.get();
+        List<String> products = cart.getProductIds();
+        List<Integer> quantities = cart.getQuantity();
+        List<BigDecimal> finalPrices = cart.getTotalPrice();
+
+        int index = products.indexOf(productId);
+        if (index < 0) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        // Remove from arrays
+        products.remove(index);
+        quantities.remove(index);
+        finalPrices.remove(index);
+
+        cart.setProductIds(products);
+        cart.setQuantity(quantities);
+        cart.setTotalPrice(finalPrices);
 
         cartRepository.save(cart);
         return new ResponseEntity<>(cart, HttpStatus.OK);
