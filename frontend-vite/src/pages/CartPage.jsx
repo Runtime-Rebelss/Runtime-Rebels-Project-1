@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ShoppingBag, Trash2, Plus, Minus } from 'lucide-react';
-import Navbar from '../components/Navbar'; // keep if you have it; otherwise remove this line
+import Navbar from '../components/Navbar'; 
 import cartLib from '../lib/cart';
 
-// ---------- Guest cart helpers ----------
-const GUEST_KEY = 'guestCart'; // { items: [{ productId, name, price, image, quantity }] }
+// Currently only supports a guest cart
 
+const GUEST_KEY = 'guestCart'; 
+// Creates a guest cart, unique to local host
 function loadGuestCart() {
     try {
         const raw = localStorage.getItem(GUEST_KEY);
@@ -40,7 +41,7 @@ function calcTotal(items) {
     return items.reduce((s, it) => s + (Number(it.price) || 0) * (Number(it.quantity) || 0), 0);
 }
 
-// Load server cart helper
+// Added for when we add actual users
 async function loadServerCart(userId, signal) {
     const res = await fetch(`/api/carts/${encodeURIComponent(userId)}`, { signal });
     if (!res.ok) throw new Error('Failed to load cart');
@@ -84,9 +85,8 @@ async function loadServerCart(userId, signal) {
     return items.filter(Boolean);
 }
 
-// ---------- Component ----------
 const CartPage = () => {
-    const [cartItems, setCartItems] = useState([]); // unified shape: { id, name, price, image, quantity }
+    const [cartItems, setCartItems] = useState([]); 
     const [total, setTotal] = useState(0);
     const [isGuest, setIsGuest] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -94,7 +94,6 @@ const CartPage = () => {
     const navigate = useNavigate();
     const userId = localStorage.getItem('userEmail');
 
-    // Load cart (server or guest)
     useEffect(() => {
         let ac = new AbortController();
 
@@ -117,15 +116,13 @@ const CartPage = () => {
                 return;
             }
 
-            // Logged-in mode (server fetch)
             setIsGuest(false);
             try {
-                // reuse helper to load server cart
                 const items = await loadServerCart(userId, ac.signal);
                 setCartItems(items);
             } catch (err) {
                 console.error('Error fetching cart:', err);
-                // Fallback to guest cart if server fails
+                toast.error('Failed to fetch cart');
                 setIsGuest(true);
                 const { items } = loadGuestCart();
                 setCartItems(
@@ -146,10 +143,8 @@ const CartPage = () => {
         return () => ac.abort();
     }, [userId]);
 
-    // Listen for cart changes coming from other pages (e.g. ProductPage add)
     useEffect(() => {
         const handler = async (e) => {
-            // If guest, reload guest cart; if user, reload server cart
             if (!localStorage.getItem('userEmail')) {
                 const items = cartLib.loadGuestCart();
                 setCartItems(
@@ -160,7 +155,6 @@ const CartPage = () => {
                     const items = await loadServerCart(localStorage.getItem('userEmail'));
                     setCartItems(items);
                 } catch {
-                    // ignore
                 }
             }
         };
@@ -169,16 +163,13 @@ const CartPage = () => {
         return () => window.removeEventListener('cart-updated', handler);
     }, []);
 
-    // Compute total whenever items change
     useEffect(() => {
         setTotal(calcTotal(cartItems));
     }, [cartItems]);
 
-    // Helpers for updating items
     const setItems = (next) => {
         setCartItems(next);
         if (isGuest) {
-            // mirror to localStorage
             saveGuestCart(
                 next.map((it) => ({
                     productId: it.id,
@@ -212,6 +203,7 @@ const CartPage = () => {
             setItems(cartItems.map((it) => (it.id === productId ? { ...it, quantity: newQty } : it)));
         } catch (err) {
             console.error('Error updating quantity:', err);
+            toast.error('Failed to update quantity');
         }
     };
 
@@ -229,10 +221,10 @@ const CartPage = () => {
             setItems(cartItems.filter((it) => it.id !== productId));
         } catch (err) {
             console.error('Error removing item:', err);
+            toast.error('Failed to remove item');
         }
     };
-
-    // Add item to cart (guest/local or server)
+    
     const addItem = async ({ productId, name, price, image, quantity = 1 }) => {
         if (!productId) return;
         const item = { id: productId, name, price: Number(price || 0), image: image || '', quantity: Number(quantity || 1) };
@@ -248,9 +240,7 @@ const CartPage = () => {
             return;
         }
 
-        // server add
         try {
-            // backend expects totalPrice as BigDecimal per CartController.addToCart
             const totalPrice = (Number(price || 0) * Number(quantity || 1)).toFixed(2);
             const res = await fetch(`/api/carts/add?userId=${encodeURIComponent(userId)}&productId=${encodeURIComponent(productId)}&quantity=${encodeURIComponent(quantity)}&totalPrice=${encodeURIComponent(totalPrice)}`, { method: 'POST' });
             if (!res.ok) throw new Error('Add failed');
@@ -259,13 +249,13 @@ const CartPage = () => {
             setItems(items);
         } catch (err) {
             console.error('Error adding item:', err);
+            toast.error('Failed to add item to cart');
         }
     };
 
     const proceedToCheckout = () => {
         if (cartItems.length === 0) return;
-        // If you require login for checkout, gate here:
-        // if (isGuest) return navigate('/login?redirect=/checkout');
+        // Checkout page needs to be setup still
         navigate('/checkout');
     };
 
@@ -276,10 +266,9 @@ const CartPage = () => {
         saveGuestCart([]);
         setCartItems([]);
     };
-
+    // Change this -> to DaisyUi
     return (
         <div className="min-h-screen bg-base-200">
-            {/* Keep Navbar if you have it; otherwise remove */}
             <Navbar />
 
             <div className="container mx-auto px-4 py-8">
