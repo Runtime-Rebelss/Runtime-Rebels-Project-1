@@ -1,17 +1,17 @@
 import { Routes, Route } from "react-router-dom";
-import ProductList from "./components/ProductList";
-import ProductDetails from "./components/ProductDetails";
+
+import ProductPage from "./pages/ProductPage";
+import HomePage from "./pages/HomePage";
 
 function App() {
     return (
-        <>
-            <h1>Hello from Vite + React 🚀</h1>
-            {/* <button className="btn btn-soft btn-error">Error</button> */}
+        <div className="relative h-full w-full">
+            <div className="absolute inset-0 -z-10 h-full w-full items-center px-5 py-24 bg-base-100" />
             <Routes>
-                <Route path="/" element={<ProductList />} />
-                <Route path="/products/:id" element={<ProductDetails />} />
+                <Route path="/" element={<HomePage />} />
+                <Route path="/product/:id" element={<ProductPage />} />
             </Routes>
-        </>
+        </div>
     );
 }
 
