@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ShoppingBag, Trash2, Plus, Minus } from 'lucide-react';
-import Navbar from '../components/Navbar'; 
-import cartLib from '../lib/cart';
+import Navbar from '../components/Navbar';
 
 // Currently only supports a guest cart
-
 const GUEST_KEY = 'guestCart'; 
 // Creates a guest cart, unique to local host
 function loadGuestCart() {
@@ -85,6 +83,7 @@ async function loadServerCart(userId, signal) {
     return items.filter(Boolean);
 }
 
+// Need to add stuff so can make an actual account
 const CartPage = () => {
     const [cartItems, setCartItems] = useState([]); 
     const [total, setTotal] = useState(0);
@@ -146,7 +145,7 @@ const CartPage = () => {
     useEffect(() => {
         const handler = async (e) => {
             if (!localStorage.getItem('userEmail')) {
-                const items = cartLib.loadGuestCart();
+                const items = loadGuestCart();
                 setCartItems(
                     items.map((it) => ({ id: it.productId, name: it.name, image: it.image, price: Number(it.price || 0), quantity: Number(it.quantity || 1) }))
                 );
@@ -266,7 +265,7 @@ const CartPage = () => {
         saveGuestCart([]);
         setCartItems([]);
     };
-    // Change this -> to DaisyUi
+
     return (
         <div className="min-h-screen bg-base-200">
             <Navbar />

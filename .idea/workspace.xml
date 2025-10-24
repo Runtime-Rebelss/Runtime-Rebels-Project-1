@@ -4,7 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="" />
+    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/StoreApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/StoreApplication.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/controller/ProductController.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/controller/ProductController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/models/Cart.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/models/Cart.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/models/Product.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/runtimerebels/store/models/Product.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/test-classes/com/CartController.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/test-classes/com/CartController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/test-classes/com/example/spring_boot/ApplicationTests.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/test-classes/com/example/spring_boot/ApplicationTests.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/Navbar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/Navbar.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/cart.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/lib/cart.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -22,7 +33,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="shopping-cart-henry" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -37,7 +48,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/Hlocke124/Runtime-Rebels-Project-1.git&quot;,
-    &quot;accountId&quot;: &quot;c092b729-09e8-4a5f-870e-9563811d8a5e&quot;
+    &quot;accountId&quot;: &quot;82aedb2d-abc9-4dc7-bdc8-8c73de7f3805&quot;
   }
 }</component>
   <component name="KubernetesApiPersistence">{}</component>
@@ -85,6 +96,7 @@
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;Spring Boot.ShoppingCartApplication.executor&quot;: &quot;Run&quot;,
     &quot;Spring Boot.StoreApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;shopping-cart-henry&quot;,
     &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/wlock/OneDrive/Documents/Runtime-Rebels-Final/Runtime-Rebels-Project-1&quot;,
@@ -135,6 +147,15 @@
     <configuration name="index.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/Runtime-Rebels-Project-1.2/frontend-vite/index.html" useBuiltInWebServerPort="true">
       <method v="2" />
     </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <option name="filePath" />
+      <method v="2" />
+    </configuration>
     <configuration name="AddToCartButton.jsx" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="AddToCartButton.jsx" typescript-loader="bundled" working-dir="$PROJECT_DIR$/frontend-vite/src/components">
       <method v="2" />
     </configuration>
@@ -154,6 +175,7 @@
         <env name="MONGO_URI" value="mongodb+srv://Hlocke124:thepomel61@runtimerebels.otltnjb.mongodb.net/" />
       </envs>
       <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="spring-boot" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.runtimerebels.store.StoreApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -210,7 +232,7 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="42b23da8-878f-492e-ac51-b1bd0a52d22f" name="Changes" comment="" />
+      <changelist id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="" />
       <created>1759514386566</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -253,6 +275,8 @@
       <workItem from="1760467285709" duration="10000" />
       <workItem from="1760467655857" duration="7000" />
       <workItem from="1761088416236" duration="1469000" />
+      <workItem from="1761264025515" duration="381000" />
+      <workItem from="1761264424916" duration="337000" />
     </task>
     <task id="LOCAL-00001" summary="Updated Code">
       <option name="closed" value="true" />
@@ -383,7 +407,8 @@
     <MESSAGE value="Added &quot;Add to Cart&quot; API endpoint (POST/cart)&quot;" />
     <MESSAGE value="Added new front end code." />
     <MESSAGE value="Updated Add to Cart API and added CartPage frontend" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated Add to Cart API and added CartPage frontend" />
+    <MESSAGE value="Scamazon_Coming_Soon" />
+    <option name="LAST_COMMIT_MESSAGE" value="Scamazon_Coming_Soon" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
