@@ -11,14 +11,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Document(collection = "users")
-public class User {
-
+@Document
+public class CartItem {
     @Id
-    private String id;
-
-    private String username;
-    private String email;
-    private String password;
-    private boolean isAdmin = false;
+    private String productId;
+    private Product product;
+    private double price;
+    private Integer quantity;
 }

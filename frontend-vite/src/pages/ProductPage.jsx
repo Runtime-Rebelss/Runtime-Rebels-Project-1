@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router'
 import toast from 'react-hot-toast'
 
 import api from '../lib/axios'
+import cart from '../lib/cart'
 import Navbar from '../components/Navbar'
 
 const ProductPage = () => {
@@ -70,7 +71,16 @@ const ProductPage = () => {
 
                 {/* Add to bag */}
                 <button
-                    onClick={() => toast.success(`Added ${product.name} to bag!`)}
+                    onClick={async () => {
+                        try {
+                            const userId = localStorage.getItem('userEmail');
+                            await cart.addToCart({ userId, productId: product.id ?? product._id ?? product.productId ?? String(product.id), name: product.name, price: product.price, quantity: 1, image: product.imageUrl || product.image });
+                            toast.success(`Added ${product.name} to bag!`);
+                        } catch (err) {
+                            console.error('Add to bag failed', err);
+                            toast.error('Failed to add to cart');
+                        }
+                    }}
                     className="btn btn-primary btn-block text-white text-lg"
                 >
                     Add to Bag

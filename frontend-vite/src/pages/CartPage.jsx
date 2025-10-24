@@ -1,0 +1,459 @@
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ShoppingBag, Trash2, Plus, Minus } from 'lucide-react';
+import Navbar from '../components/Navbar';
+
+// Currently only supports a guest cart
+const GUEST_KEY = 'guestCart'; 
+// Creates a guest cart, unique to local host
+function loadGuestCart() {
+    try {
+        const raw = localStorage.getItem(GUEST_KEY);
+        const parsed = raw ? JSON.parse(raw) : { items: [] };
+        if (!Array.isArray(parsed.items)) return { items: [] };
+        // Normalize items (tolerate older shapes)
+        const items = parsed.items
+            .filter(Boolean)
+            .map((it) => ({
+                productId: it.productId ?? it.id ?? it._id ?? '',
+                name: it.name ?? 'Item',
+                price: Number(it.price ?? it.finalPrice ?? it.itemTotal ?? 0),
+                image:
+                    it.image ||
+                    it.imageUrl ||
+                    'https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                quantity: Math.max(1, Number(it.quantity ?? 1)),
+            }))
+            .filter((it) => it.productId);
+        return { items };
+    } catch {
+        return { items: [] };
+    }
+}
+
+function saveGuestCart(items) {
+    localStorage.setItem(GUEST_KEY, JSON.stringify({ items }));
+}
+
+function calcTotal(items) {
+    return items.reduce((s, it) => s + (Number(it.price) || 0) * (Number(it.quantity) || 0), 0);
+}
+
+// Added for when we add actual users
+async function loadServerCart(userId, signal) {
+    const res = await fetch(`/api/carts/${encodeURIComponent(userId)}`, { signal });
+    if (!res.ok) throw new Error('Failed to load cart');
+    const cartData = await res.json();
+    const productIds = Array.isArray(cartData?.productIds) ? cartData.productIds : [];
+    const quantities = Array.isArray(cartData?.quantities) ? cartData.quantities : [];
+    const finalPrices = Array.isArray(cartData?.finalPrices) ? cartData.finalPrices : [];
+
+    const items = await Promise.all(
+        productIds
+            .filter((pid) => typeof pid === 'string' && pid.trim().length > 0)
+            .map(async (productId, index) => {
+                try {
+                    const productRes = await fetch(`/api/products/${encodeURIComponent(productId)}`);
+                    if (!productRes.ok) throw new Error(`Product ${productId} not found`);
+                    const product = await productRes.json();
+
+                    const quantity = Number(quantities?.[index] ?? 1) || 1;
+                    const basePrice =
+                        Number(finalPrices?.[index]) ||
+                        Number(product?.finalPrice) ||
+                        Number(product?.price) ||
+                        0;
+
+                    return {
+                        id: productId,
+                        name: product?.name ?? 'Item',
+                        image:
+                            product?.image ||
+                            product?.imageUrl ||
+                            'https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                        price: Math.max(0, basePrice),
+                        quantity,
+                    };
+                } catch {
+                    return null;
+                }
+            })
+    );
+
+    return items.filter(Boolean);
+}
+
+// Need to add stuff so can make an actual account
+const CartPage = () => {
+    const [cartItems, setCartItems] = useState([]); 
+    const [total, setTotal] = useState(0);
+    const [isGuest, setIsGuest] = useState(false);
+    const [loading, setLoading] = useState(true);
+
+    const navigate = useNavigate();
+    const userId = localStorage.getItem('userEmail');
+
+    useEffect(() => {
+        let ac = new AbortController();
+
+        const load = async () => {
+            setLoading(true);
+            if (!userId) {
+                // Guest mode
+                setIsGuest(true);
+                const { items } = loadGuestCart();
+                setCartItems(
+                    items.map((it) => ({
+                        id: it.productId,
+                        name: it.name,
+                        image: it.image,
+                        price: Number(it.price || 0),
+                        quantity: Number(it.quantity || 1),
+                    }))
+                );
+                setLoading(false);
+                return;
+            }
+
+            setIsGuest(false);
+            try {
+                const items = await loadServerCart(userId, ac.signal);
+                setCartItems(items);
+            } catch (err) {
+                console.error('Error fetching cart:', err);
+                toast.error('Failed to fetch cart');
+                setIsGuest(true);
+                const { items } = loadGuestCart();
+                setCartItems(
+                    items.map((it) => ({
+                        id: it.productId,
+                        name: it.name,
+                        image: it.image,
+                        price: Number(it.price || 0),
+                        quantity: Number(it.quantity || 1),
+                    }))
+                );
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        load();
+        return () => ac.abort();
+    }, [userId]);
+
+    useEffect(() => {
+        const handler = async (e) => {
+            if (!localStorage.getItem('userEmail')) {
+                const items = loadGuestCart();
+                setCartItems(
+                    items.map((it) => ({ id: it.productId, name: it.name, image: it.image, price: Number(it.price || 0), quantity: Number(it.quantity || 1) }))
+                );
+            } else {
+                try {
+                    const items = await loadServerCart(localStorage.getItem('userEmail'));
+                    setCartItems(items);
+                } catch {
+                }
+            }
+        };
+
+        window.addEventListener('cart-updated', handler);
+        return () => window.removeEventListener('cart-updated', handler);
+    }, []);
+
+    useEffect(() => {
+        setTotal(calcTotal(cartItems));
+    }, [cartItems]);
+
+    const setItems = (next) => {
+        setCartItems(next);
+        if (isGuest) {
+            saveGuestCart(
+                next.map((it) => ({
+                    productId: it.id,
+                    name: it.name,
+                    price: it.price,
+                    image: it.image,
+                    quantity: it.quantity,
+                }))
+            );
+        }
+    };
+
+    const updateQuantity = async (productId, newQty) => {
+        if (newQty < 1) newQty = 1;
+
+        if (isGuest) {
+            setItems(
+                cartItems.map((it) => (it.id === productId ? { ...it, quantity: newQty } : it))
+            );
+            return;
+        }
+
+        try {
+            const res = await fetch(
+                `/api/carts/update?userId=${encodeURIComponent(userId)}&productId=${encodeURIComponent(
+                    productId
+                )}&quantity=${encodeURIComponent(newQty)}`,
+                { method: 'PUT', headers: { 'Content-Type': 'application/json' } }
+            );
+            if (!res.ok) throw new Error('Update failed');
+            setItems(cartItems.map((it) => (it.id === productId ? { ...it, quantity: newQty } : it)));
+        } catch (err) {
+            console.error('Error updating quantity:', err);
+            toast.error('Failed to update quantity');
+        }
+    };
+
+    const removeItem = async (productId) => {
+        if (isGuest) {
+            setItems(cartItems.filter((it) => it.id !== productId));
+            return;
+        }
+        try {
+            const res = await fetch(
+                `/api/carts/update?userId=${encodeURIComponent(userId)}&productId=${encodeURIComponent(productId)}&quantity=0`,
+                { method: 'PUT', headers: { 'Content-Type': 'application/json' } }
+            );
+            if (!res.ok) throw new Error('Remove failed');
+            setItems(cartItems.filter((it) => it.id !== productId));
+        } catch (err) {
+            console.error('Error removing item:', err);
+            toast.error('Failed to remove item');
+        }
+    };
+    
+    const addItem = async ({ productId, name, price, image, quantity = 1 }) => {
+        if (!productId) return;
+        const item = { id: productId, name, price: Number(price || 0), image: image || '', quantity: Number(quantity || 1) };
+
+        if (isGuest) {
+            // merge locally
+            const existing = cartItems.find((it) => it.id === productId);
+            if (existing) {
+                setItems(cartItems.map((it) => (it.id === productId ? { ...it, quantity: it.quantity + item.quantity } : it)));
+            } else {
+                setItems([...cartItems, item]);
+            }
+            return;
+        }
+
+        try {
+            const totalPrice = (Number(price || 0) * Number(quantity || 1)).toFixed(2);
+            const res = await fetch(`/api/carts/add?userId=${encodeURIComponent(userId)}&productId=${encodeURIComponent(productId)}&quantity=${encodeURIComponent(quantity)}&totalPrice=${encodeURIComponent(totalPrice)}`, { method: 'POST' });
+            if (!res.ok) throw new Error('Add failed');
+            // reload server cart
+            const items = await loadServerCart(userId);
+            setItems(items);
+        } catch (err) {
+            console.error('Error adding item:', err);
+            toast.error('Failed to add item to cart');
+        }
+    };
+
+    const proceedToCheckout = () => {
+        if (cartItems.length === 0) return;
+        // Checkout page needs to be setup still
+        navigate('/checkout');
+    };
+
+    const clearGuestCart = () => {
+        if (!isGuest) return;
+        const ok = window.confirm('Clear your guest cart? This will remove all items stored on this device.');
+        if (!ok) return;
+        saveGuestCart([]);
+        setCartItems([]);
+    };
+
+    return (
+        <div className="min-h-screen bg-base-200">
+            <Navbar />
+
+            <div className="container mx-auto px-4 py-8">
+                <div className="mb-6 text-center">
+                    <h1 className="text-3xl font-semibold">Your Cart</h1>
+                    <p className="text-base-content/60">
+                        {isGuest ? 'Guest cart (stored on this device)' : 'Signed-in cart'}
+                    </p>
+                </div>
+
+                {loading ? (
+                    <div className="flex justify-center py-16">
+                        <span className="loading loading-spinner loading-lg" />
+                    </div>
+                ) : cartItems.length === 0 ? (
+                    <div className="card bg-base-100 border border-base-300">
+                        <div className="card-body items-center text-center">
+                            <div className="avatar placeholder mb-4">
+                                <div className="indicator">
+                                    <ShoppingBag className="w-10 h-10" />
+                                </div>
+                            </div>
+                            <h3 className="card-title font-normal">Your cart is empty</h3>
+                            <p className="text-base-content/70">Browse products and add something you like.</p>
+                            <div className="card-actions mt-4">
+                                <button onClick={() => navigate('/')} className="btn btn-primary">
+                                    Explore Products
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        {/* Items */}
+                        <div className="lg:col-span-2">
+                            <div className="card bg-base-100 border border-base-300">
+                                <div className="card-body p-0">
+                                    <div className="overflow-x-auto">
+                                        <table className="table">
+                                            <thead>
+                                            <tr>
+                                                <th>Product</th>
+                                                <th className="w-40">Quantity</th>
+                                                <th className="text-right">Price</th>
+                                                <th className="text-right">Subtotal</th>
+                                                <th></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {cartItems.map((it) => {
+                                                const subtotal = (Number(it.price) || 0) * (Number(it.quantity) || 0);
+                                                return (
+                                                    <tr key={it.id}>
+                                                        <td>
+                                                            <div className="flex items-center gap-3">
+                                                                <div className="mask mask-squircle w-14 h-14">
+                                                                    <img
+                                                                        src={
+                                                                            it.image ||
+                                                                            'https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+                                                                        }
+                                                                        alt={it.name}
+                                                                    />
+                                                                </div>
+                                                                <div>
+                                                                    <div className="font-medium">{it.name}</div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div className="join">
+                                                                <button
+                                                                    className="btn join-item"
+                                                                    onClick={() => updateQuantity(it.id, it.quantity - 1)}
+                                                                    disabled={it.quantity <= 1}
+                                                                >
+                                                                    <Minus className="w-4 h-4" />
+                                                                </button>
+                                                                <input
+                                                                    className="input input-bordered w-16 text-center join-item"
+                                                                    readOnly
+                                                                    value={it.quantity}
+                                                                />
+                                                                <button
+                                                                    className="btn join-item"
+                                                                    onClick={() => updateQuantity(it.id, it.quantity + 1)}
+                                                                >
+                                                                    <Plus className="w-4 h-4" />
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                        <td className="text-right">${Number(it.price || 0).toLocaleString()}</td>
+                                                        <td className="text-right">${subtotal.toLocaleString()}</td>
+                                                        <td className="text-right">
+                                                            <button
+                                                                className="btn btn-ghost text-error"
+                                                                onClick={() => removeItem(it.id)}
+                                                                title="Remove item"
+                                                            >
+                                                                <Trash2 className="w-5 h-5" />
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            })}
+                                            </tbody>
+                                            <tfoot>
+                                            <tr>
+                                                <th colSpan={3} className="text-right">
+                                                    Total:
+                                                </th>
+                                                <th className="text-right">${Number(total || 0).toLocaleString()}</th>
+                                                <th></th>
+                                            </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Summary */}
+                        <div>
+                            <div className="card bg-base-100 border border-base-300 sticky top-20">
+                                <div className="card-body">
+                                    <h3 className="card-title">Order Summary</h3>
+                                    <div className="mt-2 space-y-2">
+                                        <div className="flex justify-between">
+                                            <span>Subtotal</span>
+                                            <span>${Number(total || 0).toLocaleString()}</span>
+                                        </div>
+                                        <div className="flex justify-between">
+                                            <span>Shipping</span>
+                                            <span className="text-success">Free</span>
+                                        </div>
+                                        <div className="divider my-2" />
+                                        <div className="flex justify-between text-lg font-semibold">
+                                            <span>Total</span>
+                                            <span>${Number(total || 0).toLocaleString()}</span>
+                                        </div>
+                                    </div>
+                                    <div className="card-actions mt-4">
+                                        <button
+                                            className="btn btn-primary w-full"
+                                            disabled={cartItems.length === 0}
+                                            onClick={proceedToCheckout}
+                                        >
+                                            Proceed to Checkout
+                                        </button>
+                                        <button className="btn btn-outline w-full" onClick={() => navigate('/')}>
+                                            Continue Shopping
+                                        </button>
+                                        {isGuest && (
+                                            <div className="w-full">
+                                                <div className="alert alert-info my-3">
+                                                    <div>
+                                                        <span className="font-medium">You're browsing as a guest.</span>
+                                                        <div className="text-sm text-base-content/70">Sign in to save your cart across devices.</div>
+                                                    </div>
+                                                </div>
+
+                                                <div className="flex gap-2">
+                                                    <button
+                                                        className="btn btn-ghost btn-sm flex-1"
+                                                        onClick={() => navigate('/login?redirect=/checkout')}
+                                                    >
+                                                        Sign in to save
+                                                    </button>
+                                                    <button
+                                                        className="btn btn-error btn-sm"
+                                                        onClick={clearGuestCart}
+                                                    >
+                                                        Clear guest cart
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+};
+
+export default CartPage;
