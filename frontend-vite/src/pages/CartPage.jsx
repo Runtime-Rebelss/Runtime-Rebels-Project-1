@@ -7,6 +7,7 @@ import Navbar from '../components/Navbar';
 const GUEST_KEY = 'guestCart'; 
 // Creates a guest cart, unique to local host
 function loadGuestCart() {
+
     try {
         const raw = localStorage.getItem(GUEST_KEY);
         const parsed = raw ? JSON.parse(raw) : { items: [] };

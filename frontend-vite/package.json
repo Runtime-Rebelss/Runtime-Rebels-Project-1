@@ -10,7 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@stripe/stripe-js": "^8.2.0",
+    "@stripe/react-stripe-js": "^5.2.0",
+    "@stripe/stripe-js": "^8.1.0",
     "@tailwindcss/vite": "^4.1.14",
     "axios": "^1.12.2",
     "flowbite": "^3.1.2",
@@ -21,7 +22,8 @@
     "react-hot-toast": "^2.6.0",
     "react-responsive-carousel": "^3.2.23",
     "react-router": "^7.9.3",
-    "react-router-dom": "^7.9.3"
+    "react-router-dom": "^7.9.3",
+    "stripe": "^19.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
