@@ -201,6 +201,7 @@
     </configuration>
     <list>
       <item itemvalue="Application.StoreApplication" />
+      <item itemvalue="Docker.spring-boot/docker-compose.yaml: Compose Deployment" />
       <item itemvalue="JavaScript Debug.index.html" />
       <item itemvalue="Node.js.AddToCartButton.jsx" />
       <item itemvalue="Node.js.App.jsx" />
@@ -208,7 +209,6 @@
       <item itemvalue="Node.js.main.jsx" />
       <item itemvalue="Spring Boot.StoreApplication" />
       <item itemvalue="Spring Boot.Unnamed" />
-      <item itemvalue="Docker.spring-boot/docker-compose.yaml: Compose Deployment" />
     </list>
     <recent_temporary>
       <list>
