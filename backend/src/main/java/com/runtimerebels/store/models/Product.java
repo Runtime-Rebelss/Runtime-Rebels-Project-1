@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Document(collection = "products") // Mongo collection name
 public class Product {
@@ -14,6 +15,10 @@ public class Product {
     private BigDecimal price;
     private String imageUrl;
     private String category;
+    private String slug;
+    private String externalId;
+    private String sku;
+    private List<String> categories;
 
     public String getId() {
         return id;
@@ -56,5 +61,37 @@ public class Product {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public String getSlug() {
+        return slug;
+    }
+
+    public void setSlug(String slug) {
+        this.slug = slug;
+    }
+
+    public String getExternalId() {
+        return externalId;
+    }
+
+    public void setExternalId(String externalId) {
+        this.externalId = externalId;
+    }
+
+    public String getSku() {
+        return sku;
+    }
+
+    public void setSku(String sku) {
+        this.sku = sku;
+    }
+
+    public List<String> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<String> categories) {
+        this.categories = categories;
     }
 }
