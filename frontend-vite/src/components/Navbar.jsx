@@ -65,7 +65,7 @@ const Navbar = () => {
                 </ul>
             </div>
 
-            {/* RIGHT — Search + CartPage */}
+            {/* RIGHT — Search + Cart */}
             <div className="navbar-end gap-2">
                 {/*  search text box only visible on large screen */}
                 <div className="hidden lg:flex">
@@ -87,8 +87,8 @@ const Navbar = () => {
                 <button className="btn btn-ghost btn-circle lg:hidden">
                     <Search className="h-5 w-5" />
                 </button>
-                {/* Need to update cart UI when item added */}
-                {/* CartPage icon */}
+
+                {/* Cart icon */}
                 <Link to="/cart" className="btn btn-ghost btn-circle">
                     <div className="indicator">
                         <ShoppingCart className="h-6 w-6" />

@@ -1,7 +1,6 @@
 package com.runtimerebels.store.models;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,8 +13,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-// @Document() specifies the collection name
 @Document(collection = "carts")
 public class Cart {
 
@@ -27,16 +26,10 @@ public class Cart {
     private List<Integer> quantity;
     private List<BigDecimal> totalPrice;
 
-    public Cart() {
-        this.productIds = new ArrayList<>();
-        this.quantity = new ArrayList<>();
-    }
-
     public Cart(String userId, List<String> productIds, List<Integer> quantity, List<BigDecimal> totalPrice) {
         this.userId = userId;
         this.productIds = productIds != null ? new ArrayList<>(productIds) : new ArrayList<>();
         this.quantity = quantity != null ? new ArrayList<>(quantity) : new ArrayList<>();
         this.totalPrice = totalPrice != null ? new ArrayList<>(totalPrice) : new ArrayList<>();
     }
-
 }
