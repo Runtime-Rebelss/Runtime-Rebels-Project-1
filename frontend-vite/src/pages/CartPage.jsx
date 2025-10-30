@@ -417,9 +417,13 @@ const CartPage = () => {
                                         >
                                             Proceed to Checkout
                                         </button>
+                                        <button className="btn btn-outline w-full" onClick={() => navigate('/checkout')}>
+                                            Pay With Stripe
+                                        </button>
                                         <button className="btn btn-outline w-full" onClick={() => navigate('/')}>
                                             Continue Shopping
                                         </button>
+
                                         {isGuest && (
                                             <div className="w-full">
                                                 <div className="alert alert-info my-3">
