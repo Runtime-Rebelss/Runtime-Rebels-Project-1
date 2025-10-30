@@ -4,6 +4,7 @@ import ProductPage from "./pages/ProductPage";
 import HomePage from "./pages/HomePage";
 import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
+import OrderPage from "./pages/OrderPage";
 //import LoginPage from "./pages/Auth/LoginPage.jsx";
 //import SignUpPage from "./pages/Auth/SignUpPage.jsx";
 
@@ -16,6 +17,7 @@ function App() {
                 <Route path="/product/:id" element={<ProductPage />} />
                 <Route path="/cart" element={<CartPage />} />
                 <Route path="/checkout" element={<CheckoutPage />} />
+                <Route path="/orders" element={<OrderPage />} />
             </Routes>
         </div>
     );
