@@ -190,6 +190,7 @@ const CartPage = () => {
                 }))
             );
         }
+        window.dispatchEvent(new Event("cart-updated"));
     };
 
     const updateQuantity = async (productId, newQty) => {
@@ -279,7 +280,7 @@ const CartPage = () => {
             toast.error('Failed to add item to cart');
         }
     };
-    // [ADDED] new helper function for guest Stripe checkout
+    // new: helper function for guest Stripe checkout
     const handleGuestCheckout = async () => {
         try {
             setLoading(true);
@@ -309,7 +310,7 @@ const CartPage = () => {
 
     const proceedToCheckout = async () => {
         if (cartItems.length === 0) return;
-        // [NEW LOGIC] if guest, show modal instead of routing immediately
+        // new: guest? -> show pop up prompt instead of routing immediately
         if (isGuest) {
             setShowCheckoutPrompt(true);
             return;
