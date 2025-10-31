@@ -2,9 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ShoppingBag, Trash2, Plus, Minus } from 'lucide-react';
 import Navbar from '../components/Navbar';
+import cartLib from "../lib/cart.js";
+import api from "../lib/axios.js";
+import toast from "react-hot-toast";
 
 // Currently only supports a guest cart
-const GUEST_KEY = 'guestCart'; 
+const GUEST_KEY = 'guestCart';
+
 // Creates a guest cart, unique to local host
 function loadGuestCart() {
     try {
@@ -85,10 +89,11 @@ async function loadServerCart(userId, signal) {
 
 // Need to add stuff so can make an actual account
 const CartPage = () => {
-    const [cartItems, setCartItems] = useState([]); 
+    const [cartItems, setCartItems] = useState([]);
     const [total, setTotal] = useState(0);
     const [isGuest, setIsGuest] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [showCheckoutPrompt, setShowCheckoutPrompt] = useState(false);
 
     const navigate = useNavigate();
     const userId = localStorage.getItem('userEmail');
@@ -101,7 +106,7 @@ const CartPage = () => {
             if (!userId) {
                 // Guest mode
                 setIsGuest(true);
-                const { items } = loadGuestCart();
+                const {items} = loadGuestCart();
                 setCartItems(
                     items.map((it) => ({
                         id: it.productId,
@@ -123,7 +128,7 @@ const CartPage = () => {
                 console.error('Error fetching cart:', err);
                 toast.error('Failed to fetch cart');
                 setIsGuest(true);
-                const { items } = loadGuestCart();
+                const {items} = loadGuestCart();
                 setCartItems(
                     items.map((it) => ({
                         id: it.productId,
@@ -147,7 +152,13 @@ const CartPage = () => {
             if (!localStorage.getItem('userEmail')) {
                 const items = loadGuestCart();
                 setCartItems(
-                    items.map((it) => ({ id: it.productId, name: it.name, image: it.image, price: Number(it.price || 0), quantity: Number(it.quantity || 1) }))
+                    items.map((it) => ({
+                        id: it.productId,
+                        name: it.name,
+                        image: it.image,
+                        price: Number(it.price || 0),
+                        quantity: Number(it.quantity || 1)
+                    }))
                 );
             } else {
                 try {
@@ -186,7 +197,9 @@ const CartPage = () => {
 
         if (isGuest) {
             setItems(
-                cartItems.map((it) => (it.id === productId ? { ...it, quantity: newQty } : it))
+                cartItems.map((it) =>
+                    it.id === productId ? {...it, quantity: newQty} : it
+                )
             );
             return;
         }
@@ -196,10 +209,10 @@ const CartPage = () => {
                 `/api/carts/update?userId=${encodeURIComponent(userId)}&productId=${encodeURIComponent(
                     productId
                 )}&quantity=${encodeURIComponent(newQty)}`,
-                { method: 'PUT', headers: { 'Content-Type': 'application/json' } }
+                {method: 'PUT', headers: {'Content-Type': 'application/json'}}
             );
             if (!res.ok) throw new Error('Update failed');
-            setItems(cartItems.map((it) => (it.id === productId ? { ...it, quantity: newQty } : it)));
+            setItems(cartItems.map((it) => (it.id === productId ? {...it, quantity: newQty} : it)));
         } catch (err) {
             console.error('Error updating quantity:', err);
             toast.error('Failed to update quantity');
@@ -214,7 +227,7 @@ const CartPage = () => {
         try {
             const res = await fetch(
                 `/api/carts/update?userId=${encodeURIComponent(userId)}&productId=${encodeURIComponent(productId)}&quantity=0`,
-                { method: 'PUT', headers: { 'Content-Type': 'application/json' } }
+                {method: 'PUT', headers: {'Content-Type': 'application/json'}}
             );
             if (!res.ok) throw new Error('Remove failed');
             setItems(cartItems.filter((it) => it.id !== productId));
@@ -223,16 +236,31 @@ const CartPage = () => {
             toast.error('Failed to remove item');
         }
     };
-    
-    const addItem = async ({ productId, name, price, image, quantity = 1 }) => {
+
+    const addItem = async ({
+                               productId,
+                               name,
+                               price,
+                               image,
+                               quantity = 1,
+                           }) => {
         if (!productId) return;
-        const item = { id: productId, name, price: Number(price || 0), image: image || '', quantity: Number(quantity || 1) };
+        const item = {
+            id: productId,
+            name,
+            price: Number(price || 0),
+            image: image || '',
+            quantity: Number(quantity || 1)
+        };
 
         if (isGuest) {
             // merge locally
             const existing = cartItems.find((it) => it.id === productId);
             if (existing) {
-                setItems(cartItems.map((it) => (it.id === productId ? { ...it, quantity: it.quantity + item.quantity } : it)));
+                setItems(cartItems.map((it) => (it.id === productId ? {
+                    ...it,
+                    quantity: it.quantity + item.quantity
+                } : it)));
             } else {
                 setItems([...cartItems, item]);
             }
@@ -241,7 +269,7 @@ const CartPage = () => {
 
         try {
             const totalPrice = (Number(price || 0) * Number(quantity || 1)).toFixed(2);
-            const res = await fetch(`/api/carts/add?userId=${encodeURIComponent(userId)}&productId=${encodeURIComponent(productId)}&quantity=${encodeURIComponent(quantity)}&totalPrice=${encodeURIComponent(totalPrice)}`, { method: 'POST' });
+            const res = await fetch(`/api/carts/add?userId=${encodeURIComponent(userId)}&productId=${encodeURIComponent(productId)}&quantity=${encodeURIComponent(quantity)}&totalPrice=${encodeURIComponent(totalPrice)}`, {method: 'POST'});
             if (!res.ok) throw new Error('Add failed');
             // reload server cart
             const items = await loadServerCart(userId);
@@ -251,12 +279,45 @@ const CartPage = () => {
             toast.error('Failed to add item to cart');
         }
     };
+    // [ADDED] new helper function for guest Stripe checkout
+    const handleGuestCheckout = async () => {
+        try {
+            setLoading(true);
+            const cartItems = cartLib.loadGuestCart();
 
-    const proceedToCheckout = () => {
-        if (cartItems.length === 0) return;
-        // Checkout page needs to be setup still
-        navigate('/checkout');
+            const items = cartItems.map((item) => ({
+                name: item.name,
+                unitAmount: Math.round(item.price * 100),
+                currency: "usd",
+                quantity: item.quantity,
+            }));
+
+            const response = await api.post("/payments/create-checkout-session", {
+                items,
+                customerEmail: localStorage.getItem("userEmail") || null,
+                savePaymentMethod: false,
+            });
+
+            window.location.href = response.data.url;
+        } catch (error) {
+            console.error("Error starting checkout:", error);
+            alert("Failed to start checkout. Please try again.");
+        } finally {
+            setLoading(false);
+        }
     };
+
+    const proceedToCheckout = async () => {
+        if (cartItems.length === 0) return;
+        // [NEW LOGIC] if guest, show modal instead of routing immediately
+        if (isGuest) {
+            setShowCheckoutPrompt(true);
+            return;
+        }
+
+        await handleGuestCheckout();
+    }
+
 
     const clearGuestCart = () => {
         if (!isGuest) return;
@@ -268,7 +329,7 @@ const CartPage = () => {
 
     return (
         <div className="min-h-screen bg-base-200">
-            <Navbar />
+            <Navbar/>
 
             <div className="container mx-auto px-4 py-8">
                 <div className="mb-6 text-center">
@@ -280,14 +341,14 @@ const CartPage = () => {
 
                 {loading ? (
                     <div className="flex justify-center py-16">
-                        <span className="loading loading-spinner loading-lg" />
+                        <span className="loading loading-spinner loading-lg"/>
                     </div>
                 ) : cartItems.length === 0 ? (
                     <div className="card bg-base-100 border border-base-300">
                         <div className="card-body items-center text-center">
                             <div className="avatar placeholder mb-4">
                                 <div className="indicator">
-                                    <ShoppingBag className="w-10 h-10" />
+                                    <ShoppingBag className="w-10 h-10"/>
                                 </div>
                             </div>
                             <h3 className="card-title font-normal">Your cart is empty</h3>
@@ -312,13 +373,11 @@ const CartPage = () => {
                                                 <th>Product</th>
                                                 <th className="w-40">Quantity</th>
                                                 <th className="text-right">Price</th>
-                                                <th className="text-right">Subtotal</th>
                                                 <th></th>
                                             </tr>
                                             </thead>
                                             <tbody>
                                             {cartItems.map((it) => {
-                                                const subtotal = (Number(it.price) || 0) * (Number(it.quantity) || 0);
                                                 return (
                                                     <tr key={it.id}>
                                                         <td>
@@ -344,7 +403,7 @@ const CartPage = () => {
                                                                     onClick={() => updateQuantity(it.id, it.quantity - 1)}
                                                                     disabled={it.quantity <= 1}
                                                                 >
-                                                                    <Minus className="w-4 h-4" />
+                                                                    <Minus className="w-4 h-4"/>
                                                                 </button>
                                                                 <input
                                                                     className="input input-bordered w-16 text-center join-item"
@@ -355,34 +414,24 @@ const CartPage = () => {
                                                                     className="btn join-item"
                                                                     onClick={() => updateQuantity(it.id, it.quantity + 1)}
                                                                 >
-                                                                    <Plus className="w-4 h-4" />
+                                                                    <Plus className="w-4 h-4"/>
                                                                 </button>
                                                             </div>
                                                         </td>
                                                         <td className="text-right">${Number(it.price || 0).toLocaleString()}</td>
-                                                        <td className="text-right">${subtotal.toLocaleString()}</td>
                                                         <td className="text-right">
                                                             <button
                                                                 className="btn btn-ghost text-error"
                                                                 onClick={() => removeItem(it.id)}
                                                                 title="Remove item"
                                                             >
-                                                                <Trash2 className="w-5 h-5" />
+                                                                <Trash2 className="w-5 h-5"/>
                                                             </button>
                                                         </td>
                                                     </tr>
                                                 );
                                             })}
                                             </tbody>
-                                            <tfoot>
-                                            <tr>
-                                                <th colSpan={3} className="text-right">
-                                                    Total:
-                                                </th>
-                                                <th className="text-right">${Number(total || 0).toLocaleString()}</th>
-                                                <th></th>
-                                            </tr>
-                                            </tfoot>
                                         </table>
                                     </div>
                                 </div>
@@ -399,16 +448,10 @@ const CartPage = () => {
                                             <span>Subtotal</span>
                                             <span>${Number(total || 0).toLocaleString()}</span>
                                         </div>
-                                        <div className="flex justify-between">
-                                            <span>Shipping</span>
-                                            <span className="text-success">Free</span>
-                                        </div>
-                                        <div className="divider my-2" />
-                                        <div className="flex justify-between text-lg font-semibold">
-                                            <span>Total</span>
-                                            <span>${Number(total || 0).toLocaleString()}</span>
-                                        </div>
                                     </div>
+                                    <p className="text-sm text-base-content/60 mt-3">
+                                        Shipping and total calculated at checkout.
+                                    </p>
                                     <div className="card-actions mt-4">
                                         <button
                                             className="btn btn-primary w-full"
@@ -417,10 +460,14 @@ const CartPage = () => {
                                         >
                                             Proceed to Checkout
                                         </button>
-                                        <button className="btn btn-outline w-full" onClick={() => navigate('/')}>
+                                        <button
+                                            className="btn btn-outline w-full"
+                                            onClick={() => navigate("/")}
+                                        >
                                             Continue Shopping
                                         </button>
-                                        {isGuest && (
+
+                                        { /* {isGuest && (
                                             <div className="w-full">
                                                 <div className="alert alert-info my-3">
                                                     <div>
@@ -444,7 +491,7 @@ const CartPage = () => {
                                                     </button>
                                                 </div>
                                             </div>
-                                        )}
+                                        )} */}
                                     </div>
                                 </div>
                             </div>
@@ -452,6 +499,50 @@ const CartPage = () => {
                     </div>
                 )}
             </div>
+
+            {/* added guest checkout prompt model */}
+            {showCheckoutPrompt && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                    <div className="bg-base-100 p-6 rounded-lg shadow-lg max-w-md w-full text-center space-y-4">
+                        <h2 className="text-xl font-semibold">
+                            Members get free shipping on orders $50+
+                        </h2>
+                        <p className="text-base-content/70">
+                            Sign in to save your cart and enjoy exclusive member benefits.
+                        </p>
+
+                        <div className="flex flex-col gap-2 mt-4">
+                            <button
+                                className="btn btn-primary w-full"
+                                onClick={() => navigate("/login")}
+                            >
+                                Login
+                            </button>
+                            <button
+                                className="btn btn-outline w-full"
+                                onClick={() => navigate("/signup")}
+                            >
+                                Sign Up
+                            </button>
+                            <button
+                                className="btn btn-neutral w-full"
+                                onClick={() => {
+                                    setShowCheckoutPrompt(false);
+                                    handleGuestCheckout();
+                                }}
+                            >
+                                Continue as Guest
+                            </button>
+                        </div>
+                        <button
+                            className="btn btn-sm btn-ghost mt-3"
+                            onClick={() => setShowCheckoutPrompt(false)}
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
