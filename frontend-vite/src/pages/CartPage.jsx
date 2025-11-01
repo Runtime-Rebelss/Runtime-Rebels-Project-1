@@ -415,7 +415,7 @@ const CartPage = () => {
                                             disabled={cartItems.length === 0}
                                             onClick={proceedToCheckout}
                                         >
-                                            Proceed to Checkout
+                                            Pay with Stripe
                                         </button>
                                         <button className="btn btn-outline w-full" onClick={() => navigate('/')}>
                                             Continue Shopping
