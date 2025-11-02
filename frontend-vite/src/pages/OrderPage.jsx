@@ -9,8 +9,12 @@ import ProductCard from "../components/ProductCard";
 import api from "../lib/axios";
 
 const OrderPage = () => {
+    const [cartItems, setCartItems] = useState([]);
+    const [total, setTotal] = useState(0);
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
+
+    const userId = localStorage.getItem('userEmail');
 
     return (
         <div className="min-h-screen bg-base-200">

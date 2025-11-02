@@ -49,8 +49,8 @@ async function loadServerCart(userId, signal) {
     if (!res.ok) throw new Error('Failed to load cart');
     const cartData = await res.json();
     const productIds = Array.isArray(cartData?.productIds) ? cartData.productIds : [];
-    const quantities = Array.isArray(cartData?.quantities) ? cartData.quantities : [];
-    const finalPrices = Array.isArray(cartData?.finalPrices) ? cartData.finalPrices : [];
+    const quantities = Array.isArray(cartData?.quantity) ? cartData.quantity : [];
+    const finalPrices = Array.isArray(cartData?.totalPrice) ? cartData.totalPrice : [];
 
     const items = await Promise.all(
         productIds
@@ -126,7 +126,7 @@ const CartPage = () => {
                 setCartItems(items);
             } catch (err) {
                 console.error('Error fetching cart:', err);
-                toast.error('Failed to fetch cart');
+                toast.error('Failed to fetch cart :(');
                 setIsGuest(true);
                 const {items} = loadGuestCart();
                 setCartItems(
@@ -150,7 +150,7 @@ const CartPage = () => {
     useEffect(() => {
         const handler = async (e) => {
             if (!localStorage.getItem('userEmail')) {
-                const items = loadGuestCart();
+                const { items } = loadGuestCart();
                 setCartItems(
                     items.map((it) => ({
                         id: it.productId,

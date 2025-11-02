@@ -17,6 +17,7 @@ import com.runtimerebels.store.models.Cart;
 
 import com.runtimerebels.store.dao.CartRepository;
 
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 @RestController
 @RequestMapping("/api/carts")
 public class CartController {
@@ -48,11 +49,7 @@ public class CartController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Cart> addToCart(@RequestParam String userId,
-                                          @RequestParam String productId,
-                                          @RequestParam(defaultValue = "1") int quantity,
-                                          @RequestParam BigDecimal totalPrice) {
-
+    public ResponseEntity<Cart> addToCart(@RequestParam String userId, @RequestParam String productId, @RequestParam(defaultValue = "1") int quantity, @RequestParam BigDecimal totalPrice) {
         // Check input
         if (quantity <= 0 || totalPrice.compareTo(BigDecimal.ZERO) <= 0) {
             return ResponseEntity.badRequest().build();

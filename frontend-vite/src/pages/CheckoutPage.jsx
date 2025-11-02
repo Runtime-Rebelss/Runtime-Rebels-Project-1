@@ -16,6 +16,15 @@ const CheckoutPage = () => {
         setStatus(params.get("status"));
     }, [location.search]);
 
+    useEffect(() => {
+        if (status === "success") {
+            // Remove item from cart!
+            localStorage.removeItem('guestCart');
+            window.dispatchEvent(new Event('cart-updated'));
+            navigate('/orders', { replace: true });
+        }
+    }, [status, navigate]);
+
     // checkout with Stripe
     const handleCheckout = async () => {
         try {
@@ -55,14 +64,6 @@ const CheckoutPage = () => {
         <>
             <Navbar />
             <div className="max-w-6xl mx-auto p-6 flex flex-col lg:flex-row gap-10">
-
-                {status === "success" && (
-
-                    navigate('/orders')
-
-
-
-                )}
                 {status === "cancel" && (
                     <div className="bg-red-100 text-red-800 p-3 rounded mb-4 w-full text-center">
                         Payment canceled. You can try again below.
