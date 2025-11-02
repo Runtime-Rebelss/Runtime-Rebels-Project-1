@@ -87,7 +87,7 @@ const Navbar = () => {
                 </ul>
             </div>
 
-            {/* RIGHT — Search + Cart */}
+            {/* RIGHT — Search + Orders + Cart */}
             <div className="navbar-end gap-2">
                 {/*  search text box only visible on large screen */}
                 <div className="hidden lg:flex">
