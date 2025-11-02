@@ -10,6 +10,7 @@ backend/target/
 # --- Node (React frontend) ---
 frontend-vite/node_modules/
 frontend-vite/.env
+frontend-vite/.vite/
 
 # --- OS system files ---
 .DS_Store

@@ -57,9 +57,11 @@ const CheckoutPage = () => {
             <div className="max-w-6xl mx-auto p-6 flex flex-col lg:flex-row gap-10">
 
                 {status === "success" && (
-                    <div className="bg-green-100 text-green-800 p-3 rounded mb-4 w-full text-center">
-                        Payment successful! Thank you for your purchase.
-                    </div>
+
+                    navigate('/orders')
+
+
+
                 )}
                 {status === "cancel" && (
                     <div className="bg-red-100 text-red-800 p-3 rounded mb-4 w-full text-center">

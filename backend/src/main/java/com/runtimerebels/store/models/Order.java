@@ -9,29 +9,18 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
-@Data // <- Combines the getters and setters into one annotation
+@Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-@Document(collection = "orders")
+@Document
 public class Order {
     @Id
     private String id;
-
-    private String userId;
-    private List<String> productIds;
-    private List<Integer> quantity;
-    private BigDecimal totalPrice;
+    private Cart cart;
+    private OrderStatus orderStatus;
     private Date createdAt;
-
-    private String deliveryName;
-    private String deliveryContact;
-    private String deliveryAddress;
-    private String deliveryCity;
-    private String deliveryState;
-
-
-
+    private Date processAt;
+    private BigDecimal total;
 }
