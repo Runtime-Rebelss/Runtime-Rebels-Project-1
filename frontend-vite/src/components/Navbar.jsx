@@ -110,6 +110,11 @@ const Navbar = () => {
                     <Search className="h-5 w-5" />
                 </button>
 
+                {/* Orders Page Icon */}
+                <Link to="/orders">
+                    <button className="btn btn-ghost">Orders</button>
+                </Link>
+
                 {/* new cart icon with item count  */}
                 <Link to="/cart" className="btn btn-ghost btn-circle relative">
                     <ShoppingCart className="h-6 w-6" />

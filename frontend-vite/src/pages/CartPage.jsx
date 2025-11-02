@@ -463,7 +463,7 @@ const CartPage = () => {
                                         </button>
                                         <button
                                             className="btn btn-outline w-full"
-                                            onClick={() => navigate("/")}
+                                            onClick={() => navigate("/orders")}
                                         >
                                             Continue Shopping
                                         </button>
