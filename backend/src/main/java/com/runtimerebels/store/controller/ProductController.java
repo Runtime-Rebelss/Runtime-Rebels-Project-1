@@ -41,6 +41,12 @@ public class ProductController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // Get products by category
+    @GetMapping("/category/{category}")
+    public List<Product> getProductsByCategory(@PathVariable String category) {
+        return productRepository.findByCategoriesContainingIgnoreCase(category);
+    }
+
     // Create a new product
     @PostMapping
     public Product createProduct(@RequestBody Product product) {

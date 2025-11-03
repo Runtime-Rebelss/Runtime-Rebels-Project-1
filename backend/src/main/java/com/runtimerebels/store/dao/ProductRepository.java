@@ -14,4 +14,8 @@ public interface ProductRepository extends MongoRepository<Product, String> {
     // query by price
     List<Product> findByPrice(BigDecimal price);
     List<Product> findByPriceBetween(BigDecimal min, BigDecimal max);
+
+    // query by category
+    List<Product> findByCategories(String category);
+    List<Product> findByCategoriesContainingIgnoreCase(String category);
 }

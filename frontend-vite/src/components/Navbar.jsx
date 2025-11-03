@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { ShoppingCart, Search } from "lucide-react";
 
 const Navbar = () => {
-    const categories = ["Men", "Women", "Jewelery", "Electronics", "Accessories"];
+    const categories = ["Men's", "Women's", "Jewelry", "Electronics", "Home & Garden"];
 
     return (
         <div className="navbar bg-base-100 shadow-sm px-4 sticky top-0 z-50">
@@ -32,7 +32,7 @@ const Navbar = () => {
                     >
                         {categories.map((cat) => (
                             <li key={cat}>
-                                <Link to={`/products?category=${cat.toLowerCase()}`}>{cat}</Link>
+                                <Link to={`/results/${cat.toLowerCase()}`}>{cat}</Link>
                             </li>
                         ))}
                     </ul>
@@ -55,7 +55,7 @@ const Navbar = () => {
                     {categories.map((cat) => (
                         <li key={cat}>
                             <Link
-                                to={`/products?category=${cat.toLowerCase()}`}
+                                to={`/results/${cat.toLowerCase()}`}
                                 className="font-semibold hover:text-primary transition"
                             >
                                 {cat}
