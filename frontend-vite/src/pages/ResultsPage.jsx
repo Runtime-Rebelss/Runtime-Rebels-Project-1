@@ -6,6 +6,7 @@ import api from '../lib/axios'
 import ProductCard from '../components/ProductCard'
 import Filters from '../components/Filters'
 import Navbar from '../components/Navbar'
+import useFetchProducts from '../components/actions/useFetchProducts'
 
 const ResultsPage = () => {
   const [products, setProducts] = useState([]);
@@ -24,24 +25,7 @@ const ResultsPage = () => {
     )
   ).filter(Boolean);
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        // If no category param is provided, fetch all products. Otherwise
-        // fetch by category. This makes the component more robust.
-        const url = category ? `/products/category/${category}` : '/products';
-        const response = await api.get(url);
-        setProducts(response.data);
-      } catch (error) {
-        console.error('Error fetching products:', error);
-        toast.error('Failed to fetch products');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, [category]);
+  useFetchProducts(category, setProducts, setLoading);
 
   if (loading) {
     return <div>Loading...</div>;
