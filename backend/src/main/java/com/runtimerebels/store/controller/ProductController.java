@@ -44,7 +44,7 @@ public class ProductController {
     // Get products by category
     @GetMapping("/category/{category}")
     public List<Product> getProductsByCategory(@PathVariable String category) {
-        return productRepository.findByCategoriesContainingIgnoreCase(category);
+        return productRepository.findByCategoriesIgnoreCase(category);
     }
 
     // Create a new product
