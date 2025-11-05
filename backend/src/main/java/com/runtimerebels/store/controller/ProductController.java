@@ -5,8 +5,14 @@ import org.springframework.web.bind.annotation.*;
 
 import com.runtimerebels.store.dao.ProductRepository;
 import com.runtimerebels.store.models.Product;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 
 import java.util.List;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.Arrays;
 /**
  * ProductController - REST API for managing products.
  *
@@ -24,8 +30,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
+    private final ProductRepository productRepository;
+    private final MongoTemplate mongoTemplate;
+
     @Autowired
-    private ProductRepository productRepository;
+    public ProductController(ProductRepository productRepository, MongoTemplate mongoTemplate) {
+        this.productRepository = productRepository;
+        this.mongoTemplate = mongoTemplate;
+    }
 
     // Get all products
     @GetMapping
@@ -41,10 +53,18 @@ public class ProductController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // Get products by category
-    @GetMapping("/category/{category}")
-    public List<Product> getProductsByCategory(@PathVariable String category) {
-        return productRepository.findByCategoriesIgnoreCase(category);
+    // Get products by category (case-insensitive, must match all)
+    @GetMapping("/category")
+    public List<Product> getProductsByCategory(@RequestParam(required = false) String[] categories) {
+        if (categories == null || categories.length == 0) {
+            return productRepository.findAll();
+        }
+        // Build regex patterns for case-insensitive exact match
+        List<Pattern> patterns = Arrays.stream(categories)
+            .map(cat -> Pattern.compile("^" + Pattern.quote(cat) + "$", Pattern.CASE_INSENSITIVE))
+            .collect(Collectors.toList());
+        Query query = new Query(Criteria.where("categories").all(patterns));
+        return mongoTemplate.find(query, Product.class);
     }
 
     // Create a new product

@@ -1,8 +1,27 @@
 import React from 'react'
+import { useSearchParams } from 'react-router-dom'
 
-import api from '../lib/axios'
-
-function Filters({ categories = [], cat, products }) {
+function Filters({ categories = [] }) {
+    const [searchParams, setSearchParams] = useSearchParams();
+    
+    const handleCategoryChange = (category, checked) => {
+        const currentCategories = new Set(searchParams.getAll('categories'));
+        
+        if (checked) {
+            currentCategories.add(category);
+        } else {
+            currentCategories.delete(category);
+        }
+        
+        // Update URL parameters with new categories
+        setSearchParams(params => {
+            // Remove all existing category parameters
+            params.delete('categories');
+            // Add each selected category
+            currentCategories.forEach(cat => params.append('categories', cat.toLowerCase()));
+            return params;
+        });
+    };
 
     return (
         <form>
@@ -17,11 +36,14 @@ function Filters({ categories = [], cat, products }) {
                         categories.map((category) => (
                             <li key={category}>
                                 <label className='label'>
-                                    {cat === category.toLowerCase() ? (
-                                        <input type='checkbox' className='checkbox checkbox-primary mr-2' defaultChecked />
-                                    ) : (
-                                        <input type='checkbox' className='checkbox checkbox-primary mr-2' />
-                                        )}
+                                    <input 
+                                        type='checkbox' 
+                                        name={category}
+                                        id={category}
+                                        checked={searchParams.getAll('categories').includes(category.toLowerCase())}
+                                        onChange={(e) => handleCategoryChange(category, e.target.checked)}
+                                        className='checkbox checkbox-primary mr-2' 
+                                    />
                                     <span className='label-text'>{category}</span>
                                 </label>
                             </li>
@@ -57,10 +79,21 @@ function Filters({ categories = [], cat, products }) {
             </div>
 
             {/* Reset Button */}
-            <input className="btn btn-square" type="reset" name="filter" value="x" />
+            <button 
+                className="btn btn-square" 
+                onClick={(e) => {
+                    e.preventDefault();
+                    setSearchParams(params => {
+                        params.delete('categories');
+                        return params;
+                    });
+                }}
+            >
+                ×
+            </button>
 
         </form>
     );
 }
 
-export default Filters
+export default Filters;

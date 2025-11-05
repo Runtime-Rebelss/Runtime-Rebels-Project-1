@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 
 import api from "../../lib/axios";
 
-function useFetchProducts(category, setProducts, setLoading) {
+function useFetchProducts(categories, setProducts, setLoading) {
 
     const products = useState([]);
     const loading = useState(true);
@@ -11,9 +11,11 @@ function useFetchProducts(category, setProducts, setLoading) {
     const fetchProducts = async () => {
 
       try {
-        // If no category param is provided, fetch all products. Otherwise
-        // fetch by category. This makes the component more robust.
-        const url = category ? `/products/category/${category}` : '/products';
+        // If categories is null/undefined or empty, fetch all products
+        // Otherwise fetch by category. This makes the component more robust.
+        const url = categories?.length > 0 ? `/products/category?${categories.map(category => `categories=${category}`).join('&')}` : '/products';
+        console.log(url);
+        console.log('Current Categories: ', categories);
         const response = await api.get(url);
         setProducts(response.data);
       } catch (error) {
@@ -27,7 +29,7 @@ function useFetchProducts(category, setProducts, setLoading) {
     useEffect(() => {
       setLoading(true);
       fetchProducts();
-    }, [category]);
+    }, [categories]);
 
     return { setProducts, setLoading, fetchProducts };
 }

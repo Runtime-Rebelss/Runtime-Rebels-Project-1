@@ -32,7 +32,7 @@ const Navbar = () => {
                     >
                         {categories.map((cat) => (
                             <li key={cat}>
-                                <Link to={`/results/${cat.toLowerCase()}`}>{cat}</Link>
+                                <Link to={`/results?categories=${cat.toLowerCase()}`}>{cat}</Link>
                             </li>
                         ))}
                     </ul>
@@ -55,7 +55,7 @@ const Navbar = () => {
                     {categories.map((cat) => (
                         <li key={cat}>
                             <Link
-                                to={`/results/${cat.toLowerCase()}`}
+                                to={`/results?categories=${cat.toLowerCase()}`}
                                 className="font-semibold hover:text-primary transition"
                             >
                                 {cat}
@@ -74,6 +74,7 @@ const Navbar = () => {
                             <input
                                 type="text"
                                 placeholder="Search products..."
+                                name="searchbar"
                                 className="input input-bordered w-48 xl:w-64"
                             />
                             <button className="btn btn-square btn-primary">

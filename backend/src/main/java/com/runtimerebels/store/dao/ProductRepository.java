@@ -16,6 +16,10 @@ public interface ProductRepository extends MongoRepository<Product, String> {
     List<Product> findByPriceBetween(BigDecimal min, BigDecimal max);
 
     // query by category
-    List<Product> findByCategoriesIgnoreCase(String category);
+    // Find products whose `categories` list contains any of the provided values.
+    // Use a Collection/List parameter so Spring Data can derive the proper $in query.
+    @org.springframework.data.mongodb.repository.Query("{ 'categories': { $all: ?0 } }")
+    List<Product> findByCategoriesAllIgnoreCaseSensitive(java.util.List<String> categories);
+    // For single-value case-insensitive contains, keep a helper method
     List<Product> findByCategoriesContainingIgnoreCase(String category);
 }
