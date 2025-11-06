@@ -94,9 +94,56 @@ const CartPage = () => {
     const [isGuest, setIsGuest] = useState(false);
     const [loading, setLoading] = useState(true);
     const [showCheckoutPrompt, setShowCheckoutPrompt] = useState(false);
+    const [toastMsg, setToastMsg] = useState('');
 
     const navigate = useNavigate();
     const userId = localStorage.getItem('userEmail');
+
+    useEffect(() => {
+    const fetchCart = async () => {
+        try {
+            const res = await fetch(`/api/carts/${encodeURIComponent(userId)}`);
+            if (!res.ok) throw new Error('Failed to fetch cart');
+
+            const cartData = await res.json();
+            console.log(cartData);
+
+            const items = await Promise.all(
+                cartData.productId
+                    // Used to remove Ids that no work
+                    .filter(pid => pid && typeof pid === 'string' && pid.length > 0)
+                    .map(async (productId, index) => {
+                        try {
+                            const productRes = await fetch(`/api/products/${encodeURIComponent(productId)}`);
+                            if (!productRes.ok) throw new Error(`Product ${productId} not found`);
+                            const product = await productRes.json();
+
+                            const quantity = cartData.quantities?.[index] ?? 1;
+                            const totalPrice = cartData.totalPrices?.[index];
+
+                            return {
+                                ...product,
+                                quantity,
+                                totalPrice,
+                                itemTotal: totalPrice * quantity
+                            };
+                        } catch (err) {
+                            console.warn(err);
+                            return null;
+                        }
+                    })
+            );
+            const validItems = items.filter(i => i !== null);
+            setCartItems(validItems);
+            setTotal(validItems.reduce((sum, i) => sum + i.itemTotal, 0));
+        } catch (err) {
+            console.error(err);
+            setToastMsg('Error loading cart');
+        }
+    };
+
+    fetchCart();
+    }, [userId, navigate]);
 
     useEffect(() => {
         let ac = new AbortController();

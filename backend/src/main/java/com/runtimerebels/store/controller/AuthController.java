@@ -50,7 +50,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<Map<String, String>> registerUser(@RequestBody User user) {
+    public ResponseEntity<Map<String, String>> register(@RequestBody User user) {
         Map<String, String> response = new HashMap<>();
         if (userRepository.existsByEmail(user.getEmail())) {
             response.put("error", "Email already exists");
@@ -62,7 +62,17 @@ public class AuthController {
         response.put("Status", "Account Created!");
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
-
     // Add thing for login here!!
-
+    @PostMapping("/login")
+    public ResponseEntity<Map<String, String>> login(@RequestBody User user) {
+        Map<String, String> response = new HashMap<>();
+        Optional<User> userOptional = userRepository.findByEmail(user.getEmail());
+        if (userOptional.isPresent() && passwordEncoder.matches(user.getPassword(), userOptional.get().getPassword())) {
+            response.put("message", "Login Successful");
+            return ResponseEntity.ok(response);
+        } else {
+            response.put("message", "Wrong Credentials");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+    }
 }

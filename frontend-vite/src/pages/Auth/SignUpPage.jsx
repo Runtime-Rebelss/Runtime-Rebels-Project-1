@@ -25,7 +25,7 @@ const SignUpPage = () => {
         }
 
         if (!passOk) {
-            return setToastMsg('Please enter 6 characters');
+            return setToastMsg('Please enter 6 characters for the password');
         }
 
         try {
@@ -33,7 +33,7 @@ const SignUpPage = () => {
             setToastMsg("");
 
             const res = await api.post("/auth/signup", { email, password });
-            const { message, userId, email: serverEmail} = res.data || {};
+            const { message, userId, email: userEmail} = res.data || {};
 
             const newUser = new User({email,password});
             await newUser.save();
@@ -51,9 +51,16 @@ const SignUpPage = () => {
             }
 
             localStorage.setItem("userId", userId);
-            localStorage.setItem("userEmail",  serverEmail || email);
+            localStorage.setItem("userEmail",  userEmail || email);
+
+            // Should output a message saying account was created
+            // Redirect to homepage
+            // Then username should show up in the top right or left
+            // Need to add button to either sign out or login
+
 
             setToastMsg(message || "Account created successfully!!");
+            // Redirect to homepage
             setIsSuccessful(true);
             setEmail("");
             setPassword("");
@@ -69,6 +76,7 @@ const SignUpPage = () => {
             console.log(error);
         } finally {
             setLoading(false);
+            setToastMsg("Account Created!")
         }
     };
 
@@ -97,7 +105,8 @@ const SignUpPage = () => {
                                    className="input" placeholder="Email" />
 
                             <label className="label">Password</label>
-                            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="input" placeholder="Password" />
+                            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}
+                                   className="input" placeholder="Password" />
                             <button className="btn btn-neutral w-full" disabled={loading}>
                                 {loading ? "Creating..." : "Sign up"}
                             </button>
