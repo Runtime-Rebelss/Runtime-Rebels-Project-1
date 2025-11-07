@@ -18,8 +18,10 @@ const SignUpPage = () => {
 
     const handleSignup = async (e) => {
         e.preventDefault();
+
         // Need to add thing for email / pass valid
         // Need to check if user adds .com, etc.
+
         if (!emailOk) {
             return setToastMsg('Please enter a valid email');
         }
@@ -28,21 +30,22 @@ const SignUpPage = () => {
             return setToastMsg('Please enter 6 characters for the password');
         }
 
+        setToastMsg("");
+        setLoading(true);
+        setIsSuccessful(false);
+
         try {
-            setLoading(true);
-            setToastMsg("");
 
-            const res = await api.post("/auth/signup", { email, password });
-            const { message, userId, email: userEmail} = res.data || {};
+            const res = await api.post("/auth/signup", {email, password});
+            const data = res?.data?? {};
 
-            const newUser = new User({email,password});
-            await newUser.save();
+            const userId =
+                data.userId ||
+                data.id ||
+                data._id ||
+                data.user?.id ||
+                data.user?._id;
 
-            res.status(201).json({
-                message: 'Signup successful!',
-                userId: newUser.id,
-                email: newUser.email,
-            });
 
             if (!userId) {
                 setToastMsg("Signup successful, but no userId");
@@ -50,6 +53,7 @@ const SignUpPage = () => {
                 return;
             }
 
+            const userEmail = data.email || data.user?.email || email
             localStorage.setItem("userId", userId);
             localStorage.setItem("userEmail",  userEmail || email);
 
@@ -57,9 +61,7 @@ const SignUpPage = () => {
             // Redirect to homepage
             // Then username should show up in the top right or left
             // Need to add button to either sign out or login
-
-
-            setToastMsg(message || "Account created successfully!!");
+            setToastMsg(data.message || "Account created successfully!!");
             // Redirect to homepage
             setIsSuccessful(true);
             setEmail("");
@@ -68,19 +70,20 @@ const SignUpPage = () => {
             window.dispatchEvent(new Event("cart-updated"));
 
             navigate("/", {replace: true});
+
+
         } catch (error) {
             const msg = error?.response.error ||
-                error?.response.data.message;
+                error?.response.data.message ||
+                "Sign up failed";
             setToastMsg(msg);
             setIsSuccessful(false);
-            console.log(error);
         } finally {
             setLoading(false);
-            setToastMsg("Account Created!")
         }
     };
 
-        return (
+    return (
         <div className="min-h-screen bg-base-200">
             <Navbar/>
 

@@ -57,9 +57,11 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
         }
 
+        User saved = userRepository.save(user);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
         response.put("Status", "Account Created!");
+        response.put("userId", saved.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
     // Add thing for login here!!
@@ -69,7 +71,11 @@ public class AuthController {
         Optional<User> userOptional = userRepository.findByEmail(user.getEmail());
         if (userOptional.isPresent() && passwordEncoder.matches(user.getPassword(), userOptional.get().getPassword())) {
             response.put("message", "Login Successful");
-            return ResponseEntity.ok(response);
+            User u = userOptional.get();
+            return ResponseEntity.ok(Map.of(
+            "userId", u.getId(),
+                    "email", u.getEmail()
+            ));
         } else {
             response.put("message", "Wrong Credentials");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);

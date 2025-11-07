@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ShoppingBag, Heart, Search, Menu, X, Mail, Phone, User } from 'lucide-react';
 import Navbar from "../../components/Navbar.jsx";
+import api from "../../lib/axios.js";
 
 const LoginPage = () => {
     // Need to check if user has account already
@@ -33,28 +34,30 @@ const LoginPage = () => {
         }
     }, []);
 
+    const extractUserId = (data) =>
+        data?.userId || data?.id || data?._id || data?.user?.id || data?.user?._id || null;
+
     const handleLogin = async (e) => {
         e.preventDefault();
         setToastMsg("");
         setLoading(true);
+
         try {
-            const res = await fetch("/auth/login", {email, password});
-            console.log(res.data);
+            const res = await api.post("/auth/login", {email, password});
+            const data = res?.data?? {};
+            const userId = data.userId || data.id || data._id || data.user?.id || data.user?._id;
 
-            if (!res.ok) {
-                let msg = "Login Failed";
-                try {
-                    const data = await res.json()
-                    msg = data?.message || data?.error || msg;
-                } catch {}
-                if (res.status === 404) msg = "No account with that email.";
-                if (res.status === 401) msg = "Incorrect password.";
-            }
 
+            const userEmail = data?.email || email;
+            localStorage.setItem("userId", userId);
             localStorage.setItem("userEmail", email);
             navigate("/", {replace: true});
         } catch (err) {
-            setToastMsg('Bad credentials');
+            const status = err?.response?.status;
+            const serverMsg = err?.response?.data?.message || err?.response?.data?.error;
+
+            if (status === 404) setToastMsg(serverMsg || "No account with that email");
+            else if (status === 401) setToastMsg(serverMsg || "Incorrect password");
         } finally {
             setLoading(false);
         }
@@ -78,6 +81,13 @@ const LoginPage = () => {
                             <label className="label">Password</label>
                             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}
                                    className="input" placeholder="Password" required />
+
+                            {!!toastMsg && (
+                                <div role="alert" className="alert alert-error mt-3">
+                                    <span>{toastMsg}</span>
+                                </div>
+                            )}
+
                             {/* Login Button */}
                             <button type="submit" className="btn btn-neutral w-full" disabled={loading}>
                                 {loading ? "Logging in..." : "Sign in"}
@@ -87,7 +97,7 @@ const LoginPage = () => {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default LoginPage;

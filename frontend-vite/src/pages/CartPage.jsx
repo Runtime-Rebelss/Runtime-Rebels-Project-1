@@ -97,7 +97,7 @@ const CartPage = () => {
     const [toastMsg, setToastMsg] = useState('');
 
     const navigate = useNavigate();
-    const userId = localStorage.getItem('userEmail');
+    const userId = localStorage.getItem("userId");
 
     useEffect(() => {
     const fetchCart = async () => {
@@ -196,7 +196,7 @@ const CartPage = () => {
 
     useEffect(() => {
         const handler = async (e) => {
-            if (!localStorage.getItem('userEmail')) {
+            if (!localStorage.getItem('userId')) {
                 const { items } = loadGuestCart();
                 setCartItems(
                     items.map((it) => ({
@@ -209,7 +209,7 @@ const CartPage = () => {
                 );
             } else {
                 try {
-                    const items = await loadServerCart(localStorage.getItem('userEmail'));
+                    const items = await loadServerCart(localStorage.getItem('userId'));
                     setCartItems(items);
                 } catch {
                 }

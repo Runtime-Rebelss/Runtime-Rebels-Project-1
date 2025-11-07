@@ -110,6 +110,10 @@ const Navbar = () => {
                     <Search className="h-5 w-5" />
                 </button>
 
+                <Link to="/orders">
+                    <button className="btn btn-ghost">UserId.id</button>
+                </Link>
+
                 {/* Orders Page Icon */}
                 <Link to="/orders">
                     <button className="btn btn-ghost">Orders</button>
