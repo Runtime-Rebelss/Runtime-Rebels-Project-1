@@ -44,7 +44,9 @@ public class SecurityConfig {
                         "/webjars/**",
                         "/api/auth/authenticate",
                         "/api/auth/refreshToken",
-                        "/api/products/**"
+                        "/api/products/**",
+                        "/api/payments/**",
+                        "/api/carts/**"
                 ).permitAll()
                 // 3. Keep this essential rule for CORS pre-flight requests
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()

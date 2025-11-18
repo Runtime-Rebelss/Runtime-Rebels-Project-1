@@ -95,8 +95,14 @@ const CartPage = () => {
 
     const navigate = useNavigate();
     const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("authToken");
 
     useEffect(() => {
+        if (!userId || !token) {
+            navigate("/login?redirect=/cart");
+            return;
+        }
+
         let ac = new AbortController();
 
         const load = async () => {
@@ -281,6 +287,35 @@ const CartPage = () => {
             toast.error('Failed to add item to cart');
         }
     };
+
+    // Method to handle user Checkouts
+    const handleUserCheckout = async () => {
+        try {
+            setLoading(true);
+            const cartItems = await loadServerCart(userId);
+
+            const items = cartItems.map((item) => ({
+                name: item.name,
+                unitAmount: Math.round(item.price * 100),
+                currency: "usd",
+                quantity: item.quantity,
+            }));
+
+            const response = await api.post("/payments/create-checkout-session", {
+                items,
+                userId,
+                savePaymentMethod: true,
+            });
+
+            window.location.href = response.data.url;
+        } catch (error) {
+            console.error("Error starting checkout:", error);
+            alert("Failed to start checkout. Please try again.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const handleGuestCheckout = async () => {
         try {
             setLoading(true);
@@ -311,12 +346,12 @@ const CartPage = () => {
     const proceedToCheckout = async () => {
         if (cartItems.length === 0) return;
         // new: guest? -> show pop up prompt instead of routing immediately
-        if (isGuest) {
+        if (!localStorage.getItem("authToken")) {
             setShowCheckoutPrompt(true);
             return;
         }
 
-        await handleGuestCheckout();
+        await handleUserCheckout();
     }
 
     const clearGuestCart = () => {
