@@ -6,6 +6,8 @@ import cartLib from "../lib/cart.js";
 import api from "../lib/axios.js";
 import toast from "react-hot-toast";
 
+// Need to completely remove anything related to GUEST USER!!!!!
+
 // Currently only supports a guest cart
 const GUEST_KEY = 'guestCart';
 
@@ -45,9 +47,7 @@ function calcTotal(items) {
 
 // Added for when we add actual users
 async function loadServerCart(userId, signal) {
-    const res = await fetch(`/api/carts/${encodeURIComponent(userId)}`, { signal });
-    if (!res.ok) throw new Error('Failed to load cart');
-    const cartData = await res.json();
+    const { data: cartData } = await api.get(`/carts/${encodeURIComponent(userId)}`, { signal });
     const productIds = Array.isArray(cartData?.productIds) ? cartData.productIds : [];
     const quantities = Array.isArray(cartData?.quantity) ? cartData.quantity : [];
     const finalPrices = Array.isArray(cartData?.totalPrice) ? cartData.totalPrice : [];
@@ -57,9 +57,7 @@ async function loadServerCart(userId, signal) {
             .filter((pid) => typeof pid === 'string' && pid.trim().length > 0)
             .map(async (productId, index) => {
                 try {
-                    const productRes = await fetch(`/api/products/${encodeURIComponent(productId)}`);
-                    if (!productRes.ok) throw new Error(`Product ${productId} not found`);
-                    const product = await productRes.json();
+                    const { data: product } = await api.get(`/products/${encodeURIComponent(productId)}`, { signal });
 
                     const quantity = Number(quantities?.[index] ?? 1) || 1;
                     const basePrice =
@@ -79,11 +77,10 @@ async function loadServerCart(userId, signal) {
                         quantity,
                     };
                 } catch {
-                    return null;
-                }
+                    if (isAbort(e)) throw e; // bubble abort once
+                        return null;                }
             })
     );
-
     return items.filter(Boolean);
 }
 
@@ -98,52 +95,6 @@ const CartPage = () => {
 
     const navigate = useNavigate();
     const userId = localStorage.getItem("userId");
-
-    useEffect(() => {
-    const fetchCart = async () => {
-        try {
-            const res = await fetch(`/api/carts/${encodeURIComponent(userId)}`);
-            if (!res.ok) throw new Error('Failed to fetch cart');
-
-            const cartData = await res.json();
-            console.log(cartData);
-
-            const items = await Promise.all(
-                cartData.productId
-                    // Used to remove Ids that no work
-                    .filter(pid => pid && typeof pid === 'string' && pid.length > 0)
-                    .map(async (productId, index) => {
-                        try {
-                            const productRes = await fetch(`/api/products/${encodeURIComponent(productId)}`);
-                            if (!productRes.ok) throw new Error(`Product ${productId} not found`);
-                            const product = await productRes.json();
-
-                            const quantity = cartData.quantities?.[index] ?? 1;
-                            const totalPrice = cartData.totalPrices?.[index];
-
-                            return {
-                                ...product,
-                                quantity,
-                                totalPrice,
-                                itemTotal: totalPrice * quantity
-                            };
-                        } catch (err) {
-                            console.warn(err);
-                            return null;
-                        }
-                    })
-            );
-            const validItems = items.filter(i => i !== null);
-            setCartItems(validItems);
-            setTotal(validItems.reduce((sum, i) => sum + i.itemTotal, 0));
-        } catch (err) {
-            console.error(err);
-            setToastMsg('Error loading cart');
-        }
-    };
-
-    fetchCart();
-    }, [userId, navigate]);
 
     useEffect(() => {
         let ac = new AbortController();
@@ -167,11 +118,17 @@ const CartPage = () => {
                 return;
             }
 
+            const isAbort = (err) =>
+                err?.name === "AbortError" ||
+                err?.code === "ERR_CANCELED" ||
+                err?.message === "canceled";
+
             setIsGuest(false);
             try {
                 const items = await loadServerCart(userId, ac.signal);
                 setCartItems(items);
             } catch (err) {
+                if (isAbort(err)) return; // ignore expected cancellations
                 console.error('Error fetching cart:', err);
                 toast.error('Failed to fetch cart :(');
                 setIsGuest(true);
@@ -195,25 +152,30 @@ const CartPage = () => {
     }, [userId]);
 
     useEffect(() => {
-        const handler = async (e) => {
-            if (!localStorage.getItem('userId')) {
+        const handler = async () => {
+            const uId = localStorage.getItem("userId");
+            if (!uId) {
                 const { items } = loadGuestCart();
-                setCartItems(
-                    items.map((it) => ({
-                        id: it.productId,
-                        name: it.name,
-                        image: it.image,
-                        price: Number(it.price || 0),
-                        quantity: Number(it.quantity || 1)
-                    }))
-                );
-            } else {
-                try {
-                    const items = await loadServerCart(localStorage.getItem('userId'));
-                    setCartItems(items);
-                } catch {
+                setCartItems(items.map(it => ({
+                    id: it.productId,
+                    name: it.name,
+                    image: it.image,
+                    price: Number(it.price || 0),
+                    quantity: Number(it.quantity || 1)
+                })));
+                return;
+            }
+
+            const ac = new AbortController();
+            try {
+                const items = await loadServerCart(uId, ac.signal);
+                setCartItems(items);
+            } catch (err) {
+                if (err?.name !== "AbortError") {
+                    console.warn("cart-updated reload failed:", err);
                 }
             }
+            // no external cleanup here; handler is short-lived
         };
 
         window.addEventListener('cart-updated', handler);
@@ -253,13 +215,8 @@ const CartPage = () => {
         }
 
         try {
-            const res = await fetch(
-                `/api/carts/update?userId=${encodeURIComponent(userId)}&productId=${encodeURIComponent(
-                    productId
-                )}&quantity=${encodeURIComponent(newQty)}`,
-                {method: 'PUT', headers: {'Content-Type': 'application/json'}}
-            );
-            if (!res.ok) throw new Error('Update failed');
+            await api.put(`/carts/update`, null,
+                { params: { userId, productId, quantity: newQty }});
             setItems(cartItems.map((it) => (it.id === productId ? {...it, quantity: newQty} : it)));
         } catch (err) {
             console.error('Error updating quantity:', err);
@@ -273,11 +230,7 @@ const CartPage = () => {
             return;
         }
         try {
-            const res = await fetch(
-                `/api/carts/update?userId=${encodeURIComponent(userId)}&productId=${encodeURIComponent(productId)}&quantity=0`,
-                {method: 'PUT', headers: {'Content-Type': 'application/json'}}
-            );
-            if (!res.ok) throw new Error('Remove failed');
+            await api.put(`/carts/update`, null, { params: { userId, productId, quantity: 0 } });
             setItems(cartItems.filter((it) => it.id !== productId));
         } catch (err) {
             console.error('Error removing item:', err);
@@ -317,8 +270,9 @@ const CartPage = () => {
 
         try {
             const totalPrice = (Number(price || 0) * Number(quantity || 1)).toFixed(2);
-            const res = await fetch(`/api/carts/add?userId=${encodeURIComponent(userId)}&productId=${encodeURIComponent(productId)}&quantity=${encodeURIComponent(quantity)}&totalPrice=${encodeURIComponent(totalPrice)}`, {method: 'POST'});
-            if (!res.ok) throw new Error('Add failed');
+            await api.post(`/carts/add`, null, {
+                params: { userId, productId, quantity, totalPrice }
+            });
             // reload server cart
             const items = await loadServerCart(userId);
             setItems(items);
@@ -327,7 +281,6 @@ const CartPage = () => {
             toast.error('Failed to add item to cart');
         }
     };
-    // new: helper function for guest Stripe checkout
     const handleGuestCheckout = async () => {
         try {
             setLoading(true);
@@ -365,7 +318,6 @@ const CartPage = () => {
 
         await handleGuestCheckout();
     }
-
 
     const clearGuestCart = () => {
         if (!isGuest) return;

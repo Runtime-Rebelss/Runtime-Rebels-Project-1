@@ -1,84 +1,45 @@
 package com.runtimerebels.store.controller;
 
-import com.runtimerebels.store.dao.UserRepository;
-import com.runtimerebels.store.models.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import com.runtimerebels.store.models.dto.AuthenticateRequest;
+import com.runtimerebels.store.models.dto.AuthenticationResponse;
+import com.runtimerebels.store.services.AuthService;
+import com.runtimerebels.store.services.JwtService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.io.IOException;
+import java.net.URI;
+
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import com.runtimerebels.store.models.dto.RegisterRequest;
 
 @RestController
 @RequestMapping("/api/auth")
+@RequiredArgsConstructor
 public class AuthController {
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @GetMapping("/user")
-    public ResponseEntity<?> getUserByEmail(@RequestParam String email) {
-        Optional<User> user = userRepository.findByEmail(email);
-        if (user.isPresent()) {
-            return ResponseEntity.ok(user.get());
-        } else {
-            Map<String, String> response = new HashMap<>();
-            response.put("error", "User no found");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-    }
-
-    @PutMapping("/user")
-    public ResponseEntity<?> updateUser(@RequestParam String email, @RequestParam User userUp) {
-        Map<String, String> response = new HashMap<>();
-        Optional<User> user = userRepository.findByEmail(email);
-        if (user.isEmpty()) {
-            response.put("error", "User no found");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-
-        User existingUser = user.get();
-        existingUser.setEmail(userUp.getUsername());
-        userRepository.save(existingUser);
-        return ResponseEntity.ok(existingUser);
-    }
+    private final AuthService authService;
+    private final JwtService jwtService;
 
     @PostMapping("/signup")
-    public ResponseEntity<Map<String, String>> register(@RequestBody User user) {
-        Map<String, String> response = new HashMap<>();
-        if (userRepository.existsByEmail(user.getEmail())) {
-            response.put("error", "Email already exists");
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
-        }
-
-        User saved = userRepository.save(user);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
-        response.put("Status", "Account Created!");
-        response.put("userId", saved.getId());
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) {
+        return ResponseEntity.created(URI.create("")).body(authService.register(request));
     }
-    // Add thing for login here!!
+
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody User user) {
-        Map<String, String> response = new HashMap<>();
-        Optional<User> userOptional = userRepository.findByEmail(user.getEmail());
-        if (userOptional.isPresent() && passwordEncoder.matches(user.getPassword(), userOptional.get().getPassword())) {
-            response.put("message", "Login Successful");
-            User u = userOptional.get();
-            return ResponseEntity.ok(Map.of(
-            "userId", u.getId(),
-                    "email", u.getEmail()
-            ));
-        } else {
-            response.put("message", "Wrong Credentials");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
-        }
+    public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticateRequest request) {
+
+        return ResponseEntity.accepted().body(authService.authenticate(request));
+    }
+
+    @PostMapping("/refreshToken")
+    public void refreshToken(
+            HttpServletRequest request,
+            HttpServletResponse response
+
+    ) throws IOException {
+        authService.refreshToken(request, response);
     }
 }

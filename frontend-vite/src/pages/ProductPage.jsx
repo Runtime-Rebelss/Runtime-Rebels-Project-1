@@ -73,7 +73,7 @@ const ProductPage = () => {
                 <button
                     onClick={async () => {
                         try {
-                            const userId = localStorage.getItem('userEmail');
+                            const userId = localStorage.getItem('userId');
                             await cart.addToCart({ userId, productId: product.id ?? product._id ?? product.productId ?? String(product.id), name: product.name, price: product.price, quantity: 1, image: product.imageUrl || product.image });
                             toast.success(`Added ${product.name} to bag!`);
                         } catch (err) {

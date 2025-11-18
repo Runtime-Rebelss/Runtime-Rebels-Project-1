@@ -1,7 +1,6 @@
 package com.runtimerebels.store.controller;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -12,12 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.runtimerebels.store.models.Cart;
-
-//import com.runtimerebels.store.service.CartService;
-
 import com.runtimerebels.store.dao.CartRepository;
 
-@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 @RestController
 @RequestMapping("/api/carts")
 public class CartController {
@@ -33,7 +28,7 @@ public class CartController {
     @GetMapping("/{userId}")
     public ResponseEntity<Cart> getCart(@PathVariable String userId) {
         Cart cart = cartRepository.findByUserId(userId)
-            .orElse(new Cart(userId, new ArrayList<>(), new ArrayList<>(), new ArrayList<>()));
+                .orElse(new Cart(userId, new ArrayList<>(), new ArrayList<>(), new ArrayList<>()));
 
         int minLength = Math.min(
                 Math.min(cart.getProductIds().size(), cart.getQuantity().size()),
@@ -101,7 +96,7 @@ public class CartController {
         }
 
         if (quantity < 0) {
-            return new  ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         if (quantity == 0) {

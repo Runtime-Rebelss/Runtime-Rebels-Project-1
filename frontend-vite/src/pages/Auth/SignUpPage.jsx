@@ -35,48 +35,47 @@ const SignUpPage = () => {
         setIsSuccessful(false);
 
         try {
+            const res = await api.post("/auth/signup", { email, password });
+            const data = res?.data || {};
 
-            const res = await api.post("/auth/signup", {email, password});
-            const data = res?.data?? {};
-
-            const userId =
-                data.userId ||
-                data.id ||
-                data._id ||
-                data.user?.id ||
-                data.user?._id;
-
+            const userId = data.id || data.userId || data._id;
+            const userRole = data.role;
 
             if (!userId) {
-                setToastMsg("Signup successful, but no userId");
+                setToastMsg("Signup succeeded but server did not return a user id.");
                 setIsSuccessful(false);
                 return;
             }
 
-            const userEmail = data.email || data.user?.email || email
-            localStorage.setItem("userId", userId);
-            localStorage.setItem("userEmail",  userEmail || email);
+            const userEmail = data.email || data.user?.email || email;
 
-            // Should output a message saying account was created
-            // Redirect to homepage
-            // Then username should show up in the top right or left
-            // Need to add button to either sign out or login
+            // Persist same keys as LoginPage expects
+            localStorage.setItem("userId", userId);
+            localStorage.setItem("userEmail", userEmail || email);
+            if (userRole) localStorage.setItem("userRole", userRole);
+
+            const token = data.token || data.accessToken || data.authToken;
+            if (token) {
+                localStorage.setItem('authToken', token);
+                localStorage.setItem('token', token);
+            }
+
             setToastMsg(data.message || "Account created successfully!!");
-            // Redirect to homepage
             setIsSuccessful(true);
             setEmail("");
             setPassword("");
 
             window.dispatchEvent(new Event("cart-updated"));
 
-            navigate("/", {replace: true});
-
-
+            navigate("/", { replace: true });
         } catch (error) {
-            const msg = error?.response.error ||
-                error?.response.data.message ||
-                "Sign up failed";
-            setToastMsg(msg);
+            const status = error?.response?.status;
+            const serverMsg = error?.response?.data?.message || error?.response?.data?.error;
+            if (status) {
+                setToastMsg(serverMsg || `Sign up failed (${status})`);
+            } else {
+                setToastMsg(error?.message || 'Sign up failed. Please check your network and try again.');
+            }
             setIsSuccessful(false);
         } finally {
             setLoading(false);
