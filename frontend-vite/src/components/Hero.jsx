@@ -2,6 +2,11 @@ import React from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 
+/**
+ * Hero carousel for the homepage. Shows promotional slides and a CTA.
+ *
+ * @returns {JSX.Element}
+ */
 const Hero = () => {
     return (
         <div className="w-full mb-10 overflow-hidden">

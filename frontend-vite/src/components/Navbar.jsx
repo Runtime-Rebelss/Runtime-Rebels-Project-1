@@ -2,6 +2,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { ShoppingCart, Search } from "lucide-react";
 
+/**
+ * Navbar component renders top navigation with category links, search and cart.
+ * @returns {JSX.Element}
+ */
 const Navbar = () => {
     const categories = ["Men's", "Women's", "Jewelry", "Electronics", "Home & Garden"];
 

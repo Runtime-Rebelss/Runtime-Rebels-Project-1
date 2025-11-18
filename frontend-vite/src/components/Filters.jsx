@@ -1,6 +1,19 @@
 import React from 'react'
 import { useSearchParams } from 'react-router-dom'
 
+/**
+ * Props for Filters component
+ * @typedef {Object} FiltersProps
+ * @property {string[]} categories - List of category names to render
+ */
+
+/**
+ * Filters component - renders category checkboxes and updates URL params.
+ *
+ * @param {FiltersProps} props
+ * @returns {JSX.Element}
+ */
+
 function Filters({ categories = [] }) {
     const [searchParams, setSearchParams] = useSearchParams();
     

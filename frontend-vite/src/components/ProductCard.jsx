@@ -5,9 +5,15 @@ import { ShoppingBag } from "lucide-react";
 
 import api from "../lib/axios";
 
+/**
+ * ProductCard renders a single product tile used in lists and grids.
+ *
+ * @param {{product: Product}} props
+ * @returns {Element}
+ */
 function ProductCard({ product }) {
 
-
+    // ...existing implementation...
 
     return (
         <Link to={`/product/${product.id}`}
