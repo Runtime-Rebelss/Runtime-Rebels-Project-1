@@ -15,10 +15,14 @@ import java.util.stream.Collectors;
 import java.util.Arrays;
 /**
  * ProductController - REST API for managing products.
+ * Can create, fetch, update, and delete products.
+ * @author Haley Kenney, Frank Gonzalez
+ * @since 11-19-2025
  *
  * Endpoints implemented:
  * - GET /api/products        : Get all products
  * - GET /api/products/{id}   : Get a single product by ID
+ * - GET /api/products/category?categories=cat1 : Get products by category (case-insensitive, must match all)
  * - POST /api/products       : Create a new product
  *
  * Extra endpoints (not required for Product Details, but useful for full CRUD):
@@ -33,19 +37,33 @@ public class ProductController {
     private final ProductRepository productRepository;
     private final MongoTemplate mongoTemplate;
 
+
     @Autowired
     public ProductController(ProductRepository productRepository, MongoTemplate mongoTemplate) {
         this.productRepository = productRepository;
         this.mongoTemplate = mongoTemplate;
     }
 
-    // Get all products
+    /**
+     * GET method
+     * Get all products
+     * `/api/products`
+     * @author Haley Kenney
+     * @return returns list of all products
+     */
     @GetMapping
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
 
-    // Get a single product by ID
+    /**
+     * GET method
+     * Get a single product by ID
+     * `/api/products/{id}`
+     * @author Haley Kenney
+     * @param id Product ID
+     * @return returns product with given ID
+     */
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable String id) {
         return productRepository.findById(id)
@@ -53,7 +71,14 @@ public class ProductController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // Get products by category (case-insensitive, must match all)
+    /**
+     * GET method
+     * Get products by category (case-insensitive, must match all)
+     * `/api/products/category?categories=cat1`
+     * @author Frank Gonzalez
+     * @param categories Array of category names
+     * @return returns list of products matching all categories (case-insensitive)
+    */
     @GetMapping("/category")
     public List<Product> getProductsByCategory(@RequestParam(required = false) String[] categories) {
         if (categories == null || categories.length == 0) {
@@ -67,13 +92,28 @@ public class ProductController {
         return mongoTemplate.find(query, Product.class);
     }
 
-    // Create a new product
+    /**
+     * POST Method
+     * Create a new product
+     * `/api/products`
+     * @author Haley Kenney
+     * @param product
+     * @return saves new product to the database
+     */
     @PostMapping
     public Product createProduct(@RequestBody Product product) {
         return productRepository.save(product);
     }
 
-    // Update an existing product
+    /**
+     * PUT Method
+     * Update an existing product
+     * `/api/products/{id}`
+     * @author Haley Kenney
+     * @param id Product ID
+     * @param productDetails Updated product details
+     * @return returns success if product successfully updated, else not found
+     */
     @PutMapping("/{id}")
     public ResponseEntity<Product> updateProduct(@PathVariable String id, @RequestBody Product productDetails) {
         return productRepository.findById(id)
@@ -87,7 +127,14 @@ public class ProductController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // Delete a product
+    /**
+     * DELETE Method
+     * Delete a product
+     * `/api/products/{id}`
+     * @author Haley Kenney
+     * @param id Product ID
+     * @return returns success if product successfully deleted, else not found
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable String id) {
         return productRepository.findById(id)
