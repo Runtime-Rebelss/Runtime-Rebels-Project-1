@@ -3,6 +3,10 @@ import { Routes, Route } from "react-router-dom";
 import ProductPage from "./pages/ProductPage";
 import HomePage from "./pages/HomePage";
 import CartPage from "./pages/CartPage";
+import CheckoutPage from "./pages/CheckoutPage.jsx";
+import OrderSuccessPage from "./pages/OrderSuccessPage.jsx";
+import OrderCancelPage from "./pages/OrderCancelPage.jsx";
+
 // import CheckoutPage from "./pages/CheckoutPage";
 // import OrderPage from "./pages/OrderPage";
 // import LoginPage from "./pages/Auth/LoginPage.jsx";
@@ -16,8 +20,9 @@ function App() {
                 <Route path="/" element={<HomePage />} />
                 <Route path="/product/:id" element={<ProductPage />} />
                 <Route path="/cart" element={<CartPage />} />
-                { /* <Route path="/checkout" element={<CheckoutPage />} /> */ }
-                {/* <Route path="/orders" element={<OrderPage />} /> */}
+                <Route path="/checkout" element={<CheckoutPage />} />
+                <Route path="/order-success" element={<OrderSuccessPage />} />
+                <Route path="/order-cancel" element={<OrderCancelPage />} />
             </Routes>
         </div>
     );

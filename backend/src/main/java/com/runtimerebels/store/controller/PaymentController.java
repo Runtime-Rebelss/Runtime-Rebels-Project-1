@@ -10,6 +10,16 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * REST controller for handling Stripe payment operations.
+ * Creates Stripe Checkout Sessions based on frontend requests
+ * and configures shipping, billing, and customer options.
+ *
+ * Base URL: /api/payments
+ *
+ * @see com.runtimerebels.store.models.dto.CheckoutRequest
+ * @author Haley Kenney
+ */
 @RestController
 @RequestMapping("/api/payments")
 public class PaymentController {
@@ -20,6 +30,13 @@ public class PaymentController {
     @Value("${frontend.cancelUrl}")
     private String cancelUrl;
 
+    /**
+     * Creates a new Stripe Checkout Session for the given order request.
+     *
+     * @param req The {@link CheckoutRequest} containing order and customer details
+     * @return A ResponseEntity containing the Checkout Session URL
+     * @throws Exception if session creation fails
+     */
     @PostMapping("/create-checkout-session")
     public ResponseEntity<?> createCheckout(@RequestBody CheckoutRequest req) throws Exception {
 
@@ -119,6 +136,6 @@ public class PaymentController {
 
         return ResponseEntity.ok().body(new CreateCheckoutResponse(session.getUrl()));
     }
-
+    /** Response record for returning the Stripe Checkout URL. */
     private record CreateCheckoutResponse(String url) {}
 }

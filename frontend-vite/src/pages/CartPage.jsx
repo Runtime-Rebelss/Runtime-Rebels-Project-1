@@ -285,6 +285,9 @@ const CartPage = () => {
         try {
             setLoading(true);
             const cartItems = cartLib.loadGuestCart();
+            //  Save the current cart so the success page can access it later
+            localStorage.setItem("lastOrderCart", JSON.stringify({ items: cartItems }));
+
 
             const items = cartItems.map((item) => ({
                 name: item.name,
@@ -298,6 +301,8 @@ const CartPage = () => {
                 customerEmail: localStorage.getItem("userEmail") || null,
                 savePaymentMethod: false,
             });
+
+            window.history.pushState({ fromStripe: true }, "",  "/order-cancel");
 
             window.location.href = response.data.url;
         } catch (error) {

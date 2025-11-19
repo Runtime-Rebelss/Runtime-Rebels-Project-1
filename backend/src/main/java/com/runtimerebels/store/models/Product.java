@@ -4,6 +4,14 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
+/**
+ * Represents a product available for purchase in the Runtime Rebels e-commerce store.
+ * Stores basic product information such as name, description, price, and image URL.
+ * Persisted in the "products" MongoDB collection.
+ *
+ * @author Haley Kenney, Frank Gonzalez
+ *
+ */
 
 @Document(collection = "products") // Mongo collection name
 public class Product {
@@ -13,7 +21,6 @@ public class Product {
     private String description;
     private BigDecimal price;
     private String imageUrl;
-    private String category;
 
     public String getId() {
         return id;
@@ -50,11 +57,4 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
 }

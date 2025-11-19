@@ -4,7 +4,7 @@ import { ShoppingCart, Search } from "lucide-react";
 import cartLib from "../lib/cart.js";
 
 
-const Navbar = () => {
+const Navbar = ({ hideCart = false, hideCartCount = false }) => {
     const categories = ["Men", "Women", "Jewelery", "Electronics", "Accessories"];
     const [cartCount, setCartCount] = useState(0);
 
@@ -113,7 +113,7 @@ const Navbar = () => {
                 {/* new cart icon with item count  */}
                 <Link to="/cart" className="btn btn-ghost btn-circle relative">
                     <ShoppingCart className="h-6 w-6" />
-                    {cartCount > 0 && (
+                    {!hideCartCount && cartCount > 0 && (
                         <span className="absolute -top-1 -right-1 bg-primary text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
                             {cartCount}
                         </span>

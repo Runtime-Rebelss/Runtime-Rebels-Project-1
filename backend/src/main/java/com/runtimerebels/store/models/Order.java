@@ -6,10 +6,17 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+/**
+ * Represents a customer's order in the e-commerce app.
+ * Stores user info, ordered product IDs, quantities, total price,
+ * delivery details, and payment status for persistence in MongoDB.
+ *
+ * @author Haley Kenney
+ *
+ */
 
 @Data
 @AllArgsConstructor
