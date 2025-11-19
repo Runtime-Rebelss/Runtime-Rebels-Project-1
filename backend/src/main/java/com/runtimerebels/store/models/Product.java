@@ -7,8 +7,10 @@ import java.math.BigDecimal;
 import java.util.List;
 
 /**
- * Product model representing a product in the store.
- * Maps to the 'products' collection in MongoDB.
+ * Represents a product available for purchase in the Runtime Rebels e-commerce store.
+ * Stores product information including name, description, price, image URL, and categories.
+ * Persisted in the "products" MongoDB collection.
+ *
  * @author Haley Kenney, Frank Gonzalez
  * @since 11-19-2025
  */

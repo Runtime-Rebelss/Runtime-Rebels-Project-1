@@ -7,12 +7,13 @@ import java.math.BigDecimal;
 import java.util.List;
 
 /**
- * ProductRepository - MongoDB repository for Product entities.
- * Provides CRUD operations and custom query methods.
+ * Repository interface for accessing and managing {@link Product} documents
+ * in MongoDB. Extends {@link MongoRepository} to provide CRUD operations
+ * and defines custom query methods for filtering products by name, price, and categories.
+ *
  * @author Haley Kenney, Frank Gonzalez
  * @since 11-19-2025
  */
-
 public interface ProductRepository extends MongoRepository<Product, String> {
     
     /**

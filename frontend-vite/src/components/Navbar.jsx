@@ -1,13 +1,34 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { Link } from "react-router-dom";
 import { ShoppingCart, Search } from "lucide-react";
+import cartLib from "../lib/cart.js";
 
 /**
  * Navbar component renders top navigation with category links, search and cart.
  * @returns {JSX.Element}
  */
-const Navbar = () => {
+const Navbar = ({ hideCart = false, hideCartCount = false }) => {
     const categories = ["Men's", "Women's", "Jewelry", "Electronics", "Home & Garden"];
+    const [cartCount, setCartCount] = useState(0);
+
+// load initial count
+    useEffect(() => {
+        const items = cartLib.loadGuestCart?.();
+        const count = items.reduce((sum, it) => sum + (it.quantity || 1), 0);
+        setCartCount(count);
+    }, []);
+
+// update count
+    useEffect(() => {
+        const handler = () => {
+            const items = cartLib.loadGuestCart?.();
+            const count = items.reduce((sum, it) => sum + (it.quantity || 1), 0);
+            setCartCount(count);
+        };
+
+        window.addEventListener("cart-updated", handler);
+        return () => window.removeEventListener("cart-updated", handler);
+    }, []);
 
     return (
         <div className="navbar bg-base-100 shadow-sm px-4 sticky top-0 z-50">
@@ -93,11 +114,14 @@ const Navbar = () => {
                     <Search className="h-5 w-5" />
                 </button>
 
-                {/* Cart icon */}
-                <Link to="/cart" className="btn btn-ghost btn-circle">
-                    <div className="indicator">
-                        <ShoppingCart className="h-6 w-6" />
-                    </div>
+                {/* new cart icon with item count  */}
+                <Link to="/cart" className="btn btn-ghost btn-circle relative">
+                    <ShoppingCart className="h-6 w-6" />
+                    {!hideCartCount && cartCount > 0 && (
+                        <span className="absolute -top-1 -right-1 bg-primary text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
+                            {cartCount}
+                        </span>
+                    )}
                 </Link>
             </div>
         </div>
