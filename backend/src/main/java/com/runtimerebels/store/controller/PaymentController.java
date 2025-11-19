@@ -23,7 +23,7 @@ public class PaymentController {
     @PostMapping("/create-checkout-session")
     public ResponseEntity<?> createCheckout(@RequestBody CheckoutRequest req) throws Exception {
 
-        // Line items
+        // Build Stripe line items
         List<SessionCreateParams.LineItem> lineItems = new ArrayList<>();
         for (var it : req.items()) {
             SessionCreateParams.LineItem.PriceData.ProductData product =
@@ -46,7 +46,7 @@ public class PaymentController {
             );
         }
 
-        // Shipping: std & exp (fixed amounts for now, can change to dynamic price change later based on item)
+        // Shipping options
         SessionCreateParams.ShippingOption standard =
                 SessionCreateParams.ShippingOption.builder()
                         .setShippingRateData(
@@ -55,7 +55,7 @@ public class PaymentController {
                                         .setType(SessionCreateParams.ShippingOption.ShippingRateData.Type.FIXED_AMOUNT)
                                         .setFixedAmount(
                                                 SessionCreateParams.ShippingOption.ShippingRateData.FixedAmount.builder()
-                                                        .setAmount(799L)   // $7.99
+                                                        .setAmount(799L)
                                                         .setCurrency("usd")
                                                         .build()
                                         )
@@ -70,38 +70,53 @@ public class PaymentController {
                                         .setType(SessionCreateParams.ShippingOption.ShippingRateData.Type.FIXED_AMOUNT)
                                         .setFixedAmount(
                                                 SessionCreateParams.ShippingOption.ShippingRateData.FixedAmount.builder()
-                                                        .setAmount(1499L)  // $14.99
+                                                        .setAmount(1499L)
                                                         .setCurrency("usd")
                                                         .build()
                                         )
                                         .build()
                         ).build();
 
-        var paramsBuilder = SessionCreateParams.builder()
+        // Build the checkout session parameters
+        SessionCreateParams.Builder paramsBuilder = SessionCreateParams.builder()
                 .setMode(SessionCreateParams.Mode.PAYMENT)
                 .setSuccessUrl(successUrl)
                 .setCancelUrl(cancelUrl)
                 .addAllLineItem(lineItems)
+
+                // Require billing address and contact info
                 .setBillingAddressCollection(SessionCreateParams.BillingAddressCollection.REQUIRED)
+
+                // Require shipping address
                 .setShippingAddressCollection(
                         SessionCreateParams.ShippingAddressCollection.builder()
                                 .addAllowedCountry(SessionCreateParams.ShippingAddressCollection.AllowedCountry.US)
                                 .build()
                 )
+
+                // Add shipping choices
                 .addShippingOption(standard)
                 .addShippingOption(expedited)
+
+                // Request contact info fields directly from Stripe
+                .setPhoneNumberCollection(
+                        SessionCreateParams.PhoneNumberCollection.builder().setEnabled(true).build()
+                )
+
+                // Ask Stripe to collect the customer's email at checkout
+                .setCustomerCreation(SessionCreateParams.CustomerCreation.ALWAYS)
                 .setSubmitType(SessionCreateParams.SubmitType.PAY);
 
+        // include email if already known (logged-in users)
         if (req.customerEmail() != null && !req.customerEmail().isBlank()) {
             paramsBuilder.setCustomerEmail(req.customerEmail());
-            // ask Stripe to create/keep customer to save payment methods
-            if (req.savePaymentMethod()) {
-                paramsBuilder.setCustomerCreation(SessionCreateParams.CustomerCreation.ALWAYS);
-            }
         }
 
+        // Create the session
         Session session = Session.create(paramsBuilder.build());
-        // return URL to redirect  browser
+
+        System.out.println("Stripe Checkout session created for: " + req.customerEmail());
+
         return ResponseEntity.ok().body(new CreateCheckoutResponse(session.getUrl()));
     }
 
