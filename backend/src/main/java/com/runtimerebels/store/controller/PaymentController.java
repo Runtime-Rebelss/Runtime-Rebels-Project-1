@@ -36,7 +36,6 @@ public class PaymentController {
 
     @PostMapping("/create-checkout-session")
     public ResponseEntity<?> createCheckout(@RequestBody CheckoutRequest req) throws Exception {
-
         // Line items
         List<SessionCreateParams.LineItem> lineItems = new ArrayList<>();
         for (var it : req.items()) {

@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.*;
 import com.runtimerebels.store.models.Cart;
 import com.runtimerebels.store.dao.CartRepository;
 
+/**
+ *  cart controller
+ *
+ */
 @RestController
 @RequestMapping("/api/carts")
 public class CartController {
@@ -20,11 +24,26 @@ public class CartController {
     @Autowired
     CartRepository cartRepository;
 
+    /**
+     * get all carts
+     *
+     * @return {@link List}
+     * @see List
+     * @see Cart
+     */
     @GetMapping
     public List<Cart> getAllCarts() {
         return cartRepository.findAll();
     }
 
+    /**
+     * get cart
+     *
+     * @param userId userId
+     * @return {@link ResponseEntity}
+     * @see ResponseEntity
+     * @see Cart
+     */
     @GetMapping("/{userId}")
     public ResponseEntity<Cart> getCart(@PathVariable String userId) {
         Cart cart = cartRepository.findByUserId(userId)
@@ -43,6 +62,17 @@ public class CartController {
         return new ResponseEntity<>(cart, HttpStatus.OK);
     }
 
+    /**
+     * add to cart
+     *
+     * @param userId userId
+     * @param productId productId
+     * @param quantity quantity
+     * @param totalPrice totalPrice
+     * @return {@link ResponseEntity}
+     * @see ResponseEntity
+     * @see Cart
+     */
     @PostMapping("/add")
     public ResponseEntity<Cart> addToCart(@RequestParam String userId, @RequestParam String productId, @RequestParam(defaultValue = "1") int quantity, @RequestParam BigDecimal totalPrice) {
         // Check input
@@ -77,6 +107,16 @@ public class CartController {
         return ResponseEntity.ok(cart);
     }
 
+    /**
+     * update cart
+     *
+     * @param userId userId
+     * @param productId productId
+     * @param quantity quantity
+     * @return {@link ResponseEntity}
+     * @see ResponseEntity
+     * @see Cart
+     */
     @PutMapping("/update")
     public ResponseEntity<Cart> updateCart(@RequestParam String userId, @RequestParam String productId, @RequestParam int quantity) {
 
@@ -117,6 +157,15 @@ public class CartController {
         return new ResponseEntity<>(cart, HttpStatus.OK);
     }
 
+    /**
+     * remove item
+     *
+     * @param userId userId
+     * @param productId productId
+     * @return {@link ResponseEntity}
+     * @see ResponseEntity
+     * @see Cart
+     */
     @DeleteMapping("/remove")
     public ResponseEntity<Cart> removeItem(@RequestParam String userId, @RequestParam String productId) {
         Optional<Cart> optionalCart = cartRepository.findByUserId(userId);

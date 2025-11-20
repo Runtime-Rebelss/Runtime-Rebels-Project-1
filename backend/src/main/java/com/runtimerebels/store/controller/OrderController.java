@@ -19,6 +19,13 @@ import org.springframework.web.bind.annotation.*;
 import com.runtimerebels.store.models.Order;
 import com.runtimerebels.store.dao.OrderRepository;
 
+/**
+ *   order controller
+ *
+ */ /**
+ *  order controller
+ *
+ */
 @RestController
 @RequestMapping("/api/orders")
 public class OrderController {
@@ -35,7 +42,14 @@ public class OrderController {
     @GetMapping
     public List<Order> getAllOrders() { return orderRepository.findAll(); }
 
-    // Get all orders for a user
+    /**
+     * get orders by user id
+     *
+     * @param userId userId
+     * @return {@link ResponseEntity}
+     * @see ResponseEntity
+     * @see List
+     */ // Get all orders for a user
     @GetMapping("/{userId}")
     public ResponseEntity<List<Order>> getOrdersByUserId(@PathVariable String userId) {
         List<Order> orders = orderRepository.findByUserId(userId);
@@ -45,7 +59,14 @@ public class OrderController {
         return ResponseEntity.ok(orders);
     }
 
-    // Gets one specific order
+    /**
+     * get order details
+     *
+     * @param orderId orderId
+     * @return {@link ResponseEntity}
+     * @see ResponseEntity
+     * @see OrderResponse
+     */ // Gets one specific order
     @GetMapping("/details/{orderId}")
     public ResponseEntity<OrderResponse> getOrderDetails(@PathVariable String orderId) {
         return orderRepository.findById(orderId)
@@ -56,14 +77,28 @@ public class OrderController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // Create new order
+    /**
+     * create order
+     *
+     * @param order order
+     * @return {@link ResponseEntity}
+     * @see ResponseEntity
+     * @see Order
+     */ // Create new order
     @PostMapping
     public ResponseEntity<Order> createOrder(@RequestBody Order order) {
         Order savedOrder = orderRepository.save(order);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedOrder);
     }
 
-    // Delete the order
+    /**
+     * delete order by id
+     *
+     * @param orderId orderId
+     * @return {@link ResponseEntity}
+     * @see ResponseEntity
+     * @see String
+     */ // Delete the order
     @DeleteMapping("/{orderId}")
     public ResponseEntity<String> deleteOrderById(@PathVariable String orderId) {
         if (!orderRepository.existsById(orderId)) {
@@ -73,6 +108,15 @@ public class OrderController {
         return ResponseEntity.ok("Order deleted.");
     }
 
+    /**
+     * confirm payment
+     *
+     * @param userId userId
+     * @return {@link ResponseEntity}
+     * @see ResponseEntity
+     * @see Order
+     * @throws Exception java.lang. exception
+     */
     @PostMapping("/confirm/{userId}")
     public ResponseEntity<Order> confirmPayment(@PathVariable String userId) throws Exception {
         Cart cart = cartRepository.findByUserId(userId).orElseThrow(() -> new RuntimeException("Cart not found!"));

@@ -18,8 +18,9 @@ const fmtDate = (d) =>
 
 
 const OrderDetailsPage = () => {
-    const [orders, setOrders] = useState([]);
+    const [orders, setOrders] = useState(null);
     const {orderId} = useParams();
+    const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
@@ -29,10 +30,11 @@ const OrderDetailsPage = () => {
         const fetchOrders = async () => {
             try {
                 setLoading(true);
-                const {data} = await api.get(`/orders/details/${encodeURIComponent(orderId)}`, {
+                const { data } = await api.get(`/orders/details/${encodeURIComponent(orderId)}`, {
                     signal: controller.signal,
                 });
-                setOrders(data);
+                setOrders(data.order);
+                setProducts(data.products || []);
             } catch (err) {
                 if (err?.code !== "ERR_CANCELED") {
                     console.warn("orders fetch failed:", err);
@@ -66,12 +68,10 @@ const OrderDetailsPage = () => {
 
     if (!orders) return <div className="p-6 text-center">Order not found</div>;
 
-    const total =
-        orders.items ??
-        (orders.items || []).reduce(
-            (s, it) => s + Number(it.price || 0) * Number(it.quantity || 1),
-            0
-        );
+    const total = (orders.totalPrice || []).reduce((sum, price, i) => {
+        const qty = Number(orders.quantity?.[i] ?? 1);
+        return sum + Number(price || 0) * qty;
+    }, 0);
 
     const userEmail = localStorage.getItem("userEmail");
 
@@ -123,7 +123,7 @@ const OrderDetailsPage = () => {
                                         />
                                     </div>
                                     <div className="flex-1 min-w-0">
-                                        <div className="font-medium truncate">{it.name}</div>
+                                        <div className="font-medium truncate">{products.name}</div>
                                         <div className="text-sm opacity-70">
                                             Qty: {orders.quantity?.[i]} • {""}
                                             {fmtUSD(orders.totalPrice?.[i] || product.price)}
@@ -131,7 +131,7 @@ const OrderDetailsPage = () => {
                                     </div>
                                     <button
                                         className="btn btn-outline btn-sm"
-                                        onClick={() => navigate(`/product/${it.id || it.productId || ""}`)}
+                                        onClick={() => navigate(`/product/${product.id || ""}`)}
                                     >
                                         View item
                                     </button>
