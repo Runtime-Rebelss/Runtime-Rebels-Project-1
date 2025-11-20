@@ -26,7 +26,7 @@ const CheckoutPage = () => {
             localStorage.removeItem('guestCart');
             window.dispatchEvent(new Event('cart-updated'));
             // Not creating an order!!
-            api.post(`/payments/confirm/${userId}`);
+            api.post(`/orders/confirm/${userId}`);
             navigate('/orders', { replace: true });
         }
     }, [status, navigate]);

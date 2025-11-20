@@ -120,30 +120,4 @@ public class PaymentController {
     }
 
     private record CreateCheckoutResponse(String url) {}
-
-    @PostMapping("/confirm/{userId}")
-    public ResponseEntity<Order> confirmPayment(@PathVariable String userId) throws Exception {
-        Cart cart = cartRepository.findByUserId(userId).orElseThrow(() -> new RuntimeException("Cart not found!"));
-        Calendar calendar = Calendar.getInstance();
-
-        // Create the order
-        Order order = new Order();
-        order.setUserId(userId);
-        order.setProductIds(cart.getProductIds());
-        order.setQuantity(cart.getQuantity());
-        order.setTotalPrice(cart.getTotalPrice());
-        order.setOrderStatus(OrderStatus.PENDING);
-        order.setCreatedAt(calendar.getTime());
-        order.setProcessAt(null);
-        orderRepository.save(order);
-
-        // Remove item(s) from cart
-        cart.setProductIds(new ArrayList<>());
-        cart.setQuantity(new ArrayList<>());
-        cart.setTotalPrice(new ArrayList<>());
-        cartRepository.save(cart);
-
-        return ResponseEntity.ok(order);
-    }
-
 }
