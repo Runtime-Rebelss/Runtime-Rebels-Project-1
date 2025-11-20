@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
 import {useParams, useNavigate} from "react-router-dom";
-import {ShoppingBag} from "lucide-react";
 import Navbar from "../components/Navbar";
 import api from "../lib/axios";
 
@@ -30,7 +29,7 @@ const OrderDetailsPage = () => {
         const fetchOrders = async () => {
             try {
                 setLoading(true);
-                const { data } = await api.get(`/orders/details/${encodeURIComponent(orderId)}`, {
+                const {data} = await api.get(`/orders/details/${encodeURIComponent(orderId)}`, {
                     signal: controller.signal,
                 });
                 setOrders(data.order);
@@ -107,23 +106,20 @@ const OrderDetailsPage = () => {
                         </div>
 
                         <div className="p-4 divide-y divide-base-300">
-                            {(orders.items || []).map((it, i) => (
-                                <div
-                                    key={`${it.id || it.productId || i}-${orderId}`}
-                                    className="py-4 flex items-center gap-4"
-                                >
+                            {products.map((product, i) => (
+                                <div key={product.id || i} className="py-4 flex items-center gap-4">
                                     <div className="w-20 h-20 bg-base-200 rounded overflow-hidden flex-shrink-0">
                                         <img
                                             src={
-                                                it.image ||
+                                                product.imageUrl ||
                                                 "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=400&q=70"
                                             }
-                                            alt={it.name}
+                                            alt={product.name}
                                             className="w-full h-full object-cover"
                                         />
                                     </div>
                                     <div className="flex-1 min-w-0">
-                                        <div className="font-medium truncate">{products.name}</div>
+                                        <div className="font-medium truncate">{product.name}</div>
                                         <div className="text-sm opacity-70">
                                             Qty: {orders.quantity?.[i]} • {""}
                                             {fmtUSD(orders.totalPrice?.[i] || product.price)}
