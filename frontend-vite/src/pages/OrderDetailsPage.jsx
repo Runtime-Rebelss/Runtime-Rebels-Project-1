@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { ShoppingBag } from "lucide-react";
+import React, {useEffect, useState} from "react";
+import {useParams, useNavigate} from "react-router-dom";
+import {ShoppingBag} from "lucide-react";
 import Navbar from "../components/Navbar";
 import api from "../lib/axios";
 
@@ -16,54 +16,10 @@ const fmtDate = (d) =>
         day: "numeric",
     });
 
-async function loadServerOrders(userId, signal) {
-    if (!userId) return [];
-    const { data: orderList } = await api.get(`/orders/${encodeURIComponent(userId)}`, { signal });
-    if (!Array.isArray(orderList)) return [];
-
-    const detailed = await Promise.all(
-        orderList.map(async (order) => {
-            const productIds = Array.isArray(order.productIds) ? order.productIds : [];
-            const quantities = Array.isArray(order.quantity) ? order.quantity : [];
-            const finalPrices = Array.isArray(order.totalPrice) ? order.totalPrice : [];
-
-            const items = await Promise.all(
-                productIds.map(async (productId, index) => {
-                    try {
-                        const { data: product } = await api.get(`/products/${encodeURIComponent(productId)}`, { signal });
-                        const quantity = Number(quantities?.[index] ?? 1) || 1;
-                        const basePrice =
-                            Number(finalPrices?.[index]) ||
-                            Number(product?.finalPrice) ||
-                            Number(product?.price) ||
-                            0;
-
-                        return {
-                            id: productId,
-                            name: product?.name ?? "Item",
-                            image:
-                                product?.image ||
-                                product?.imageUrl ||
-                                "https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-                            price: Math.max(0, basePrice),
-                            quantity,
-                        };
-                    } catch (e) {
-                        console.warn("Failed to load product", productId, e);
-                        return null;
-                    }
-                })
-            );
-
-            return { ...order, items: items.filter(Boolean) };
-        })
-    );
-
-    return detailed;
-}
 
 const OrderDetailsPage = () => {
     const [orders, setOrders] = useState([]);
+    const {orderId} = useParams();
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
@@ -73,9 +29,10 @@ const OrderDetailsPage = () => {
         const fetchOrders = async () => {
             try {
                 setLoading(true);
-                const uId = localStorage.getItem("userId");
-                const userOrders = await loadServerOrders(uId, controller.signal);
-                setOrders(userOrders);
+                const {data} = await api.get(`/orders/details/${encodeURIComponent(orderId)}`, {
+                    signal: controller.signal,
+                });
+                setOrders(data);
             } catch (err) {
                 if (err?.code !== "ERR_CANCELED") {
                     console.warn("orders fetch failed:", err);
@@ -97,111 +54,92 @@ const OrderDetailsPage = () => {
             window.removeEventListener("cart-updated", handler);
             window.removeEventListener("order-updated", handler);
         };
-    }, []);
+    }, [orderId]);
+
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center h-screen">
+                <span className="loading loading-spinner loading-xl"></span>
+            </div>
+        )
+    }
+
+    if (!orders) return <div className="p-6 text-center">Order not found</div>;
+
+    const total =
+        orders.items ??
+        (orders.items || []).reduce(
+            (s, it) => s + Number(it.price || 0) * Number(it.quantity || 1),
+            0
+        );
+
+    const userEmail = localStorage.getItem("userEmail");
 
     return (
-        <div className="min-h-screen bg-base-200">
-            <Navbar />
+        <div>
+            <Navbar/>
             <div className="container mx-auto px-4 py-8">
                 <h1 className="text-3xl font-semibold mb-6">Order Details</h1>
+                <div className="space-y-6">
+                    <div className="card bg-base-100 border border-base-300 overflow-hidden">
+                        <div
+                            className="bg-base-200/60 border border-base-300 px-4 py-3 grid grid-cols-1 md:grid-cols-4 gap-2 text-sm">
+                            <div>
+                                <div className="font-medium">Order Placed</div>
+                                <div className="opacity-70">
+                                    {fmtDate(orders.createdAt || Date.now())}
+                                </div>
+                            </div>
+                            <div>
+                                <div className="font-medium">Total</div>
+                                <div className="opacity-70">{fmtUSD(total)}</div>
+                            </div>
+                            <div>
+                                <div className="font-medium">Ship to</div>
+                                <div className="opacity-70">
+                                    {orders.shipTo?.fullName || userEmail}
+                                </div>
+                            </div>
+                            <div className="md:text-right">
+                                <div className="font-medium">Order ID</div>
+                                <div className="opacity-70">{orderId}</div>
+                            </div>
+                        </div>
 
-                {loading ? (
-                    <div className="flex justify-center py-16">
-                        <span className="loading loading-spinner loading-lg" />
-                    </div>
-                ) : orders.length === 0 ? (
-                    <div className="card bg-base-100 border border-base-300">
-                        <div className="card-body items-center text-center">
-                            <ShoppingBag className="w-10 h-10 mb-3" />
-                            <h3 className="card-title font-normal">No orders yet</h3>
-                            <p className="text-base-content/70 mb-3">
-                                When you place an order, it will appear here.
-                            </p>
-                            <button className="btn btn-primary" onClick={() => navigate("/")}>
-                                Continue Shopping
-                            </button>
+                        <div className="p-4 divide-y divide-base-300">
+                            {(orders.items || []).map((it, i) => (
+                                <div
+                                    key={`${it.id || it.productId || i}-${orderId}`}
+                                    className="py-4 flex items-center gap-4"
+                                >
+                                    <div className="w-20 h-20 bg-base-200 rounded overflow-hidden flex-shrink-0">
+                                        <img
+                                            src={
+                                                it.image ||
+                                                "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=400&q=70"
+                                            }
+                                            alt={it.name}
+                                            className="w-full h-full object-cover"
+                                        />
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                        <div className="font-medium truncate">{it.name}</div>
+                                        <div className="text-sm opacity-70">
+                                            Qty: {orders.quantity?.[i]} • {""}
+                                            {fmtUSD(orders.totalPrice?.[i] || product.price)}
+                                        </div>
+                                    </div>
+                                    <button
+                                        className="btn btn-outline btn-sm"
+                                        onClick={() => navigate(`/product/${it.id || it.productId || ""}`)}
+                                    >
+                                        View item
+                                    </button>
+                                </div>
+                            ))}
                         </div>
                     </div>
-                ) : (
-                    <div className="space-y-6">
-                        {orders.map((order) => {
-                            const total =
-                                order.total ??
-                                (order.items || []).reduce(
-                                    (s, it) => s + Number(it.price || 0) * Number(it.quantity || 1),
-                                    0
-                                );
-
-                            const orderId = order.id || order._id || "-";
-                            const userEmail = localStorage.getItem("userEmail");
-
-                            return (
-                                <div
-                                    key={orderId}
-                                    className="card bg-base-100 border border-base-300 overflow-hidden"
-                                >
-                                    <div className="bg-base-200/60 border border-base-300 px-4 py-3 grid grid-cols-1 md:grid-cols-4 gap-2 text-sm">
-                                        <div>
-                                            <div className="font-medium">Order Placed</div>
-                                            <div className="opacity-70">
-                                                {fmtDate(order.createdAt || Date.now())}
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div className="font-medium">Total</div>
-                                            <div className="opacity-70">{fmtUSD(total)}</div>
-                                        </div>
-                                        <div>
-                                            <div className="font-medium">Ship to</div>
-                                            <div className="opacity-70">
-                                                {order.shipTo?.fullName || userEmail}
-                                            </div>
-                                        </div>
-                                        <div className="md:text-right">
-                                            <div className="font-medium">Order ID</div>
-                                            <div className="opacity-70">{orderId}</div>
-                                            <button className="text-primary-600 text-sm hover:underline text-gray-900" onClick={() => navigate(`/orderDetails`)}> View Order Details</button>
-
-
-                                        </div>
-                                    </div>
-
-                                    <div className="p-4 divide-y divide-base-300">
-                                        {(order.items || []).map((it, i) => (
-                                            <div
-                                                key={`${it.id || it.productId || i}-${orderId}`}
-                                                className="py-4 flex items-center gap-4"
-                                            >
-                                                <div className="w-20 h-20 bg-base-200 rounded overflow-hidden flex-shrink-0">
-                                                    <img
-                                                        src={
-                                                            it.image ||
-                                                            "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=400&q=70"
-                                                        }
-                                                        alt={it.name}
-                                                        className="w-full h-full object-cover"
-                                                    />
-                                                </div>
-                                                <div className="flex-1 min-w-0">
-                                                    <div className="font-medium truncate">{it.name}</div>
-                                                    <div className="text-sm opacity-70">
-                                                        Qty: {it.quantity} • {fmtUSD(Number(it.price || 0) * Number(it.quantity || 1))}
-                                                    </div>
-                                                </div>
-                                                <button
-                                                    className="btn btn-outline btn-sm"
-                                                    onClick={() => navigate(`/product/${it.id || it.productId || ""}`)}
-                                                >
-                                                    View item
-                                                </button>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            );
-                        })}
-                    </div>
-                )}
+                </div>
             </div>
         </div>
     );

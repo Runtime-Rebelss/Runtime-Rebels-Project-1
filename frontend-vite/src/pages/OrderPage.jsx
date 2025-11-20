@@ -160,9 +160,7 @@ const OrderPage = () => {
                                         <div className="md:text-right">
                                             <div className="font-medium">Order ID</div>
                                             <div className="opacity-70">{orderId}</div>
-                                            <button className="text-primary-600 text-sm hover:underline text-gray-900" onClick={() => navigate(`/orderDetails`)}> View Order Details</button>
-
-
+                                            <button className="text-primary-600 text-sm hover:underline text-gray-900" onClick={() => navigate(`/details/${orderId}`)}> View Order Details</button>
                                         </div>
                                     </div>
 

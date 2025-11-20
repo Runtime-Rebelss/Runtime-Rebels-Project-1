@@ -6,8 +6,11 @@ import java.util.List;
 import java.util.Optional;
 
 import com.runtimerebels.store.dao.CartRepository;
+import com.runtimerebels.store.dao.ProductRepository;
 import com.runtimerebels.store.models.Cart;
 import com.runtimerebels.store.models.OrderStatus;
+import com.runtimerebels.store.models.Product;
+import com.runtimerebels.store.models.dto.OrderResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,12 +28,14 @@ public class OrderController {
 
     @Autowired
     private CartRepository cartRepository;
+    @Autowired
+    private ProductRepository productRepository;
 
     // Get all orders
     @GetMapping
     public List<Order> getAllOrders() { return orderRepository.findAll(); }
 
-    // Get order
+    // Get all orders for a user
     @GetMapping("/{userId}")
     public ResponseEntity<List<Order>> getOrdersByUserId(@PathVariable String userId) {
         List<Order> orders = orderRepository.findByUserId(userId);
@@ -38,6 +43,17 @@ public class OrderController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(orders);
+    }
+
+    // Gets one specific order
+    @GetMapping("/details/{orderId}")
+    public ResponseEntity<OrderResponse> getOrderDetails(@PathVariable String orderId) {
+        return orderRepository.findById(orderId)
+                .map(order -> {
+                    List<Product> products = productRepository.findAllById(order.getProductIds());
+                    return ResponseEntity.ok(new OrderResponse(order, products));
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 
     // Create new order
