@@ -66,11 +66,16 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(@NonNull HttpServletRequest request) throws ServletException {
+        System.out.println("JWT Filter path: " + request.getServletPath());
+
         // List all paths that the JWT filter should completely ignore.
         return request.getServletPath().equals("/api/auth/authenticate")
                 || request.getServletPath().equals("/api/auth/register")
                 || request.getServletPath().equals("/api/auth/signup")
                 || request.getServletPath().equals("/api/auth/refreshToken")
-                || request.getServletPath().equals("/api/auth/login");
+                || request.getServletPath().equals("/api/auth/login")
+                || request.getServletPath().equals("/api/auth/logout")
+                || request.getServletPath().equals("/api/auth/token")
+                || request.getServletPath().startsWith("/api/payments/confirm");
     }
 }

@@ -3,6 +3,7 @@ package com.runtimerebels.store.controller;
 import com.runtimerebels.store.dao.CartRepository;
 import com.runtimerebels.store.dao.OrderRepository;
 import com.runtimerebels.store.models.Cart;
+import com.runtimerebels.store.models.OrderStatus;
 import com.runtimerebels.store.models.dto.CheckoutRequest;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import com.runtimerebels.store.models.Order;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -119,9 +121,10 @@ public class PaymentController {
 
     private record CreateCheckoutResponse(String url) {}
 
-    @PostMapping("/confirm")
-    public ResponseEntity<Order> confirmPayment(@RequestParam String userId) throws Exception {
+    @PostMapping("/confirm/{userId}")
+    public ResponseEntity<Order> confirmPayment(@PathVariable String userId) throws Exception {
         Cart cart = cartRepository.findByUserId(userId).orElseThrow(() -> new RuntimeException("Cart not found!"));
+        Calendar calendar = Calendar.getInstance();
 
         // Create the order
         Order order = new Order();
@@ -129,6 +132,9 @@ public class PaymentController {
         order.setProductIds(cart.getProductIds());
         order.setQuantity(cart.getQuantity());
         order.setTotalPrice(cart.getTotalPrice());
+        order.setOrderStatus(OrderStatus.PENDING);
+        order.setCreatedAt(calendar.getTime());
+        order.setProcessAt(null);
         orderRepository.save(order);
 
         // Remove item(s) from cart

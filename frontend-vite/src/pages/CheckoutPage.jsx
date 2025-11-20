@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar';
 import cartLib from '../lib/cart';
 import checkoutImage from '../assets/Scamazon_Coming_Soon.png';
 import api from '../lib/axios';
+import toast from 'react-hot-toast'
 
 const CheckoutPage = () => {
     const [loading, setLoading] = useState(false);
@@ -19,9 +20,13 @@ const CheckoutPage = () => {
 
     useEffect(() => {
         if (status === "success") {
+            toast.success("YAYYYY");
             // Remove item from cart!
+            const userId = localStorage.getItem("userId");
             localStorage.removeItem('guestCart');
             window.dispatchEvent(new Event('cart-updated'));
+            // Not creating an order!!
+            api.post(`/payments/confirm/${userId}`);
             navigate('/orders', { replace: true });
         }
     }, [status, navigate]);

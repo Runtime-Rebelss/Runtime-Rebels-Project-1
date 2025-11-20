@@ -24,7 +24,7 @@ const OrderPage = () => {
     // OPTIONAL: load local orders (delete if you already set orders elsewhere)
     useEffect(() => {
         try {
-            const raw = localStorage.getItem("guestOrders");
+            const raw = api.get(`carts/${productId}`)
             const list = raw ? JSON.parse(raw) : [];
             setOrders(Array.isArray(list) ? list : []);
         } catch {

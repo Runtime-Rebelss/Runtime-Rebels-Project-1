@@ -35,6 +35,7 @@ public class SecurityConfig {
                 // 1. CRITICAL: Explicitly allow the POST method for login first
                 .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/auth/signup").permitAll()
+                .requestMatchers("/api/payments/**").permitAll()
                 // 2. All other public/whitelisted paths (General GETs, Swagger, etc.)
                 .requestMatchers(
                         "/v3/api-docs/**",
@@ -42,11 +43,10 @@ public class SecurityConfig {
                         "/swagger-ui.html",
                         "/swagger-resources/**",
                         "/webjars/**",
-                        "/api/auth/authenticate",
                         "/api/auth/refreshToken",
                         "/api/products/**",
-                        "/api/payments/**",
-                        "/api/carts/**"
+                        "/api/carts/**",
+                        "/api/orders/**"
                 ).permitAll()
                 // 3. Keep this essential rule for CORS pre-flight requests
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()

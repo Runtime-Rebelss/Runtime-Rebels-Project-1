@@ -24,9 +24,9 @@ public class OrderController {
     }
 
     // Get order
-    @GetMapping("/{orderId}")
-    public ResponseEntity<Order> getOrderById(@PathVariable String orderId) {
-        return orderRepository.findById(orderId)
+    @GetMapping("/{userId}")
+    public ResponseEntity<Order> getOrderByUserId(@PathVariable String userId) {
+        return orderRepository.findByUserId(userId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
