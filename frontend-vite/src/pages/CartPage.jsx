@@ -9,37 +9,37 @@ import toast from "react-hot-toast";
 // Need to completely remove anything related to GUEST USER!!!!!
 
 // Currently only supports a guest cart
-const GUEST_KEY = 'guestCart';
+//const GUEST_KEY = 'guestCart';
 
 // Creates a guest cart, unique to local host
-function loadGuestCart() {
-    try {
-        const raw = localStorage.getItem(GUEST_KEY);
-        const parsed = raw ? JSON.parse(raw) : { items: [] };
-        if (!Array.isArray(parsed.items)) return { items: [] };
-        // Normalize items (tolerate older shapes)
-        const items = parsed.items
-            .filter(Boolean)
-            .map((it) => ({
-                productId: it.productId ?? it.id ?? it._id ?? '',
-                name: it.name ?? 'Item',
-                price: Number(it.price ?? it.finalPrice ?? it.itemTotal ?? 0),
-                image:
-                    it.image ||
-                    it.imageUrl ||
-                    'https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                quantity: Math.max(1, Number(it.quantity ?? 1)),
-            }))
-            .filter((it) => it.productId);
-        return { items };
-    } catch {
-        return { items: [] };
-    }
-}
+// function loadGuestCart() {
+//     try {
+//         const raw = localStorage.getItem(GUEST_KEY);
+//         const parsed = raw ? JSON.parse(raw) : { items: [] };
+//         if (!Array.isArray(parsed.items)) return { items: [] };
+//         // Normalize items (tolerate older shapes)
+//         const items = parsed.items
+//             .filter(Boolean)
+//             .map((it) => ({
+//                 productId: it.productId ?? it.id ?? it._id ?? '',
+//                 name: it.name ?? 'Item',
+//                 price: Number(it.price ?? it.finalPrice ?? it.itemTotal ?? 0),
+//                 image:
+//                     it.image ||
+//                     it.imageUrl ||
+//                     'https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+//                 quantity: Math.max(1, Number(it.quantity ?? 1)),
+//             }))
+//             .filter((it) => it.productId);
+//         return { items };
+//     } catch {
+//         return { items: [] };
+//     }
+// }
 
-function saveGuestCart(items) {
-    localStorage.setItem(GUEST_KEY, JSON.stringify({ items }));
-}
+// function saveGuestCart(items) {
+//     localStorage.setItem(GUEST_KEY, JSON.stringify({ items }));
+// }
 
 function calcTotal(items) {
     return items.reduce((s, it) => s + (Number(it.price) || 0) * (Number(it.quantity) || 0), 0);
@@ -78,7 +78,7 @@ async function loadServerCart(userId, signal) {
                     };
                 } catch {
                     if (isAbort(e)) throw e; // bubble abort once
-                        return null;                }
+                    return null;                }
             })
     );
     return items.filter(Boolean);
@@ -88,7 +88,6 @@ async function loadServerCart(userId, signal) {
 const CartPage = () => {
     const [cartItems, setCartItems] = useState([]);
     const [total, setTotal] = useState(0);
-    const [isGuest, setIsGuest] = useState(false);
     const [loading, setLoading] = useState(true);
     const [showCheckoutPrompt, setShowCheckoutPrompt] = useState(false);
     const [toastMsg, setToastMsg] = useState('');
@@ -98,38 +97,21 @@ const CartPage = () => {
     const token = localStorage.getItem("authToken");
 
     useEffect(() => {
-        if (!userId || !token) {
-            navigate("/login?redirect=/cart");
-            return;
-        }
+        // if (!userId || !token) {
+        //     navigate("/login?redirect=/cart");
+        //     return;
+        // }
 
         let ac = new AbortController();
 
         const load = async () => {
             setLoading(true);
-            if (!userId) {
-                // Guest mode
-                setIsGuest(true);
-                const {items} = loadGuestCart();
-                setCartItems(
-                    items.map((it) => ({
-                        id: it.productId,
-                        name: it.name,
-                        image: it.image,
-                        price: Number(it.price || 0),
-                        quantity: Number(it.quantity || 1),
-                    }))
-                );
-                setLoading(false);
-                return;
-            }
 
             const isAbort = (err) =>
                 err?.name === "AbortError" ||
                 err?.code === "ERR_CANCELED" ||
                 err?.message === "canceled";
 
-            setIsGuest(false);
             try {
                 const items = await loadServerCart(userId, ac.signal);
                 setCartItems(items);
@@ -137,17 +119,7 @@ const CartPage = () => {
                 if (isAbort(err)) return; // ignore expected cancellations
                 console.error('Error fetching cart:', err);
                 toast.error('Failed to fetch cart :(');
-                setIsGuest(true);
-                const {items} = loadGuestCart();
-                setCartItems(
-                    items.map((it) => ({
-                        id: it.productId,
-                        name: it.name,
-                        image: it.image,
-                        price: Number(it.price || 0),
-                        quantity: Number(it.quantity || 1),
-                    }))
-                );
+
             } finally {
                 setLoading(false);
             }
@@ -155,22 +127,11 @@ const CartPage = () => {
 
         load();
         return () => ac.abort();
-    }, [userId]);
+    }, [userId, token, navigate]);
 
     useEffect(() => {
         const handler = async () => {
             const uId = localStorage.getItem("userId");
-            if (!uId) {
-                const { items } = loadGuestCart();
-                setCartItems(items.map(it => ({
-                    id: it.productId,
-                    name: it.name,
-                    image: it.image,
-                    price: Number(it.price || 0),
-                    quantity: Number(it.quantity || 1)
-                })));
-                return;
-            }
 
             const ac = new AbortController();
             try {
@@ -181,7 +142,6 @@ const CartPage = () => {
                     console.warn("cart-updated reload failed:", err);
                 }
             }
-            // no external cleanup here; handler is short-lived
         };
 
         window.addEventListener('cart-updated', handler);
@@ -192,33 +152,8 @@ const CartPage = () => {
         setTotal(calcTotal(cartItems));
     }, [cartItems]);
 
-    const setItems = (next) => {
-        setCartItems(next);
-        if (isGuest) {
-            saveGuestCart(
-                next.map((it) => ({
-                    productId: it.id,
-                    name: it.name,
-                    price: it.price,
-                    image: it.image,
-                    quantity: it.quantity,
-                }))
-            );
-        }
-        window.dispatchEvent(new Event("cart-updated"));
-    };
-
     const updateQuantity = async (productId, newQty) => {
         if (newQty < 1) newQty = 1;
-
-        if (isGuest) {
-            setItems(
-                cartItems.map((it) =>
-                    it.id === productId ? {...it, quantity: newQty} : it
-                )
-            );
-            return;
-        }
 
         try {
             await api.put(`/carts/update`, null,
@@ -231,57 +166,26 @@ const CartPage = () => {
     };
 
     const removeItem = async (productId) => {
-        if (isGuest) {
-            setItems(cartItems.filter((it) => it.id !== productId));
-            return;
-        }
+
         try {
             await api.put(`/carts/update`, null, { params: { userId, productId, quantity: 0 } });
-            setItems(cartItems.filter((it) => it.id !== productId));
+            setCartItems(cartItems.filter((it) => it.id !== productId));
         } catch (err) {
             console.error('Error removing item:', err);
             toast.error('Failed to remove item');
         }
     };
 
-    const addItem = async ({
-                               productId,
-                               name,
-                               price,
-                               image,
-                               quantity = 1,
-                           }) => {
+    const addItem = async ({ productId, name, price, image, quantity = 1 }) => {
         if (!productId) return;
-        const item = {
-            id: productId,
-            name,
-            price: Number(price || 0),
-            image: image || '',
-            quantity: Number(quantity || 1)
-        };
-
-        if (isGuest) {
-            // merge locally
-            const existing = cartItems.find((it) => it.id === productId);
-            if (existing) {
-                setItems(cartItems.map((it) => (it.id === productId ? {
-                    ...it,
-                    quantity: it.quantity + item.quantity
-                } : it)));
-            } else {
-                setItems([...cartItems, item]);
-            }
-            return;
-        }
 
         try {
             const totalPrice = (Number(price || 0) * Number(quantity || 1)).toFixed(2);
             await api.post(`/carts/add`, null, {
                 params: { userId, productId, quantity, totalPrice }
             });
-            // reload server cart
             const items = await loadServerCart(userId);
-            setItems(items);
+            setCartItems(items);
         } catch (err) {
             console.error('Error adding item:', err);
             toast.error('Failed to add item to cart');
@@ -316,36 +220,9 @@ const CartPage = () => {
         }
     };
 
-    const handleGuestCheckout = async () => {
-        try {
-            setLoading(true);
-            const cartItems = cartLib.loadGuestCart();
-
-            const items = cartItems.map((item) => ({
-                name: item.name,
-                unitAmount: Math.round(item.price * 100),
-                currency: "usd",
-                quantity: item.quantity,
-            }));
-
-            const response = await api.post("/payments/create-checkout-session", {
-                items,
-                customerEmail: localStorage.getItem("userEmail") || null,
-                savePaymentMethod: false,
-            });
-
-            window.location.href = response.data.url;
-        } catch (error) {
-            console.error("Error starting checkout:", error);
-            alert("Failed to start checkout. Please try again.");
-        } finally {
-            setLoading(false);
-        }
-    };
-
     const proceedToCheckout = async () => {
         if (cartItems.length === 0) return;
-        // new: guest? -> show pop up prompt instead of routing immediately
+
         if (!localStorage.getItem("authToken")) {
             setShowCheckoutPrompt(true);
             return;
@@ -353,14 +230,6 @@ const CartPage = () => {
 
         await handleUserCheckout();
     }
-
-    const clearGuestCart = () => {
-        if (!isGuest) return;
-        const ok = window.confirm('Clear your guest cart? This will remove all items stored on this device.');
-        if (!ok) return;
-        saveGuestCart([]);
-        setCartItems([]);
-    };
 
     return (
         <div className="min-h-screen bg-base-200">
@@ -370,7 +239,7 @@ const CartPage = () => {
                 <div className="mb-6 text-center">
                     <h1 className="text-3xl font-semibold">Your Cart</h1>
                     <p className="text-base-content/60">
-                        {isGuest ? 'Guest cart (stored on this device)' : 'Signed-in cart'}
+                        {'Signed-in cart'}
                     </p>
                 </div>
 

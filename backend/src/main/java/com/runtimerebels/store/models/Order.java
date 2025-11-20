@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Builder
@@ -18,9 +19,13 @@ import java.util.Date;
 public class Order {
     @Id
     private String id;
-    private Cart cart;
+
+    private String userId;
+    private List<String> productIds;
+    private List<Integer> quantity;
+    private List<BigDecimal> totalPrice;
     private OrderStatus orderStatus;
     private Date createdAt;
     private Date processAt;
-    private BigDecimal total;
+
 }

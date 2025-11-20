@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
-import { Link } from "react-router-dom";
-import { ShoppingCart, Search } from "lucide-react";
+import {Link} from "react-router-dom";
+import {ShoppingCart, Search} from "lucide-react";
 import cartLib from "../lib/cart.js";
 import api from "../lib/axios.js";
 
@@ -20,7 +20,7 @@ const Navbar = () => {
 
     const countFromServer = async (userId, signal) => {
         // Assumes backend returns { productIds: [], quantity: [], totalPrice: [] }
-        const { data } = await api.get(`/carts/${encodeURIComponent(userId)}`, { signal });
+        const {data} = await api.get(`/carts/${encodeURIComponent(userId)}`, {signal});
         const qtys = Array.isArray(data?.quantity) ? data.quantity : [];
         return qtys.reduce((s, q) => s + (Number(q) || 1), 0);
     };
@@ -127,7 +127,8 @@ const Navbar = () => {
                 <div className="hidden lg:flex">
                     <div className="form-control">
                         <div className="input-group">
-                            <input type="text" placeholder="Search products..." className="input input-bordered w-48 xl:w-64"/>
+                            <input type="text" placeholder="Search products..."
+                                   className="input input-bordered w-48 xl:w-64"/>
                             <button className="btn btn-square btn-primary">
                                 <Search className="h-5 w-5 text-white"/>
                             </button>
@@ -141,15 +142,29 @@ const Navbar = () => {
                 </button>
 
                 {/* Account (simple) */}
+
+
                 {userId ? (
-                    <Link to="/account">
-                        <button className="btn btn-ghost">Account</button>
-                    </Link>
+                    <div className="dropdown dropdown-hover">
+                        <div tabIndex={0} role="button" className="btn btn-ghost">Account ⬇️</div>
+                        <ul tabIndex="-1"
+                            className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+                            <li><a>
+                                <Link to="/account">
+                                    <button className="btn-ghost">Account</button>
+                                </Link>
+                            </a></li>
+                            <li><a>
+                                <button className="btn-ghost">Sign Out</button>
+                            </a></li>
+                        </ul>
+                    </div>
                 ) : (
                     <Link to="/login">
                         <button className="btn btn-ghost">Sign in</button>
                     </Link>
                 )}
+
 
                 {/* Orders */}
                 <Link to="/orders">

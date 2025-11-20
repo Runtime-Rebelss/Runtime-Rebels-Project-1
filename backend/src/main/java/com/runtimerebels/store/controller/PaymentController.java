@@ -1,24 +1,36 @@
 package com.runtimerebels.store.controller;
 
+import com.runtimerebels.store.dao.CartRepository;
+import com.runtimerebels.store.dao.OrderRepository;
+import com.runtimerebels.store.models.Cart;
 import com.runtimerebels.store.models.dto.CheckoutRequest;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.runtimerebels.store.models.Order;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/payments")
 public class PaymentController {
 
+    private final CartRepository cartRepository;
+    private final OrderRepository orderRepository;
     @Value("${frontend.successUrl}")
     private String successUrl;
 
     @Value("${frontend.cancelUrl}")
     private String cancelUrl;
+
+    public PaymentController(CartRepository cartRepository, OrderRepository orderRepository) {
+        this.cartRepository = cartRepository;
+        this.orderRepository = orderRepository;
+    }
 
     @PostMapping("/create-checkout-session")
     public ResponseEntity<?> createCheckout(@RequestBody CheckoutRequest req) throws Exception {
@@ -106,4 +118,26 @@ public class PaymentController {
     }
 
     private record CreateCheckoutResponse(String url) {}
+
+    @PostMapping("/confirm")
+    public ResponseEntity<Order> confirmPayment(@RequestParam String userId) throws Exception {
+        Cart cart = cartRepository.findByUserId(userId).orElseThrow(() -> new RuntimeException("Cart not found!"));
+
+        // Create the order
+        Order order = new Order();
+        order.setUserId(userId);
+        order.setProductIds(cart.getProductIds());
+        order.setQuantity(cart.getQuantity());
+        order.setTotalPrice(cart.getTotalPrice());
+        orderRepository.save(order);
+
+        // Remove item(s) from cart
+        cart.setProductIds(new ArrayList<>());
+        cart.setQuantity(new ArrayList<>());
+        cart.setTotalPrice(new ArrayList<>());
+        cartRepository.save(cart);
+
+        return ResponseEntity.ok(order);
+    }
+
 }
