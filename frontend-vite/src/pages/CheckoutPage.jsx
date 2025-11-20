@@ -10,6 +10,7 @@ const CheckoutPage = () => {
     const [status, setStatus] = useState(null);
     const navigate = useNavigate();
     const location = useLocation();
+    const [cartItems, setCartItems] = useState([]);
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
@@ -29,9 +30,9 @@ const CheckoutPage = () => {
     const handleCheckout = async () => {
         try {
             setLoading(true);
-
+            const userId = localStorage.getItem('userId');
             // get items from local cart
-            const cartItems = cartLib.loadGuestCart();
+            const cartItems = api.get(`/carts/${userId}`);
             if (!cartItems || cartItems.length === 0) {
                 alert("Your cart is empty!");
                 setLoading(false);

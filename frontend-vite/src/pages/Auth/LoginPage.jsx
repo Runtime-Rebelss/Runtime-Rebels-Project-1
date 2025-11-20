@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar.jsx';
 import api from '../../lib/axios.js';
+import toast from 'react-hot-toast'
 
 const LoginPage = () => {
     const [loading, setLoading] = useState(false);
@@ -70,12 +71,13 @@ const LoginPage = () => {
 
             localStorage.setItem('userId', userId);
             localStorage.setItem('userEmail', userEmail);
-            // Change this
+            // Change this to cookies based
             if (token) localStorage.setItem('authToken', token);
 
             await preloadCart(userId);
 
             navigate('/', { replace: true });
+            toast.success('Login successfully!');
         } catch (err) {
             const status = err?.response?.status;
             const serverMsg = err?.response?.data?.message || err?.response?.data?.error;

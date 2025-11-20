@@ -15,8 +15,7 @@ import java.math.BigDecimal;
 @Document
 public class CartItem {
     @Id
-    private String productId;
+    private String id;
     private Product product;
     private Integer quantity;
-    private BigDecimal finalPrice;
 }

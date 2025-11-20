@@ -3,10 +3,12 @@ import {Link} from "react-router-dom";
 import {ShoppingCart, Search} from "lucide-react";
 import cartLib from "../lib/cart.js";
 import api from "../lib/axios.js";
+import toast from 'react-hot-toast'
 
 const Navbar = () => {
     const categories = ["Men", "Women", "Jewelery", "Electronics", "Accessories"];
     const [cartCount, setCartCount] = useState(0);
+    const [loading, setLoading] = useState(true);
 
     const isAbort = (err) =>
         err?.name === "AbortError" ||
@@ -64,6 +66,8 @@ const Navbar = () => {
                 if (!isAbort(e)) {
                     console.warn("navbar cart refresh failed:", e);
                 }
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -74,6 +78,20 @@ const Navbar = () => {
             window.removeEventListener("storage", handler);
         };
     }, []);
+
+    const handleLogout = () => {
+        try {
+            localStorage.removeItem("userId");
+            localStorage.removeItem("userEmail");
+            localStorage.removeItem("authToken");
+            toast.success("User logged out!");
+        } catch (error) {
+            console.error("Failed to sign out");
+            toast.error("Failed to sign out");
+        } finally {
+            setLoading(false);
+        }
+    }
 
     const userId = localStorage.getItem("userId");
 
@@ -142,21 +160,19 @@ const Navbar = () => {
                 </button>
 
                 {/* Account (simple) */}
-
-
                 {userId ? (
                     <div className="dropdown dropdown-hover">
                         <div tabIndex={0} role="button" className="btn btn-ghost">Account ⬇️</div>
                         <ul tabIndex="-1"
-                            className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-                            <li><a>
+                            className="dropdown-content menu bg-base-100 rounded-box z-1 w-full p-2 shadow-sm">
+                            <li>
                                 <Link to="/account">
                                     <button className="btn-ghost">Account</button>
                                 </Link>
-                            </a></li>
-                            <li><a>
-                                <button className="btn-ghost">Sign Out</button>
-                            </a></li>
+                            </li>
+                            <li>
+                                <button onClick={handleLogout} className="text-primary-600 underline text-sm hover:text-gray-900">Sign Out</button>
+                            </li>
                         </ul>
                     </div>
                 ) : (
@@ -164,7 +180,6 @@ const Navbar = () => {
                         <button className="btn btn-ghost">Sign in</button>
                     </Link>
                 )}
-
 
                 {/* Orders */}
                 <Link to="/orders">

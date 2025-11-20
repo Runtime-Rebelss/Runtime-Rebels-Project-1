@@ -89,7 +89,7 @@ const ProductPage = () => {
                 {/* Back button */}
                 <button
                     onClick={() => navigate(-1)}
-                    className="mt-4 text-gray-600 underline text-sm hover:text-gray-900"
+                    className="mt-4 `text-gray-600 underline text-sm hover:text-gray-900`"
                 >
                     ← Back to Products
                 </button>
