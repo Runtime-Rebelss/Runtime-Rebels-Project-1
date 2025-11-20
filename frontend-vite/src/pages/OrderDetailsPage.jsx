@@ -62,7 +62,7 @@ async function loadServerOrders(userId, signal) {
     return detailed;
 }
 
-const OrderPage = () => {
+const OrderDetailsPage = () => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
@@ -103,7 +103,7 @@ const OrderPage = () => {
         <div className="min-h-screen bg-base-200">
             <Navbar />
             <div className="container mx-auto px-4 py-8">
-                <h1 className="text-3xl font-semibold mb-6">Your Orders</h1>
+                <h1 className="text-3xl font-semibold mb-6">Order Details</h1>
 
                 {loading ? (
                     <div className="flex justify-center py-16">
@@ -207,4 +207,4 @@ const OrderPage = () => {
     );
 };
 
-export default OrderPage;
+export default OrderDetailsPage;

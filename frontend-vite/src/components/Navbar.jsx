@@ -94,6 +94,7 @@ const Navbar = () => {
     }
 
     const userId = localStorage.getItem("userId");
+    const userEmail = localStorage.getItem("userEmail");
 
     return (
         <div className="navbar bg-base-100 shadow-sm px-4 sticky top-0 z-50">
@@ -162,9 +163,9 @@ const Navbar = () => {
                 {/* Account (simple) */}
                 {userId ? (
                     <div className="dropdown dropdown-hover">
-                        <div tabIndex={0} role="button" className="btn btn-ghost">Account ⬇️</div>
+                        <div tabIndex={0} role="button" className="btn btn-ghost">{userEmail} ⬇️</div>
                         <ul tabIndex="-1"
-                            className="dropdown-content menu bg-base-100 rounded-box z-1 w-full p-2 shadow-sm">
+                            className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
                             <li>
                                 <Link to="/account">
                                     <button className="btn-ghost">Account</button>
