@@ -28,7 +28,7 @@ public class Order {
     private OrderStatus orderStatus;
     private Date createdAt;
     private Date processAt;
-
+    // New Code
     // Payment + Stripe info
     private String paymentStatus;     // "paid", "pending", etc.
     private String stripeSessionId;   // unique ID from Stripe
