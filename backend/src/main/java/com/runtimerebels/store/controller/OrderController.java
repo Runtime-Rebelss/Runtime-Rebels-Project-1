@@ -50,9 +50,18 @@ public class OrderController {
      * @see ResponseEntity
      * @see List
      */ // Get all orders for a user
-    @GetMapping("/{userId}")
+    @GetMapping("/user/{userId}")
     public ResponseEntity<List<Order>> getOrdersByUserId(@PathVariable String userId) {
         List<Order> orders = orderRepository.findByUserId(userId);
+        if (orders.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(orders);
+    }
+
+    @GetMapping("/email/{userEmail}")
+    public ResponseEntity<List<Order>> getOrdersByEmail(@PathVariable String userEmail) {
+        List<Order> orders = orderRepository.findByUserId(userEmail);
         if (orders.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
@@ -87,7 +96,20 @@ public class OrderController {
      */ // Create new order
     @PostMapping
     public ResponseEntity<Order> createOrder(@RequestBody Order order) {
+        System.out.println("Received order: " + order);
+
+        // simple duplicate check by sessionId
+        if (order.getStripeSessionId() != null) {
+            List<Order> existingOrders = orderRepository.findByStripeSessionId(order.getStripeSessionId());
+            if (!existingOrders.isEmpty()) {
+                System.out.println("Duplicate order detected, ignoring...");
+                return ResponseEntity.ok(existingOrders.get(0));
+            }
+        }
+
+        order.setPaymentStatus("paid");
         Order savedOrder = orderRepository.save(order);
+        System.out.println("Saved order with ID: " + savedOrder.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(savedOrder);
     }
 

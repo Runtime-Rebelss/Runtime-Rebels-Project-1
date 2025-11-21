@@ -8,7 +8,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface OrderRepository extends MongoRepository<Order, String> {
-
-
+    List<Order> findByUserEmail(String userEmail);
     List<Order> findByUserId(String userId);
+    List<Order> findByStripeSessionId(String stripeSessionId);
+
 }

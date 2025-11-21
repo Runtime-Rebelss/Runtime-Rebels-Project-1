@@ -21,6 +21,7 @@ public class Order {
     private String id;
 
     private String userId;
+    private String userEmail;
     private List<String> productIds;
     private List<Integer> quantity;
     private List<BigDecimal> totalPrice;
@@ -28,4 +29,8 @@ public class Order {
     private Date createdAt;
     private Date processAt;
 
+    // Payment + Stripe info
+    private String paymentStatus;     // "paid", "pending", etc.
+    private String stripeSessionId;   // unique ID from Stripe
 }
+
