@@ -8,13 +8,13 @@ const fmtUSD = (n) =>
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
     })}`;
+
 const fmtDate = (d) =>
     new Date(d).toLocaleDateString(undefined, {
         year: "numeric",
         month: "long",
         day: "numeric",
     });
-
 
 const OrderDetailsPage = () => {
     const [orders, setOrders] = useState(null);

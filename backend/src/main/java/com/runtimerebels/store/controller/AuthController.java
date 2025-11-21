@@ -16,6 +16,10 @@ import org.springframework.web.bind.annotation.*;
 
 import com.runtimerebels.store.models.dto.RegisterRequest;
 
+/**
+ * @author Henry Locke
+ * @since 11-19-2025
+*/
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
@@ -27,7 +31,14 @@ public class AuthController {
     public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) {
         return ResponseEntity.created(URI.create("")).body(authService.register(request));
     }
-
+    /**
+     * login
+     *
+     * @param request request
+     * @return {@link ResponseEntity}
+     * @see ResponseEntity
+     * @see AuthenticationResponse
+     */
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticateRequest request) {
 
