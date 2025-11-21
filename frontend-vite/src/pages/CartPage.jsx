@@ -6,38 +6,40 @@ import cartLib from "../lib/cart.js";
 import api from "../lib/axios.js";
 import toast from "react-hot-toast";
 
+// Need to completely remove anything related to GUEST USER!!!!!
+
 // Currently only supports a guest cart
-const GUEST_KEY = 'guestCart';
+//const GUEST_KEY = 'guestCart';
 
 // Creates a guest cart, unique to local host
-function loadGuestCart() {
-    try {
-        const raw = localStorage.getItem(GUEST_KEY);
-        const parsed = raw ? JSON.parse(raw) : { items: [] };
-        if (!Array.isArray(parsed.items)) return { items: [] };
-        // Normalize items (tolerate older shapes)
-        const items = parsed.items
-            .filter(Boolean)
-            .map((it) => ({
-                productId: it.productId ?? it.id ?? it._id ?? '',
-                name: it.name ?? 'Item',
-                price: Number(it.price ?? it.finalPrice ?? it.itemTotal ?? 0),
-                image:
-                    it.image ||
-                    it.imageUrl ||
-                    'https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                quantity: Math.max(1, Number(it.quantity ?? 1)),
-            }))
-            .filter((it) => it.productId);
-        return { items };
-    } catch {
-        return { items: [] };
-    }
-}
+// function loadGuestCart() {
+//     try {
+//         const raw = localStorage.getItem(GUEST_KEY);
+//         const parsed = raw ? JSON.parse(raw) : { items: [] };
+//         if (!Array.isArray(parsed.items)) return { items: [] };
+//         // Normalize items (tolerate older shapes)
+//         const items = parsed.items
+//             .filter(Boolean)
+//             .map((it) => ({
+//                 productId: it.productId ?? it.id ?? it._id ?? '',
+//                 name: it.name ?? 'Item',
+//                 price: Number(it.price ?? it.finalPrice ?? it.itemTotal ?? 0),
+//                 image:
+//                     it.image ||
+//                     it.imageUrl ||
+//                     'https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+//                 quantity: Math.max(1, Number(it.quantity ?? 1)),
+//             }))
+//             .filter((it) => it.productId);
+//         return { items };
+//     } catch {
+//         return { items: [] };
+//     }
+// }
 
-function saveGuestCart(items) {
-    localStorage.setItem(GUEST_KEY, JSON.stringify({ items }));
-}
+// function saveGuestCart(items) {
+//     localStorage.setItem(GUEST_KEY, JSON.stringify({ items }));
+// }
 
 function calcTotal(items) {
     return items.reduce((s, it) => s + (Number(it.price) || 0) * (Number(it.quantity) || 0), 0);
@@ -45,21 +47,17 @@ function calcTotal(items) {
 
 // Added for when we add actual users
 async function loadServerCart(userId, signal) {
-    const res = await fetch(`/api/carts/${encodeURIComponent(userId)}`, { signal });
-    if (!res.ok) throw new Error('Failed to load cart');
-    const cartData = await res.json();
+    const { data: cartData } = await api.get(`/carts/${encodeURIComponent(userId)}`, { signal });
     const productIds = Array.isArray(cartData?.productIds) ? cartData.productIds : [];
-    const quantities = Array.isArray(cartData?.quantities) ? cartData.quantities : [];
-    const finalPrices = Array.isArray(cartData?.finalPrices) ? cartData.finalPrices : [];
+    const quantities = Array.isArray(cartData?.quantity) ? cartData.quantity : [];
+    const finalPrices = Array.isArray(cartData?.totalPrice) ? cartData.totalPrice : [];
 
     const items = await Promise.all(
         productIds
             .filter((pid) => typeof pid === 'string' && pid.trim().length > 0)
             .map(async (productId, index) => {
                 try {
-                    const productRes = await fetch(`/api/products/${encodeURIComponent(productId)}`);
-                    if (!productRes.ok) throw new Error(`Product ${productId} not found`);
-                    const product = await productRes.json();
+                    const { data: product } = await api.get(`/products/${encodeURIComponent(productId)}`, { signal });
 
                     const quantity = Number(quantities?.[index] ?? 1) || 1;
                     const basePrice =
@@ -79,11 +77,10 @@ async function loadServerCart(userId, signal) {
                         quantity,
                     };
                 } catch {
-                    return null;
-                }
+                    if (isAbort(e)) throw e; // bubble abort once
+                    return null;                }
             })
     );
-
     return items.filter(Boolean);
 }
 
@@ -91,53 +88,38 @@ async function loadServerCart(userId, signal) {
 const CartPage = () => {
     const [cartItems, setCartItems] = useState([]);
     const [total, setTotal] = useState(0);
-    const [isGuest, setIsGuest] = useState(false);
     const [loading, setLoading] = useState(true);
     const [showCheckoutPrompt, setShowCheckoutPrompt] = useState(false);
+    const [toastMsg, setToastMsg] = useState('');
 
     const navigate = useNavigate();
-    const userId = localStorage.getItem('userEmail');
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("authToken");
 
     useEffect(() => {
+        // if (!userId || !token) {
+        //     navigate("/login?redirect=/cart");
+        //     return;
+        // }
+
         let ac = new AbortController();
 
         const load = async () => {
             setLoading(true);
-            if (!userId) {
-                // Guest mode
-                setIsGuest(true);
-                const {items} = loadGuestCart();
-                setCartItems(
-                    items.map((it) => ({
-                        id: it.productId,
-                        name: it.name,
-                        image: it.image,
-                        price: Number(it.price || 0),
-                        quantity: Number(it.quantity || 1),
-                    }))
-                );
-                setLoading(false);
-                return;
-            }
 
-            setIsGuest(false);
+            const isAbort = (err) =>
+                err?.name === "AbortError" ||
+                err?.code === "ERR_CANCELED" ||
+                err?.message === "canceled";
+
             try {
                 const items = await loadServerCart(userId, ac.signal);
                 setCartItems(items);
             } catch (err) {
+                if (isAbort(err)) return; // ignore expected cancellations
                 console.error('Error fetching cart:', err);
-                toast.error('Failed to fetch cart');
-                setIsGuest(true);
-                const {items} = loadGuestCart();
-                setCartItems(
-                    items.map((it) => ({
-                        id: it.productId,
-                        name: it.name,
-                        image: it.image,
-                        price: Number(it.price || 0),
-                        quantity: Number(it.quantity || 1),
-                    }))
-                );
+                toast.error('Failed to fetch cart :(');
+
             } finally {
                 setLoading(false);
             }
@@ -145,26 +127,19 @@ const CartPage = () => {
 
         load();
         return () => ac.abort();
-    }, [userId]);
+    }, [userId, token, navigate]);
 
     useEffect(() => {
-        const handler = async (e) => {
-            if (!localStorage.getItem('userEmail')) {
-                const items = loadGuestCart();
-                setCartItems(
-                    items.map((it) => ({
-                        id: it.productId,
-                        name: it.name,
-                        image: it.image,
-                        price: Number(it.price || 0),
-                        quantity: Number(it.quantity || 1)
-                    }))
-                );
-            } else {
-                try {
-                    const items = await loadServerCart(localStorage.getItem('userEmail'));
-                    setCartItems(items);
-                } catch {
+        const handler = async () => {
+            const uId = localStorage.getItem("userId");
+
+            const ac = new AbortController();
+            try {
+                const items = await loadServerCart(uId, ac.signal);
+                setCartItems(items);
+            } catch (err) {
+                if (err?.name !== "AbortError") {
+                    console.warn("cart-updated reload failed:", err);
                 }
             }
         };
@@ -177,42 +152,12 @@ const CartPage = () => {
         setTotal(calcTotal(cartItems));
     }, [cartItems]);
 
-    const setItems = (next) => {
-        setCartItems(next);
-        if (isGuest) {
-            saveGuestCart(
-                next.map((it) => ({
-                    productId: it.id,
-                    name: it.name,
-                    price: it.price,
-                    image: it.image,
-                    quantity: it.quantity,
-                }))
-            );
-        }
-        window.dispatchEvent(new Event("cart-updated"));
-    };
-
     const updateQuantity = async (productId, newQty) => {
         if (newQty < 1) newQty = 1;
 
-        if (isGuest) {
-            setItems(
-                cartItems.map((it) =>
-                    it.id === productId ? {...it, quantity: newQty} : it
-                )
-            );
-            return;
-        }
-
         try {
-            const res = await fetch(
-                `/api/carts/update?userId=${encodeURIComponent(userId)}&productId=${encodeURIComponent(
-                    productId
-                )}&quantity=${encodeURIComponent(newQty)}`,
-                {method: 'PUT', headers: {'Content-Type': 'application/json'}}
-            );
-            if (!res.ok) throw new Error('Update failed');
+            await api.put(`/carts/update`, null,
+                { params: { userId, productId, quantity: newQty }});
             setItems(cartItems.map((it) => (it.id === productId ? {...it, quantity: newQty} : it)));
         } catch (err) {
             console.error('Error updating quantity:', err);
@@ -221,73 +166,37 @@ const CartPage = () => {
     };
 
     const removeItem = async (productId) => {
-        if (isGuest) {
-            setItems(cartItems.filter((it) => it.id !== productId));
-            return;
-        }
+
         try {
-            const res = await fetch(
-                `/api/carts/update?userId=${encodeURIComponent(userId)}&productId=${encodeURIComponent(productId)}&quantity=0`,
-                {method: 'PUT', headers: {'Content-Type': 'application/json'}}
-            );
-            if (!res.ok) throw new Error('Remove failed');
-            setItems(cartItems.filter((it) => it.id !== productId));
+            await api.put(`/carts/update`, null, { params: { userId, productId, quantity: 0 } });
+            setCartItems(cartItems.filter((it) => it.id !== productId));
         } catch (err) {
             console.error('Error removing item:', err);
             toast.error('Failed to remove item');
         }
     };
 
-    const addItem = async ({
-                               productId,
-                               name,
-                               price,
-                               image,
-                               quantity = 1,
-                           }) => {
+    const addItem = async ({ productId, name, price, image, quantity = 1 }) => {
         if (!productId) return;
-        const item = {
-            id: productId,
-            name,
-            price: Number(price || 0),
-            image: image || '',
-            quantity: Number(quantity || 1)
-        };
-
-        if (isGuest) {
-            // merge locally
-            const existing = cartItems.find((it) => it.id === productId);
-            if (existing) {
-                setItems(cartItems.map((it) => (it.id === productId ? {
-                    ...it,
-                    quantity: it.quantity + item.quantity
-                } : it)));
-            } else {
-                setItems([...cartItems, item]);
-            }
-            return;
-        }
 
         try {
             const totalPrice = (Number(price || 0) * Number(quantity || 1)).toFixed(2);
-            const res = await fetch(`/api/carts/add?userId=${encodeURIComponent(userId)}&productId=${encodeURIComponent(productId)}&quantity=${encodeURIComponent(quantity)}&totalPrice=${encodeURIComponent(totalPrice)}`, {method: 'POST'});
-            if (!res.ok) throw new Error('Add failed');
-            // reload server cart
+            await api.post(`/carts/add`, null, {
+                params: { userId, productId, quantity, totalPrice }
+            });
             const items = await loadServerCart(userId);
-            setItems(items);
+            setCartItems(items);
         } catch (err) {
             console.error('Error adding item:', err);
             toast.error('Failed to add item to cart');
         }
     };
-    // new: helper function for guest Stripe checkout
-    const handleGuestCheckout = async () => {
+
+    // Method to handle user Checkouts
+    const handleUserCheckout = async () => {
         try {
             setLoading(true);
-            const cartItems = cartLib.loadGuestCart();
-            //  Save the current cart so the success page can access it later
-            localStorage.setItem("lastOrderCart", JSON.stringify({ items: cartItems }));
-
+            const cartItems = await loadServerCart(userId);
 
             const items = cartItems.map((item) => ({
                 name: item.name,
@@ -298,8 +207,8 @@ const CartPage = () => {
 
             const response = await api.post("/payments/create-checkout-session", {
                 items,
-                customerEmail: localStorage.getItem("userEmail") || null,
-                savePaymentMethod: false,
+                userId,
+                savePaymentMethod: true,
             });
 
             window.history.pushState({ fromStripe: true }, "",  "/order-cancel");
@@ -315,23 +224,14 @@ const CartPage = () => {
 
     const proceedToCheckout = async () => {
         if (cartItems.length === 0) return;
-        // new: guest? -> show pop up prompt instead of routing immediately
-        if (isGuest) {
+
+        if (!localStorage.getItem("authToken")) {
             setShowCheckoutPrompt(true);
             return;
         }
 
-        await handleGuestCheckout();
+        await handleUserCheckout();
     }
-
-
-    const clearGuestCart = () => {
-        if (!isGuest) return;
-        const ok = window.confirm('Clear your guest cart? This will remove all items stored on this device.');
-        if (!ok) return;
-        saveGuestCart([]);
-        setCartItems([]);
-    };
 
     return (
         <div className="min-h-screen bg-base-200">
@@ -341,7 +241,7 @@ const CartPage = () => {
                 <div className="mb-6 text-center">
                     <h1 className="text-3xl font-semibold">Your Cart</h1>
                     <p className="text-base-content/60">
-                        {isGuest ? 'Guest cart (stored on this device)' : 'Signed-in cart'}
+                        {'Signed-in cart'}
                     </p>
                 </div>
 
@@ -464,11 +364,11 @@ const CartPage = () => {
                                             disabled={cartItems.length === 0}
                                             onClick={proceedToCheckout}
                                         >
-                                            Proceed to Checkout
+                                            Pay with Stripe
                                         </button>
                                         <button
                                             className="btn btn-outline w-full"
-                                            onClick={() => navigate("/")}
+                                            onClick={() => navigate("/orders")}
                                         >
                                             Continue Shopping
                                         </button>

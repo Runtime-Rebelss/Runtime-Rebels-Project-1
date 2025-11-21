@@ -1,5 +1,7 @@
 package com.runtimerebels.store.models;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -15,6 +17,8 @@ import java.util.List;
  * @since 11-19-2025
  */
 
+@Setter
+@Getter
 @Document(collection = "products") // Mongo collection name
 public class Product {
     @Id

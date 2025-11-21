@@ -1,7 +1,6 @@
 package com.runtimerebels.store.controller;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -12,9 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.runtimerebels.store.models.Cart;
-
-//import com.runtimerebels.store.service.CartService;
-
 import com.runtimerebels.store.dao.CartRepository;
 
 /**
@@ -53,10 +49,18 @@ public class CartController {
         return cartRepository.findAll();
     }
 
+    /**
+     * get cart
+     *
+     * @param userId userId
+     * @return {@link ResponseEntity}
+     * @see ResponseEntity
+     * @see Cart
+     */
     @GetMapping("/{userId}")
     public ResponseEntity<Cart> getCart(@PathVariable String userId) {
         Cart cart = cartRepository.findByUserId(userId)
-            .orElse(new Cart(userId, new ArrayList<>(), new ArrayList<>(), new ArrayList<>()));
+                .orElse(new Cart(userId, new ArrayList<>(), new ArrayList<>(), new ArrayList<>()));
 
         int minLength = Math.min(
                 Math.min(cart.getProductIds().size(), cart.getQuantity().size()),
@@ -88,11 +92,7 @@ public class CartController {
      *      HTTP 400 (Bad Request) if the input is invalid
      */
     @PostMapping("/add")
-    public ResponseEntity<Cart> addToCart(@RequestParam String userId,
-                                          @RequestParam String productId,
-                                          @RequestParam(defaultValue = "1") int quantity,
-                                          @RequestParam BigDecimal totalPrice) {
-
+    public ResponseEntity<Cart> addToCart(@RequestParam String userId, @RequestParam String productId, @RequestParam(defaultValue = "1") int quantity, @RequestParam BigDecimal totalPrice) {
         // Check input
         if (quantity <= 0 || totalPrice.compareTo(BigDecimal.ZERO) <= 0) {
             return ResponseEntity.badRequest().build();
@@ -159,7 +159,7 @@ public class CartController {
         }
 
         if (quantity < 0) {
-            return new  ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         if (quantity == 0) {

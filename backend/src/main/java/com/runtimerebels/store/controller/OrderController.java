@@ -1,34 +1,101 @@
 package com.runtimerebels.store.controller;
 
-import com.runtimerebels.store.dao.OrderRepository;
-import com.runtimerebels.store.models.Order;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
-/**
- * REST controller for managing customer orders.
- * Handles endpoints for creating new orders and retrieving existing ones.
- * Communicates with the {@link OrderRepository} for persistence.
- *
- * Base URL: /api/orders
- *
- * @author Haley Kenney
- */
+import java.util.Optional;
 
+import com.runtimerebels.store.dao.CartRepository;
+import com.runtimerebels.store.dao.ProductRepository;
+import com.runtimerebels.store.models.Cart;
+import com.runtimerebels.store.models.OrderStatus;
+import com.runtimerebels.store.models.Product;
+import com.runtimerebels.store.models.dto.OrderResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import com.runtimerebels.store.models.Order;
+import com.runtimerebels.store.dao.OrderRepository;
+
+/**
+ *   order controller
+ *
+ */ /**
+ *  order controller
+ *
+ */
 @RestController
 @RequestMapping("/api/orders")
 public class OrderController {
-    /**
-     * Creates a new order or returns an existing one if a duplicate Stripe session ID is found.
-     *
-     * @param order The {@link Order} to be created
-     * @return The saved or existing {@link Order}
-     */
+
     @Autowired
     private OrderRepository orderRepository;
 
+    @Autowired
+    private CartRepository cartRepository;
+    @Autowired
+    private ProductRepository productRepository;
+
+    // Get all orders
+    @GetMapping
+    public List<Order> getAllOrders() { return orderRepository.findAll(); }
+
+    /**
+     * get orders by user id
+     *
+     * @param userId userId
+     * @return {@link ResponseEntity}
+     * @see ResponseEntity
+     * @see List
+     */ // Get all orders for a user
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<Order>> getOrdersByUserId(@PathVariable String userId) {
+        List<Order> orders = orderRepository.findByUserId(userId);
+        if (orders.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(orders);
+    }
+
+    @GetMapping("/email/{userEmail}")
+    public ResponseEntity<List<Order>> getOrdersByEmail(@PathVariable String userEmail) {
+        List<Order> orders = orderRepository.findByUserId(userEmail);
+        if (orders.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(orders);
+    }
+
+    /**
+     * get order details
+     *
+     * @param orderId orderId
+     * @return {@link ResponseEntity}
+     * @see ResponseEntity
+     * @see OrderResponse
+     */ // Gets one specific order
+    @GetMapping("/details/{orderId}")
+    public ResponseEntity<OrderResponse> getOrderDetails(@PathVariable String orderId) {
+        return orderRepository.findById(orderId)
+                .map(order -> {
+                    List<Product> products = productRepository.findAllById(order.getProductIds());
+                    return ResponseEntity.ok(new OrderResponse(order, products));
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    /**
+     * create order
+     *
+     * @param order order
+     * @return {@link ResponseEntity}
+     * @see ResponseEntity
+     * @see Order
+     */ // Create new order
     @PostMapping
-    public Order createOrder(@RequestBody Order order) {
+    public ResponseEntity<Order> createOrder(@RequestBody Order order) {
         System.out.println("Received order: " + order);
 
         // simple duplicate check by sessionId
@@ -36,23 +103,64 @@ public class OrderController {
             List<Order> existingOrders = orderRepository.findByStripeSessionId(order.getStripeSessionId());
             if (!existingOrders.isEmpty()) {
                 System.out.println("Duplicate order detected, ignoring...");
-                return existingOrders.get(0);
+                return ResponseEntity.ok(existingOrders.get(0));
             }
         }
 
         order.setPaymentStatus("paid");
         Order savedOrder = orderRepository.save(order);
         System.out.println("Saved order with ID: " + savedOrder.getId());
-        return savedOrder;
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedOrder);
     }
+
     /**
-     * Retrieves all orders associated with a given user's email.
+     * delete order by id
      *
-     * @param email The user's email address
-     * @return List of {@link Order} objects for that user
+     * @param orderId orderId
+     * @return {@link ResponseEntity}
+     * @see ResponseEntity
+     * @see String
+     */ // Delete the order
+    @DeleteMapping("/{orderId}")
+    public ResponseEntity<String> deleteOrderById(@PathVariable String orderId) {
+        if (!orderRepository.existsById(orderId)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order not found.");
+        }
+        orderRepository.deleteById(orderId);
+        return ResponseEntity.ok("Order deleted.");
+    }
+
+    /**
+     * confirm payment
+     *
+     * @param userId userId
+     * @return {@link ResponseEntity}
+     * @see ResponseEntity
+     * @see Order
+     * @throws Exception java.lang. exception
      */
-    @GetMapping("/{email}")
-    public List<Order> getOrdersByEmail(@PathVariable String email) {
-        return orderRepository.findByUserEmail(email);
+    @PostMapping("/confirm/{userId}")
+    public ResponseEntity<Order> confirmPayment(@PathVariable String userId) throws Exception {
+        Cart cart = cartRepository.findByUserId(userId).orElseThrow(() -> new RuntimeException("Cart not found!"));
+        Calendar calendar = Calendar.getInstance();
+
+        // Create the order
+        Order order = new Order();
+        order.setUserId(userId);
+        order.setProductIds(cart.getProductIds());
+        order.setQuantity(cart.getQuantity());
+        order.setTotalPrice(cart.getTotalPrice());
+        order.setOrderStatus(OrderStatus.PENDING);
+        order.setCreatedAt(calendar.getTime());
+        order.setProcessAt(null);
+        orderRepository.save(order);
+
+        // Remove item(s) from cart
+        cart.setProductIds(new ArrayList<>());
+        cart.setQuantity(new ArrayList<>());
+        cart.setTotalPrice(new ArrayList<>());
+        cartRepository.save(cart);
+
+        return ResponseEntity.ok(order);
     }
 }
