@@ -1,21 +1,14 @@
 package com.runtimerebels.store.controller;
 
-import com.runtimerebels.store.dao.CartRepository;
-import com.runtimerebels.store.dao.OrderRepository;
-import com.runtimerebels.store.models.Cart;
-import com.runtimerebels.store.models.OrderStatus;
 import com.runtimerebels.store.models.dto.CheckoutRequest;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.runtimerebels.store.models.Order;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * REST controller for handling Stripe payment operations.
@@ -31,8 +24,6 @@ import java.util.Optional;
 @RequestMapping("/api/payments")
 public class PaymentController {
 
-    private final CartRepository cartRepository;
-    private final OrderRepository orderRepository;
     @Value("${frontend.successUrl}")
     private String successUrl;
 

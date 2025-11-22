@@ -4,7 +4,6 @@ import Navbar from '../components/Navbar';
 import cartLib from '../lib/cart';
 import checkoutImage from '../assets/Scamazon_Coming_Soon.png';
 import api from '../lib/axios';
-import toast from 'react-hot-toast'
 
 const hasSaved = new Set();
 
@@ -12,8 +11,6 @@ const CheckoutPage = () => {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const hasRunRef = useRef(false); //  prevents double saves
-    const location = useLocation();
-    const [cartItems, setCartItems] = useState([]);
 
     //  Save order to DB after Stripe redirects back
     useEffect(() => {
@@ -73,26 +70,12 @@ const CheckoutPage = () => {
         }
     }, []);
 
-    useEffect(() => {
-        if (status === "success") {
-            toast.success("YAYYYY");
-            // Remove item from cart!
-            const userId = localStorage.getItem("userId");
-            localStorage.removeItem('guestCart');
-            window.dispatchEvent(new Event('cart-updated'));
-            // Not creating an order!!
-            api.post(`/orders/confirm/${userId}`);
-            navigate('/orders', { replace: true });
-        }
-    }, [status, navigate]);
-
     // checkout with Stripe
     const handleCheckout = async () => {
         try {
             setLoading(true);
-            const userId = localStorage.getItem('userId');
-            // get items from local cart
-            const cartItems = api.get(`/carts/${userId}`);
+
+            const cartItems = cartLib.loadGuestCart();
             if (!cartItems || cartItems.length === 0) {
                 alert('Your cart is empty!');
                 setLoading(false);
