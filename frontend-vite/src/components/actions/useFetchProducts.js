@@ -5,6 +5,9 @@ import api from "../../lib/axios";
 
 /**
  * Hook to fetch products from backend.
+ * 
+ * @author Frank Gonzalez
+ * @since 11-19-2025
  *
  * @param {string[]|null} categories - Categories to filter by. Pass null/[] to fetch all.
  * @param {ProductsSetter} setProducts - State setter for products (see types.js)

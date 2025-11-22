@@ -35,6 +35,16 @@ public class CartController {
     CartRepository cartRepository;
 
     /**
+     * Retrives all carts in the system.
+     * 
+     * @return a list of all {@link Cart} instances
+     */
+    @GetMapping
+    public List<Cart> getAllCarts() {
+        return cartRepository.findAll();
+    }
+
+    /**
      * Retrives the cart for a specific user.
      *
      * <p> If a cart does not exist for the given user ID, a new empty cart
@@ -48,11 +58,6 @@ public class CartController {
      * and an HTTP 200 (OK) status
      *
      */
-    @GetMapping
-    public List<Cart> getAllCarts() {
-        return cartRepository.findAll();
-    }
-
     @GetMapping("/{userId}")
     public ResponseEntity<Cart> getCart(@PathVariable String userId) {
         Cart cart = cartRepository.findByUserId(userId)

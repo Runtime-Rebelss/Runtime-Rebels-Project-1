@@ -10,6 +10,8 @@ import { useSearchParams } from 'react-router-dom'
 /**
  * Filters component - renders category checkboxes and updates URL params.
  *
+ * @author Frank Gonzalez
+ * @since 11-19-2025
  * @param {FiltersProps} props
  * @returns {JSX.Element}
  */

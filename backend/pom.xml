@@ -103,7 +103,25 @@
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
+
+            <!-- Javadoc plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.12.0</version>
+                <configuration>
+                    <outputDirectory>${project.basedir}/docs</outputDirectory>
+                    <source>17</source>
+                    <encoding>UTF-8</encoding>
+                    <docencoding>UTF-8</docencoding>
+                    <charset>UTF-8</charset>
+                    <show>protected</show>
+                    <additionalparam>-Xdoclint:none</additionalparam>
+                    <doctitle>Runtime Rebels Backend Documentation</doctitle>
+                </configuration>
+            </plugin>
         </plugins>
+
     </build>
 
     <repositories>

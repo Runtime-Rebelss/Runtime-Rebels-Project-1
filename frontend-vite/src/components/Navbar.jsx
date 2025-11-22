@@ -5,6 +5,9 @@ import cartLib from "../lib/cart.js";
 
 /**
  * Navbar component renders top navigation with category links, search and cart.
+ * 
+ * @author Frank Gonzalez, Haley Kenney
+ * @since 11-19-2025
  * @returns {JSX.Element}
  */
 const Navbar = ({ hideCart = false, hideCartCount = false }) => {

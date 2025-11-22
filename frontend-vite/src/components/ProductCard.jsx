@@ -7,6 +7,9 @@ import api from "../lib/axios";
 
 /**
  * ProductCard renders a single product tile used in lists and grids.
+ * 
+ * @author Frank Gonzalez, Haley Kenney
+ * @since 11-19-2025
  *
  * @param {{product: Product}} props
  * @returns {Element}
