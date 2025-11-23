@@ -1,70 +1,66 @@
 import api from './axios';
 
-const toInt = (v, d = 0) => {
-    const n = Number(v);
-    return Number.isFinite(n) ? n : d;
-};
-const toQty = (v) => Math.max(1, toInt(v, 1));
+const GUEST_KEY = 'guestCart';
+const userEmail = localStorage.getItem("userEmail");
 
-export function loadServerCart() {
+export function loadGuestCart() {
     try {
-        const raw = localStorage.getItem("userCart");
-        const parsed = raw ? JSON.parse(raw) : { items: [] };
+        const raw = localStorage.getItem(GUEST_KEY);
+        const parsed = raw ? JSON.parse(raw) : { items: []};
         return Array.isArray(parsed.items) ? parsed.items : [];
     } catch {
         return [];
     }
 }
 
-export async function addToCart({
-                                    userId,
-                                    productId,
-                                    name,
-                                    price,
-                                    quantity = 1,
-                                    image = '',
-                                    signal,
-                                }) {
-    if (!productId) throw new Error('productId required');
-
-    // For users signed-in user
+export function loadServerCart() {
     try {
-        const qty = toQty(quantity);
-        const unit = toInt(price, 0);
-        const totalPrice = (unit * qty).toFixed(2);
-
-        const res = await api.post(
-            '/carts/add',
-            null,
-            {
-                params: { userId, productId, quantity: qty, totalPrice },
-                signal,
-            });
-
-        const serverCart = await res.data;
-
-        if (serverCart?.productId && serverCart?.quantity) {
-            const items = serverCart.productIds.map((id, i) => ({
-                productId: id,
-                quantity: quantity,
-                totalPrice: serverCart.totalPrice?.[i],
-            }));
-
-            localStorage.setItem("userCart", JSON.stringify(items));
-        }
-
-        try {
-            window.dispatchEvent(new CustomEvent('cart-updated', { detail: { source: 'server', data: res.data } }));
-        } catch {}
-        return { source: 'server', data: res.data };
-    } catch (err) {
-        const msg =
-            err?.response?.data?.message ||
-            err?.response?.data?.error ||
-            err?.message ||
-            'Failed to add to cart';
-        throw new Error(msg);
+        const raw = localStorage.getItem(userEmail);
+        const parsed = raw ? JSON.parse(raw) : { items: []};
+        return Array.isArray(parsed.items) ? parsed.items : [];
+    } catch {
+        return [];
     }
 }
 
-export default { addToCart, loadServerCart };
+export function saveGuestCart(items) {
+    localStorage.setItem(GUEST_KEY, JSON.stringify({items}));
+}
+
+export function saveServerCart(items) {
+    localStorage.setItem(userEmail, JSON.stringify({items}));
+}
+
+export async function addToCart({ userEmail, productId, name, price, quantity = 1}) {
+    if (!productId) throw new Error('Product Id is required');
+
+    if (!userEmail) {
+        // This means it's a guest user
+        const items = loadGuestCart();
+        const idx = items.findIndex((it) => it.productId === productId);
+        if (idx >= 0) {
+            items[idx].quantity = (Number(items[idx].quantity) || 0) + Number(quantity || 1);
+        } else {
+            items.push({ productId, name, price, quantity, image: arguments[0]?.image || ''});
+        }
+        // Save the guestCart
+        saveGuestCart(items);
+        // Send out event to listeners
+        try { window.dispatchEvent(new CustomEvent('cart-updated', { detail: { source: 'guest', items } })); } catch {}
+        return {source: 'guest', items};
+    } else {
+        const items = loadServerCart();
+        const idx = items.findIndex((it) => it.productId === productId);
+        if (idx >= 0) {
+            items[idx].quantity = (Number(items[idx].quantity) || 0) + Number(quantity || 1);
+        } else {
+            items.push({ productId, name, price, quantity, image: arguments[0]?.image || ''});
+        }
+        // Save the serverCart
+        saveServerCart(items);
+        // Send out event to listeners
+        try { window.dispatchEvent(new CustomEvent('cart-updated', { detail: { source: 'user', items } })); } catch {}
+        return {source: 'user', items};
+    }
+
+export default {loadGuestCart, loadServerCart, saveServerCart, saveGuestCart, addToCart};
