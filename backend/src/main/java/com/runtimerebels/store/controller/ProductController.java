@@ -74,23 +74,18 @@ public class ProductController {
 
     /**
      * GET method
-     * Get products by category (case-insensitive, must match all)
+     * Get products by category (must match all)
      * `/api/products/category?categories=cat1`
      * @author Frank Gonzalez
      * @param categories Array of category names
-     * @return returns list of products matching all categories (case-insensitive)
+     * @return returns list of products matching all categories
     */
     @GetMapping("/category")
     public List<Product> getProductsByCategory(@RequestParam(required = false) String[] categories) {
         if (categories == null || categories.length == 0) {
             return productRepository.findAll();
         }
-        // Build regex patterns for case-insensitive exact match
-        List<Pattern> patterns = Arrays.stream(categories)
-            .map(cat -> Pattern.compile("^" + Pattern.quote(cat) + "$", Pattern.CASE_INSENSITIVE))
-            .collect(Collectors.toList());
-        Query query = new Query(Criteria.where("categories").all(patterns));
-        return mongoTemplate.find(query, Product.class);
+        return productRepository.findByCategoriesAll(Arrays.asList(categories));
     }
 
     /**

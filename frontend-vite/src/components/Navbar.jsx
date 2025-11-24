@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import { Link } from "react-router-dom";
 import { ShoppingCart, Search } from "lucide-react";
 import cartLib from "../lib/cart.js";
+import formatString from "./actions/stringFormatter.js";
 
 /**
  * Navbar component renders top navigation with category links, search and cart.
@@ -60,7 +61,7 @@ const Navbar = ({ hideCart = false, hideCartCount = false }) => {
                     >
                         {categories.map((cat) => (
                             <li key={cat}>
-                                <Link to={`/results?categories=${cat.toLowerCase()}`}>{cat}</Link>
+                                <Link to={`/results?categories=${encodeURIComponent(formatString(cat))}`}>{cat}</Link>
                             </li>
                         ))}
                     </ul>
@@ -83,7 +84,7 @@ const Navbar = ({ hideCart = false, hideCartCount = false }) => {
                     {categories.map((cat) => (
                         <li key={cat}>
                             <Link
-                                to={`/results?categories=${cat.toLowerCase()}`}
+                                to={`/results?categories=${encodeURIComponent(formatString(cat))}`}
                                 className="font-semibold hover:text-primary transition"
                             >
                                 {cat}

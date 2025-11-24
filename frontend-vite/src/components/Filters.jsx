@@ -1,5 +1,6 @@
 import React from 'react'
 import { useSearchParams } from 'react-router-dom'
+import { denormalizeString } from './actions/stringFormatter';
 
 /**
  * Props for Filters component
@@ -59,7 +60,7 @@ function Filters({ categories = [] }) {
                                         onChange={(e) => handleCategoryChange(category, e.target.checked)}
                                         className='checkbox checkbox-primary mr-2' 
                                     />
-                                    <span className='label-text'>{category}</span>
+                                    <span className='label-text'>{denormalizeString(category)}</span>
                                 </label>
                             </li>
                         ))

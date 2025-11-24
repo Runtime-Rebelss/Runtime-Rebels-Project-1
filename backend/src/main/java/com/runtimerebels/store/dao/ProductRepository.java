@@ -51,11 +51,11 @@ public interface ProductRepository extends MongoRepository<Product, String> {
      * @return list of products whose categories contain all the given values
      */
     @org.springframework.data.mongodb.repository.Query("{ 'categories': { $all: ?0 } }")
-    List<Product> findByCategoriesAllIgnoreCaseSensitive(java.util.List<String> categories);
+    List<Product> findByCategoriesAll(java.util.List<String> categories);
     /**
      * Find products whose `categories` list contains the provided value (case-insensitive).
      * @param category the category to match
      * @return list of products whose categories contain the given value
      */
-    List<Product> findByCategoriesContainingIgnoreCase(String category);
+    List<Product> findByCategoriesContaining(String category);
 }
