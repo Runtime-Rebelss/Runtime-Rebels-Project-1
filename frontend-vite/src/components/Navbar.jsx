@@ -1,8 +1,9 @@
-import React, {useEffect, useState} from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { ShoppingCart, Search } from "lucide-react";
 import cartLib from "../lib/cart.js";
 import formatString from "./actions/stringFormatter.js";
+import { buildMergedParams } from "../lib/query";
 
 /**
  * Navbar component renders top navigation with category links, search and cart.
@@ -14,15 +15,17 @@ import formatString from "./actions/stringFormatter.js";
 const Navbar = ({ hideCart = false, hideCartCount = false }) => {
     const categories = ["Men's", "Women's", "Jewelry", "Electronics", "Home & Garden"];
     const [cartCount, setCartCount] = useState(0);
+    const navigate = useNavigate();
+    const [searchTerm, setSearchTerm] = useState("");
 
-// load initial count
+    // load initial count
     useEffect(() => {
         const items = cartLib.loadGuestCart?.();
         const count = items.reduce((sum, it) => sum + (it.quantity || 1), 0);
         setCartCount(count);
     }, []);
 
-// update count
+    // update count
     useEffect(() => {
         const handler = () => {
             const items = cartLib.loadGuestCart?.();
@@ -33,6 +36,23 @@ const Navbar = ({ hideCart = false, hideCartCount = false }) => {
         window.addEventListener("cart-updated", handler);
         return () => window.removeEventListener("cart-updated", handler);
     }, []);
+
+    // Handle search
+    const [searchParams] = useSearchParams();
+
+    const handleSearch = (term) => {
+        const trimmed = (term || '').trim();
+        if (!trimmed) return;
+
+        const params = buildMergedParams(searchParams, { search: trimmed });
+        navigate(`/results?${params.toString()}`);
+    };
+
+    // Handle search submission
+    const onSubmitSearch = (e) => {
+        e.preventDefault();
+        handleSearch(searchTerm);
+    };
 
     return (
         <div className="navbar bg-base-100 shadow-sm px-4 sticky top-0 z-50">
@@ -61,7 +81,7 @@ const Navbar = ({ hideCart = false, hideCartCount = false }) => {
                     >
                         {categories.map((cat) => (
                             <li key={cat}>
-                                <Link to={`/results?categories=${encodeURIComponent(formatString(cat))}`}>{cat}</Link>
+                                <Link to={`/results?${buildMergedParams(searchParams, { categories: [formatString(cat)] }).toString()}`}>{cat}</Link>
                             </li>
                         ))}
                     </ul>
@@ -84,7 +104,7 @@ const Navbar = ({ hideCart = false, hideCartCount = false }) => {
                     {categories.map((cat) => (
                         <li key={cat}>
                             <Link
-                                to={`/results?categories=${encodeURIComponent(formatString(cat))}`}
+                                to={`/results?${buildMergedParams(searchParams, { categories: [formatString(cat)] }).toString()}`}
                                 className="font-semibold hover:text-primary transition"
                             >
                                 {cat}
@@ -101,12 +121,19 @@ const Navbar = ({ hideCart = false, hideCartCount = false }) => {
                     <div className="form-control">
                         <div className="input-group">
                             <input
-                                type="text"
+                                type="search"
                                 placeholder="Search products..."
                                 name="searchbar"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        onSubmitSearch(e);
+                                    }
+                                }}
                                 className="input input-bordered w-48 xl:w-64"
                             />
-                            <button className="btn btn-square btn-primary">
+                            <button className="btn btn-square btn-primary" onClick={onSubmitSearch}>
                                 <Search className="h-5 w-5 text-white" />
                             </button>
                         </div>

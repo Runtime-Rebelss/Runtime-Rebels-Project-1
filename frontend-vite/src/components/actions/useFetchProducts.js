@@ -1,7 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import toast from "react-hot-toast";
 
 import api from "../../lib/axios";
+
+import { buildMergedParams } from '../../lib/query';
+
+/** @typedef {import('../../lib/types').ProductsSetter} ProductsSetter */
+/** @typedef {import('../../lib/types').LoadingSetter} LoadingSetter */
 
 /**
  * Hook to fetch products from backend.
@@ -9,12 +14,19 @@ import api from "../../lib/axios";
  * @author Frank Gonzalez
  * @since 11-19-2025
  *
- * @param {string[]|null} categories - Categories to filter by. Pass null/[] to fetch all.
+ * @param {URLSearchParams|Object|string} inputParams - URL search params or plain object (e.g. from `useSearchParams()`)
  * @param {ProductsSetter} setProducts - State setter for products (see types.js)
  * @param {LoadingSetter} setLoading - State setter for loading (see types.js)
+ * @param {{search?:string, categories?:string[]}} [overrides] - Optional overrides to append or replace params
  * @returns {object} helper object exposing `fetchProducts`
  */
-function useFetchProducts(categories, setProducts, setLoading) {
+function useFetchProducts(inputParams, setProducts, setLoading, overrides = {}) {
+
+    
+
+    const mergedParams = useMemo(() => buildMergedParams(inputParams, overrides), [inputParams, JSON.stringify(overrides)]);
+
+    
 
     /**
      * Perform the API request. Uses `categories` to build the URL.
@@ -22,11 +34,11 @@ function useFetchProducts(categories, setProducts, setLoading) {
      */
     const fetchProducts = async () => {
       try {
-        // If categories is null/undefined or empty, fetch all products
-        // Otherwise fetch by category. This makes the component more robust.
-        const url = categories?.length > 0
-          ? '/products/category?' + categories.map(category => 'categories=' + encodeURIComponent(category)).join('&')
-          : '/products';
+        // If mergedParams has any entries, request /products/results with the query string,
+        // otherwise request the base /products endpoint.
+        const qs = mergedParams ? mergedParams.toString() : '';
+        const url = qs ? `/products/results?${qs}` : '/products';
+        console.log(url);
         const response = await api.get(url);
         setProducts(response.data);
       } catch (error) {
@@ -41,7 +53,7 @@ function useFetchProducts(categories, setProducts, setLoading) {
       setLoading(true);
       fetchProducts();
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [categories]);
+    }, [mergedParams.toString()]);
 
     return { setProducts, setLoading, fetchProducts };
 }

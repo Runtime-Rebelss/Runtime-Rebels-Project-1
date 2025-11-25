@@ -11,7 +11,7 @@ import useFetchProducts from '../components/actions/useFetchProducts'
 const ResultsPage = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   // Memoize categories so the array identity only changes when the
   // search params string changes. `searchParams.getAll` returns a new
@@ -20,6 +20,8 @@ const ResultsPage = () => {
   const categories = useMemo(() => searchParams.getAll('categories'), [searchParams.toString()]);
   // Build a unique list of category names from either `product.category` (string)
   // or `product.categories` (array) so the UI reliably shows filters.
+  
+
   const filterCategories = Array.from(
     new Set(
       products.flatMap((product) => {
@@ -31,7 +33,9 @@ const ResultsPage = () => {
     )
   ).filter(Boolean);
 
-  useFetchProducts(categories, setProducts, setLoading);
+  // Pass the entire searchParams to the hook so it can build a consistent
+  // request URL including both `search` and repeated `categories` params.
+  useFetchProducts(searchParams, setProducts, setLoading);
 
   if (loading) {
     return <div>Loading...</div>;

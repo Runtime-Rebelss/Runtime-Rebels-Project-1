@@ -31,6 +31,13 @@ public interface ProductRepository extends MongoRepository<Product, String> {
     List<Product> findByNameContaining(String name);
 
     /**
+     * Find products by slug containing a given string.
+     * @param slug the substring to search for in product slugs
+     * @return list of products whose slugs contain the given string
+    */
+    List<Product> findBySlugContaining(String slug);
+
+    /**
      * Find products by exact price.
      * @param price given price 
      * @return list of products with the given price
@@ -53,7 +60,7 @@ public interface ProductRepository extends MongoRepository<Product, String> {
     @org.springframework.data.mongodb.repository.Query("{ 'categories': { $all: ?0 } }")
     List<Product> findByCategoriesAll(java.util.List<String> categories);
     /**
-     * Find products whose `categories` list contains the provided value (case-insensitive).
+     * Find products whose `categories` list contains the provided value (case-sensitive).
      * @param category the category to match
      * @return list of products whose categories contain the given value
      */
