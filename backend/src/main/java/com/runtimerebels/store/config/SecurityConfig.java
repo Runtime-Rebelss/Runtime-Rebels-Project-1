@@ -46,7 +46,8 @@ public class SecurityConfig {
                                 "/api/auth/refreshToken",
                                 "/api/products/**",
                                 "/api/carts/**",
-                                "/api/orders/**"
+                                "/api/orders/**",
+                                "/api/stripe/**"
                         ).permitAll()
                         // 3. Keep this essential rule for CORS pre-flight requests
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()

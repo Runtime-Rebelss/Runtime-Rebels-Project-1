@@ -21,7 +21,7 @@ const CheckoutPage = () => {
         const status = params.get('status');
         const sessionId = params.get("session_id");
 
-        if (status === 'success' && sessionId && !hasRunRef.current && !hasSaved.has(sessionId)) {
+        if (status === 'success') {
             hasRunRef.current = true;
             hasSaved.add(sessionId);
 
@@ -36,9 +36,13 @@ const CheckoutPage = () => {
                     const shipping = stripeSession.shipping_details || {};
                     const address = shipping.address || {};
                     const card = stripeSession.payment_method || {};
-                    
-                    const cart = cartLib.loadGuestCart();
+                    const userId = localStorage.getItem("userId");
 
+                    if (!userId) {
+                        const cart = cartLib.loadGuestCart();
+                    } else {
+                        api.post(`/orders/confirm/${userId}`);
+                    }
 
                     const orderData = {
                         userEmail: customerEmail,
@@ -73,18 +77,18 @@ const CheckoutPage = () => {
         }
     }, []);
 
-    useEffect(() => {
-        if (status === "success") {
-            toast.success("YAYYYY");
-            // Remove item from cart!
-            const userId = localStorage.getItem("userId");
-            localStorage.removeItem('guestCart');
-            window.dispatchEvent(new Event('cart-updated'));
-            // Not creating an order!!
-            api.post(`/orders/confirm/${userId}`);
-            navigate('/orders', { replace: true });
-        }
-    }, [status, navigate]);
+    // useEffect(() => {
+    //     if (status === "success") {
+    //         toast.success("YAYYYY");
+    //         // Remove item from cart!
+    //         const userId = localStorage.getItem("userId");
+    //         localStorage.removeItem('guestCart');
+    //         window.dispatchEvent(new Event('cart-updated'));
+    //         // Not creating an order!!
+    //         api.post(`/orders/confirm/${userId}`);
+    //         navigate('/orders', { replace: true });
+    //     }
+    // }, [status, navigate]);
 
     // checkout with Stripe
     const handleCheckout = async () => {

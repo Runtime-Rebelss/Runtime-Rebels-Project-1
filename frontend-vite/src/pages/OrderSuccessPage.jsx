@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import cartLib from "../lib/cart";
+import api from '../lib/axios';
 
 const OrderSuccessPage = () => {
     const [cartItems, setCartItems] = useState([]);
@@ -13,6 +14,8 @@ const OrderSuccessPage = () => {
         // Generate random confirmation number
         const randomCode = "SCZ-" + Math.floor(100000 + Math.random() * 900000);
         setConfirmation(randomCode);
+        const params = new URLSearchParams(window.location.search);
+        const status = params.get('status');
 
         // Try to load the last order cart first (fallback to guestCart)
         const savedOrder = localStorage.getItem("lastOrderCart");
@@ -26,6 +29,9 @@ const OrderSuccessPage = () => {
             0
         );
         setTotal(totalPrice);
+        const userId = localStorage.getItem("userId");
+        api.post(`/orders/confirm/${userId}`);
+
 
         // Clear only guestCart but leave lastOrderCart (so data persists for success)
         localStorage.removeItem("guestCart");
