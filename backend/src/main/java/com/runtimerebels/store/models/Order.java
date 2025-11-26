@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 /**
  * Represents a customer's order in the e-commerce app.
@@ -28,11 +29,14 @@ public class Order {
     @Id
     private String id;
 
+    private String userId;
     private String userEmail;
     private List<String> productIds;
-    private List<Integer> quantities;
-    private BigDecimal totalPrice;
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private List<Integer> quantity;
+    private List<BigDecimal> totalPrice;
+    private OrderStatus orderStatus;
+    private Date createdAt;
+    private Date processAt;
 
     private String deliveryName;
     private String deliveryContact;

@@ -7,6 +7,7 @@ import com.runtimerebels.store.models.OrderStatus;
 import com.runtimerebels.store.models.dto.CheckoutRequest;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,8 +32,12 @@ import java.util.Optional;
 @RequestMapping("/api/payments")
 public class PaymentController {
 
-    private final CartRepository cartRepository;
-    private final OrderRepository orderRepository;
+    @Autowired
+    private CartRepository cartRepository;
+
+    @Autowired
+    private OrderRepository orderRepository;
+
     @Value("${frontend.successUrl}")
     private String successUrl;
 
