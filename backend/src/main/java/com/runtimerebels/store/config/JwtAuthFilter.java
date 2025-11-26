@@ -28,8 +28,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
-            @NonNull HttpServletResponse response,
-            @NonNull FilterChain filterChain
+                                    @NonNull HttpServletResponse response,
+                                    @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
@@ -78,6 +78,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 || request.getServletPath().equals("/api/auth/token")
                 || request.getServletPath().startsWith("/api/payments/confirm")
                 || request.getServletPath().startsWith("/api/orders")
-                || request.getServletPath().startsWith("/api/carts");
+                || request.getServletPath().startsWith("/api/carts")
+                || request.getServletPath().startsWith("/api/orders/")
+                || request.getServletPath().startsWith("/api/carts/");
     }
 }

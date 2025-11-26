@@ -18,7 +18,7 @@ const fmtDate = (d) =>
 
 async function loadServerOrders(userId, signal) {
     if (!userId) return [];
-    const { data: orderList } = await api.get(`/orders/${encodeURIComponent(userId)}`, { signal });
+    const { data: orderList } = await api.get(`/orders/user/${encodeURIComponent(userId)}`, { signal });
     if (!Array.isArray(orderList)) return [];
 
     const detailed = await Promise.all(

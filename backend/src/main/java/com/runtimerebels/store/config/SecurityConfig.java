@@ -32,26 +32,26 @@ public class SecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .cors(c -> c.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                // 1. CRITICAL: Explicitly allow the POST method for login first
-                .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/auth/signup").permitAll()
-                .requestMatchers("/api/payments/**").permitAll()
-                // 2. All other public/whitelisted paths (General GETs, Swagger, etc.)
-                .requestMatchers(
-                        "/v3/api-docs/**",
-                        "/swagger-ui/**",
-                        "/swagger-ui.html",
-                        "/swagger-resources/**",
-                        "/webjars/**",
-                        "/api/auth/refreshToken",
-                        "/api/products/**",
-                        "/api/carts/**",
-                        "/api/orders/**"
-                ).permitAll()
-                // 3. Keep this essential rule for CORS pre-flight requests
-                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                // 4. Secure all other requests (they must have a valid token/principal)
-                .anyRequest().authenticated()
+                        // 1. CRITICAL: Explicitly allow the POST method for login first
+                        .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/signup").permitAll()
+                        .requestMatchers("/api/payments/**").permitAll()
+                        // 2. All other public/whitelisted paths (General GETs, Swagger, etc.)
+                        .requestMatchers(
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/swagger-resources/**",
+                                "/webjars/**",
+                                "/api/auth/refreshToken",
+                                "/api/products/**",
+                                "/api/carts/**",
+                                "/api/orders/**"
+                        ).permitAll()
+                        // 3. Keep this essential rule for CORS pre-flight requests
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        // 4. Secure all other requests (they must have a valid token/principal)
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
