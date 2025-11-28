@@ -16,7 +16,8 @@ const Navbar = () => {
         err?.message === "canceled";
 
     const countFromGuest = () => {
-        const items = cartLib.loadGuestCart?.() || [];
+        const cart = cartLib.loadGuestCart?.() || { items: [] };
+        const items = Array.isArray(cart.items) ? cart.items : [];
         return items.reduce((sum, it) => sum + (Number(it.quantity) || 1), 0);
     };
 

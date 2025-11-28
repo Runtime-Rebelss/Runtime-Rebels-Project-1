@@ -47,7 +47,8 @@ public class SecurityConfig {
                                 "/api/products/**",
                                 "/api/carts/**",
                                 "/api/orders/**",
-                                "/api/stripe/**"
+                                "/api/stripe/**",
+                                "/api/carts/update"
                         ).permitAll()
                         // 3. Keep this essential rule for CORS pre-flight requests
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()

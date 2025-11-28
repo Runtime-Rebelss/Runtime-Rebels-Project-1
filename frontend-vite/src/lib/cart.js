@@ -1,21 +1,39 @@
 import api from "./axios";
+import toast from "react-hot-toast";
 
 const GUEST_KEY = "guestCart";
 
 /**
  * Guest cart
  */
+// Creates a guest cart, unique to local host
 export function loadGuestCart() {
     try {
         const raw = localStorage.getItem(GUEST_KEY);
         const parsed = raw ? JSON.parse(raw) : { items: [] };
-        return Array.isArray(parsed.items) ? parsed.items : [];
+        if (!Array.isArray(parsed.items)) return { items: [] };
+        // Normalize items (tolerate older shapes)
+        const items = parsed.items
+            .filter(Boolean)
+            .map((it) => ({
+                productId: it.productId ?? it.id ?? it._id ?? '',
+                name: it.name ?? 'Item',
+                price: Number(it.price ?? it.finalPrice ?? it.itemTotal ?? 0),
+                image:
+                    it.image ||
+                    it.imageUrl ||
+                    'https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                quantity: Math.max(1, Number(it.quantity ?? 1)),
+            }))
+            .filter((it) => it.productId);
+        return { items };
     } catch {
-        return [];
+        return { items: [] };
     }
 }
 
-export function saveGuestCart(items) {
+export function saveGuestCart(data) {
+    const items = Array.isArray(data) ? data : data.items;
     localStorage.setItem(GUEST_KEY, JSON.stringify({ items }));
 }
 
@@ -32,15 +50,9 @@ export async function loadServerCart(userId, signal) {
         { signal }
     );
 
-    const productIds = Array.isArray(cart?.productIds)
-        ? cart.productIds
-        : [];
-    const quantities = Array.isArray(cart?.quantity)
-        ? cart.quantity
-        : [];
-    const totalPrices = Array.isArray(cart?.totalPrice)
-        ? cart.totalPrice
-        : [];
+    const productIds = Array.isArray(cart?.productIds) ? cart.productIds : [];
+    const quantities = Array.isArray(cart?.quantity) ? cart.quantity : [];
+    const totalPrices = Array.isArray(cart?.totalPrice) ? cart.totalPrice : [];
 
     const items = await Promise.all(
         productIds.map(async (productId, index) => {
@@ -49,32 +61,22 @@ export async function loadServerCart(userId, signal) {
                     `/products/${encodeURIComponent(productId)}`,
                     { signal }
                 );
+                const quantity = Number(quantities?.[index] ?? 1) || 1;
+                const lineTotal = Number(totalPrices?.[index] ?? 0) || 0;
 
-                const quantity =
-                    Number(quantities?.[index] ?? 1) || 1;
-                const lineTotal =
-                    Number(totalPrices?.[index] ?? 0) || 0;
-
-                // Derive unit price from lineTotal if possible,
-                // otherwise fall back to product price.
                 let unitPrice = 0;
                 if (lineTotal > 0 && quantity > 0) {
                     unitPrice = lineTotal / quantity;
                 } else {
                     unitPrice =
                         Number(
-                            product?.finalPrice ?? product?.price ?? 0
-                        ) || 0;
+                            product?.finalPrice ?? product?.price ?? 0) || 0;
                 }
 
                 return {
                     id: productId,
-                    productId,
-                    name: product?.name ?? "Item",
-                    image:
-                        product?.image ||
-                        product?.imageUrl ||
-                        "",
+                    name: product?.name,
+                    image: product?.image || product?.imageUrl || "",
                     price: unitPrice,
                     quantity,
                 };
@@ -91,49 +93,35 @@ export async function loadServerCart(userId, signal) {
 /**
  * Add item to cart (guest or signed-in user).
  */
-export async function addToCart({
-                                    userId,
-                                    productId,
-                                    name,
-                                    price,
-                                    quantity = 1,
-                                    image = "",
-                                }) {
+export async function addToCart({ userId, productId, name, price, quantity = 1, image = "" }) {
     if (!productId) throw new Error("Product Id is required");
 
-    // GUEST USER
     if (!userId) {
-        const items = loadGuestCart();
+        const { items } = loadGuestCart();
+
         const idx = items.findIndex(
-            (it) => it.productId === productId
+            it => it.productId === productId || it.id === productId
         );
 
         if (idx >= 0) {
-            items[idx].quantity =
-                (Number(items[idx].quantity) || 0) +
-                Number(quantity || 1);
+            items[idx].quantity += Number(quantity || 1);
         } else {
             items.push({
+                id: productId,
                 productId,
                 name,
-                price,
-                quantity,
+                price: Number(price || 0),
                 image,
+                quantity: Number(quantity || 1),
             });
         }
-
+        // saves the items
         saveGuestCart(items);
-        try {
-            window.dispatchEvent(
-                new CustomEvent("cart-updated", {
-                    detail: { source: "guest", items },
-                })
-            );
-        } catch {}
+        // Updates navbar
+        window.dispatchEvent(new Event("cart-updated"));
         return { source: "guest", items };
     }
 
-    // SIGNED-IN USER
     const qty = Number(quantity || 1);
     const unit = Number(price || 0) || 0;
     const totalPrice = (unit * qty).toFixed(2);
@@ -149,13 +137,10 @@ export async function addToCart({
     );
 
     try {
-        window.dispatchEvent(
-            new CustomEvent("cart-updated", {
-                detail: { source: "server", data: res.data },
-            })
-        );
+        window.dispatchEvent(new CustomEvent("cart-updated", {
+            detail: { source: "server", data: res.data },
+        }));
     } catch {}
-
     return { source: "server", data: res.data };
 }
 
@@ -164,46 +149,48 @@ export async function addToCart({
  * For guests, you can still directly modify localStorage in CartPage if you want,
  * but here we focus on the user/server path.
  */
-export async function updateQuantity({
-                                         userId,
-                                         productId,
-                                         quantity,
-                                         signal,
-                                     }) {
-    if (!userId) throw new Error("User Id is required");
+export async function updateQuantity({ productId, quantity }) {
     if (!productId) throw new Error("Product Id is required");
 
-    const qty = Number(quantity);
-    if (!Number.isFinite(qty) || qty < 0) {
-        throw new Error("Quantity must be >= 0");
-    }
+    let qty = Number(quantity);
+    if (!Number.isFinite(qty)) qty = 1;
+    if (qty < 0) qty = 0;
 
-    const res = await api.put(
-        "/carts/update",
-        null,
-        {
-            params: { userId, productId, quantity: qty },
-            signal,
-        }
-    );
+    const cart = loadGuestCart();
+    const items = Array.isArray(cart.items) ? [...cart.items] : [];
 
-    try {
-        window.dispatchEvent(
-            new CustomEvent("cart-updated", {
-                detail: { source: "server", data: res.data },
-            })
-        );
-    } catch {}
+    const idx = items.findIndex(it => it.productId === productId);
+    if (idx === -1) return;
 
-    return res.data;
+    if (qty === 0) items.splice(idx, 1);
+    else items[idx].quantity = qty;
+
+    saveGuestCart({ items });
+
+    window.dispatchEvent(new Event("cart-updated"));
 }
 
 /**
  * Remove an item from a signed-in user's cart.
  */
-export async function removeItem({ userId, productId, signal }) {
-    if (!userId) throw new Error("User Id is required");
+export async function removeItem({ productId }) {
     if (!productId) throw new Error("Product Id is required");
+
+    export function removeGuestItem(productId) {
+        if (!productId) return;
+
+        const { items } = loadGuestCart();
+        if (!Array.isArray(items)) return;
+
+        const filtered = items.filter(
+            it => it.productId !== productId && it.id !== productId
+        );
+
+        saveGuestCart(filtered);
+
+        // Update navbar
+        window.dispatchEvent(new Event("cart-updated"));
+    }
 
     const res = await api.delete("/carts/remove", {
         params: { userId, productId },
@@ -212,10 +199,8 @@ export async function removeItem({ userId, productId, signal }) {
 
     try {
         window.dispatchEvent(
-            new CustomEvent("cart-updated", {
-                detail: { source: "server", data: res.data },
-            })
-        );
+            new CustomEvent("cart-updated", { detail: { source: "server", data: res.data },
+            }));
     } catch {}
 
     return res.data;

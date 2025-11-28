@@ -6,41 +6,6 @@ import cartLib from "../lib/cart.js";
 import api from "../lib/axios.js";
 import toast from "react-hot-toast";
 
-// Need to completely remove anything related to GUEST USER!!!!!
-
-// Currently only supports a guest cart
-const GUEST_KEY = 'guestCart';
-
-// Creates a guest cart, unique to local host
-function loadGuestCart() {
-    try {
-        const raw = localStorage.getItem(GUEST_KEY);
-        const parsed = raw ? JSON.parse(raw) : { items: [] };
-        if (!Array.isArray(parsed.items)) return { items: [] };
-        // Normalize items (tolerate older shapes)
-        const items = parsed.items
-            .filter(Boolean)
-            .map((it) => ({
-                productId: it.productId ?? it.id ?? it._id ?? '',
-                name: it.name ?? 'Item',
-                price: Number(it.price ?? it.finalPrice ?? it.itemTotal ?? 0),
-                image:
-                    it.image ||
-                    it.imageUrl ||
-                    'https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                quantity: Math.max(1, Number(it.quantity ?? 1)),
-            }))
-            .filter((it) => it.productId);
-        return { items };
-    } catch {
-        return { items: [] };
-    }
-}
-
-function saveGuestCart(items) {
-    localStorage.setItem(GUEST_KEY, JSON.stringify({ items }));
-}
-
 function calcTotal(items) {
     return items.reduce((s, it) => s + (Number(it.price) || 0) * (Number(it.quantity) || 0), 0);
 }
@@ -115,7 +80,7 @@ const CartPage = () => {
             if (!userId) {
                 // Guest mode
                 setIsGuest(true);
-                const {items} = loadGuestCart();
+                const {items} = cartLib.loadGuestCart();
                 setCartItems(
                     items.map((it) => ({
                         id: it.productId,
@@ -152,6 +117,20 @@ const CartPage = () => {
         const handler = async () => {
             const uId = localStorage.getItem("userId");
 
+            if (!uId) {
+                const { items } = cartLib.loadGuestCart();
+                setCartItems(
+                    items.map((it) => ({
+                        id: it.productId,
+                        name: it.name,
+                        image: it.image,
+                        price: Number(it.price || 0),
+                        quantity: Number(it.quantity || 1),
+                    }))
+                );
+                return;
+            }
+
             const ac = new AbortController();
             try {
                 const items = await loadServerCart(uId, ac.signal);
@@ -162,10 +141,11 @@ const CartPage = () => {
                 }
             }
         };
-
-        window.addEventListener('cart-updated', handler);
-        return () => window.removeEventListener('cart-updated', handler);
+        // Updates the navbar
+        window.addEventListener("cart-updated", handler);
+        return () => window.removeEventListener("cart-updated", handler);
     }, []);
+
 
     useEffect(() => {
         setTotal(calcTotal(cartItems));
@@ -175,39 +155,40 @@ const CartPage = () => {
         if (newQty < 1) newQty = 1;
 
         try {
-            await api.put(`/carts/update`, null,
-                { params: { userId, productId, quantity: newQty }});
-            setItems(cartItems.map((it) => (it.id === productId ? {...it, quantity: newQty} : it)));
+            if (!userId) {
+                await cartLib.updateQuantity({ productId, quantity: newQty });
+                setCartItems(cartItems.map((it) =>
+                    it.productId === productId ? { ...it, quantity: newQty } : it
+                ));
+                window.dispatchEvent(new Event("cart-updated"));
+                return;
+            }
+            await api.put(`/carts/update`, null, { params: { userId, productId, quantity: newQty}});
+
+            setCartItems(cartItems.map((it) =>
+                it.id === productId ? { ...it, quantity: newQty } : it
+            ));
+            // Makes navbar update in real-time
+            window.dispatchEvent(new Event("cart-updated"));
         } catch (err) {
-            console.error('Error updating quantity:', err);
-            toast.error('Failed to update quantity');
+            console.error("Error updating quantity:", err);
+            toast.error("Failed to update quantity");
         }
     };
 
     const removeItem = async (productId) => {
+        const userId = localStorage.getItem("userId");
 
         try {
+            if (!userId) {
+                set
+            }
+
             await api.put(`/carts/update`, null, { params: { userId, productId, quantity: 0 } });
             setCartItems(cartItems.filter((it) => it.id !== productId));
         } catch (err) {
             console.error('Error removing item:', err);
             toast.error('Failed to remove item');
-        }
-    };
-
-    const addItem = async ({ productId, name, price, image, quantity = 1 }) => {
-        if (!productId) return;
-
-        try {
-            const totalPrice = (Number(price || 0) * Number(quantity || 1)).toFixed(2);
-            await api.post(`/carts/add`, null, {
-                params: { userId, productId, quantity, totalPrice }
-            });
-            const items = await loadServerCart(userId);
-            setCartItems(items);
-        } catch (err) {
-            console.error('Error adding item:', err);
-            toast.error('Failed to add item to cart');
         }
     };
 
@@ -277,7 +258,7 @@ const CartPage = () => {
         if (!isGuest) return;
         const ok = window.confirm('Clear your guest cart? This will remove all items stored on this device.');
         if (!ok) return;
-        saveGuestCart([]);
+        cartLib.saveGuestCart([]);
         setCartItems([]);
     };
 
