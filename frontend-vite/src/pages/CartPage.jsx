@@ -9,37 +9,37 @@ import toast from "react-hot-toast";
 // Need to completely remove anything related to GUEST USER!!!!!
 
 // Currently only supports a guest cart
-//const GUEST_KEY = 'guestCart';
+const GUEST_KEY = 'guestCart';
 
 // Creates a guest cart, unique to local host
-// function loadGuestCart() {
-//     try {
-//         const raw = localStorage.getItem(GUEST_KEY);
-//         const parsed = raw ? JSON.parse(raw) : { items: [] };
-//         if (!Array.isArray(parsed.items)) return { items: [] };
-//         // Normalize items (tolerate older shapes)
-//         const items = parsed.items
-//             .filter(Boolean)
-//             .map((it) => ({
-//                 productId: it.productId ?? it.id ?? it._id ?? '',
-//                 name: it.name ?? 'Item',
-//                 price: Number(it.price ?? it.finalPrice ?? it.itemTotal ?? 0),
-//                 image:
-//                     it.image ||
-//                     it.imageUrl ||
-//                     'https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-//                 quantity: Math.max(1, Number(it.quantity ?? 1)),
-//             }))
-//             .filter((it) => it.productId);
-//         return { items };
-//     } catch {
-//         return { items: [] };
-//     }
-// }
+function loadGuestCart() {
+    try {
+        const raw = localStorage.getItem(GUEST_KEY);
+        const parsed = raw ? JSON.parse(raw) : { items: [] };
+        if (!Array.isArray(parsed.items)) return { items: [] };
+        // Normalize items (tolerate older shapes)
+        const items = parsed.items
+            .filter(Boolean)
+            .map((it) => ({
+                productId: it.productId ?? it.id ?? it._id ?? '',
+                name: it.name ?? 'Item',
+                price: Number(it.price ?? it.finalPrice ?? it.itemTotal ?? 0),
+                image:
+                    it.image ||
+                    it.imageUrl ||
+                    'https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                quantity: Math.max(1, Number(it.quantity ?? 1)),
+            }))
+            .filter((it) => it.productId);
+        return { items };
+    } catch {
+        return { items: [] };
+    }
+}
 
-// function saveGuestCart(items) {
-//     localStorage.setItem(GUEST_KEY, JSON.stringify({ items }));
-// }
+function saveGuestCart(items) {
+    localStorage.setItem(GUEST_KEY, JSON.stringify({ items }));
+}
 
 function calcTotal(items) {
     return items.reduce((s, it) => s + (Number(it.price) || 0) * (Number(it.quantity) || 0), 0);
@@ -91,6 +91,7 @@ const CartPage = () => {
     const [loading, setLoading] = useState(true);
     const [showCheckoutPrompt, setShowCheckoutPrompt] = useState(false);
     const [toastMsg, setToastMsg] = useState('');
+    const [isGuest, setIsGuest] = useState(false);
 
     const navigate = useNavigate();
     const userId = localStorage.getItem("userId");
@@ -106,11 +107,29 @@ const CartPage = () => {
 
         const load = async () => {
             setLoading(true);
-
             const isAbort = (err) =>
                 err?.name === "AbortError" ||
                 err?.code === "ERR_CANCELED" ||
                 err?.message === "canceled";
+            // From cart.js
+            if (!userId) {
+                // Guest mode
+                setIsGuest(true);
+                const {items} = loadGuestCart();
+                setCartItems(
+                    items.map((it) => ({
+                        id: it.productId,
+                        name: it.name,
+                        image: it.image,
+                        price: Number(it.price || 0),
+                        quantity: Number(it.quantity || 1),
+                    }))
+                );
+                setLoading(false);
+                return;
+            }
+
+            setIsGuest(false);
 
             try {
                 const items = await loadServerCart(userId, ac.signal);
@@ -220,6 +239,46 @@ const CartPage = () => {
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleGuestCheckout = async () => {
+        try {
+            setLoading(true);
+            const cartItems = cartLib.loadGuestCart();
+            //  Save the current cart so the success page can access it later
+            localStorage.setItem("guestOrder", JSON.stringify({ items: cartItems }));
+
+
+            const items = cartItems.map((item) => ({
+                name: item.name,
+                unitAmount: Math.round(item.price * 100),
+                currency: "usd",
+                quantity: item.quantity,
+            }));
+
+            const response = await api.post("/payments/create-checkout-session", {
+                items,
+                customerEmail: localStorage.getItem("userEmail") || null,
+                savePaymentMethod: false,
+            });
+
+            window.history.pushState({ fromStripe: true }, "",  "/order-cancel");
+
+            window.location.href = response.data.url;
+        } catch (error) {
+            console.error("Error starting checkout:", error);
+            alert("Failed to start checkout. Please try again.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const clearGuestCart = () => {
+        if (!isGuest) return;
+        const ok = window.confirm('Clear your guest cart? This will remove all items stored on this device.');
+        if (!ok) return;
+        saveGuestCart([]);
+        setCartItems([]);
     };
 
     const proceedToCheckout = async () => {

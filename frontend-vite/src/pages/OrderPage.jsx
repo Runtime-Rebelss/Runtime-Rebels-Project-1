@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ShoppingBag } from "lucide-react";
 import Navbar from "../components/Navbar";
 import api from "../lib/axios";
+import orderLib from "../lib/orders.js";
 
 const fmtUSD = (n) =>
     `$${Number(n || 0).toLocaleString(undefined, {
@@ -71,6 +72,24 @@ const OrderPage = () => {
         const controller = new AbortController();
 
         const fetchOrders = async () => {
+            const userId = localStorage.getItem("userId");
+            // If Guest user
+            if (!userId) {
+                try {
+                    setLoading(true);
+                    // Gets local orders
+                    const guestOrder = orderLib.readLocalOrders();
+                    setOrders(Array.isArray(guestOrder) ? guestOrder : [guestOrder]);
+                } catch (error) {
+                    console.error("Failed to load guest orders", error);
+                    setOrders([]);
+                } finally {
+                    setLoading(false);
+                }
+                // Makes it not fetch server orders
+                return;
+            }
+
             try {
                 setLoading(true);
                 const uId = localStorage.getItem("userId");
@@ -85,7 +104,6 @@ const OrderPage = () => {
             }
         };
 
-        // initial fetch
         fetchOrders();
 
         const handler = () => fetchOrders();
@@ -204,5 +222,4 @@ const OrderPage = () => {
         </div>
     );
 };
-
 export default OrderPage;

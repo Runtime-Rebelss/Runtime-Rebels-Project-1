@@ -1,7 +1,7 @@
 // helpers/ordersLocal.js
 export function readLocalOrders() {
     try {
-        const raw = localStorage.getItem("guestOrders");
+        const raw = localStorage.getItem("guestOrder");
         if (!raw) return [];
         const data = JSON.parse(raw);
 
@@ -50,3 +50,5 @@ export function seedSampleOrder() {
     const current = readLocalOrders();
     writeLocalOrders([...current, sample]);
 }
+
+export default { readLocalOrders, writeLocalOrders, seedSampleOrder };
