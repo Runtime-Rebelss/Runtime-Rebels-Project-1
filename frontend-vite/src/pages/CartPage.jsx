@@ -178,25 +178,30 @@ const CartPage = () => {
 
     const removeItem = async (productId) => {
         const userId = localStorage.getItem("userId");
-
+        // This is for guest
         try {
             if (!userId) {
-                set
+                await cartLib.removeItem(productId);
+                // Update the cart and remove the product
+                setCartItems(cartItems.filter((it) => it.id !== productId));
+                return;
             }
-
+            // This is for user
             await api.put(`/carts/update`, null, { params: { userId, productId, quantity: 0 } });
             setCartItems(cartItems.filter((it) => it.id !== productId));
+            // update navbar
+            window.dispatchEvent(new Event("cart-updated"));
         } catch (err) {
             console.error('Error removing item:', err);
             toast.error('Failed to remove item');
         }
     };
 
-    // Method to handle user Checkouts
+    // Method to handle user Checkouts (move to cart)
     const handleUserCheckout = async () => {
         try {
             setLoading(true);
-            const cartItems = await loadServerCart(userId);
+            const cartItems = await cartLib.loadServerCart(userId);
 
             const items = cartItems.map((item) => ({
                 name: item.name,
@@ -221,14 +226,13 @@ const CartPage = () => {
             setLoading(false);
         }
     };
-
+    // Move to cart
     const handleGuestCheckout = async () => {
         try {
             setLoading(true);
             const cartItems = cartLib.loadGuestCart();
             //  Save the current cart so the success page can access it later
             localStorage.setItem("guestOrder", JSON.stringify({ items: cartItems }));
-
 
             const items = cartItems.map((item) => ({
                 name: item.name,
@@ -269,7 +273,6 @@ const CartPage = () => {
             setShowCheckoutPrompt(true);
             return;
         }
-
         await handleUserCheckout();
     }
 

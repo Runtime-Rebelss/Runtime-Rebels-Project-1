@@ -10,8 +10,8 @@ const GUEST_KEY = "guestCart";
 export function loadGuestCart() {
     try {
         const raw = localStorage.getItem(GUEST_KEY);
-        const parsed = raw ? JSON.parse(raw) : { items: [] };
-        if (!Array.isArray(parsed.items)) return { items: [] };
+        const parsed = raw ? JSON.parse(raw) : {items: []};
+        if (!Array.isArray(parsed.items)) return {items: []};
         // Normalize items (tolerate older shapes)
         const items = parsed.items
             .filter(Boolean)
@@ -26,15 +26,15 @@ export function loadGuestCart() {
                 quantity: Math.max(1, Number(it.quantity ?? 1)),
             }))
             .filter((it) => it.productId);
-        return { items };
+        return {items};
     } catch {
-        return { items: [] };
+        return {items: []};
     }
 }
 
 export function saveGuestCart(data) {
     const items = Array.isArray(data) ? data : data.items;
-    localStorage.setItem(GUEST_KEY, JSON.stringify({ items }));
+    localStorage.setItem(GUEST_KEY, JSON.stringify({items}));
 }
 
 /**
@@ -45,9 +45,9 @@ export function saveGuestCart(data) {
 export async function loadServerCart(userId, signal) {
     if (!userId) return [];
 
-    const { data: cart } = await api.get(
+    const {data: cart} = await api.get(
         `/carts/${encodeURIComponent(userId)}`,
-        { signal }
+        {signal}
     );
 
     const productIds = Array.isArray(cart?.productIds) ? cart.productIds : [];
@@ -57,9 +57,9 @@ export async function loadServerCart(userId, signal) {
     const items = await Promise.all(
         productIds.map(async (productId, index) => {
             try {
-                const { data: product } = await api.get(
+                const {data: product} = await api.get(
                     `/products/${encodeURIComponent(productId)}`,
-                    { signal }
+                    {signal}
                 );
                 const quantity = Number(quantities?.[index] ?? 1) || 1;
                 const lineTotal = Number(totalPrices?.[index] ?? 0) || 0;
@@ -93,11 +93,11 @@ export async function loadServerCart(userId, signal) {
 /**
  * Add item to cart (guest or signed-in user).
  */
-export async function addToCart({ userId, productId, name, price, quantity = 1, image = "" }) {
+export async function addToCart({userId, productId, name, price, quantity = 1, image = ""}) {
     if (!productId) throw new Error("Product Id is required");
 
     if (!userId) {
-        const { items } = loadGuestCart();
+        const {items} = loadGuestCart();
 
         const idx = items.findIndex(
             it => it.productId === productId || it.id === productId
@@ -119,7 +119,7 @@ export async function addToCart({ userId, productId, name, price, quantity = 1, 
         saveGuestCart(items);
         // Updates navbar
         window.dispatchEvent(new Event("cart-updated"));
-        return { source: "guest", items };
+        return {source: "guest", items};
     }
 
     const qty = Number(quantity || 1);
@@ -138,10 +138,11 @@ export async function addToCart({ userId, productId, name, price, quantity = 1, 
 
     try {
         window.dispatchEvent(new CustomEvent("cart-updated", {
-            detail: { source: "server", data: res.data },
+            detail: {source: "server", data: res.data},
         }));
-    } catch {}
-    return { source: "server", data: res.data };
+    } catch {
+    }
+    return {source: "server", data: res.data};
 }
 
 /**
@@ -149,7 +150,7 @@ export async function addToCart({ userId, productId, name, price, quantity = 1, 
  * For guests, you can still directly modify localStorage in CartPage if you want,
  * but here we focus on the user/server path.
  */
-export async function updateQuantity({ productId, quantity }) {
+export async function updateQuantity({productId, quantity}) {
     if (!productId) throw new Error("Product Id is required");
 
     let qty = Number(quantity);
@@ -165,7 +166,7 @@ export async function updateQuantity({ productId, quantity }) {
     if (qty === 0) items.splice(idx, 1);
     else items[idx].quantity = qty;
 
-    saveGuestCart({ items });
+    saveGuestCart({items});
 
     window.dispatchEvent(new Event("cart-updated"));
 }
@@ -173,38 +174,25 @@ export async function updateQuantity({ productId, quantity }) {
 /**
  * Remove an item from a signed-in user's cart.
  */
-export async function removeItem({ productId }) {
-    if (!productId) throw new Error("Product Id is required");
+export async function removeItem(productId) {
+    if (!productId) return;
 
-    export function removeGuestItem(productId) {
-        if (!productId) return;
+    const userId = localStorage.getItem("userId");
 
-        const { items } = loadGuestCart();
+    if (!userId) {
+        const {items} = loadGuestCart();
         if (!Array.isArray(items)) return;
 
-        const filtered = items.filter(
-            it => it.productId !== productId && it.id !== productId
-        );
-
+        const filtered = items.filter(it => it.productId !== productId &&
+            it.id !== productId);
+        // Save guest cart
         saveGuestCart(filtered);
-
         // Update navbar
         window.dispatchEvent(new Event("cart-updated"));
     }
-
-    const res = await api.delete("/carts/remove", {
-        params: { userId, productId },
-        signal,
-    });
-
-    try {
-        window.dispatchEvent(
-            new CustomEvent("cart-updated", { detail: { source: "server", data: res.data },
-            }));
-    } catch {}
-
-    return res.data;
 }
 
-export default { loadGuestCart, saveGuestCart, loadServerCart, addToCart, updateQuantity,
-    removeItem,};
+export default {
+    loadGuestCart, saveGuestCart, loadServerCart, addToCart, updateQuantity,
+    removeItem,
+};
