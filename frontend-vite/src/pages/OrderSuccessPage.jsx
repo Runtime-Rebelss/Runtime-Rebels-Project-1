@@ -20,6 +20,7 @@ const OrderSuccessPage = () => {
 
             const params = new URLSearchParams(window.location.search);
             const sessionId = params.get("session_id");
+            // Used to separate guest and user orders
             const guestConfirmKey = `guest-confirm-${sessionId}`;
             const userConfirmKey = `user-confirm-${sessionId}`;
 
@@ -63,15 +64,13 @@ const OrderSuccessPage = () => {
                 setTotal(guestOrder.total);
 
                 // Clear only guestCart but leave lastOrderCart (so data persists for success)
-                console.log("-----MEW------");
                 localStorage.removeItem("guestCart");
                 localStorage.removeItem("pendingGuestOrder");
                 window.dispatchEvent(new Event("cart-updated"));
 
                 return;
             }
-
-            // Prevent duplicate user order creation(?)
+            // Prevent duplicate user order creation
             if (sessionStorage.getItem(userConfirmKey)) {
                 const saved = JSON.parse(sessionStorage.getItem("confirmedOrder") || "{}");
 
