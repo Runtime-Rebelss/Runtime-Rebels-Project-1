@@ -71,8 +71,8 @@ const OrderSuccessPage = () => {
                 return;
             }
 
-            // Prevent duplicate user order creation
-            if (sessionStorage.getItem(guestConfirmKey)) {
+            // Prevent duplicate user order creation(?)
+            if (sessionStorage.getItem(userConfirmKey)) {
                 const saved = JSON.parse(sessionStorage.getItem("confirmedOrder") || "{}");
 
                 if (saved.productId) {
