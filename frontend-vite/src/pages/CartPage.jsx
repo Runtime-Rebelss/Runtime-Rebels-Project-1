@@ -195,7 +195,7 @@ const CartPage = () => {
             toast.error('Failed to remove item');
         }
     };
-
+    // Handle checkout
     const handleCheckout = async () => {
         const controller = new AbortController();
 
@@ -222,7 +222,7 @@ const CartPage = () => {
             setShowCheckoutPrompt(true);
             return;
         }
-        await handleUserCheckout();
+        await handleCheckout();
     }
 
     return (
@@ -335,7 +335,6 @@ const CartPage = () => {
                                 </div>
                             </div>
                         </div>
-
                         {/* Summary */}
                         <div>
                             <div className="card bg-base-100 border border-base-300 sticky top-20">
@@ -364,32 +363,6 @@ const CartPage = () => {
                                         >
                                             Continue Shopping
                                         </button>
-
-                                        { /* {isGuest && (
-                                            <div className="w-full">
-                                                <div className="alert alert-info my-3">
-                                                    <div>
-                                                        <span className="font-medium">You're browsing as a guest.</span>
-                                                        <div className="text-sm text-base-content/70">Sign in to save your cart across devices.</div>
-                                                    </div>
-                                                </div>
-
-                                                <div className="flex gap-2">
-                                                    <button
-                                                        className="btn btn-ghost btn-sm flex-1"
-                                                        onClick={() => navigate('/login?redirect=/checkout')}
-                                                    >
-                                                        Sign in to save
-                                                    </button>
-                                                    <button
-                                                        className="btn btn-error btn-sm"
-                                                        onClick={clearGuestCart}
-                                                    >
-                                                        Clear guest cart
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        )} */}
                                     </div>
                                 </div>
                             </div>
@@ -426,7 +399,7 @@ const CartPage = () => {
                                 className="btn btn-neutral w-full"
                                 onClick={() => {
                                     setShowCheckoutPrompt(false);
-                                    handleGuestCheckout();
+                                    handleCheckout();
                                 }}
                             >
                                 Continue as Guest

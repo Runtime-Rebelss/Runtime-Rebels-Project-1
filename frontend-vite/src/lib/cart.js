@@ -194,7 +194,7 @@ export async function removeItem(productId) {
 
 // Method to handle checking out
 export async function handleCheckout(userId, signal) {
-    const userEmail = localStorage.get("userEmail");
+    const userEmail = localStorage.getItem("userEmail");
 
     if (!userId) {
         const {items} = loadGuestCart();
@@ -246,5 +246,5 @@ export const clearGuestCart = () => {
 
 export default {
     loadGuestCart, saveGuestCart, loadServerCart, addToCart, updateQuantity,
-    removeItem,
+    removeItem, handleCheckout, clearGuestCart,
 };
