@@ -20,8 +20,8 @@ const CheckoutPage = () => {
         const params = new URLSearchParams(window.location.search);
         const status = params.get('status');
         const sessionId = params.get("session_id");
-
-        if (status === 'success') {
+        // Other two arguments could pose an issue
+        if (status === 'success' && sessionId && !hasRunRef.current && !hasSaved.has(sessionId)) {
             hasRunRef.current = true;
             hasSaved.add(sessionId);
 
@@ -55,7 +55,6 @@ const CheckoutPage = () => {
                         deliveryCity: address.city || "N/A",
                         deliveryState: address.state || "N/A",
                     };
-                    console.log("-----MAW------");
                     const response = await fetch('http://localhost:8080/api/orders', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -98,7 +97,6 @@ const CheckoutPage = () => {
             }));
 
             const response = await api.post('/payments/create-checkout-session', { items });
-            console.log("-----MEWERRR------");
             const { url } = response.data;
             window.location.href = url;
         } catch (error) {
