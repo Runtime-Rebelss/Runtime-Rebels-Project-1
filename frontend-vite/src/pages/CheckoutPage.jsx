@@ -55,12 +55,13 @@ const CheckoutPage = () => {
                         deliveryCity: address.city || "N/A",
                         deliveryState: address.state || "N/A",
                     };
-
+                    console.log("-----MAW------");
                     const response = await fetch('http://localhost:8080/api/orders', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(orderData)
                     });
+                    const pendingCart = sessionStorage.getItem("pendingCart");
 
                     if (response.ok) {
                         console.log(' Order saved successfully!');
@@ -75,19 +76,6 @@ const CheckoutPage = () => {
             saveOrder();
         }
     }, []);
-
-    // useEffect(() => {
-    //     if (status === "success") {
-    //         toast.success("YAYYYY");
-    //         // Remove item from cart!
-    //         const userId = localStorage.getItem("userId");
-    //         localStorage.removeItem('guestCart');
-    //         window.dispatchEvent(new Event('cart-updated'));
-    //         // Not creating an order!!
-    //         api.post(`/orders/confirm/${userId}`);
-    //         navigate('/orders', { replace: true });
-    //     }
-    // }, [status, navigate]);
 
     // checkout with Stripe
     const handleCheckout = async () => {
@@ -110,6 +98,7 @@ const CheckoutPage = () => {
             }));
 
             const response = await api.post('/payments/create-checkout-session', { items });
+            console.log("-----MEWERRR------");
             const { url } = response.data;
             window.location.href = url;
         } catch (error) {

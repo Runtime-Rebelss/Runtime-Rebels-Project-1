@@ -29,7 +29,7 @@ export function readLocalOrders() {
 
 export function writeLocalOrders(orders) {
     try {
-        localStorage.setItem("guestOrders", JSON.stringify(orders || []));
+        localStorage.setItem("guestOrder", JSON.stringify(orders || []));
     } catch {}
 }
 

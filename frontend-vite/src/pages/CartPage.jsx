@@ -202,6 +202,8 @@ const CartPage = () => {
         try {
             setLoading(true);
             const url = await cartLib.handleCheckout(userId, controller.signal);
+            // Create a pending cart here
+            sessionStorage.setItem("pendingCart", JSON.stringify(cartItems));
             window.location.href = url;
         } catch (err) {
             if (err?.name === "AbortError") {

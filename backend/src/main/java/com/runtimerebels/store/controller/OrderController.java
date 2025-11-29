@@ -94,8 +94,8 @@ public class OrderController {
      * @see ResponseEntity
      * @see Order
      */ // Create new order
-    @PostMapping
-    public ResponseEntity<Order> createOrder(@RequestBody Order order) {
+    @PostMapping("create/{userId}")
+    public ResponseEntity<Order> createOrder(@PathVariable String userId, @RequestBody Order order) {
         System.out.println("Received order: " + order);
 
         // simple duplicate check by sessionId
@@ -109,6 +109,14 @@ public class OrderController {
 
         order.setPaymentStatus("paid");
         Order savedOrder = orderRepository.save(order);
+        Cart cart = cartRepository.findByUserId(userId).orElseThrow(() -> new RuntimeException("Cart not found!"));
+
+        // Remove item(s) from cart
+        cart.setProductIds(new ArrayList<>());
+        cart.setQuantity(new ArrayList<>());
+        cart.setTotalPrice(new ArrayList<>());
+        cartRepository.save(cart);
+
         System.out.println("Saved order with ID: " + savedOrder.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(savedOrder);
     }
@@ -140,7 +148,7 @@ public class OrderController {
      * @throws Exception java.lang. exception
      */
     @PostMapping("/confirm/{userId}")
-    public ResponseEntity<Order> confirmPayment(@PathVariable String userId) throws Exception {
+public ResponseEntity<Order> confirmPayment(@PathVariable String userId, @RequestBody Order request) throws Exception {
         Cart cart = cartRepository.findByUserId(userId).orElseThrow(() -> new RuntimeException("Cart not found!"));
         Calendar calendar = Calendar.getInstance();
 
@@ -150,6 +158,8 @@ public class OrderController {
         order.setProductIds(cart.getProductIds());
         order.setQuantity(cart.getQuantity());
         order.setTotalPrice(cart.getTotalPrice());
+        order.setStripeSessionId(request.getStripeSessionId());
+        order.setPaymentStatus("paid");
         order.setOrderStatus(OrderStatus.PENDING);
         order.setCreatedAt(calendar.getTime());
         order.setProcessAt(null);

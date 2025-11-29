@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 import {ShoppingCart, Search} from "lucide-react";
+import { useParams, useNavigate } from 'react-router';
 import cartLib from "../lib/cart.js";
 import api from "../lib/axios.js";
 import toast from 'react-hot-toast'
@@ -8,6 +9,7 @@ import toast from 'react-hot-toast'
 const Navbar = () => {
     const categories = ["Men", "Women", "Jewelery", "Electronics", "Accessories"];
     const [cartCount, setCartCount] = useState(0);
+    const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
 
     const isAbort = (err) =>
@@ -86,6 +88,7 @@ const Navbar = () => {
             localStorage.removeItem("userEmail");
             localStorage.removeItem("authToken");
             toast.success("User logged out!");
+            navigate("/");
             window.location.reload();
         } catch (error) {
             console.error("Failed to sign out");

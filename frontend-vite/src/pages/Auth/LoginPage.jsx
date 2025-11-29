@@ -65,20 +65,20 @@ const LoginPage = () => {
             const token = data?.token || data?.accessToken || null;
 
             if (!userId) {
-                setToastMsg('Login response missing user id.');
+                setToastMsg("Login response missing user id.");
                 return;
             }
 
-            localStorage.setItem('userId', userId);
-            localStorage.setItem('userEmail', userEmail);
+            localStorage.setItem("userId", userId);
+            localStorage.setItem("userEmail", userEmail);
             // Change this to cookies based
-            if (token) localStorage.setItem('authToken', token);
+            if (token) localStorage.setItem("authToken", token);
 
             await preloadCart(userId);
 
             navigate('/', { replace: true });
             toast.success('Login successfully!');
-            //localStorage.remove("guestOrder");
+            await api.post(`api/orders`)
         } catch (err) {
             const status = err?.response?.status;
             const serverMsg = err?.response?.data?.message || err?.response?.data?.error;

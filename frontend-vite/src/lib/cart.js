@@ -199,7 +199,8 @@ export async function handleCheckout(userId, signal) {
     if (!userId) {
         const {items} = loadGuestCart();
         // Save the order info
-        localStorage.setItem("guestOrder", JSON.stringify({items}));
+        localStorage.removeItem("pendingGuestOrder");
+        localStorage.setItem("pendingGuestOrder", JSON.stringify({items}));
 
         const cartItems = items.map(item => ({
                 name: item.name,
@@ -218,6 +219,10 @@ export async function handleCheckout(userId, signal) {
 
     const serverItems = await loadServerCart(userId, signal);
 
+    // Save the order info
+    localStorage.removeItem("pendingServerOrder");
+    localStorage.setItem("pendingServerOrder", JSON.stringify(serverItems));
+
     const cartItems = serverItems.map(item => ({
         name: item.name,
         unitAmount: Math.round(item.price * 100),
@@ -232,8 +237,6 @@ export async function handleCheckout(userId, signal) {
     }, {signal});
 
     return response.data.url;
-
-
 }
 
 export const clearGuestCart = () => {

@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import {useParams, useNavigate} from "react-router-dom";
 import Navbar from "../components/Navbar";
 import api from "../lib/axios";
+import orderLib from "../lib/orders.js";
 
 const fmtUSD = (n) =>
     `$${Number(n || 0).toLocaleString(undefined, {
@@ -18,6 +19,7 @@ const fmtDate = (d) =>
 
 const OrderDetailsPage = () => {
     const [orders, setOrders] = useState(null);
+    const [items, setItems] = useState(null);
     const {orderId} = useParams();
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -27,13 +29,29 @@ const OrderDetailsPage = () => {
         const controller = new AbortController();
 
         const fetchOrders = async () => {
+            const userId = localStorage.getItem("userId");
+
+            setLoading(true);
+            if (!userId) {
+                const orders = orderLib.readLocalOrders();
+                const order = orders.find(o => o.id === orderId);
+                if (order) {
+                    setOrders(order);
+                    setItems(order.items || []);
+                    setProducts(order.items || []);
+                }
+                setLoading(false);
+                return;
+            }
+
             try {
-                setLoading(true);
-                const {data} = await api.get(`/orders/details/${encodeURIComponent(orderId)}`, {
+                const res = await api.get(`/orders/details/${encodeURIComponent(orderId)}`, {
                     signal: controller.signal,
                 });
-                setOrders(data.order);
-                setProducts(data.products || []);
+                setOrders(res.data.order);
+                setItems(res.data.products);
+                setProducts(res.data.products);
+
             } catch (err) {
                 if (err?.code !== "ERR_CANCELED") {
                     console.warn("orders fetch failed:", err);
@@ -67,10 +85,10 @@ const OrderDetailsPage = () => {
 
     if (!orders) return <div className="p-6 text-center">Order not found</div>;
 
-    const total = (orders.totalPrice || []).reduce((sum, price, i) => {
-        const qty = Number(orders.quantity?.[i] ?? 1);
-        return sum + Number(price || 0) * qty;
-    }, 0);
+    const total = (orders.totalPrice || []).reduce(
+        (sum, lineTotal) => sum + Number(lineTotal || 0),
+        0
+    );
 
     const userEmail = localStorage.getItem("userEmail");
 
@@ -112,6 +130,7 @@ const OrderDetailsPage = () => {
                                         <img
                                             src={
                                                 product.imageUrl ||
+                                                product.image ||
                                                 "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=400&q=70"
                                             }
                                             alt={product.name}
