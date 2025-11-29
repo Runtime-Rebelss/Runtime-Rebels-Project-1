@@ -25,6 +25,7 @@ const OrderSuccessPage = () => {
 
             const params = new URLSearchParams(window.location.search);
             const sessionId = params.get("session_id");
+            // Used to separate guest and user orders
             const guestConfirmKey = `guest-confirm-${sessionId}`;
             const userConfirmKey = `user-confirm-${sessionId}`;
 
