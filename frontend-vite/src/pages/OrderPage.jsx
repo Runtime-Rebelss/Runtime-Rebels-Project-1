@@ -5,64 +5,6 @@ import Navbar from "../components/Navbar";
 import api from "../lib/axios";
 import orderLib from "../lib/orders.js";
 
-const fmtUSD = (n) =>
-    `$${Number(n || 0).toLocaleString(undefined, {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-    })}`;
-const fmtDate = (d) =>
-    new Date(d).toLocaleDateString(undefined, {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-    });
-
-async function loadServerOrders(userId, signal) {
-    if (!userId) return [];
-    const { data: orderList } = await api.get(`/orders/user/${encodeURIComponent(userId)}`, { signal });
-    if (!Array.isArray(orderList)) return [];
-
-    const detailed = await Promise.all(
-        orderList.map(async (order) => {
-            const productIds = Array.isArray(order.productIds) ? order.productIds : [];
-            const quantities = Array.isArray(order.quantity) ? order.quantity : [];
-            const finalPrices = Array.isArray(order.totalPrice) ? order.totalPrice : [];
-
-            const items = await Promise.all(
-                productIds.map(async (productId, index) => {
-                    try {
-                        const { data: product } = await api.get(`/products/${encodeURIComponent(productId)}`, { signal });
-                        const quantity = Number(quantities?.[index] ?? 1) || 1;
-                        const basePrice =
-                            Number(finalPrices?.[index]) ||
-                            Number(product?.finalPrice) ||
-                            Number(product?.price) ||
-                            0;
-
-                        return {
-                            id: productId,
-                            name: product?.name ?? "Item",
-                            image:
-                                product?.image ||
-                                product?.imageUrl ||
-                                "https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-                            price: Math.max(0, basePrice),
-                            quantity,
-                        };
-                    } catch (e) {
-                        console.warn("Failed to load product", productId, e);
-                        return null;
-                    }
-                })
-            );
-
-            return { ...order, items: items.filter(Boolean) };
-        })
-    );
-
-    return detailed;
-}
-
 const OrderPage = () => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -93,7 +35,7 @@ const OrderPage = () => {
             try {
                 setLoading(true);
                 const uId = localStorage.getItem("userId");
-                const userOrders = await loadServerOrders(uId, controller.signal);
+                const userOrders = await orderLib.loadServerOrders(uId, controller.signal);
                 setOrders(userOrders);
             } catch (err) {
                 if (err?.code !== "ERR_CANCELED") {
@@ -162,12 +104,12 @@ const OrderPage = () => {
                                         <div>
                                             <div className="font-medium">Order Placed</div>
                                             <div className="opacity-70">
-                                                {fmtDate(order.createdAt || Date.now())}
+                                                {orderLib.fmtDate(order.createdAt || Date.now())}
                                             </div>
                                         </div>
                                         <div>
                                             <div className="font-medium">Total</div>
-                                            <div className="opacity-70">{fmtUSD(total)}</div>
+                                            <div className="opacity-70">{orderLib.fmtUSD(total)}</div>
                                         </div>
                                         <div>
                                             <div className="font-medium">Ship to</div>
@@ -201,7 +143,7 @@ const OrderPage = () => {
                                                 <div className="flex-1 min-w-0">
                                                     <div className="font-medium truncate">{it.name}</div>
                                                     <div className="text-sm opacity-70">
-                                                        Qty: {it.quantity} • {fmtUSD(Number(it.price || 0) * Number(it.quantity || 1))}
+                                                        Qty: {it.quantity} • {orderLib.fmtUSD(Number(it.price || 0) * Number(it.quantity || 1))}
                                                     </div>
                                                 </div>
                                                 <button
