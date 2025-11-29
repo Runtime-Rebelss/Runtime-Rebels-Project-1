@@ -90,7 +90,7 @@ public class AuthController {
 
         Cookie newAccess = new Cookie("access_token", tokens.getAccessToken());
         newAccess.setHttpOnly(true);
-        newAccess.setSecure(true);  // false in dev
+        newAccess.setSecure(true);
         newAccess.setPath("/");
         newAccess.setMaxAge(7 * 200 * 200);
 

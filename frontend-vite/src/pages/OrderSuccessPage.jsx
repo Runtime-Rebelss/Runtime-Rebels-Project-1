@@ -11,6 +11,7 @@ const OrderSuccessPage = () => {
     const [confirmation, setConfirmation] = useState("");
     const navigate = useNavigate();
     const userId = localStorage.getItem("userId");
+    const userEmail = localStorage.getItem("userEmail");
 
     useEffect(() => {
         const confirmOrder = async () => {
@@ -69,14 +70,13 @@ const OrderSuccessPage = () => {
 
                 return;
             }
-
-            // Prevent duplicate user order creation(?)
+            // Prevent duplicate user order creation
             if (sessionStorage.getItem(userConfirmKey)) {
                 const saved = JSON.parse(sessionStorage.getItem("confirmedOrder") || "{}");
 
-                if (saved.productId) {
+                if (saved.productIds) {
                     const items = await Promise.all(
-                        saved.productId.map(async (pid, i) => {
+                        saved.productIds.map(async (pid, i) => {
                             const {data: product} = await api.get(`/products/${pid}`);
                             const qty = saved.quantity[i];
                             const lineTotal = saved.totalPrice[i];
@@ -92,38 +92,11 @@ const OrderSuccessPage = () => {
 
                     setCartItems(items);
                     setTotal(saved.totalPrice.reduce((s, t) => s + Number(t), 0));
-
                     return;
                 }
             }
-            // prevent duplicate user orders
-            if (sessionStorage.getItem(userConfirmKey)) {
-                const saved = JSON.parse(sessionStorage.getItem("confirmedOrder") || "{}");
 
-                if (saved.productIds) {
-                    const items = await Promise.all(
-                        saved.productIds.map(async (pid, i) => {
-                            const { data: product } = await api.get(`/products/${pid}`);
-                            const qty = saved.quantity[i];
-                            const lineTotal = saved.totalPrice[i];
-
-                            return {
-                                id: pid,
-                                name: product.name,
-                                image: product.image || product.imageUrl,
-                                quantity: qty,
-                                price: lineTotal / qty
-                            };
-                        })
-                    );
-
-                    setCartItems(items);
-                    setTotal(saved.totalPrice.reduce((s, t) => s + Number(t), 0));
-                }
-                return;
-            }
-
-            let pending = [];
+            let pending;
             try {
                 pending = JSON.parse(localStorage.getItem("pendingServerOrder") || "[]");
             } catch {
@@ -137,6 +110,7 @@ const OrderSuccessPage = () => {
 
             // create backend order
             const orderPayload = {
+                userEmail,
                 userId,
                 productIds: pending.map(i => i.id || i.productId),
                 quantity: pending.map(i => i.quantity),
@@ -155,10 +129,11 @@ const OrderSuccessPage = () => {
             setCartItems(pending);
             setTotal(orderPayload.totalPrice.reduce((s, t) => s + Number(t), 0));
 
-            localStorage.removeItem("pendingOrder");
-            return;
+            localStorage.removeItem("pendingServerOrder");
+            sessionStorage.removeItem("confirmedOrder");
+            sessionStorage.removeItem(userConfirmKey);
+            window.dispatchEvent(new Event("cart-updated"));
         };
-
         confirmOrder();
     }, []);
 

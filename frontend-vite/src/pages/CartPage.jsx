@@ -60,14 +60,8 @@ const CartPage = () => {
 
     const navigate = useNavigate();
     const userId = localStorage.getItem("userId");
-    const token = localStorage.getItem("authToken");
 
     useEffect(() => {
-        // if (!userId || !token) {
-        //     navigate("/login?redirect=/cart");
-        //     return;
-        // }
-
         let ac = new AbortController();
 
         const load = async () => {
@@ -111,7 +105,7 @@ const CartPage = () => {
 
         load();
         return () => ac.abort();
-    }, [userId, token, navigate]);
+    }, [userId, navigate]);
 
     useEffect(() => {
         const handler = async () => {
@@ -203,7 +197,7 @@ const CartPage = () => {
             setLoading(true);
             const url = await cartLib.handleCheckout(userId, controller.signal);
             // Create a pending cart here
-            sessionStorage.setItem("pendingCart", JSON.stringify(cartItems));
+            //sessionStorage.setItem("pendingCart", JSON.stringify(cartItems));
             window.location.href = url;
         } catch (err) {
             if (err?.name === "AbortError") {
@@ -219,8 +213,8 @@ const CartPage = () => {
 
     const proceedToCheckout = async () => {
         if (cartItems.length === 0) return;
-
-        if (!localStorage.getItem("authToken")) {
+        // Can change to authToken if wanted
+        if (!localStorage.getItem("userId")) {
             setShowCheckoutPrompt(true);
             return;
         }

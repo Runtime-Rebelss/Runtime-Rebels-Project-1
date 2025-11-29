@@ -45,7 +45,7 @@ const CheckoutPage = () => {
                     }
 
                     const orderData = {
-                        userEmail: customerEmail,
+                        userEmail: customerEmail || email || userEmail,
                         productIds: cart.map(it => it.productId),
                         quantities: cart.map(it => it.quantity),
                         totalPrice: cart.reduce((sum, it) => sum + it.price * it.quantity, 0),
@@ -61,8 +61,7 @@ const CheckoutPage = () => {
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(orderData)
                     });
-                    const pendingCart = sessionStorage.getItem("pendingCart");
-
+                    window.dispatchEvent(new Event("cart-updated"));
                     if (response.ok) {
                         console.log(' Order saved successfully!');
                         localStorage.removeItem('guestCart');
