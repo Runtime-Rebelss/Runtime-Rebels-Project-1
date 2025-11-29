@@ -21,11 +21,11 @@ function useFetchProducts(categories, setProducts, setLoading) {
       try {
         // If categories is null/undefined or empty, fetch all products
         // Otherwise fetch by category. This makes the component more robust.
-        const url = categories?.length > 0
-          ? '/products/category?' + categories.map(category => 'categories=' + encodeURIComponent(category)).join('&')
-          : '/products';
+        const url = categories?.length > 0 ? `/products/category?${categories.map(category => `categories=${category}`).join('&')}` : '/products';
+        console.log(url);
+        console.log('Current Categories: ', categories);
         const response = await api.get(url);
-        setProducts(response.data);
+      setProducts(response.data);
       } catch (error) {
         console.error('Error fetching products:', error);
         toast.error('Failed to fetch products');

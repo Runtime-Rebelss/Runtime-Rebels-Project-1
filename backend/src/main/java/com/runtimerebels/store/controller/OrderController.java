@@ -109,7 +109,7 @@ public class OrderController {
             }
         }
 
-        order.setPaymentStatus("Paid");
+        order.setPaymentStatus("paid");
         Order savedOrder = orderRepository.save(order);
         Cart cart = cartRepository.findByUserId(userId).orElseThrow(() -> new RuntimeException("Cart not found!"));
 

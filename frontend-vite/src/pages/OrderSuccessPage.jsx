@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useRef} from "react";
 import {useNavigate} from "react-router-dom";
 import Navbar from "../components/Navbar";
 import orderLib from "../lib/orders.js";
@@ -12,8 +12,12 @@ const OrderSuccessPage = () => {
     const navigate = useNavigate();
     const userId = localStorage.getItem("userId");
     const userEmail = localStorage.getItem("userEmail");
+    const didRun = useRef(false);
 
     useEffect(() => {
+        // Stop from running twice
+        if (didRun.current) return;
+        didRun.current = true;
         const confirmOrder = async () => {
             // Generate random confirmation number
             const randomCode = "SCZ-" + Math.floor(100000 + Math.random() * 900000);
@@ -91,12 +95,12 @@ const OrderSuccessPage = () => {
                     );
 
                     setCartItems(items);
-                    setTotal(saved.totalPrice.reduce((s, t) => s + Number(t), 0));
+                    setTotal(items.reduce((s, it) => s + (Number(it.price) || 0) * (Number(it.quantity) || 0), 0));
                     return;
                 }
             }
 
-            let pending;
+            let pending = [];
             try {
                 pending = JSON.parse(localStorage.getItem("pendingServerOrder") || "[]");
             } catch {
@@ -116,23 +120,19 @@ const OrderSuccessPage = () => {
                 quantity: pending.map(i => i.quantity),
                 totalPrice: pending.map(i => (i.price || 0) * i.quantity),
                 stripeSessionId: sessionId,
-                paymentStatus: "paid",
+                paymentStatus: "Paid",
                 orderStatus: "PENDING",
                 createdAt: new Date().toISOString()
             };
 
             const created = await api.post(`/orders/create/${userId}`, orderPayload);
 
-            sessionStorage.setItem(userConfirmKey, "1");
-            sessionStorage.setItem("confirmedOrder", JSON.stringify(created.data));
-
             setCartItems(pending);
+            // Needs fixed
             setTotal(orderPayload.totalPrice.reduce((s, t) => s + Number(t), 0));
 
-            localStorage.removeItem("pendingServerOrder");
-            sessionStorage.removeItem("confirmedOrder");
-            sessionStorage.removeItem(userConfirmKey);
             window.dispatchEvent(new Event("cart-updated"));
+
         };
         confirmOrder();
     }, []);
@@ -185,7 +185,7 @@ const OrderSuccessPage = () => {
                                     <td></td>
                                     <td className="text-right font-semibold">Total:</td>
                                     <td className="text-right font-semibold">
-                                        ${total.toFixed(2)}
+                                        {orderLib.fmtUSD(total)}
                                     </td>
                                 </tr>
                                 </tbody>
@@ -197,14 +197,18 @@ const OrderSuccessPage = () => {
                 <div className="mt-8 flex justify-center gap-4">
                     <button
                         className="btn btn-primary"
-                        onClick={() => navigate("/")}
+                        onClick={() => {
+                            orderLib.clearDedupeKey()
+                            navigate("/")}}
                     >
                         Continue Shopping
                     </button>
 
                     <button
                         className="btn btn-outline"
-                        onClick={() => navigate("/orders")}
+                        onClick={() => {
+                            orderLib.clearDedupeKey()
+                            navigate("/orders")}}
                     >
                         View My Orders
                     </button>

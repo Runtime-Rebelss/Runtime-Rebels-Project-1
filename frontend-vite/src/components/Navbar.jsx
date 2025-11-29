@@ -117,7 +117,7 @@ const Navbar = () => {
                         className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
                         {categories.map((cat) => (
                             <li key={cat}>
-                                <Link to={`/products?category=${cat.toLowerCase()}`}>{cat}</Link>
+                                <Link to={`/results?categories=${cat.toLowerCase()}`}>{cat}</Link>
                             </li>
                         ))}
                     </ul>
@@ -136,7 +136,7 @@ const Navbar = () => {
                 <ul className="menu menu-horizontal px-1">
                     {categories.map((cat) => (
                         <li key={cat}>
-                            <Link to={`/products?category=${cat.toLowerCase()}`}
+                            <Link to={`/results?categories=${cat.toLowerCase()}`}
                                   className="font-semibold hover:text-primary transition">
                                 {cat}
                             </Link>

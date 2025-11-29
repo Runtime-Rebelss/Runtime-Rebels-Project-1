@@ -16,8 +16,6 @@ import java.util.Arrays;
 /**
  * ProductController - REST API for managing products.
  * Can create, fetch, update, and delete products.
- * @author Haley Kenney, Frank Gonzalez
- * @since 11-19-2025
  *
  * Endpoints implemented:
  * - GET /api/products        : Get all products
@@ -28,6 +26,9 @@ import java.util.Arrays;
  * Extra endpoints (not required for Product Details, but useful for full CRUD):
  * - PUT /api/products/{id}   : Update an existing product
  * - DELETE /api/products/{id} : Delete a product
+ *
+ * @author Haley Kenney, Frank Gonzalez
+ * @since 11-19-2025
  */
 
 
@@ -78,7 +79,7 @@ public class ProductController {
      * @author Frank Gonzalez
      * @param categories Array of category names
      * @return returns list of products matching all categories (case-insensitive)
-    */
+     */
     @GetMapping("/category")
     public List<Product> getProductsByCategory(@RequestParam(required = false) String[] categories) {
         if (categories == null || categories.length == 0) {
@@ -86,8 +87,8 @@ public class ProductController {
         }
         // Build regex patterns for case-insensitive exact match
         List<Pattern> patterns = Arrays.stream(categories)
-            .map(cat -> Pattern.compile("^" + Pattern.quote(cat) + "$", Pattern.CASE_INSENSITIVE))
-            .collect(Collectors.toList());
+                .map(cat -> Pattern.compile("^" + Pattern.quote(cat) + "$", Pattern.CASE_INSENSITIVE))
+                .collect(Collectors.toList());
         Query query = new Query(Criteria.where("categories").all(patterns));
         return mongoTemplate.find(query, Product.class);
     }
