@@ -4,23 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Added cookies based authToken">
-      <change afterPath="$PROJECT_DIR$/frontend-vite/src/components/Cart.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend-vite/src/components/Order.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend-vite/src/lib/checkout.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/OrderController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/ProductController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/ProductController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/Navbar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/Navbar.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/actions/useFetchProducts.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/actions/useFetchProducts.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/axios.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/lib/axios.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/orders.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/lib/orders.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/CheckoutPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/CheckoutPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/OrderPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/OrderPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/OrderSuccessPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/OrderSuccessPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/ResultsPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/ResultsPage.jsx" afterDir="false" />
-    </list>
+    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Fixed duplication issue with orders and refactored code for OrderPage, CheckoutPage, and CartPage" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -299,7 +283,7 @@
       <workItem from="1763600355259" duration="17538000" />
       <workItem from="1763666284092" duration="13143000" />
       <workItem from="1764405959254" duration="3247000" />
-      <workItem from="1764441248702" duration="16157000" />
+      <workItem from="1764441248702" duration="16650000" />
     </task>
     <task id="LOCAL-00001" summary="Updated Code">
       <option name="closed" value="true" />
@@ -597,7 +581,23 @@
       <option name="project" value="LOCAL" />
       <updated>1764448709748</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL-00038" summary="Fixed duplication issue with orders and refactored code for OrderPage, CheckoutPage, and CartPage">
+      <option name="closed" value="true" />
+      <created>1764457757298</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1764457757298</updated>
+    </task>
+    <task id="LOCAL-00039" summary="Fixed duplication issue with orders and refactored code for OrderPage, CheckoutPage, and CartPage">
+      <option name="closed" value="true" />
+      <created>1764457784631</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1764457784631</updated>
+    </task>
+    <option name="localTasksCounter" value="40" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -617,6 +617,21 @@
     <option featureType="dependencySupport" implementationName="java:org.projectlombok:lombok" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="ordering-henry" />
+                </option>
+              </RecentGroup>
+            </list>
+          </value>
+        </entry>
+      </map>
+    </option>
     <option name="TAB_STATES">
       <map>
         <entry key="MAIN">
@@ -627,7 +642,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="origin/shopping-cart-henry" />
+                        <option value="ordering-henry" />
                       </list>
                     </value>
                   </entry>
@@ -661,7 +676,8 @@
     <MESSAGE value="Fixed order duping issue" />
     <MESSAGE value="Removed old debug messages" />
     <MESSAGE value="Added cookies based authToken" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added cookies based authToken" />
+    <MESSAGE value="Fixed duplication issue with orders and refactored code for OrderPage, CheckoutPage, and CartPage" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed duplication issue with orders and refactored code for OrderPage, CheckoutPage, and CartPage" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
