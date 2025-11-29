@@ -58,12 +58,11 @@ const OrderSuccessPage = () => {
                 orderLib.writeLocalOrders([...existing, guestOrder]);
 
                 sessionStorage.setItem(guestConfirmKey, "1");
-
+                // Update the cart
                 setCartItems(items);
                 setTotal(guestOrder.total);
 
                 // Clear only guestCart but leave lastOrderCart (so data persists for success)
-                console.log("-----MEW------");
                 localStorage.removeItem("guestCart");
                 localStorage.removeItem("pendingGuestOrder");
                 window.dispatchEvent(new Event("cart-updated"));

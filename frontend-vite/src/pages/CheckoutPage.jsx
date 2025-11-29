@@ -98,7 +98,6 @@ const CheckoutPage = () => {
             }));
 
             const response = await api.post('/payments/create-checkout-session', { items });
-            console.log("-----MEWERRR------");
             const { url } = response.data;
             window.location.href = url;
         } catch (error) {

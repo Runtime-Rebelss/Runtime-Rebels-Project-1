@@ -97,7 +97,7 @@ public class OrderController {
     @PostMapping("create/{userId}")
     public ResponseEntity<Order> createOrder(@PathVariable String userId, @RequestBody Order order) {
         System.out.println("Received order: " + order);
-
+        // Prevents dupe
         order.setUserId(userId);
 
         // simple duplicate check by sessionId
@@ -109,7 +109,7 @@ public class OrderController {
             }
         }
 
-        order.setPaymentStatus("paid");
+        order.setPaymentStatus("Paid");
         Order savedOrder = orderRepository.save(order);
         Cart cart = cartRepository.findByUserId(userId).orElseThrow(() -> new RuntimeException("Cart not found!"));
 
