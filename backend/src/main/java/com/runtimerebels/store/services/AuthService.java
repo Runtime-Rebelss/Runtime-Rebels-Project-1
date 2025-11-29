@@ -1,6 +1,5 @@
 package com.runtimerebels.store.services;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.runtimerebels.store.models.Role;
 import com.runtimerebels.store.models.Token;
 import com.runtimerebels.store.models.TokenType;
@@ -12,16 +11,13 @@ import com.runtimerebels.store.models.dto.AuthenticationResponse;
 import com.runtimerebels.store.models.dto.LoggedUserResponse;
 import com.runtimerebels.store.models.dto.RegisterRequest;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
 
 import static com.runtimerebels.store.util.Util.getUserByToken;
 
@@ -33,6 +29,7 @@ public class AuthService {
     private final TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final UserDetailsService userDetailsService;
 
     private void saveUserToken(User user, String jwtToken, TokenType type) {
         var token = Token
@@ -139,44 +136,36 @@ public class AuthService {
         throw new RuntimeException("Incorrect password");
     }
 
-    public void refreshToken(
-            HttpServletRequest request,
-            HttpServletResponse response
-    ) throws IOException {
-        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        final String refreshToken;
-        final String userEmail;
-
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return;
+    public AuthenticationResponse refreshWithToken(String refreshToken) {
+        if (refreshToken == null || refreshToken.isBlank()) {
+            throw new RuntimeException("Refresh token missing");
         }
 
-        refreshToken = authHeader.split(" ")[1].trim();
-        userEmail = jwtService.extractUsername(refreshToken);
-
-        if (userEmail != null) {
-            var user = this.userRepository.findByEmail(userEmail)
-                    .orElseThrow(() -> new RuntimeException("Please enter valid token"));
-
-            var isTokenValid = tokenRepository.findByToken(refreshToken)
-                    .map(token -> !token.getRevoked() && !token.getExpired() && token.getTokenType().equals(TokenType.REFRESH))
-                    .orElse(false);
-
-            if (jwtService.isTokenValid(refreshToken, user) && isTokenValid) {
-                var accessToken = jwtService.generateToken(user);
-                revokeAllUserTokens(user);
-                saveUserToken(user, accessToken, TokenType.ACCESS);
-                saveUserToken(user, refreshToken, TokenType.REFRESH);
-
-                var authResponse = AuthenticationResponse
-                        .builder()
-                        .accessToken(accessToken)
-                        .refreshToken(refreshToken)
-                        .build();
-                new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
-            }
-
-            throw new RuntimeException("Please enter valid refresh token");
+        String userEmail = jwtService.extractUsername(refreshToken);
+        if (userEmail == null) {
+            throw new RuntimeException("Invalid refresh token");
         }
+
+        var user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!jwtService.isTokenValid(refreshToken, user)) {
+            throw new RuntimeException("Refresh token expired or invalid");
+        }
+
+        revokeAllUserTokens(user);
+
+        String newRefreshToken = jwtService.generateToken(user);
+
+        saveUserToken(user, newRefreshToken, TokenType.ACCESS);
+
+        return AuthenticationResponse.builder()
+                .accessToken(newRefreshToken)
+                .refreshToken(refreshToken) // re-use same refresh token
+                .userId(user.getId())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .role(user.getRole().name())
+                .build();
     }
 }

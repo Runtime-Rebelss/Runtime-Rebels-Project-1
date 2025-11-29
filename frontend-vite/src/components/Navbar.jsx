@@ -86,7 +86,7 @@ const Navbar = () => {
         try {
             localStorage.removeItem("userId");
             localStorage.removeItem("userEmail");
-            localStorage.removeItem("authToken");
+            localStorage.removeItem("pendingServerOrders");
             toast.success("User logged out!");
             navigate("/");
             window.location.reload();

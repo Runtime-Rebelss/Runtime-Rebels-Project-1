@@ -13,18 +13,6 @@ const LoginPage = () => {
     const navigate = useNavigate();
     const acRef = useRef(null);
 
-    async function refreshAccessToken(refreshToken) {
-        try {
-            const response = await api.post('/users/login', {
-                refreshToken: refreshToken,
-            });
-            return response.data;
-        } catch (error) {
-            console.error("Failed to refresh access token", error);
-            throw error;
-        }
-    }
-
     // If already logged in
     useEffect(() => {
         const already = localStorage.getItem('userId');
@@ -57,12 +45,11 @@ const LoginPage = () => {
         setLoading(true);
 
         try {
-            const res = await api.post('/auth/login', { email, password });
+            const res = await api.post('/auth/login', { email, password }, {withCredentials: true});
             const data = res?.data ?? {};
 
             const userId = extractUserId(data);
             const userEmail = data?.email || email;
-            const token = data?.token || data?.accessToken || null;
 
             if (!userId) {
                 setToastMsg("Login response missing user id.");
@@ -71,14 +58,12 @@ const LoginPage = () => {
 
             localStorage.setItem("userId", userId);
             localStorage.setItem("userEmail", userEmail);
-            // Change this to cookies based
-            if (token) localStorage.setItem("authToken", token);
 
             await preloadCart(userId);
 
             navigate('/', { replace: true });
             toast.success('Login successfully!');
-            await api.post(`api/orders`)
+
         } catch (err) {
             const status = err?.response?.status;
             const serverMsg = err?.response?.data?.message || err?.response?.data?.error;

@@ -5,6 +5,7 @@ import com.runtimerebels.store.models.dto.AuthenticationResponse;
 import com.runtimerebels.store.services.AuthService;
 import com.runtimerebels.store.services.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import java.io.IOException;
 import java.net.URI;
 
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 import com.runtimerebels.store.models.dto.RegisterRequest;
@@ -35,6 +37,7 @@ import com.runtimerebels.store.models.dto.RegisterRequest;
 public class AuthController {
     private final AuthService authService;
     private final JwtService jwtService;
+    private final UserDetailsService userDetailsService;
 
     @PostMapping("/signup")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) {
@@ -42,17 +45,57 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticateRequest request) {
+    public ResponseEntity<?> login(@RequestBody AuthenticateRequest request, HttpServletResponse response) {
+        // Used to implement the request
+        AuthenticationResponse auth = authService.authenticate(request);
 
-        return ResponseEntity.accepted().body(authService.authenticate(request));
+        // Set the cookie to the Token
+        Cookie accessTokenCookie = new Cookie("access_token", auth.getAccessToken());
+        accessTokenCookie.setHttpOnly(true);
+        accessTokenCookie.setSecure(false);
+        accessTokenCookie.setPath("/");
+        accessTokenCookie.setMaxAge(400 * 400 * 200);
+
+        // Do the same for the refresh Token!!
+        Cookie accessRefreshTokenCookie = new Cookie("access_refresh_token", auth.getRefreshToken());
+        accessRefreshTokenCookie.setHttpOnly(true);
+        accessRefreshTokenCookie.setSecure(false);
+        accessRefreshTokenCookie.setPath("/");
+        accessRefreshTokenCookie.setMaxAge(7 *  24 * 60 * 60); // <- This is seven days
+        // Add the tokens to the cookies
+        response.addCookie(accessTokenCookie);
+        response.addCookie(accessRefreshTokenCookie);
+
+        return ResponseEntity.ok(auth);
     }
 
     @PostMapping("/refreshToken")
-    public void refreshToken(
-            HttpServletRequest request,
-            HttpServletResponse response
+    public ResponseEntity<?> refreshToken(HttpServletRequest request, HttpServletResponse response)
+    {
+        String refreshToken = null;
+        // Get token from cookies
+        if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if (cookie.getName().equals("access_refresh_token")) {
+                    refreshToken = cookie.getValue();
+                }
+            }
+        }
 
-    ) throws IOException {
-        authService.refreshToken(request, response);
+        if (refreshToken == null) {
+            return ResponseEntity.status(401).body("Refresh token missing");
+        }
+        // Make new refreshToken
+        AuthenticationResponse tokens = authService.refreshWithToken(refreshToken);
+
+        Cookie newAccess = new Cookie("access_token", tokens.getAccessToken());
+        newAccess.setHttpOnly(true);
+        newAccess.setSecure(true);  // false in dev
+        newAccess.setPath("/");
+        newAccess.setMaxAge(7 * 200 * 200);
+
+        response.addCookie(newAccess);
+
+        return ResponseEntity.ok(tokens);
     }
 }
