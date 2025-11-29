@@ -31,4 +31,6 @@ public interface OrderRepository extends MongoRepository<Order, String> {
      * @return a list of {@link Order} objects matching the session ID
      */
     List<Order> findByStripeSessionId(String stripeSessionId);
+
+    List<Order> findByUserId(String userId);
 }
