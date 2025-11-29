@@ -2,15 +2,28 @@ import React, {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 import {ShoppingCart, Search} from "lucide-react";
 import { useParams, useNavigate } from 'react-router';
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { ShoppingCart, Search } from "lucide-react";
 import cartLib from "../lib/cart.js";
 import api from "../lib/axios.js";
 import toast from 'react-hot-toast'
+import formatString from "./actions/stringFormatter.js";
+import { buildMergedParams } from "../lib/query";
 
-const Navbar = () => {
-    const categories = ["Men", "Women", "Jewelery", "Electronics", "Accessories"];
+/**
+ * Navbar component renders top navigation with category links, search and cart.
+ *
+ * @author Frank Gonzalez, Haley Kenney
+ * @since 11-19-2025
+ * @returns {JSX.Element}
+ */
+const Navbar = ({ hideCart = false, hideCartCount = false }) => {
+    const categories = ["Men's", "Women's", "Jewelry", "Electronics", "Home & Garden"];
     const [cartCount, setCartCount] = useState(0);
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
+    const [searchTerm, setSearchTerm] = useState("");
 
     const isAbort = (err) =>
         err?.name === "AbortError" ||
@@ -54,6 +67,7 @@ const Navbar = () => {
         return () => ac.abort();
     }, []);
 
+    // update count
     useEffect(() => {
         const handler = async () => {
             const userId = localStorage.getItem("userId");
@@ -82,6 +96,12 @@ const Navbar = () => {
         };
     }, []);
 
+    // Handle search
+    const [searchParams] = useSearchParams();
+
+    const handleSearch = (term) => {
+        const trimmed = (term || '').trim();
+        if (!trimmed) return;
     const handleLogout = () => {
         try {
             localStorage.removeItem("userId");
@@ -98,8 +118,20 @@ const Navbar = () => {
         }
     }
 
+
+        const params = buildMergedParams(searchParams, { search: trimmed });
+        navigate(`/results?${params.toString()}`);
+    };
+
+    // Handle search submission
+    const onSubmitSearch = (e) => {
+        e.preventDefault();
+        handleSearch(searchTerm);
+    };
+
     const userId = localStorage.getItem("userId");
     const userEmail = localStorage.getItem("userEmail");
+
 
     return (
         <div className="navbar bg-base-100 shadow-sm px-4 sticky top-0 z-50">
@@ -107,37 +139,53 @@ const Navbar = () => {
             <div className="navbar-start lg:hidden">
                 <div className="dropdown">
                     <div tabIndex={0} role="button" className="btn btn-ghost">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none"
-                             viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                                  d="M4 6h16M4 12h16M4 18h16"/>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M4 6h16M4 12h16M4 18h16"
+                            />
                         </svg>
                     </div>
-                    <ul tabIndex={0}
-                        className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+                    <ul
+                        tabIndex={0}
+                        className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+                    >
                         {categories.map((cat) => (
                             <li key={cat}>
-                                <Link to={`/results?categories=${cat.toLowerCase()}`}>{cat}</Link>
+                                <Link to={`/results?${buildMergedParams(searchParams, { categories: [formatString(cat)] }).toString()}`}>{cat}</Link>
                             </li>
                         ))}
                     </ul>
                 </div>
             </div>
 
-            {/* CENTER — Logo */}
+            {/* CENTER — Logo (moves center on small, left on large) */}
             <div className="navbar-center lg:navbar-start">
-                <Link to="/" className="btn btn-ghost normal-case text-2xl font-bold tracking-wide">
+                <Link
+                    to="/"
+                    className="btn btn-ghost normal-case text-2xl font-bold tracking-wide"
+                >
                     scamazon
                 </Link>
             </div>
 
-            {/* CENTER (lg) — Category menu */}
+            {/* CENTER (on large screens) — Category menu */}
             <div className="absolute left-1/2 transform -translate-x-1/2 hidden lg:block">
                 <ul className="menu menu-horizontal px-1">
                     {categories.map((cat) => (
                         <li key={cat}>
-                            <Link to={`/results?categories=${cat.toLowerCase()}`}
-                                  className="font-semibold hover:text-primary transition">
+                            <Link
+                                to={`/results?${buildMergedParams(searchParams, { categories: [formatString(cat)] }).toString()}`}
+                                className="font-semibold hover:text-primary transition"
+                            >
                                 {cat}
                             </Link>
                         </li>
@@ -147,22 +195,33 @@ const Navbar = () => {
 
             {/* RIGHT — Search + Account + Orders + Cart */}
             <div className="navbar-end gap-2">
-                {/* Search (lg) */}
+                {/*  search text box only visible on large screen */}
                 <div className="hidden lg:flex">
                     <div className="form-control">
                         <div className="input-group">
-                            <input type="text" placeholder="Search products..."
-                                   className="input input-bordered w-48 xl:w-64"/>
-                            <button className="btn btn-square btn-primary">
-                                <Search className="h-5 w-5 text-white"/>
+                            <input
+                                type="search"
+                                placeholder="Search products..."
+                                name="searchbar"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        onSubmitSearch(e);
+                                    }
+                                }}
+                                className="input input-bordered w-48 xl:w-64"
+                            />
+                            <button className="btn btn-square btn-primary" onClick={onSubmitSearch}>
+                                <Search className="h-5 w-5 text-white" />
                             </button>
                         </div>
                     </div>
                 </div>
 
-                {/* Search icon (xs/md) */}
+                {/*  ensures search icon is always visible */}
                 <button className="btn btn-ghost btn-circle lg:hidden">
-                    <Search className="h-5 w-5"/>
+                    <Search className="h-5 w-5" />
                 </button>
 
                 {/* Account (simple) */}

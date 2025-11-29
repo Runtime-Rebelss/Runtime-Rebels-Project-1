@@ -1,5 +1,6 @@
 import React from 'react'
 import { useSearchParams } from 'react-router-dom'
+import { denormalizeString } from './actions/stringFormatter';
 
 /**
  * Props for Filters component
@@ -10,6 +11,8 @@ import { useSearchParams } from 'react-router-dom'
 /**
  * Filters component - renders category checkboxes and updates URL params.
  *
+ * @author Frank Gonzalez
+ * @since 11-19-2025
  * @param {FiltersProps} props
  * @returns {JSX.Element}
  */
@@ -57,7 +60,7 @@ function Filters({ categories = [] }) {
                                         onChange={(e) => handleCategoryChange(category, e.target.checked)}
                                         className='checkbox checkbox-primary mr-2' 
                                     />
-                                    <span className='label-text'>{category}</span>
+                                    <span className='label-text'>{denormalizeString(category)}</span>
                                 </label>
                             </li>
                         ))

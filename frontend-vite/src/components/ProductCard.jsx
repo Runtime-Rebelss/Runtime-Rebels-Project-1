@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import React from "react";
 import toast from "react-hot-toast";
 import { ShoppingBag } from "lucide-react";
@@ -7,6 +7,9 @@ import api from "../lib/axios";
 
 /**
  * ProductCard renders a single product tile used in lists and grids.
+ * 
+ * @author Frank Gonzalez, Haley Kenney
+ * @since 11-19-2025
  *
  * @param {{product: Product}} props
  * @returns {Element}
@@ -20,7 +23,7 @@ function ProductCard({ product }) {
             className='card bg-base-200 shadow-sm hover:shadow-lg transition-all duration-200'
         >
             <figure className="w-full h-full flex items-center justify-center object-contain overflow-hidden">
-                <img className="w-full h-full flex p-4 lg:object-contain md:object-contain sm:object-contain"
+                <img class="w-full h-full flex p-4 lg:object-contain md:object-contain sm:object-contain"
                     src={product.imageUrl}
                     alt={product.name} />
             </figure>

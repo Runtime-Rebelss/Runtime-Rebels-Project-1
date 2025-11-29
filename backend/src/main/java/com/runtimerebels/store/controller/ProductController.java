@@ -10,9 +10,12 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 /**
  * ProductController - REST API for managing products.
  * Can create, fetch, update, and delete products.
@@ -26,7 +29,7 @@ import java.util.Arrays;
  * Extra endpoints (not required for Product Details, but useful for full CRUD):
  * - PUT /api/products/{id}   : Update an existing product
  * - DELETE /api/products/{id} : Delete a product
- *
+ * 
  * @author Haley Kenney, Frank Gonzalez
  * @since 11-19-2025
  */
@@ -74,23 +77,47 @@ public class ProductController {
 
     /**
      * GET method
-     * Get products by category (case-insensitive, must match all)
-     * `/api/products/category?categories=cat1`
+     * Get products by search parameters (must match all)
+     * `/api/products/results?search=searchTerm&categories=cat1`
      * @author Frank Gonzalez
      * @param categories Array of category names
-     * @return returns list of products matching all categories (case-insensitive)
-     */
-    @GetMapping("/category")
-    public List<Product> getProductsByCategory(@RequestParam(required = false) String[] categories) {
-        if (categories == null || categories.length == 0) {
-            return productRepository.findAll();
-        }
-        // Build regex patterns for case-insensitive exact match
-        List<Pattern> patterns = Arrays.stream(categories)
-                .map(cat -> Pattern.compile("^" + Pattern.quote(cat) + "$", Pattern.CASE_INSENSITIVE))
-                .collect(Collectors.toList());
-        Query query = new Query(Criteria.where("categories").all(patterns));
-        return mongoTemplate.find(query, Product.class);
+     * @param searchTerm Search term for product fields
+     * @return returns list of products matching all categories and search term
+    */
+    @GetMapping("/results")
+    public ResponseEntity<List<Product>> searchProducts(
+        @RequestParam(name="categories", required = false) List<String> categories,
+        @RequestParam(name="search", required = false) String searchTerm
+    ) {
+
+      List<Criteria> criteriaList = new ArrayList<>();
+
+      // If categories were supplied, match documents that have ALL of them (intersection)
+      if (categories != null && !categories.isEmpty()) {
+          criteriaList.add(Criteria.where("categories").all(categories));
+      }
+
+      // If a search term is supplied, do a case-insensitive regex search across relevant fields
+      if (searchTerm != null && !searchTerm.isBlank()) {
+          String escaped = Pattern.quote(searchTerm.trim()); // avoid regex injection
+          Pattern regex = Pattern.compile(escaped, Pattern.CASE_INSENSITIVE);
+          // Example: search name, slug, and description
+          Criteria searchCriteria = new Criteria().orOperator(
+              Criteria.where("name").regex(regex),
+              Criteria.where("slug").regex(regex),
+              Criteria.where("description").regex(regex)
+          );
+          criteriaList.add(searchCriteria);
+      }
+
+      Query qObj = new Query();
+      if (!criteriaList.isEmpty()) {
+          qObj.addCriteria(new Criteria().andOperator(criteriaList.toArray(new Criteria[0])));
+      }
+
+      List<Product> products = mongoTemplate.find(qObj, Product.class);
+
+      return ResponseEntity.ok(products);
     }
 
     /**

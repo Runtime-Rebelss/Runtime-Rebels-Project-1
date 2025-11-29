@@ -23,8 +23,8 @@ import com.runtimerebels.store.models.dto.RegisterRequest;
  * REST controller responsible for authentication-related endpoints.
  *
  * <p>
- *     This controller wills erve as the entry point for user authentication
- *     opperations such as login, registration, and token validiation under the
+ *     This controller wills serve as the entry point for user authentication
+ *     operations such as login, registration, and token validation under the
  *     base path <code>/api/auth</code>.
  * </p>
  *

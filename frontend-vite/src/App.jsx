@@ -7,10 +7,8 @@ import CheckoutPage from "./pages/CheckoutPage.jsx";
 import ResultsPage from "./pages/ResultsPage";
 import OrderSuccessPage from "./pages/OrderSuccessPage.jsx";
 import OrderCancelPage from "./pages/OrderCancelPage.jsx";
-import OrderPage from "./pages/OrderPage";
-import LoginPage from "./pages/Auth/LoginPage.jsx";
-import SignUpPage from "./pages/Auth/SignUpPage.jsx";
-import OrderDetailsPage from "./pages/OrderDetailsPage";
+//import LoginPage from "./pages/Auth/LoginPage.jsx";
+//import SignUpPage from "./pages/Auth/SignUpPage.jsx";
 
 function App() {
     return (
@@ -24,10 +22,6 @@ function App() {
                 <Route path="/results" element={<ResultsPage />} />
                 <Route path="/order-success" element={<OrderSuccessPage />} />
                 <Route path="/order-cancel" element={<OrderCancelPage />} />
-                <Route path="/orders" element={<OrderPage />} />
-                <Route path="/signup" element={<SignUpPage />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="details/:orderId" element={<OrderDetailsPage />} />
             </Routes>
         </div>
     );

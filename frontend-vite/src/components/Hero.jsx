@@ -3,8 +3,10 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 
 /**
- * Hero carousel for the homepage. Shows promotional slides and a CTA.
- *
+ * Hero carousel for the homepage. Shows promotional slides for products.
+ * 
+ * @author Frank Gonzalez, Haley Kenney
+ * @since 11-19-2025
  * @returns {JSX.Element}
  */
 const Hero = () => {

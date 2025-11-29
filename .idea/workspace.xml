@@ -4,7 +4,224 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Fixed duplication issue with orders and refactored code for OrderPage, CheckoutPage, and CartPage" />
+    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/allclasses-index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/allpackages-index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/StoreApplication.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/class-use/StoreApplication.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/config/DataSeeder.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/config/StripeConfig.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/config/WebConfig.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/config/class-use/DataSeeder.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/config/class-use/StripeConfig.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/config/class-use/WebConfig.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/config/package-summary.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/config/package-tree.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/config/package-use.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/controller/AuthController.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/controller/CartController.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/controller/OrderController.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/controller/PaymentController.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/controller/ProductController.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/controller/StripeSessionController.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/controller/class-use/AuthController.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/controller/class-use/CartController.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/controller/class-use/OrderController.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/controller/class-use/PaymentController.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/controller/class-use/ProductController.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/controller/class-use/StripeSessionController.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/controller/package-summary.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/controller/package-tree.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/controller/package-use.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/dao/CartItemRepository.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/dao/CartRepository.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/dao/ProductRepository.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/dao/UserRepository.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/dao/class-use/CartItemRepository.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/dao/class-use/CartRepository.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/dao/class-use/OrderRepository.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/dao/class-use/ProductRepository.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/dao/class-use/UserRepository.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/dao/package-summary.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/dao/package-tree.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/dao/package-use.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/models/Cart.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/models/CartItem.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/models/Product.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/models/User.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/models/class-use/Cart.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/models/class-use/CartItem.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/models/class-use/Order.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/models/class-use/Product.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/models/class-use/User.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/models/dto/CheckoutRequest.Item.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/models/dto/CheckoutRequest.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/models/dto/class-use/CheckoutRequest.Item.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/models/dto/class-use/CheckoutRequest.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/models/dto/package-summary.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/models/dto/package-tree.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/models/dto/package-use.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/models/package-summary.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/models/package-tree.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/models/package-use.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/package-summary.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/package-tree.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/package-use.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/element-list" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/help-doc.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/index-all.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/legal/ADDITIONAL_LICENSE_INFO" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/legal/ASSEMBLY_EXCEPTION" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/legal/LICENSE" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/legal/dejavufonts.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/legal/jquery.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/member-search-index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/overview-summary.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/overview-tree.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/package-search-index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/resource-files/copy.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/resource-files/glass.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/resource-files/jquery-ui.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/resource-files/left.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/resource-files/link.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/resource-files/right.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/resource-files/stylesheet.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/resource-files/x.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/script-files/jquery-3.7.1.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/script-files/jquery-ui.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/script-files/script.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/script-files/search-page.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/script-files/search.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/search.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docs/apidocs/type-search-index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-vite/src/components/actions/stringFormatter.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-vite/src/lib/query.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/config/AppConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/config/WebConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/config/WebConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/ProductController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/ProductController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/dao/CartRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/dao/CartRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/dao/OrderRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/dao/OrderRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/dao/ProductRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/dao/ProductRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/dao/TokenRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/dao/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/dao/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/Cart.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/Cart.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/CartItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/CartItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/OrderStatus.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/Permission.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/Product.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/Role.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/Shipping.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/Token.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/TokenType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/dto/AddOrUpdateItemRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/dto/AuthenticateRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/dto/AuthenticationResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/dto/LoggedUserResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/dto/OrderResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/dto/RegisterRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/services/LogoutService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/util/Util.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/allclasses-index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/allpackages-index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/com/runtimerebels/store/dao/OrderRepository.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/dao/OrderRepository.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/com/runtimerebels/store/dao/class-use/OrderRepository.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/com/runtimerebels/store/dao/package-summary.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/com/runtimerebels/store/dao/package-tree.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/com/runtimerebels/store/dao/package-use.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/com/runtimerebels/store/models/Order.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/docs/apidocs/com/runtimerebels/store/models/Order.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/com/runtimerebels/store/models/class-use/Order.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/com/runtimerebels/store/models/package-summary.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/com/runtimerebels/store/models/package-tree.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/com/runtimerebels/store/models/package-use.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/element-list" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/help-doc.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/index-files/index-1.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/index-files/index-2.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/index-files/index-3.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/jquery-ui.overrides.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/legal/COPYRIGHT" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/legal/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/legal/jquery.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/legal/jqueryUI.md" beforeDir="false" afterPath="$PROJECT_DIR$/backend/docs/apidocs/legal/jqueryUI.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/member-search-index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/module-search-index.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/docs/apidocs/module-search-index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/overview-tree.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/package-search-index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/resources/glass.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/resources/x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/script-dir/images/ui-bg_glass_55_fbf9ee_1x400.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/script-dir/images/ui-bg_glass_65_dadada_1x400.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/script-dir/images/ui-bg_glass_75_dadada_1x400.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/script-dir/images/ui-bg_glass_75_e6e6e6_1x400.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/script-dir/images/ui-bg_glass_95_fef1ec_1x400.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/script-dir/images/ui-bg_highlight-soft_75_cccccc_1x100.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/script-dir/images/ui-icons_222222_256x240.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/script-dir/images/ui-icons_2e83ff_256x240.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/script-dir/images/ui-icons_454545_256x240.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/script-dir/images/ui-icons_888888_256x240.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/script-dir/images/ui-icons_cd0a0a_256x240.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/script-dir/jquery-3.5.1.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/script-dir/jquery-ui.min.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/script-dir/jquery-ui.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/script-dir/jquery-ui.structure.min.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/script.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/search.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/stylesheet.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/tag-search-index.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/docs/apidocs/tag-search-index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/type-search-index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/.vite/deps/_metadata.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/.vite/deps/axios.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/.vite/deps/axios.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/.vite/deps/chunk-4BPZ7PBZ.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/.vite/deps/chunk-4BPZ7PBZ.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/.vite/deps/chunk-DUDVYA5Z.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/.vite/deps/chunk-DUDVYA5Z.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/.vite/deps/chunk-G3PMV62Z.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/.vite/deps/chunk-G3PMV62Z.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/.vite/deps/chunk-JF7IVAG4.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/.vite/deps/chunk-JF7IVAG4.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/.vite/deps/lucide-react.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/.vite/deps/lucide-react.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/.vite/deps/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/.vite/deps/react-dom_client.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/.vite/deps/react-dom_client.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/.vite/deps/react-hot-toast.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/.vite/deps/react-hot-toast.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/.vite/deps/react-responsive-carousel.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/.vite/deps/react-responsive-carousel.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/.vite/deps/react-router-dom.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/.vite/deps/react-router-dom.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/.vite/deps/react-router.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/.vite/deps/react-router.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/.vite/deps/react.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/.vite/deps/react.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/docs/components_Filters.jsx.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/docs/components_Filters.jsx.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/docs/components_Hero.jsx.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/docs/components_Hero.jsx.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/docs/components_Navbar.jsx.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/docs/components_Navbar.jsx.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/docs/components_ProductCard.jsx.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/docs/components_ProductCard.jsx.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/docs/components_actions_useFetchProducts.js.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/docs/components_actions_useFetchProducts.js.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/docs/global.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/docs/global.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/docs/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/docs/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/docs/lib_types.js.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/docs/lib_types.js.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/Filters.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/Filters.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/Hero.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/Hero.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/Navbar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/Navbar.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/ProductCard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/ProductCard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/Scamazon_Coming_Soon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/actions/useFetchProducts.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/actions/useFetchProducts.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/SignUpPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/SignUpPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/ProductPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/ProductPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/ResultsPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/ResultsPage.jsx" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -25,7 +242,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="shopping-cart-henry" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -49,11 +266,8 @@
   <component name="MavenRunner">
     <option name="skipTests" value="true" />
   </component>
-  <component name="PackageJsonUpdateNotifier">
-    <dismissed value="$PROJECT_DIR$/backend/package.json" />
-  </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="ProjectErrors" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 2
@@ -67,52 +281,52 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.ShoppingCartApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Application.StoreApplication (2).executor&quot;: &quot;Run&quot;,
-    &quot;Application.StoreApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.spring-boot/docker-compose.yaml: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;JavaScript Debug.index.html.executor&quot;: &quot;Run&quot;,
-    &quot;Maven.spring-boot [install].executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;Node.js.AddToCartButton.jsx.executor&quot;: &quot;Run&quot;,
-    &quot;Node.js.App.js.executor&quot;: &quot;Run&quot;,
-    &quot;Node.js.App.jsx.executor&quot;: &quot;Run&quot;,
-    &quot;Node.js.ProductList.jsx.executor&quot;: &quot;Run&quot;,
-    &quot;Node.js.main.jsx.executor&quot;: &quot;Run&quot;,
-    &quot;Notification.DisplayName-DoNotAsk-DatabaseConfigFileWatcher.found&quot;: &quot;New/updated database configurations found&quot;,
-    &quot;Notification.DoNotAsk-DatabaseConfigFileWatcher.found&quot;: &quot;true&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Spring Boot.ShoppingCartApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.StoreApplication.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;ordering-henry&quot;,
-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/wlock/OneDrive/Documents/Runtime-Rebels-Final/Runtime-Rebels-Project-1/backend/src/main/java/com/runtimerebels/store/services&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\wlock\\AppData\\Roaming\\JetBrains\\IntelliJIdea2025.2\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.ShoppingCartApplication.executor": "Run",
+    "Application.StoreApplication (2).executor": "Run",
+    "Application.StoreApplication.executor": "Run",
+    "Docker.spring-boot/docker-compose.yaml: Compose Deployment.executor": "Run",
+    "JavaScript Debug.index.html.executor": "Run",
+    "Maven.spring-boot [install].executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Node.js.AddToCartButton.jsx.executor": "Run",
+    "Node.js.App.js.executor": "Run",
+    "Node.js.App.jsx.executor": "Run",
+    "Node.js.ProductList.jsx.executor": "Run",
+    "Node.js.main.jsx.executor": "Run",
+    "Notification.DisplayName-DoNotAsk-DatabaseConfigFileWatcher.found": "New/updated database configurations found",
+    "Notification.DoNotAsk-DatabaseConfigFileWatcher.found": "true",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Spring Boot.ShoppingCartApplication.executor": "Run",
+    "Spring Boot.StoreApplication.executor": "Run",
+    "git-widget-placeholder": "Merging ordering-henry",
+    "junie.onboarding.icon.badge.shown": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/wlock/OneDrive/Documents/Runtime-Rebels-Final/Runtime-Rebels-Project-1/backend/src/main/java/com/runtimerebels/store/services",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "to.speed.mode.migration.done": "true",
+    "ts.external.directory.path": "C:\\Users\\wlock\\AppData\\Roaming\\JetBrains\\IntelliJIdea2025.2\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mongo&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mongo"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\wlock\OneDrive\Documents\Runtime-Rebels-Final\Runtime-Rebels-Project-1\backend\src\main\java\com\runtimerebels\store\services" />
