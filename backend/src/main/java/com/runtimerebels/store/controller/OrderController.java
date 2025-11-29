@@ -98,6 +98,8 @@ public class OrderController {
     public ResponseEntity<Order> createOrder(@PathVariable String userId, @RequestBody Order order) {
         System.out.println("Received order: " + order);
 
+        order.setUserId(userId);
+
         // simple duplicate check by sessionId
         if (order.getStripeSessionId() != null) {
             List<Order> existingOrders = orderRepository.findByStripeSessionId(order.getStripeSessionId());
