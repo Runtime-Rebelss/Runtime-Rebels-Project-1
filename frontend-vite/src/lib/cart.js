@@ -192,6 +192,58 @@ export async function removeItem(productId) {
     }
 }
 
+// Method to handle checking out
+export async function handleCheckout(userId, signal) {
+    const userEmail = localStorage.get("userEmail");
+
+    if (!userId) {
+        const {items} = loadGuestCart();
+        // Save the order info
+        localStorage.setItem("guestOrder", JSON.stringify({items}));
+
+        const cartItems = items.map(item => ({
+                name: item.name,
+                unitAmount: Math.round(item.price * 100),
+                currency: "usd",
+                quantity: item.quantity,
+        }));
+
+        const response = await api.post("/payments/create-checkout-session", {
+            items: cartItems,
+            customerEmail: localStorage.getItem("userEmail") || null,
+            savePaymentMethod: false,
+        }, {signal});
+        return response.data.url;
+    }
+
+    const serverItems = await loadServerCart(userId, signal);
+
+    const cartItems = serverItems.map(item => ({
+        name: item.name,
+        unitAmount: Math.round(item.price * 100),
+        currency: "usd",
+        quantity: item.quantity,
+    }));
+
+    const response = await api.post("/payments/create-checkout-session", {
+        items: cartItems,
+        customerEmail: userEmail,
+        savePaymentMethod: true,
+    }, {signal});
+
+    return response.data.url;
+
+
+}
+
+export const clearGuestCart = () => {
+    if (!isGuest) return;
+    const ok = window.confirm('Clear your guest cart? This will remove all items stored on this device.');
+    if (!ok) return;
+    cartLib.saveGuestCart([]);
+    setCartItems([]);
+};
+
 export default {
     loadGuestCart, saveGuestCart, loadServerCart, addToCart, updateQuantity,
     removeItem,

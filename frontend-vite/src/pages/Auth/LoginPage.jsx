@@ -78,6 +78,7 @@ const LoginPage = () => {
 
             navigate('/', { replace: true });
             toast.success('Login successfully!');
+            //localStorage.remove("guestOrder");
         } catch (err) {
             const status = err?.response?.status;
             const serverMsg = err?.response?.data?.message || err?.response?.data?.error;

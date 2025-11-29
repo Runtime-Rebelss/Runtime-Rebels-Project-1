@@ -196,73 +196,23 @@ const CartPage = () => {
         }
     };
 
-    // Method to handle user Checkouts (move to cart)
-    const handleUserCheckout = async () => {
+    const handleCheckout = async () => {
+        const controller = new AbortController();
+
         try {
             setLoading(true);
-            const cartItems = await cartLib.loadServerCart(userId);
-
-            const items = cartItems.map((item) => ({
-                name: item.name,
-                unitAmount: Math.round(item.price * 100),
-                currency: "usd",
-                quantity: item.quantity,
-            }));
-
-            const response = await api.post("/payments/create-checkout-session", {
-                items,
-                userId,
-                savePaymentMethod: true,
-            });
-
-            window.history.pushState({ fromStripe: true }, "",  "/order-cancel");
-
-            window.location.href = response.data.url;
-        } catch (error) {
-            console.error("Error starting checkout:", error);
-            alert("Failed to start checkout. Please try again.");
+            const url = await cartLib.handleCheckout(userId, controller.signal);
+            window.location.href = url;
+        } catch (err) {
+            if (err?.name === "AbortError") {
+                console.log("Checkout aborted");
+                return;
+            }
+            console.error("Checkout failed:", err);
+            alert("Failed to start checkout!!")
         } finally {
             setLoading(false);
         }
-    };
-    // Move to cart
-    const handleGuestCheckout = async () => {
-        try {
-            setLoading(true);
-            const cartItems = cartLib.loadGuestCart();
-            //  Save the current cart so the success page can access it later
-            localStorage.setItem("guestOrder", JSON.stringify({ items: cartItems }));
-
-            const items = cartItems.map((item) => ({
-                name: item.name,
-                unitAmount: Math.round(item.price * 100),
-                currency: "usd",
-                quantity: item.quantity,
-            }));
-
-            const response = await api.post("/payments/create-checkout-session", {
-                items,
-                customerEmail: localStorage.getItem("userEmail") || null,
-                savePaymentMethod: false,
-            });
-
-            window.history.pushState({ fromStripe: true }, "",  "/order-cancel");
-
-            window.location.href = response.data.url;
-        } catch (error) {
-            console.error("Error starting checkout:", error);
-            alert("Failed to start checkout. Please try again.");
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const clearGuestCart = () => {
-        if (!isGuest) return;
-        const ok = window.confirm('Clear your guest cart? This will remove all items stored on this device.');
-        if (!ok) return;
-        cartLib.saveGuestCart([]);
-        setCartItems([]);
     };
 
     const proceedToCheckout = async () => {
