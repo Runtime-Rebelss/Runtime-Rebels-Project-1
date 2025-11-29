@@ -8,6 +8,7 @@ const OrderSuccessPage = () => {
     const [cartItems, setCartItems] = useState([]);
     const [total, setTotal] = useState(0);
     const [confirmation, setConfirmation] = useState("");
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -17,21 +18,31 @@ const OrderSuccessPage = () => {
         const params = new URLSearchParams(window.location.search);
         const status = params.get('status');
 
-        // Try to load the last order cart first (fallback to guestCart)
-        const savedOrder = localStorage.getItem("lastOrderCart");
-        const savedCart = savedOrder
-            ? JSON.parse(savedOrder).items || []
-            : JSON.parse(localStorage.getItem("guestCart") || "{}").items || [];
-
-        setCartItems(savedCart);
-        const totalPrice = savedCart.reduce(
-            (sum, it) => sum + (it.price || 0) * (it.quantity || 0),
-            0
-        );
-        setTotal(totalPrice);
         const userId = localStorage.getItem("userId");
-        api.post(`/orders/confirm/${userId}`);
 
+        // Try to load the last order cart first (fallback to guestCart)
+        try {
+            setLoading(true);
+        if (!userId) {
+            const savedOrder = localStorage.getItem("guestOrder");
+            const savedCart = savedOrder
+                ? JSON.parse(savedOrder).items || []
+                : JSON.parse(localStorage.getItem("guestCart") || "{}").items || [];
+
+            setCartItems(savedCart);
+            const totalPrice = savedCart.reduce(
+                (sum, it) => sum + (it.price || 0) * (it.quantity || 0),
+                0
+            );
+            setTotal(totalPrice);
+        }
+            api.post(`/orders/confirm/${userId}`);
+    } catch (error) {
+        console.error("Failed to get guestOrder", error);
+        toast.error("Failed to get guestOrder");
+    } finally {
+        setLoading(false);
+    }
 
         // Clear only guestCart but leave lastOrderCart (so data persists for success)
         localStorage.removeItem("guestCart");

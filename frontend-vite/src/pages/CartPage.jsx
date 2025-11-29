@@ -166,8 +166,7 @@ const CartPage = () => {
             await api.put(`/carts/update`, null, { params: { userId, productId, quantity: newQty}});
 
             setCartItems(cartItems.map((it) =>
-                it.id === productId ? { ...it, quantity: newQty } : it
-            ));
+                it.id === productId ? { ...it, quantity: newQty } : it));
             // Makes navbar update in real-time
             window.dispatchEvent(new Event("cart-updated"));
         } catch (err) {
@@ -411,7 +410,7 @@ const CartPage = () => {
                                         </button>
                                         <button
                                             className="btn btn-outline w-full"
-                                            onClick={() => navigate("/orders")}
+                                            onClick={() => navigate("/products")}
                                         >
                                             Continue Shopping
                                         </button>

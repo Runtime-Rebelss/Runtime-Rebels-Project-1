@@ -72,7 +72,6 @@ const CheckoutPage = () => {
                     console.error(' Error posting order:', err);
                 }
             };
-
             saveOrder();
         }
     }, []);
