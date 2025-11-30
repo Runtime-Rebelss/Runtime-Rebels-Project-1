@@ -13,14 +13,6 @@ const LoginPage = () => {
     const navigate = useNavigate();
     const acRef = useRef(null);
 
-    // If already logged in
-    useEffect(() => {
-        const already = localStorage.getItem('userId');
-        if (already) {
-            void preloadCart(already);
-        }
-    }, []);
-
     const preloadCart = async (userId) => {
         try {
             const res = await fetch(`/api/carts/${encodeURIComponent(userId)}`);
@@ -39,7 +31,7 @@ const LoginPage = () => {
     const extractUserId = (data) =>
         data?.userId || data?.id || data?._id || data?.user?.id || data?.user?._id || null;
 
-    const handleLogin = async (e) => {
+    const handleLogin = async(e) => {
         e.preventDefault();
         setToastMsg('');
         setLoading(true);
@@ -73,7 +65,15 @@ const LoginPage = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }
+
+    // If already logged in
+    useEffect(() => {
+        const already = localStorage.getItem('userId');
+        if (already) {
+            void preloadCart(already);
+        }
+    }, []);
 
     return (
         <div className="min-h-screen bg-base-200">
@@ -109,16 +109,24 @@ const LoginPage = () => {
                                 autoComplete="current-password"
                             />
 
+                            <div className="flex w-full flex-col">
+                                {/* Login Button */}
+                                <button type="submit" className="btn btn-neutral w-full mt-4" disabled={loading}>
+                                    {loading ? 'Logging in…' : 'Sign in'}
+                                </button>
+                                <div className="divider">Don't have an account?</div>
+                                {/* Signup Button */}
+                                <button type="button" onClick={() => navigate("/signup")} className="btn btn-neutral w-full mt-4" disabled={loading}>
+
+                                    {loading ? 'Logging in…' : 'Sign up'}
+                                </button>
+                            </div>
+
                             {!!toastMsg && (
                                 <div role="alert" className="alert alert-error mt-3">
                                     <span>{toastMsg}</span>
                                 </div>
                             )}
-
-                            {/* Login Button */}
-                            <button type="submit" className="btn btn-neutral w-full mt-4" disabled={loading}>
-                                {loading ? 'Logging in…' : 'Sign in'}
-                            </button>
                         </fieldset>
                     </form>
                 </div>

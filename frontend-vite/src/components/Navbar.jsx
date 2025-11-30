@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
-import {ShoppingCart, Search} from "lucide-react";
+import {ShoppingCart, Search, User} from "lucide-react";
 import { useParams, useNavigate, useSearchParams } from 'react-router';
 import cartLib from "../lib/cart.js";
 import api from "../lib/axios.js";
@@ -221,9 +221,17 @@ const Navbar = ({ hideCart = false, hideCartCount = false }) => {
                 </button>
 
                 {/* Account (simple) */}
+
+                {/* Orders */}
+                <Link to="/orders">
+                    <button className="btn btn-ghost">Orders</button>
+                </Link>
+
                 {userId ? (
                     <div className="dropdown dropdown-hover">
-                        <div tabIndex={0} role="button" className="btn btn-ghost">{userEmail} ⬇️</div>
+                        <div tabIndex={0} role="button" className="btn btn-ghost">
+                            <User />
+                        </div>
                         <ul tabIndex="-1"
                             className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
                             <li>
@@ -241,11 +249,6 @@ const Navbar = ({ hideCart = false, hideCartCount = false }) => {
                         <button className="btn btn-ghost">Sign in</button>
                     </Link>
                 )}
-
-                {/* Orders */}
-                <Link to="/orders">
-                    <button className="btn btn-ghost">Orders</button>
-                </Link>
 
                 {/* Cart */}
                 <Link to="/cart" className="btn btn-ghost btn-circle relative">

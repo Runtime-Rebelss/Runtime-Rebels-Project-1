@@ -84,7 +84,7 @@ const OrderPage = () => {
                     </div>
                 ) : (
                     <div className="space-y-6">
-                        {orders.reverse().map((order) => {
+                        {orders.map((order) => {
                             const total =
                                 order.total ??
                                 (order.items || []).reduce(
