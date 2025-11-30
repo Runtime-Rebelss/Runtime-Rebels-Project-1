@@ -12,6 +12,7 @@ export function readLocalOrders() {
 
         // Legacy shape: { items: [...] } — treat as a single “order”
         if (data && Array.isArray(data.items)) {
+            console.log(data.items)
             return [{
                 id: "local-legacy",
                 createdAt: new Date().toISOString(),
@@ -66,7 +67,7 @@ export async function loadServerOrders(userId, signal) {
                             Number(product?.finalPrice) ||
                             Number(product?.price) ||
                             0;
-
+                        console.log(product.name);
                         return {
                             id: productId,
                             name: product?.name ?? "Item",

@@ -198,9 +198,9 @@ export async function handleCheckout(userId, signal) {
 
     if (!userId) {
         const {items} = loadGuestCart();
-        // Save the order info
+        // Save the order info as an array of items (OrderSuccessPage expects an array)
         localStorage.removeItem("pendingGuestOrder");
-        localStorage.setItem("pendingGuestOrder", JSON.stringify({items}));
+        localStorage.setItem("pendingGuestOrder", JSON.stringify(items));
 
         const cartItems = items.map(item => ({
                 name: item.name,

@@ -117,7 +117,7 @@ const OrderPage = () => {
                                         <div>
                                             <div className="font-medium">Ship to</div>
                                             <div className="opacity-70">
-                                                {order.shipTo?.firstName.lastName || userEmail}
+                                                {order.shipTo?.fullName || userEmail}
                                             </div>
                                         </div>
                                         <div className="md:text-right">

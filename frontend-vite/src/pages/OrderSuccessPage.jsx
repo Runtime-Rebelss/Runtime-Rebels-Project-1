@@ -10,6 +10,7 @@ const OrderSuccessPage = () => {
     const [total, setTotal] = useState(0);
     const [confirmation, setConfirmation] = useState("");
     const navigate = useNavigate();
+    const fullName = localStorage.getItem("userFullName") || "Valued Customer";
     const userId = localStorage.getItem("userId");
     const userEmail = localStorage.getItem("userEmail");
     const didRun = useRef(false);
@@ -31,7 +32,17 @@ const OrderSuccessPage = () => {
 
             if (!userId) {
                 if (sessionStorage.getItem(guestConfirmKey)) {
-                    const items = JSON.parse(localStorage.getItem("pendingGuestOrder") || "[]");
+                    // Accept either an array or an object with { items: [...] }
+                    let items = [];
+                    try {
+                        const raw = localStorage.getItem("pendingGuestOrder") || "[]";
+                        const parsed = JSON.parse(raw);
+                        if (Array.isArray(parsed)) items = parsed;
+                        else if (parsed && Array.isArray(parsed.items)) items = parsed.items;
+                    } catch (e) {
+                        items = [];
+                    }
+
                     const total = items.reduce(
                         (s, it) => s + (Number(it.price) || 0) * (Number(it.quantity) || 1), 0
                     );
@@ -45,6 +56,7 @@ const OrderSuccessPage = () => {
                     const parsed = raw ? JSON.parse(raw) : [];
 
                     if (Array.isArray(parsed)) items = parsed;
+                    else if (parsed && Array.isArray(parsed.items)) items = parsed.items;
 
                 } catch (e) {
                     console.warn("Failed to parse pendingGuestOrder:", e);
@@ -115,7 +127,7 @@ const OrderSuccessPage = () => {
 
             // create backend order
             const orderPayload = {
-                firstName,
+                fullName,
                 userEmail,
                 userId,
                 productIds: pending.map(i => i.id || i.productId),
