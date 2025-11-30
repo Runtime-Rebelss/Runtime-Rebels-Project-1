@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Fixed conflict issues">
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/Navbar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/Navbar.jsx" afterDir="false" />
+    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Added untracked files">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/OrderPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/OrderPage.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -285,7 +285,7 @@
       <workItem from="1763666284092" duration="13143000" />
       <workItem from="1764405959254" duration="3247000" />
       <workItem from="1764441248702" duration="16650000" />
-      <workItem from="1764460598757" duration="2918000" />
+      <workItem from="1764460598757" duration="3547000" />
     </task>
     <task id="LOCAL-00001" summary="Updated Code">
       <option name="closed" value="true" />
@@ -623,7 +623,23 @@
       <option name="project" value="LOCAL" />
       <updated>1764463304346</updated>
     </task>
-    <option name="localTasksCounter" value="43" />
+    <task id="LOCAL-00043" summary="Fixed conflict issues">
+      <option name="closed" value="true" />
+      <created>1764463827992</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1764463827992</updated>
+    </task>
+    <task id="LOCAL-00044" summary="Added untracked files">
+      <option name="closed" value="true" />
+      <created>1764463976893</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1764463976893</updated>
+    </task>
+    <option name="localTasksCounter" value="45" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -705,7 +721,8 @@
     <MESSAGE value="Fixed duplication issue with orders and refactored code for OrderPage, CheckoutPage, and CartPage" />
     <MESSAGE value="Merged main into ordering-henry" />
     <MESSAGE value="Fixed conflict issues" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed conflict issues" />
+    <MESSAGE value="Added untracked files" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added untracked files" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
