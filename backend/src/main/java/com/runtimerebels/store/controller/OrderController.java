@@ -20,12 +20,15 @@ import com.runtimerebels.store.models.Order;
 import com.runtimerebels.store.dao.OrderRepository;
 
 /**
- *   order controller
+ * REST controller for managing customer orders.
+ * Handles endpoints for creating new orders and retrieving existing ones.
+ * Communicates with the {@link OrderRepository} for persistence.
  *
- */ /**
- *  order controller
+ * Base URL: /api/orders
  *
+ * @author Haley Kenney, Henry Locke
  */
+
 @RestController
 @RequestMapping("/api/orders")
 public class OrderController {

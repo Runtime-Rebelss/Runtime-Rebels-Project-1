@@ -2,9 +2,6 @@ import React, {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 import {ShoppingCart, Search} from "lucide-react";
 import { useParams, useNavigate } from 'react-router';
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { ShoppingCart, Search } from "lucide-react";
 import cartLib from "../lib/cart.js";
 import api from "../lib/axios.js";
 import toast from 'react-hot-toast'
@@ -14,7 +11,7 @@ import { buildMergedParams } from "../lib/query";
 /**
  * Navbar component renders top navigation with category links, search and cart.
  *
- * @author Frank Gonzalez, Haley Kenney
+ * @author Frank Gonzalez, Haley Kenney, Henry Locke
  * @since 11-19-2025
  * @returns {JSX.Element}
  */
@@ -117,7 +114,6 @@ const Navbar = ({ hideCart = false, hideCartCount = false }) => {
             setLoading(false);
         }
     }
-
 
         const params = buildMergedParams(searchParams, { search: trimmed });
         navigate(`/results?${params.toString()}`);
