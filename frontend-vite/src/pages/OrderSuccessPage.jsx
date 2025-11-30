@@ -115,6 +115,7 @@ const OrderSuccessPage = () => {
 
             // create backend order
             const orderPayload = {
+                firstName,
                 userEmail,
                 userId,
                 productIds: pending.map(i => i.id || i.productId),
@@ -132,6 +133,7 @@ const OrderSuccessPage = () => {
             // Needs fixed
             setTotal(orderPayload.totalPrice.reduce((s, t) => s + Number(t), 0));
 
+            localStorage.removeItem("pendingServerOrder");
             window.dispatchEvent(new Event("cart-updated"));
 
         };

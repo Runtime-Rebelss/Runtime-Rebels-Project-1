@@ -47,11 +47,13 @@ const SignUpPage = () => {
         setLoading(true);
 
         try {
-            const res = await api.post('/auth/signup', { email, password }, {withCredentials: true});
+            const res = await api.post('/auth/signup', { firstName, lastName, email, password }, {withCredentials: true});
             const data = res?.data ?? {};
 
             const userId = extractUserId(data);
             const userEmail = data?.email || email;
+            setFirstName(firstName);
+            setLastName(lastName);
 
             if (!userId) {
                 setToastMsg("Login response missing user id.");

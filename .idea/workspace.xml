@@ -6,10 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Added untracked files">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/Navbar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/Navbar.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/LoginPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/LoginPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/dto/LoggedUserResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/dto/LoggedUserResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/services/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/services/AuthService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/SignUpPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/SignUpPage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/OrderPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/OrderPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/OrderSuccessPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/OrderSuccessPage.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -288,7 +289,7 @@
       <workItem from="1763666284092" duration="13143000" />
       <workItem from="1764405959254" duration="3247000" />
       <workItem from="1764441248702" duration="16650000" />
-      <workItem from="1764460598757" duration="7777000" />
+      <workItem from="1764460598757" duration="11691000" />
     </task>
     <task id="LOCAL-00001" summary="Updated Code">
       <option name="closed" value="true" />
@@ -650,7 +651,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764464349331</updated>
     </task>
-    <option name="localTasksCounter" value="46" />
+    <task id="LOCAL-00046" summary="Added untracked files">
+      <option name="closed" value="true" />
+      <created>1764468460380</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1764468460380</updated>
+    </task>
+    <option name="localTasksCounter" value="47" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

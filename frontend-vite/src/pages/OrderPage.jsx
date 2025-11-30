@@ -59,6 +59,8 @@ const OrderPage = () => {
         };
     }, []);
 
+    const revOrder = orders.slice().reverse();
+
     return (
         <div className="min-h-screen bg-base-200">
             <Navbar />
@@ -84,7 +86,8 @@ const OrderPage = () => {
                     </div>
                 ) : (
                     <div className="space-y-6">
-                        {orders.map((order) => {
+
+                        {revOrder.map((order) => {
                             const total =
                                 order.total ??
                                 (order.items || []).reduce(
@@ -114,7 +117,7 @@ const OrderPage = () => {
                                         <div>
                                             <div className="font-medium">Ship to</div>
                                             <div className="opacity-70">
-                                                {order.shipTo?.fullName || userEmail}
+                                                {order.shipTo?.firstName.lastName || userEmail}
                                             </div>
                                         </div>
                                         <div className="md:text-right">

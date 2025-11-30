@@ -47,8 +47,8 @@ public class AuthService {
         User user = getUserByToken(request, jwtService, this.userRepository);
         return LoggedUserResponse.builder()
                 .id(user.getId())
-                .firstname(user.getFirstName())
-                .lastname(user.getLastName())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
                 .email(user.getEmail())
                 .mobileNumber(user.getMobileNumber())
                 .build();
