@@ -28,13 +28,13 @@ const ProductPage = () => {
         fetchProduct();
     }, [id]);
 
-  if (loading) {
-    return (
-        <div className="flex items-center justify-center h-screen">
-            <span className="loading loading-spinner loading-xl"></span>
-        </div>
-    )
-  }
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center h-screen">
+                <span className="loading loading-spinner loading-xl"></span>
+            </div>
+        )
+    }
 
     if (!product) return <div className="p-6 text-center">Product not found</div>;
 
@@ -58,41 +58,41 @@ const ProductPage = () => {
                         {product.category}
                     </p>
 
-                {/* Name */}
-                <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
+                    {/* Name */}
+                    <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
 
-                {/* Price */}
-                <p className="text-2xl text-gray-800 font-semibold mb-4">
-                    ${Number(product.price).toFixed(2)}
-                </p>
+                    {/* Price */}
+                    <p className="text-2xl text-gray-800 font-semibold mb-4">
+                        ${Number(product.price).toFixed(2)}
+                    </p>
 
-                {/* Description */}
-                <p className="text-gray-600 mb-6">{product.description}</p>
+                    {/* Description */}
+                    <p className="text-gray-600 mb-6">{product.description}</p>
 
-                {/* Add to bag */}
-                <button
-                    onClick={async () => {
-                        try {
-                            const userId = localStorage.getItem('userEmail');
-                            await cart.addToCart({ userId, productId: product.id ?? product._id ?? product.productId ?? String(product.id), name: product.name, price: product.price, quantity: 1, image: product.imageUrl || product.image });
-                            toast.success(`Added ${product.name} to bag!`);
-                        } catch (err) {
-                            console.error('Add to bag failed', err);
-                            toast.error('Failed to add to cart');
-                        }
-                    }}
-                    className="btn btn-primary btn-block text-white text-lg"
-                >
-                    Add to Bag
-                </button>
+                    {/* Add to bag */}
+                    <button
+                        onClick={async () => {
+                            try {
+                                const userId = localStorage.getItem('userId');
+                                await cart.addToCart({ userId, productId: product.id ?? product._id ?? product.productId ?? String(product.id), name: product.name, price: product.price, quantity: 1, image: product.imageUrl || product.image });
+                                toast.success(`Added ${product.name} to bag!`);
+                            } catch (err) {
+                                console.error('Add to bag failed', err);
+                                toast.error('Failed to add to cart');
+                            }
+                        }}
+                        className="btn btn-primary btn-block text-white text-lg"
+                    >
+                        Add to Bag
+                    </button>
 
-                {/* Back button */}
-                <button
-                    onClick={() => navigate(-1)}
-                    className="mt-4 text-gray-600 underline text-sm hover:text-gray-900"
-                >
-                    ← Back to Products
-                </button>
+                    {/* Back button */}
+                    <button
+                        onClick={() => navigate(-1)}
+                        className="mt-4 `text-gray-600 underline text-sm hover:text-gray-900`"
+                    >
+                        ← Back to Products
+                    </button>
                 </div>
             </div>
         </div>

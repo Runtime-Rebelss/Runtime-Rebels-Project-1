@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 import {ShoppingCart, Search} from "lucide-react";
-import { useParams, useNavigate } from 'react-router';
+import { useParams, useNavigate, useSearchParams } from 'react-router';
 import cartLib from "../lib/cart.js";
 import api from "../lib/axios.js";
 import toast from 'react-hot-toast'
@@ -99,6 +99,10 @@ const Navbar = ({ hideCart = false, hideCartCount = false }) => {
     const handleSearch = (term) => {
         const trimmed = (term || '').trim();
         if (!trimmed) return;
+        const params = buildMergedParams(searchParams, { search: trimmed });
+        navigate(`/results?${params.toString()}`);
+    };
+
     const handleLogout = () => {
         try {
             localStorage.removeItem("userId");
@@ -114,10 +118,6 @@ const Navbar = ({ hideCart = false, hideCartCount = false }) => {
             setLoading(false);
         }
     }
-
-        const params = buildMergedParams(searchParams, { search: trimmed });
-        navigate(`/results?${params.toString()}`);
-    };
 
     // Handle search submission
     const onSubmitSearch = (e) => {
