@@ -105,7 +105,8 @@ public class ProductController {
           Criteria searchCriteria = new Criteria().orOperator(
               Criteria.where("name").regex(regex),
               Criteria.where("slug").regex(regex),
-              Criteria.where("description").regex(regex)
+              Criteria.where("description").regex(regex),
+              Criteria.where("categories").regex(regex)
           );
           criteriaList.add(searchCriteria);
       }
