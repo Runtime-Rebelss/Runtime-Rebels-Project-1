@@ -33,12 +33,12 @@ const Hero = () => {
                     />
                     <div className="absolute inset-0 bg-black/40 flex flex-col justify-center items-start pl-10 text-white">
                         <h1 className="text-4xl md:text-5xl font-bold mb-4">
-                            Step into your style
+                            Step Up Your Game
                         </h1>
                         <p className="mb-6 text-lg max-w-md text-justify leading-relaxed">
-                            Discover our latest collection of shoes, apparel, and accessories.
+                            Discover our latest sports footwear and equipment to elevate your performance.
                         </p>
-                        <a href="/products" className="btn btn-primary">
+                        <a href="/results?categories=sports%2Band%2Boutdoor" className="btn btn-primary">
                             Shop Now
                         </a>
                     </div>
@@ -47,7 +47,7 @@ const Hero = () => {
                 {/* Slide 2 */}
                 <div className="relative">
                     <img
-                        src="https://images.unsplash.com/photo-1514996937319-344454492b37"
+                        src="https://images.unsplash.com/photo-1724184888115-e76e42f53dcc?q=80&w=2532&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                         alt="Clothing"
                         className="object-cover h-[400px] md:h-[500px] lg:h-[600px] w-full"
                     />
@@ -58,7 +58,7 @@ const Hero = () => {
                         <p className="mb-6 text-lg max-w-md text-justify leading-relaxed">
                             Refresh your wardrobe with the latest trends and timeless pieces.
                         </p>
-                        <a href="/products" className="btn btn-primary">
+                        <a href="/results?categories=clothing" className="btn btn-primary">
                             Explore Now
                         </a>
                     </div>
@@ -67,19 +67,19 @@ const Hero = () => {
                 {/* Slide 3 */}
                 <div className="relative">
                     <img
-                        src="https://images.unsplash.com/photo-1606813903219-1b5d0c68af97"
-                        alt="Accessories"
+                        src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                        alt="Tech Accessories"
                         className="object-cover h-[400px] md:h-[500px] lg:h-[600px] w-full"
                     />
                     <div className="absolute inset-0 bg-black/40 flex flex-col justify-center items-start pl-10 text-white">
                         <h1 className="text-4xl md:text-5xl font-bold mb-4">
-                            Complete Your Look
+                            Need a Tech Upgrade?
                         </h1>
                         <p className="mb-6 text-lg max-w-md text-justify leading-relaxed">
-                            From statement accessories to everyday essentials — find it all here.
+                            From hard drives to cables, find the accessories you need to stay connected.
                         </p>
-                        <a href="/products" className="btn btn-primary">
-                            Shop Accessories
+                        <a href="/results?categories=electronics" className="btn btn-primary">
+                            Shop Electronics
                         </a>
                     </div>
                 </div>
