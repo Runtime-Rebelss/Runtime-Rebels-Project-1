@@ -63,11 +63,21 @@ const OrderSuccessPage = () => {
                     items = [];
                 }
 
+                // Normalize items so they contain an `id` field (used by Product routes)
+                const normalizedItems = (items || []).map((it) => ({
+                    id: it.id || it.productId || it._id || "",
+                    productId: it.productId || it.id || it._id || "",
+                    name: it.name || it.productName || "Item",
+                    image: it.image || it.imageUrl || "",
+                    price: Number(it.price || it.unitPrice || 0),
+                    quantity: Number(it.quantity || it.qty || 1),
+                }));
+
                 const guestOrder = {
                     id: "guest-" + Date.now(),
                     createdAt: new Date(),
-                    items,
-                    total: items.reduce((sum, it) => sum + it.price * it.quantity, 0),
+                    items: normalizedItems,
+                    total: normalizedItems.reduce((sum, it) => sum + (Number(it.price) || 0) * (Number(it.quantity) || 1), 0),
                     status: "Paid",
                     shipTo: {fullName: localStorage.getItem("userEmail") || "Guest Checkout"}
                 };

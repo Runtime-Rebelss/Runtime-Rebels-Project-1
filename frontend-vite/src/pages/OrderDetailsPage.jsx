@@ -146,7 +146,7 @@ const OrderDetailsPage = () => {
                                     </div>
                                     <button
                                         className="btn btn-outline btn-sm"
-                                        onClick={() => navigate(`/product/${product.id || ""}`)}
+                                        onClick={() => navigate(`/product/${product.id || product.productId || product._id || ""}`)}
                                     >
                                         View item
                                     </button>
