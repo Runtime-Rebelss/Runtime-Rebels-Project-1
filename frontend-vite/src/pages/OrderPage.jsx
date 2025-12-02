@@ -4,6 +4,7 @@ import { ShoppingBag } from "lucide-react";
 import Navbar from "../components/Navbar";
 import api from "../lib/axios";
 import orderLib from "../lib/orders.js";
+import orderService from "../lib/orderService";
 
 const OrderPage = () => {
     const [orders, setOrders] = useState([]);
@@ -14,32 +15,14 @@ const OrderPage = () => {
         const controller = new AbortController();
 
         const fetchOrders = async () => {
-            const userId = localStorage.getItem("userId");
-            // If Guest user
-            if (!userId) {
-                try {
-                    setLoading(true);
-                    // Gets local orders
-                    const guestOrder = orderLib.readLocalOrders();
-                    setOrders(Array.isArray(guestOrder) ? guestOrder : [guestOrder]);
-                } catch (error) {
-                    console.error("Failed to load guest orders", error);
-                    setOrders([]);
-                } finally {
-                    setLoading(false);
-                }
-                // Makes it not fetch server orders
-                return;
-            }
-
             try {
                 setLoading(true);
-                const uId = localStorage.getItem("userId");
-                const userOrders = await orderLib.loadServerOrders(uId, controller.signal);
-                setOrders(userOrders);
+                const orders = await orderService.fetchOrders(controller.signal);
+                setOrders(Array.isArray(orders) ? orders : [orders]);
             } catch (err) {
                 if (err?.code !== "ERR_CANCELED") {
                     console.warn("orders fetch failed:", err);
+                    setOrders([]);
                 }
             } finally {
                 setLoading(false);

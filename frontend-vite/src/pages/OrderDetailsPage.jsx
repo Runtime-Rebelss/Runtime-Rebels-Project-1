@@ -3,6 +3,7 @@ import {useParams, useNavigate} from "react-router-dom";
 import Navbar from "../components/Navbar";
 import api from "../lib/axios";
 import orderLib from "../lib/orders.js";
+import orderService from "../lib/orderService";
 
 const fmtUSD = (n) =>
     `$${Number(n || 0).toLocaleString(undefined, {
@@ -29,29 +30,18 @@ const OrderDetailsPage = () => {
         const controller = new AbortController();
 
         const fetchOrders = async () => {
-            const userId = localStorage.getItem("userId");
-
-            setLoading(true);
-            if (!userId) {
-                const orders = orderLib.readLocalOrders();
-                const order = orders.find(o => o.id === orderId);
+            try {
+                setLoading(true);
+                const { order, products, items } = await orderService.fetchOrderDetails(orderId, controller.signal);
                 if (order) {
                     setOrders(order);
-                    setItems(order.items || []);
-                    setProducts(order.items || []);
+                    setItems(items ?? products ?? order.items ?? []);
+                    setProducts(products ?? items ?? order.items ?? []);
+                } else {
+                    setOrders(null);
+                    setItems([]);
+                    setProducts([]);
                 }
-                setLoading(false);
-                return;
-            }
-
-            try {
-                const res = await api.get(`/orders/details/${encodeURIComponent(orderId)}`, {
-                    signal: controller.signal,
-                });
-                setOrders(res.data.order);
-                setItems(res.data.products);
-                setProducts(res.data.products);
-
             } catch (err) {
                 if (err?.code !== "ERR_CANCELED") {
                     console.warn("orders fetch failed:", err);
