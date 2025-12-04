@@ -51,6 +51,11 @@ const LoginPage = () => {
             localStorage.setItem("userId", userId);
             localStorage.setItem("userEmail", userEmail);
 
+            if (userEmail === "admin@gmail.com") {
+                localStorage.setItem("adminEmail", userEmail);
+                localStorage.removeItem("userEmail");
+            }
+
             await preloadCart(userId);
 
             navigate('/', { replace: true });
