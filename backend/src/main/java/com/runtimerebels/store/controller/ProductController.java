@@ -93,12 +93,14 @@ public class ProductController {
       List<Criteria> criteriaList = new ArrayList<>();
 
       // If categories were supplied, match documents that have ALL of them (intersection)
-      if (categories != null && !categories.isEmpty()) {
+      if (categories != null && 
+        !categories.isEmpty()) {
           criteriaList.add(Criteria.where("categories").all(categories));
       }
 
       // If a search term is supplied, do a case-insensitive regex search across relevant fields
-      if (searchTerm != null && !searchTerm.isBlank()) {
+      if (searchTerm != null && 
+        !searchTerm.isBlank()) {
           String escaped = Pattern.quote(searchTerm.trim()); // avoid regex injection
           Pattern regex = Pattern.compile(escaped, Pattern.CASE_INSENSITIVE);
           // Example: search name, slug, and description
