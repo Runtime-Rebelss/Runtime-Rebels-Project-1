@@ -1,12 +1,13 @@
 import api from "./axios";
 import orderLib from "./orders.js";
+import Cookies from "js-cookie"
 
 /**
  * Fetch orders for current context (guest or signed-in user).
  * Returns an array of orders. For signed-in users the items are enriched.
  */
 export async function fetchOrders(signal) {
-  const userId = localStorage.getItem("userId");
+  const userId = Cookies.get("userId");
   if (!userId) {
     const guestOrder = orderLib.readLocalOrders();
     return Array.isArray(guestOrder) ? guestOrder : [guestOrder];
@@ -20,7 +21,7 @@ export async function fetchOrders(signal) {
  * Returns an object { order, products, items } where `items` is an array used by pages.
  */
 export async function fetchOrderDetails(orderId, signal) {
-  const userId = localStorage.getItem("userId");
+  const userId = Cookies.get("userId");
   if (!userId) {
     const local = orderLib.readLocalOrders();
     const order = (Array.isArray(local) ? local : [local]).find((o) => (o.id || o._id) === orderId);

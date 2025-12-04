@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import orderLib from "../lib/orders.js";
 import api from "../lib/axios";
 import cartLib from "../lib/cart";
+import Cookies from "js-cookie"
 
 const OrderSuccessPage = () => {
     const [cartItems, setCartItems] = useState([]);
@@ -11,8 +12,8 @@ const OrderSuccessPage = () => {
     const [confirmation, setConfirmation] = useState("");
     const navigate = useNavigate();
     const fullName = localStorage.getItem("userFullName") || "Valued Customer";
-    const userId = localStorage.getItem("userId");
-    const userEmail = localStorage.getItem("userEmail");
+    const userId = Cookies.get("userId");
+    const userEmail = Cookies.get("userEmail");
     const didRun = useRef(false);
 
     useEffect(() => {
@@ -79,7 +80,7 @@ const OrderSuccessPage = () => {
                     items: normalizedItems,
                     total: normalizedItems.reduce((sum, it) => sum + (Number(it.price) || 0) * (Number(it.quantity) || 1), 0),
                     status: "Paid",
-                    shipTo: {fullName: localStorage.getItem("userEmail") || "Guest Checkout"}
+                    shipTo: {fullName: Cookies.get("userEmail") || "Guest Checkout"}
                 };
 
                 const existing = orderLib.readLocalOrders();
@@ -155,7 +156,6 @@ const OrderSuccessPage = () => {
             // Needs fixed
             setTotal(orderPayload.totalPrice.reduce((s, t) => s + Number(t), 0));
 
-            localStorage.removeItem("pendingServerOrder");
             window.dispatchEvent(new Event("cart-updated"));
 
         };

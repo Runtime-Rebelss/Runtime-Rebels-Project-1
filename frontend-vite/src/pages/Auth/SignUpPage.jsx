@@ -3,10 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar.jsx';
 import api from '../../lib/axios.js';
 import toast from 'react-hot-toast'
+import Cookies from "js-cookie"
 
 const SignUpPage = () => {
     const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState('');
+    const [isValid, setIsValid] = useState(true);
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [password, setPassword] = useState('');
@@ -14,29 +16,6 @@ const SignUpPage = () => {
     const [cartItems, setCartItems] = useState([]);
     const navigate = useNavigate();
     const acRef = useRef(null);
-
-    // If already logged in
-    useEffect(() => {
-        const already = localStorage.getItem('userId');
-        if (already) {
-            void preloadCart(already);
-        }
-    }, []);
-
-    const preloadCart = async (userId) => {
-        try {
-            const res = await fetch(`/api/carts/${encodeURIComponent(userId)}`);
-            if (!res.ok) return;
-            const data = await res.json();
-            const productIds =
-                (Array.isArray(data?.productIds) && data.productIds) ||
-                (Array.isArray(data?.productId) && data.productId) ||
-                [];
-            setCartItems(productIds);
-        } catch (err) {
-            console.warn('preloadCart failed', err);
-        }
-    };
 
     const extractUserId = (data) =>
         data?.userId || data?.id || data?._id || data?.user?.id || data?.user?._id || null;
@@ -60,10 +39,8 @@ const SignUpPage = () => {
                 return;
             }
 
-            localStorage.setItem("userId", userId);
-            localStorage.setItem("userEmail", userEmail);
-
-            await preloadCart(userId);
+            Cookies.set("userId", userId);
+            Cookies.set("userEmail", userEmail);
 
             navigate('/', { replace: true });
             toast.success('Signup successfully!');

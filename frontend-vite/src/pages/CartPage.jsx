@@ -5,6 +5,7 @@ import Navbar from '../components/Navbar';
 import cartLib from "../lib/cart.js";
 import api from "../lib/axios.js";
 import toast from "react-hot-toast";
+import Cookies from "js-cookie"
 
 function calcTotal(items) {
     return items.reduce((s, it) => s + (Number(it.price) || 0) * (Number(it.quantity) || 0), 0);
@@ -59,7 +60,7 @@ const CartPage = () => {
     const [isGuest, setIsGuest] = useState(false);
 
     const navigate = useNavigate();
-    const userId = localStorage.getItem("userId");
+    const userId = Cookies.get("userId");
 
     useEffect(() => {
         let ac = new AbortController();
@@ -109,7 +110,7 @@ const CartPage = () => {
 
     useEffect(() => {
         const handler = async () => {
-            const uId = localStorage.getItem("userId");
+            const uId = Cookies.get("userId");
 
             if (!uId) {
                 const { items } = cartLib.loadGuestCart();
@@ -170,7 +171,7 @@ const CartPage = () => {
     };
 
     const removeItem = async (productId) => {
-        const userId = localStorage.getItem("userId");
+        const userId = Cookies.get("userId");
         // This is for guest
         try {
             if (!userId) {
@@ -214,7 +215,7 @@ const CartPage = () => {
     const proceedToCheckout = async () => {
         if (cartItems.length === 0) return;
         // Can change to authToken if wanted
-        if (!localStorage.getItem("userId")) {
+        if (!Cookies.get("userId")) {
             setShowCheckoutPrompt(true);
             return;
         }

@@ -49,13 +49,13 @@ const LoginPage = () => {
                 return;
             }
 
-            localStorage.setItem("userId", userId);
-            localStorage.setItem("userEmail", userEmail);
+            Cookies.set("userId", userId);
+            Cookies.set("userEmail", userEmail);
 
             if (userEmail === "admin@gmail.com") {
                 console.log(Cookies.get("access_token"));
-                localStorage.setItem("adminEmail", userEmail);
-                localStorage.removeItem("userEmail");
+                Cookies.set("adminEmail", userEmail);
+                Cookies.remove("userEmail");
             }
 
             await preloadCart(userId);
@@ -76,7 +76,7 @@ const LoginPage = () => {
 
     // If already logged in
     useEffect(() => {
-        const already = localStorage.getItem("userId");
+        const already = Cookies.get("userId");
         if (already) {
             void preloadCart(already);
         }

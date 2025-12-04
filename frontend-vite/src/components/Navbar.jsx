@@ -44,7 +44,7 @@ const Navbar = ({hideCart = false, hideCartCount = false}) => {
 
     // Initial load
     useEffect(() => {
-        const userId = localStorage.getItem("userId");
+        const userId = Cookies.get("userId");
         const ac = new AbortController();
 
         (async () => {
@@ -69,7 +69,7 @@ const Navbar = ({hideCart = false, hideCartCount = false}) => {
     // Update count when cart changes
     useEffect(() => {
         const handler = async () => {
-            const userId = localStorage.getItem("userId");
+            const userId = Cookies.get("userId");
             if (!userId) {
                 setCartCount(countFromGuest());
                 return;
@@ -109,9 +109,9 @@ const Navbar = ({hideCart = false, hideCartCount = false}) => {
 
     const handleLogout = () => {
         try {
-            localStorage.removeItem("userId");
-            localStorage.removeItem("userEmail");
-            localStorage.removeItem("adminEmail");
+            Cookies.remove("userId");
+            Cookies.remove("userEmail");
+            Cookies.remove("adminEmail");
             toast.success("User logged out!");
             navigate("/");
             window.location.reload();
@@ -123,9 +123,9 @@ const Navbar = ({hideCart = false, hideCartCount = false}) => {
         }
     };
 
-    const userId = localStorage.getItem("userId");
-    const userEmail = localStorage.getItem("userEmail");
-    const adminEmail = localStorage.getItem("adminEmail");
+    const userId = Cookies.get("userId");
+    const userEmail = Cookies.get("userEmail");
+    const adminEmail = Cookies.get("adminEmail");
     Cookies.set("adminEmail", adminEmail);
     Cookies.remove("adminEmail");
 

@@ -5,6 +5,7 @@ import Navbar from "../components/Navbar";
 import api from "../lib/axios";
 import orderLib from "../lib/orders.js";
 import orderService from "../lib/orderService";
+import Cookies from "js-cookie"
 
 const OrderPage = () => {
     const [orders, setOrders] = useState([]);
@@ -79,7 +80,7 @@ const OrderPage = () => {
                                 );
 
                             const orderId = order.id || order._id || "-";
-                            const userEmail = localStorage.getItem("userEmail");
+                            const userEmail = Cookies.get("userEmail");
 
                             return (
                                 <div
