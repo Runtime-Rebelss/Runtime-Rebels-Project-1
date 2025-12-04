@@ -12,6 +12,7 @@ import OrderPage from "./pages/OrderPage";
 import LoginPage from "./pages/Auth/LoginPage.jsx";
 import SignUpPage from "./pages/Auth/SignUpPage.jsx";
 import OrderDetailsPage from "./pages/OrderDetailsPage";
+import AdminPage from "./pages/auth/AdminPage";
 
 function App() {
     return (
@@ -29,6 +30,7 @@ function App() {
                 <Route path="/signup" element={<SignUpPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="details/:orderId" element={<OrderDetailsPage />} />
+                <Route path="/admin" element={<AdminPage />} />
             </Routes>
         </div>
     );

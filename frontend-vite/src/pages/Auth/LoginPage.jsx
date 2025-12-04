@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar.jsx';
 import api from '../../lib/axios.js';
 import toast from 'react-hot-toast'
+import Cookies from "js-cookie";
 
 const LoginPage = () => {
     const [loading, setLoading] = useState(false);
@@ -52,6 +53,7 @@ const LoginPage = () => {
             localStorage.setItem("userEmail", userEmail);
 
             if (userEmail === "admin@gmail.com") {
+                console.log(Cookies.get("access_token"));
                 localStorage.setItem("adminEmail", userEmail);
                 localStorage.removeItem("userEmail");
             }

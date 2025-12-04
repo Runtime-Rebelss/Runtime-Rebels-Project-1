@@ -77,6 +77,8 @@ public class AuthService {
 
         var role = request.getRole() != null ? request.getRole() : Role.CUSTOMER;
 
+        var adminRole = request.getRole() != null ? request.getRole() : Role.ADMIN;
+
         var user = User.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())

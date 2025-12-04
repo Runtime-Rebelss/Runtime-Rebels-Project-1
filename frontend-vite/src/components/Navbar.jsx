@@ -7,6 +7,7 @@ import api from "../lib/axios.js";
 import toast from "react-hot-toast";
 import formatString from "./actions/stringFormatter.js";
 import {buildMergedParams} from "../lib/query";
+import Cookies from "js-cookie";
 
 /**
  * Navbar component renders top navigation with category links, search and cart.
@@ -110,6 +111,7 @@ const Navbar = ({hideCart = false, hideCartCount = false}) => {
         try {
             localStorage.removeItem("userId");
             localStorage.removeItem("userEmail");
+            localStorage.removeItem("adminEmail");
             localStorage.removeItem("pendingServerOrder");
             toast.success("User logged out!");
             navigate("/");
