@@ -112,7 +112,6 @@ const Navbar = ({hideCart = false, hideCartCount = false}) => {
             localStorage.removeItem("userId");
             localStorage.removeItem("userEmail");
             localStorage.removeItem("adminEmail");
-            localStorage.removeItem("pendingServerOrder");
             toast.success("User logged out!");
             navigate("/");
             window.location.reload();
