@@ -124,7 +124,10 @@ const Navbar = ({hideCart = false, hideCartCount = false}) => {
     };
 
     const userId = localStorage.getItem("userId");
+    const userEmail = localStorage.getItem("userEmail");
     const adminEmail = localStorage.getItem("adminEmail");
+    Cookies.set("adminEmail", adminEmail);
+    Cookies.remove("adminEmail");
 
     return (
         <div className="bg-base-100 shadow-sm sticky top-0 z-50 flex flex-col">
@@ -200,7 +203,7 @@ const Navbar = ({hideCart = false, hideCartCount = false}) => {
                     </Link>
 
                     {
-                        userId ? (
+                        userEmail ? (
                                 <div className="dropdown dropdown-hover">
                                     <div tabIndex={0} role="button" className="btn btn-ghost">
                                         <User/>
