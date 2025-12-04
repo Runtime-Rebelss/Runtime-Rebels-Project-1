@@ -71,9 +71,9 @@ const SignUpPage = () => {
         } catch (err) {
             const status = err?.response?.status;
             const serverMsg = err?.response?.data?.message || err?.response?.data?.error;
-            if (status === 404) setToastMsg(serverMsg || 'No account with that email');
-            else if (status === 401) setToastMsg(serverMsg || 'Incorrect password');
-            else setToastMsg(serverMsg || 'Login failed. Please try again.');
+            if (status === 403) setToastMsg(serverMsg || 'There is already an account associated with that email');
+            else if (status === 401) setToastMsg(serverMsg || 'Invalid password');
+            else setToastMsg(serverMsg || 'Sign up failed. Please try again.');
         } finally {
             setLoading(false);
         }
