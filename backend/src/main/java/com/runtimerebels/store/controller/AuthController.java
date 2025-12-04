@@ -36,8 +36,6 @@ import com.runtimerebels.store.models.dto.RegisterRequest;
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;
-    private final JwtService jwtService;
-    private final UserDetailsService userDetailsService;
 
     @PostMapping("/signup")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) {
@@ -87,7 +85,7 @@ public class AuthController {
         }
         // Make new refreshToken
         AuthenticationResponse tokens = authService.refreshWithToken(refreshToken);
-
+        // Get access token
         Cookie newAccess = new Cookie("access_token", tokens.getAccessToken());
         newAccess.setHttpOnly(true);
         newAccess.setSecure(true);

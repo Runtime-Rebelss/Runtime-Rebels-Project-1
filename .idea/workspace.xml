@@ -5,12 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Added untracked files">
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/EmailDetails.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/test/java/com/runtimerebels/store/models/dto/CheckoutRequestTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/dto/LoggedUserResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/dto/LoggedUserResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/services/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/services/AuthService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/SignUpPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/SignUpPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/OrderPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/OrderPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/OrderSuccessPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/OrderSuccessPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/test/CartService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/test/CartServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/test/java/com/runtimerebels/store/CartController.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,9 +26,10 @@
         <option value="Enum" />
         <option value="Interface" />
         <option value="JSX File" />
-        <option value="Class" />
         <option value="package.json" />
         <option value="JavaScript File" />
+        <option value="Class" />
+        <option value="JUnit5 Test Class" />
       </list>
     </option>
   </component>
@@ -47,7 +50,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/Hlocke124/Runtime-Rebels-Project-1.git&quot;,
-    &quot;accountId&quot;: &quot;c092b729-09e8-4a5f-870e-9563811d8a5e&quot;
+    &quot;accountId&quot;: &quot;82aedb2d-abc9-4dc7-bdc8-8c73de7f3805&quot;
   }
 }</component>
   <component name="KubernetesApiPersistence">{}</component>
@@ -78,6 +81,8 @@
     &quot;Application.StoreApplication (2).executor&quot;: &quot;Run&quot;,
     &quot;Application.StoreApplication.executor&quot;: &quot;Run&quot;,
     &quot;Docker.spring-boot/docker-compose.yaml: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.CheckoutRequestTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.JwtAuthFilterTest.executor&quot;: &quot;Run&quot;,
     &quot;JavaScript Debug.index.html.executor&quot;: &quot;Run&quot;,
     &quot;Maven.spring-boot [install].executor&quot;: &quot;Run&quot;,
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
@@ -98,7 +103,10 @@
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;Spring Boot.ShoppingCartApplication.executor&quot;: &quot;Run&quot;,
     &quot;Spring Boot.StoreApplication.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;ordering-henry&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.includeInheritedMembers&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/wlock/OneDrive/Documents/Runtime-Rebels-Final/Runtime-Rebels-Project-1/backend/src/main/java/com/runtimerebels/store/services&quot;,
@@ -107,7 +115,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;project.propCompiler&quot;,
     &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
     &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\wlock\\AppData\\Roaming\\JetBrains\\IntelliJIdea2025.2\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
@@ -132,10 +140,44 @@
       <recent name="C:\Users\wlock\OneDrive\Documents\Runtime-Rebels-Final\Runtime-Rebels-Project-1\backend\src\test" />
       <recent name="C:\Users\wlock\OneDrive\Documents\Runtime-Rebels-Project-1.2" />
     </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="com.runtimerebels.store.models.dto" />
+      <recent name="com.runtimerebels.store.config" />
+    </key>
   </component>
   <component name="RunManager" selected="Spring Boot.StoreApplication">
-    <configuration name="index.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/Runtime-Rebels-Project-1.2/frontend-vite/index.html" useBuiltInWebServerPort="true">
-      <method v="2" />
+    <configuration name="CheckoutRequestTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="spring-boot" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.runtimerebels.store.models.dto.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.runtimerebels.store.models.dto" />
+      <option name="MAIN_CLASS_NAME" value="com.runtimerebels.store.models.dto.CheckoutRequestTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="JwtAuthFilterTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="spring-boot" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.runtimerebels.store.config.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.runtimerebels.store.config" />
+      <option name="MAIN_CLASS_NAME" value="com.runtimerebels.store.config.JwtAuthFilterTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
     <configuration default="true" type="JetRunConfigurationType">
       <method v="2">
@@ -144,9 +186,6 @@
     </configuration>
     <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
       <option name="filePath" />
-      <method v="2" />
-    </configuration>
-    <configuration name="AddToCartButton.jsx" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="AddToCartButton.jsx" typescript-loader="bundled" working-dir="$PROJECT_DIR$/frontend-vite/src/components">
       <method v="2" />
     </configuration>
     <configuration name="App.jsx" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="App.jsx" typescript-loader="bundled" working-dir="$PROJECT_DIR$/frontend-vite/src">
@@ -184,8 +223,8 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="JavaScript Debug.index.html" />
-      <item itemvalue="Node.js.AddToCartButton.jsx" />
+      <item itemvalue="JUnit.CheckoutRequestTest" />
+      <item itemvalue="JUnit.JwtAuthFilterTest" />
       <item itemvalue="Node.js.App.jsx" />
       <item itemvalue="Node.js.ProductList.jsx" />
       <item itemvalue="Node.js.main.jsx" />
@@ -194,11 +233,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.CheckoutRequestTest" />
+        <item itemvalue="JUnit.JwtAuthFilterTest" />
         <item itemvalue="Node.js.main.jsx" />
         <item itemvalue="Node.js.ProductList.jsx" />
         <item itemvalue="Node.js.App.jsx" />
-        <item itemvalue="Node.js.AddToCartButton.jsx" />
-        <item itemvalue="JavaScript Debug.index.html" />
       </list>
     </recent_temporary>
   </component>
@@ -290,6 +329,9 @@
       <workItem from="1764405959254" duration="3247000" />
       <workItem from="1764441248702" duration="16650000" />
       <workItem from="1764460598757" duration="11691000" />
+      <workItem from="1764722411459" duration="290000" />
+      <workItem from="1764722718639" duration="709000" />
+      <workItem from="1764809854442" duration="848000" />
     </task>
     <task id="LOCAL-00001" summary="Updated Code">
       <option name="closed" value="true" />
@@ -744,20 +786,8 @@
     <MESSAGE value="Added untracked files" />
     <option name="LAST_COMMIT_MESSAGE" value="Added untracked files" />
   </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/backend/src/test/CartServiceImpl.java</url>
-          <line>23</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/backend/src/test/CartServiceImpl.java</url>
-          <line>24</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>
