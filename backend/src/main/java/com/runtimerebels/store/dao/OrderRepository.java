@@ -12,7 +12,7 @@ import java.util.List;
  * It also defines custom query methods for retrieving orders by user email
  * or Stripe session ID.
  *
- * @author Haley Kenney
+ * @author Haley Kenney, Henry Locke
  */
 public interface OrderRepository extends MongoRepository<Order, String> {
 

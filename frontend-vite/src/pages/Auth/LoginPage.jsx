@@ -69,7 +69,7 @@ const LoginPage = () => {
 
     // If already logged in
     useEffect(() => {
-        const already = localStorage.getItem('userId');
+        const already = localStorage.getItem("userId");
         if (already) {
             void preloadCart(already);
         }
@@ -112,13 +112,13 @@ const LoginPage = () => {
                             <div className="flex w-full flex-col">
                                 {/* Login Button */}
                                 <button type="submit" className="btn btn-neutral w-full mt-4" disabled={loading}>
-                                    {loading ? 'Logging in…' : 'Sign in'}
+                                    {loading ? "Logging in…" : "Sign in"}
                                 </button>
                                 <div className="divider">Don't have an account?</div>
                                 {/* Signup Button */}
                                 <button type="button" onClick={() => navigate("/signup")} className="btn btn-neutral w-full mt-4" disabled={loading}>
 
-                                    {loading ? 'Logging in…' : 'Sign up'}
+                                    {loading ? "Logging in…" : "Sign in"}
                                 </button>
                             </div>
 
