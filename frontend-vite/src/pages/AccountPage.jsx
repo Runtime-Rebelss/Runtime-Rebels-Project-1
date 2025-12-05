@@ -140,10 +140,10 @@ const AccountPage = () => {
                                 </button>
                             </div>
                         </section>
-                        {/* YOUR ORDERS */}
+                        {/* Login & Security */}
                         <section
                             className="card bg-base-200 shadow-md hover:shadow-lg transition cursor-pointer"
-                            onClick={() => (window.location.href = "/orders")}
+                            onClick={() => (window.location.href = "/account/manage")}
                         >
                             <div className="card-body">
                                 <h2 className="card-title">Login & Security</h2>
@@ -155,8 +155,6 @@ const AccountPage = () => {
                                 </button>
                             </div>
                         </section>
-
-
                     </div>
                 )}
             </main>

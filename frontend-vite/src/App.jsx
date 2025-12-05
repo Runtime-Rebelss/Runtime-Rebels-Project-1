@@ -13,6 +13,7 @@ import SignUpPage from "./pages/Auth/SignUpPage.jsx";
 import OrderDetailsPage from "./pages/OrderDetailsPage";
 import AdminPage from "./pages/auth/AdminPage";
 import AccountPage from "./pages/AccountPage";
+import UserInfoPage from "./pages/auth/UserInfoPage";
 
 function App() {
     return (
@@ -32,6 +33,7 @@ function App() {
                 <Route path="details/:orderId" element={<OrderDetailsPage />} />
                 <Route path="/admin" element={<AdminPage />} />
                 <Route path="/account" element={<AccountPage />} />
+                <Route path="/account/manage" element={<UserInfoPage />} />
             </Routes>
         </div>
     );

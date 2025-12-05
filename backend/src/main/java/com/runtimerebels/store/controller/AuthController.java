@@ -1,5 +1,7 @@
 package com.runtimerebels.store.controller;
 
+import com.runtimerebels.store.dao.UserRepository;
+import com.runtimerebels.store.models.User;
 import com.runtimerebels.store.models.dto.AuthenticateRequest;
 import com.runtimerebels.store.models.dto.AuthenticationResponse;
 import com.runtimerebels.store.services.AuthService;
@@ -8,10 +10,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +44,7 @@ public class AuthController {
     private final AuthService authService;
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+    private final UserRepository userRepository;
 
     @PostMapping("/signup")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) {
@@ -98,9 +105,22 @@ public class AuthController {
 
         return ResponseEntity.ok(tokens);
     }
-//    // User info for account Page
-//    @GetMapping("/user")
-//    public ResponseEntity<?> getUserByEmail(HttpServletRequest request, HttpServletResponse response) {
-//
-//    }
+
+    // Update user email
+    @PutMapping("/user")
+    public ResponseEntity<?> updateEmail(@RequestParam String email, @RequestBody User upUser) {
+        Map<String, String> response = new HashMap<>();
+        Optional<User> existingUser = userRepository.findByEmail(email);
+        if (existingUser.isEmpty()) {
+            response.put("message", "User not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+        User existing = existingUser.get();
+        existing.setEmail(upUser.getEmail());
+        return ResponseEntity.ok(existing);
+    }
+
+//    @PutMapping("/resetPassword")
+//    public ResponseEntity<?> resetPassword(@RequestParam String email, @RequestParam String password, @RequestParam String confirmPassword) {}
+
 }
