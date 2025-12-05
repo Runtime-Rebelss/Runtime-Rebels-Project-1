@@ -113,6 +113,8 @@ const Navbar = ({hideCart = false, hideCartCount = false}) => {
             Cookies.remove("access_refresh_token");
             Cookies.remove("userId");
             Cookies.remove("userEmail");
+            Cookies.remove("firstName");
+            Cookies.remove("lastName");
             Cookies.remove("adminEmail");
             toast.success("User logged out!");
             navigate("/");
