@@ -1,46 +1,30 @@
 import React, {useEffect, useState} from "react";
-import {useParams, useNavigate} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import Navbar from "../components/Navbar";
-import api from "../lib/axios";
-import orderLib from "../lib/orders.js";
 import orderService from "../lib/orderService";
-
-const fmtUSD = (n) =>
-    `$${Number(n || 0).toLocaleString(undefined, {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-    })}`;
-const fmtDate = (d) =>
-    new Date(d).toLocaleDateString(undefined, {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-    });
-
+import OrderCard from "../components/OrderCard";
 
 const OrderDetailsPage = () => {
-    const [orders, setOrders] = useState(null);
-    const [items, setItems] = useState(null);
+    const [order, setOrder] = useState(null);
     const {orderId} = useParams();
-    const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
-    const navigate = useNavigate();
 
     useEffect(() => {
         const controller = new AbortController();
 
-        const fetchOrders = async () => {
+        const fetchOrder = async () => {
             try {
                 setLoading(true);
                 const { order, products, items } = await orderService.fetchOrderDetails(orderId, controller.signal);
                 if (order) {
-                    setOrders(order);
-                    setItems(items ?? products ?? order.items ?? []);
-                    setProducts(products ?? items ?? order.items ?? []);
+                    // Ensure order.items is populated with the products/items array
+                    const orderWithItems = {
+                        ...order,
+                        items: items ?? products ?? order.items ?? []
+                    };
+                    setOrder(orderWithItems);
                 } else {
-                    setOrders(null);
-                    setItems([]);
-                    setProducts([]);
+                    setOrder(null);
                 }
             } catch (err) {
                 if (err?.code !== "ERR_CANCELED") {
@@ -52,9 +36,9 @@ const OrderDetailsPage = () => {
         };
 
         // initial fetch
-        fetchOrders();
+        fetchOrder();
 
-        const handler = () => fetchOrders();
+        const handler = () => fetchOrder();
         window.addEventListener("cart-updated", handler);
         window.addEventListener("order-updated", handler);
 
@@ -73,14 +57,7 @@ const OrderDetailsPage = () => {
         )
     }
 
-    if (!orders) return <div className="p-6 text-center">Order not found</div>;
-
-    const total = (orders.totalPrice || []).reduce(
-        (sum, lineTotal) => sum + Number(lineTotal || 0),
-        0
-    );
-
-    const userEmail = localStorage.getItem("userEmail");
+    if (!order) return <div className="p-6 text-center">Order not found</div>;
 
     return (
         <div>
@@ -88,62 +65,7 @@ const OrderDetailsPage = () => {
             <div className="container mx-auto px-4 py-8">
                 <h1 className="text-3xl font-semibold mb-6">Order Details</h1>
                 <div className="space-y-6">
-                    <div className="card bg-base-100 border border-base-300 overflow-hidden">
-                        <div
-                            className="bg-base-200/60 border border-base-300 px-4 py-3 grid grid-cols-1 md:grid-cols-4 gap-2 text-sm">
-                            <div>
-                                <div className="font-medium">Order Placed</div>
-                                <div className="opacity-70">
-                                    {fmtDate(orders.createdAt || Date.now())}
-                                </div>
-                            </div>
-                            <div>
-                                <div className="font-medium">Total</div>
-                                <div className="opacity-70">{fmtUSD(total)}</div>
-                            </div>
-                            <div>
-                                <div className="font-medium">Ship to</div>
-                                <div className="opacity-70">
-                                    {orders.shipTo?.fullName || userEmail}
-                                </div>
-                            </div>
-                            <div className="md:text-right">
-                                <div className="font-medium">Order ID</div>
-                                <div className="opacity-70">{orderId}</div>
-                            </div>
-                        </div>
-
-                        <div className="p-4 divide-y divide-base-300">
-                            {products.map((product, i) => (
-                                <div key={product.id || i} className="py-4 flex items-center gap-4">
-                                    <div className="w-20 h-20 bg-base-200 rounded overflow-hidden flex-shrink-0">
-                                        <img
-                                            src={
-                                                product.imageUrl ||
-                                                product.image ||
-                                                "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=400&q=70"
-                                            }
-                                            alt={product.name}
-                                            className="w-full h-full object-cover"
-                                        />
-                                    </div>
-                                    <div className="flex-1 min-w-0">
-                                        <div className="font-medium truncate">{product.name}</div>
-                                        <div className="text-sm opacity-70">
-                                            Qty: {orders.quantity?.[i]} • {""}
-                                            {fmtUSD(orders.totalPrice?.[i] || product.price)}
-                                        </div>
-                                    </div>
-                                    <button
-                                        className="btn btn-outline btn-sm"
-                                        onClick={() => navigate(`/product/${product.id || product.productId || product._id || ""}`)}
-                                    >
-                                        View item
-                                    </button>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
+                    <OrderCard order={order} detailsPage={true} />
                 </div>
             </div>
         </div>
