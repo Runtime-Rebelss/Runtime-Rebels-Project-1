@@ -52,7 +52,6 @@ function useFetchProducts(inputParams, setProducts, setLoading, overrides = {}) 
     useEffect(() => {
       setLoading(true);
       fetchProducts();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [mergedParams.toString()]);
 
     return { setProducts, setLoading, fetchProducts };

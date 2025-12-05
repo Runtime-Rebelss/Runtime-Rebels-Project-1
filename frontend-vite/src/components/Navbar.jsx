@@ -97,7 +97,8 @@ const Navbar = ({ hideCart = false, hideCartCount = false }) => {
     const handleSearch = (term) => {
         const trimmed = (term || "").trim();
         if (!trimmed) return;
-        const params = buildMergedParams(searchParams, { search: trimmed });
+        // Create new params with only the search term (clear categories and sort)
+        const params = new URLSearchParams({ search: trimmed });
         navigate(`/results?${params.toString()}`);
     };
 
