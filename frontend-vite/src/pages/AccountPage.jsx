@@ -10,6 +10,7 @@ const AccountPage = () => {
     const userEmail = Cookies.get("userEmail");
     const userId = Cookies.get("userId");
     const firstName = Cookies.get("firstName");
+    const lastName = Cookies.get("lastName");
 
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -139,10 +140,28 @@ const AccountPage = () => {
                                 </button>
                             </div>
                         </section>
+                        {/* YOUR ORDERS */}
+                        <section
+                            className="card bg-base-200 shadow-md hover:shadow-lg transition cursor-pointer"
+                            onClick={() => (window.location.href = "/orders")}
+                        >
+                            <div className="card-body">
+                                <h2 className="card-title">Login & Security</h2>
+                                <p className="text-sm text-base-content/70">
+                                    Edit login, and name
+                                </p>
+                                <button className="btn btn-primary btn-sm mt-3 w-fit">
+                                    View Login
+                                </button>
+                            </div>
+                        </section>
+
+
                     </div>
                 )}
             </main>
         </div>
+
     );
 };
 

@@ -122,7 +122,7 @@ public class OrderController {
         cart.setTotalPrice(new ArrayList<>());
         cartRepository.save(cart);
 
-        System.out.println("Saved order with ID: " + savedOrder.getId());
+        System.out.println("Saved order with ID: " + savedOrder.getOrderId());
         return ResponseEntity.status(HttpStatus.CREATED).body(savedOrder);
     }
 

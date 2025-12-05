@@ -4,8 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Added first and last name field">
+    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Updated Account Page">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/OrderController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/Order.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/AccountPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/AccountPage.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -286,14 +289,6 @@
       <workItem from="1764405959254" duration="3247000" />
       <workItem from="1764441248702" duration="16650000" />
       <workItem from="1764460598757" duration="11691000" />
-    </task>
-    <task id="LOCAL-00004" summary="Completely revamped file names">
-      <option name="closed" value="true" />
-      <created>1759527573216</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1759527573216</updated>
     </task>
     <task id="LOCAL-00005" summary="Completely revamped file names">
       <option name="closed" value="true" />
@@ -679,7 +674,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764894700684</updated>
     </task>
-    <option name="localTasksCounter" value="53" />
+    <task id="LOCAL-00053" summary="Updated Account Page">
+      <option name="closed" value="true" />
+      <created>1764895237817</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1764895237817</updated>
+    </task>
+    <option name="localTasksCounter" value="54" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -737,7 +740,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added new front end code." />
     <MESSAGE value="Updated Add to Cart API and added CartPage frontend" />
     <MESSAGE value="Scamazon_Coming_Soon" />
     <MESSAGE value="Pushed latest code" />
@@ -762,6 +764,7 @@
     <MESSAGE value="Updated messages in SignupPage" />
     <MESSAGE value="Switched User authorization to cookies" />
     <MESSAGE value="Added first and last name field" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added first and last name field" />
+    <MESSAGE value="Updated Account Page" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated Account Page" />
   </component>
 </project>

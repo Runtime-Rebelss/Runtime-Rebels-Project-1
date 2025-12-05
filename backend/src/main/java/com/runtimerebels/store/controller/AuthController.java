@@ -98,4 +98,9 @@ public class AuthController {
 
         return ResponseEntity.ok(tokens);
     }
+//    // User info for account Page
+//    @GetMapping("/user")
+//    public ResponseEntity<?> getUserByEmail(HttpServletRequest request, HttpServletResponse response) {
+//
+//    }
 }
