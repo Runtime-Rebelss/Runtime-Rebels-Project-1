@@ -6,6 +6,7 @@
 
 # --- Maven (Spring Boot backend) ---
 backend/target/
+backend/node_modules/
 
 # --- Node (React frontend) ---
 frontend-vite/node_modules/
