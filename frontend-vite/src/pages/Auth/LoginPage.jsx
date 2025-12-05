@@ -9,6 +9,8 @@ const LoginPage = () => {
     const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
     const [toastMsg, setToastMsg] = useState('');
     const [cartItems, setCartItems] = useState([]);
     const navigate = useNavigate();

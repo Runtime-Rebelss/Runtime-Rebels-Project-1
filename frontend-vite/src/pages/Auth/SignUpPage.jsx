@@ -41,6 +41,8 @@ const SignUpPage = () => {
 
             Cookies.set("userId", userId);
             Cookies.set("userEmail", userEmail);
+            Cookies.set("firstName", firstName);
+            Cookies.set("lastName", lastName);
 
             navigate('/', { replace: true });
             toast.success('Signup successfully!');
