@@ -115,6 +115,7 @@ const Navbar = ({hideCart = false, hideCartCount = false}) => {
             Cookies.remove("userEmail");
             Cookies.remove("firstName");
             Cookies.remove("lastName");
+            Cookies.remove("fullName");
             Cookies.remove("adminEmail");
             toast.success("User logged out!");
             navigate("/");

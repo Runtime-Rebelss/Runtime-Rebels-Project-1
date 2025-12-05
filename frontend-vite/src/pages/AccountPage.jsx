@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
+import { useNavigate } from "react-router-dom";
 import api from "../lib/axios";
+import orderLib from "../lib/orders.js";
+import orderService from "../lib/orderService";
 import Cookies from "js-cookie"
 
 const AccountPage = () => {
@@ -9,35 +12,41 @@ const AccountPage = () => {
     const firstName = Cookies.get("firstName");
 
     const [orders, setOrders] = useState([]);
-    const [loadingOrders, setLoadingOrders] = useState(true);
+    const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        if (!userId) {
-            setLoadingOrders(false);
-            return;
-        }
+        const controller = new AbortController();
 
-        const ac = new AbortController();
-
-        (async () => {
+        const fetchOrders = async () => {
             try {
-                // Adjust endpoint if your backend uses a different one
-                const res = await api.get(`/orders/user/${encodeURIComponent(userId)}`, {
-                    withCredentials: true,
-                    signal: ac.signal,
-                });
-
-                setOrders(Array.isArray(res.data) ? res.data : []);
+                setLoading(true);
+                const orders = await orderService.fetchOrders(controller.signal);
+                setOrders(Array.isArray(orders) ? orders : [orders]);
             } catch (err) {
-                console.error("Failed to load orders:", err);
-                setOrders([]);
+                if (err?.code !== "ERR_CANCELED") {
+                    console.warn("orders fetch failed:", err);
+                    setOrders([]);
+                }
             } finally {
-                setLoadingOrders(false);
+                setLoading(false);
             }
-        })();
+        };
 
-        return () => ac.abort();
-    }, [userId]);
+        fetchOrders();
+
+        const handler = () => fetchOrders();
+        window.addEventListener("cart-updated", handler);
+        window.addEventListener("order-updated", handler);
+
+        return () => {
+            controller.abort();
+            window.removeEventListener("cart-updated", handler);
+            window.removeEventListener("order-updated", handler);
+        };
+    }, []);
+
+    const revOrder = orders.slice().reverse();
 
     const formatDate = (date) => {
         const d = new Date(date);
@@ -88,7 +97,7 @@ const AccountPage = () => {
                                     Recent payment activity from your orders.
                                 </p>
 
-                                {loadingOrders ? (
+                                {loading ? (
                                     <p className="text-sm text-base-content/70">Loading…</p>
                                 ) : orders.length === 0 ? (
                                     <p className="text-sm text-base-content/70">
