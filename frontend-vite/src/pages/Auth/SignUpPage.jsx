@@ -34,7 +34,7 @@ const SignUpPage = () => {
             const userEmail = data?.email || email;
             setFirstName(firstName);
             setLastName(lastName);
-            setFullName(firstName + ' ' + lastName);
+            setFullName(firstName + lastName);
 
             if (!userId) {
                 setToastMsg("Login response missing user id.");

@@ -81,6 +81,7 @@ const OrderPage = () => {
 
                             const orderId = order.id || order._id || "-";
                             const userEmail = Cookies.get("userEmail");
+                            const fullName = Cookies.get("fullName");
 
                             return (
                                 <div
@@ -101,7 +102,7 @@ const OrderPage = () => {
                                         <div>
                                             <div className="font-medium">Ship to</div>
                                             <div className="opacity-70">
-                                                {order.shipTo?.fullName || userEmail}
+                                                {fullName}
                                             </div>
                                         </div>
                                         <div className="md:text-right">

@@ -17,6 +17,7 @@ const UserInfo = () => {
     const [editName, setEditName] = useState(true);
     const [editEmail, setEditEmail] = useState(true);
     const [editPassword, setEditPassword] = useState(true);
+    const [saveDisabled, setSaveDisabled] = useState(true);
 
 
     // Do the login page, but make the button update instead of logging in
@@ -25,9 +26,10 @@ const UserInfo = () => {
         e.preventDefault();
         setToastMsg('');
         setLoading(true);
+        const upUser = {email: email};
 
         try {
-            const res = await api.put('/auth/email', {email}, {withCredentials: true});
+            const res = await api.put(`/auth/user?email=${email}`, upUser, {withCredentials: true});
             const data = res?.data ?? {};
 
             const userEmail = data?.email || email;
@@ -84,7 +86,7 @@ const UserInfo = () => {
                     <input type="text" className="input" disabled={editPassword} placeholder="Confirm password"/>
                 </div>
                 {/* Save Changes */}
-                <button type="submit" onClick={() => toast.success("Change Confirmed!")} className="btn btn-primary join-item">Save</button>
+                <button type="submit" onClick={() => toast.success("Change Confirmed!")} disabled={saveDisabled} className="btn btn-primary join-item">Save</button>
             </fieldset>
             </form>
         </div>

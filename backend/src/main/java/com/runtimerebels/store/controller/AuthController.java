@@ -117,6 +117,7 @@ public class AuthController {
         }
         User existing = existingUser.get();
         existing.setEmail(upUser.getEmail());
+        userRepository.save(existing);
         return ResponseEntity.ok(existing);
     }
 

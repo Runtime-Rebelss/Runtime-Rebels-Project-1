@@ -9,8 +9,6 @@ const LoginPage = () => {
     const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
     const [toastMsg, setToastMsg] = useState('');
     const [cartItems, setCartItems] = useState([]);
     const navigate = useNavigate();
@@ -41,7 +39,7 @@ const LoginPage = () => {
 
         try {
             const res = await api.post('/auth/login', { email, password }, {withCredentials: true});
-            const data = res?.data ?? {};
+            const data = res.data;
 
             const userId = extractUserId(data);
             const userEmail = data?.email || email;
@@ -50,9 +48,11 @@ const LoginPage = () => {
                 setToastMsg("Login response missing user id.");
                 return;
             }
-
+            Cookies.set("firstName", data.firstName);
+            Cookies.set("lastName", data.lastName);
             Cookies.set("userId", userId);
-            Cookies.set("userEmail", userEmail);
+            Cookies.set("userEmail", data.email);
+            Cookies.set("fullName", `${data.firstName} ${data.lastName}`);
             console.log(Cookies.get("access_token"));
 
             if (userEmail === "admin@gmail.com") {
