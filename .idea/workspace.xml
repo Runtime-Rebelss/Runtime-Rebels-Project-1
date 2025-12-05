@@ -4,18 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Updated messages in SignupPage">
+    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Switched User authorization to cookies">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/test/CartService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/test/CartServiceImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/Cart.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/Navbar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/Navbar.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/Order.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/ProductCard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/ProductCard.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/cart.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/lib/cart.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/LoginPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/LoginPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/OrderSuccessPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/OrderSuccessPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/ProductPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/ProductPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/AdminPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/AdminPage.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -295,14 +286,6 @@
       <workItem from="1764405959254" duration="3247000" />
       <workItem from="1764441248702" duration="16650000" />
       <workItem from="1764460598757" duration="11691000" />
-    </task>
-    <task id="LOCAL-00001" summary="Updated Code">
-      <option name="closed" value="true" />
-      <created>1759515139591</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1759515139591</updated>
     </task>
     <task id="LOCAL-00002" summary="Adjusted code">
       <option name="closed" value="true" />
@@ -688,7 +671,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764891440752</updated>
     </task>
-    <option name="localTasksCounter" value="50" />
+    <task id="LOCAL-00050" summary="Switched User authorization to cookies">
+      <option name="closed" value="true" />
+      <created>1764893047969</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1764893047970</updated>
+    </task>
+    <option name="localTasksCounter" value="51" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -746,7 +737,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Completely revamped file names" />
     <MESSAGE value="Added &quot;Add to Cart&quot; API endpoint (POST/cart)&quot;" />
     <MESSAGE value="Added new front end code." />
     <MESSAGE value="Updated Add to Cart API and added CartPage frontend" />
@@ -771,6 +761,7 @@
     <MESSAGE value="Added untracked files" />
     <MESSAGE value="Added Admin code" />
     <MESSAGE value="Updated messages in SignupPage" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated messages in SignupPage" />
+    <MESSAGE value="Switched User authorization to cookies" />
+    <option name="LAST_COMMIT_MESSAGE" value="Switched User authorization to cookies" />
   </component>
 </project>
