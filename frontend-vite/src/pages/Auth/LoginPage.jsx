@@ -51,6 +51,7 @@ const LoginPage = () => {
 
             Cookies.set("userId", userId);
             Cookies.set("userEmail", userEmail);
+            console.log(Cookies.get("access_token"));
 
             if (userEmail === "admin@gmail.com") {
                 console.log(Cookies.get("access_token"));

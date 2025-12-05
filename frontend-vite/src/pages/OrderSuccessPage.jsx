@@ -156,6 +156,7 @@ const OrderSuccessPage = () => {
             // Needs fixed
             setTotal(orderPayload.totalPrice.reduce((s, t) => s + Number(t), 0));
 
+            localStorage.removeItem("pendingServerOrder");
             window.dispatchEvent(new Event("cart-updated"));
 
         };

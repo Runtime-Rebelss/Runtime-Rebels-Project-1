@@ -109,6 +109,8 @@ const Navbar = ({hideCart = false, hideCartCount = false}) => {
 
     const handleLogout = () => {
         try {
+            Cookies.remove("access_token");
+            Cookies.remove("access_refresh_token");
             Cookies.remove("userId");
             Cookies.remove("userEmail");
             Cookies.remove("adminEmail");
@@ -123,11 +125,8 @@ const Navbar = ({hideCart = false, hideCartCount = false}) => {
         }
     };
 
-    const userId = Cookies.get("userId");
     const userEmail = Cookies.get("userEmail");
     const adminEmail = Cookies.get("adminEmail");
-    Cookies.set("adminEmail", adminEmail);
-    Cookies.remove("adminEmail");
 
     return (
         <div className="bg-base-100 shadow-sm sticky top-0 z-50 flex flex-col">

@@ -1,5 +1,6 @@
 import api from "./axios";
 import toast from "react-hot-toast";
+import Cookies from "js-cookie"
 
 const GUEST_KEY = "guestCart";
 
@@ -177,7 +178,7 @@ export async function updateQuantity({productId, quantity}) {
 export async function removeItem(productId) {
     if (!productId) return;
 
-    const userId = localStorage.getItem("userId");
+    const userId = Cookies.get("userId");
 
     if (!userId) {
         const {items} = loadGuestCart();
@@ -194,7 +195,7 @@ export async function removeItem(productId) {
 
 // Method to handle checking out
 export async function handleCheckout(userId, signal) {
-    const userEmail = localStorage.getItem("userEmail");
+    const userEmail = Cookies.get("userEmail");
 
     if (!userId) {
         const {items} = loadGuestCart();
@@ -211,7 +212,7 @@ export async function handleCheckout(userId, signal) {
 
         const response = await api.post("/payments/create-checkout-session", {
             items: cartItems,
-            customerEmail: localStorage.getItem("userEmail") || null,
+            customerEmail: Cookies.get("userEmail") || null,
             savePaymentMethod: false,
         }, {signal});
         return response.data.url;
