@@ -4,12 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Updated Account Page">
-      <change afterPath="$PROJECT_DIR$/frontend-vite/src/components/UserInfo.jsx" afterDir="false" />
+    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Added user info page">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/AuthController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/AccountPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/AccountPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/UserInfo.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/UserInfo.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/SignUpPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/SignUpPage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/UserInfoPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/UserInfoPage.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -291,15 +289,7 @@
       <workItem from="1764405959254" duration="3247000" />
       <workItem from="1764441248702" duration="16650000" />
       <workItem from="1764460598757" duration="11691000" />
-      <workItem from="1764960923332" duration="7398000" />
-    </task>
-    <task id="LOCAL-00006" summary="Added &quot;Add to Cart&quot; API endpoint (POST/cart)&quot;">
-      <option name="closed" value="true" />
-      <created>1760051658086</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1760051658086</updated>
+      <workItem from="1764960923332" duration="8819000" />
     </task>
     <task id="LOCAL-00007" summary="Added new front end code.">
       <option name="closed" value="true" />
@@ -685,7 +675,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764960993425</updated>
     </task>
-    <option name="localTasksCounter" value="55" />
+    <task id="LOCAL-00055" summary="Added user info page">
+      <option name="closed" value="true" />
+      <created>1764968384536</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1764968384536</updated>
+    </task>
+    <option name="localTasksCounter" value="56" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -743,7 +741,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Updated Add to Cart API and added CartPage frontend" />
     <MESSAGE value="Scamazon_Coming_Soon" />
     <MESSAGE value="Pushed latest code" />
     <MESSAGE value="Added code to remove item from cart after purchase" />
@@ -768,6 +765,7 @@
     <MESSAGE value="Switched User authorization to cookies" />
     <MESSAGE value="Added first and last name field" />
     <MESSAGE value="Updated Account Page" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated Account Page" />
+    <MESSAGE value="Added user info page" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added user info page" />
   </component>
 </project>

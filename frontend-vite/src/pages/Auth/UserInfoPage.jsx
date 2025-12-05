@@ -9,7 +9,6 @@ import Cookies from "js-cookie"
 import UserInfo from "../../components/UserInfo";
 
 const UserInfoPage = () => {
-
     return (
         <div className="min-h-screen bg-base-200">
             <Navbar/>
@@ -22,10 +21,7 @@ const UserInfoPage = () => {
                 </div>
             </div>
         </div>
-
-
     )
-
 }
 
 export default UserInfoPage;
