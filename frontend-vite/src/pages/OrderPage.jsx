@@ -56,6 +56,7 @@ const OrderPage = () => {
     if (orders.length === 0) {
         return (
             <div className="card bg-base-100 border border-base-300">
+                <Navbar />
                 <div className="card-body items-center text-center">
                     <ShoppingBag className="w-10 h-10 mb-3" />
                     <h3 className="card-title font-normal">No orders yet</h3>
@@ -76,7 +77,6 @@ const OrderPage = () => {
             <div className="container mx-auto px-4 py-8">
                 <h1 className="text-3xl font-semibold mb-6">Your Orders</h1>
                 <div className="space-y-6">
-
                     {/* Generate OrderCard components for each order */}
                     {revOrder.map((order) => {
                         const orderId = order.id || order._id || "-";
