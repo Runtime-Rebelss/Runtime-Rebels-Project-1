@@ -11,6 +11,43 @@ const OrderPage = () => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
+    const userId = Cookies.get("userId");
+    const adminEmail = Cookies.get("adminEmail");
+    const isAdmin = adminEmail === "admin@gmail.com";
+
+    const hydrateOrders = async (orders) => {
+        const results = [];
+
+        for (const order of orders) {
+            const items = [];
+            const productIds = order.productIds || [];
+            const quantities = order.quantity || [];
+            const finalPrices = order.totalPrice || [];
+
+            for (let i = 0; i < productIds.length; i++) {
+                try {
+                    const { data: product } = await api.get(`/products/${productIds[i]}`);
+                    items.push({
+                        id: productIds[i],
+                        name: product.name,
+                        image: product.imageUrl,
+                        price: Number(finalPrices[i]),
+                        quantity: Number(quantities[i])
+                    });
+                } catch (err) {
+                    console.error("Error loading product:", err);
+                }
+            }
+
+            results.push({
+                ...order,
+                items,
+                total: items.reduce((s, it) => s + it.price * it.quantity, 0)
+            });
+        }
+
+        return results;
+    };
 
     useEffect(() => {
         const controller = new AbortController();
@@ -18,8 +55,25 @@ const OrderPage = () => {
         const fetchOrders = async () => {
             try {
                 setLoading(true);
-                const orders = await orderService.fetchOrders(controller.signal);
-                setOrders(Array.isArray(orders) ? orders : [orders]);
+
+                // admin sees all orders
+                if (isAdmin) {
+                    const { data } = await api.get("/orders", { signal: controller.signal });
+                    const hydrated = await hydrateOrders(data);
+                    setOrders(hydrated);
+                    return;
+                }
+
+                // user only sees their orders when signed in
+                if (userId) {
+                    const userOrders = await orderService.fetchOrders(controller.signal);
+                    setOrders(Array.isArray(userOrders) ? userOrders : []);
+                    return;
+                }
+
+                // guest sees local storage orders
+                const guestOrders = orderLib.readLocalOrders();
+                setOrders(Array.isArray(guestOrders) ? guestOrders : []);
             } catch (err) {
                 if (err?.code !== "ERR_CANCELED") {
                     console.warn("orders fetch failed:", err);
@@ -41,7 +95,7 @@ const OrderPage = () => {
             window.removeEventListener("cart-updated", handler);
             window.removeEventListener("order-updated", handler);
         };
-    }, []);
+    }, [isAdmin, userId]);
 
     const revOrder = orders.slice().reverse();
 
@@ -49,7 +103,9 @@ const OrderPage = () => {
         <div className="min-h-screen bg-base-200">
             <Navbar />
             <div className="container mx-auto px-4 py-8">
-                <h1 className="text-3xl font-semibold mb-6">Your Orders</h1>
+                <h1 className="text-3xl font-semibold mb-6">
+                    {isAdmin ? "All Orders" : "Your Orders"}
+                </h1>
 
                 {loading ? (
                     <div className="flex justify-center py-16">
@@ -101,7 +157,7 @@ const OrderPage = () => {
                                         <div>
                                             <div className="font-medium">Ship to</div>
                                             <div className="opacity-70">
-                                                {order.shipTo?.fullName || userEmail}
+                                                {order.userEmail || "Unknown" }
                                             </div>
                                         </div>
                                         <div className="md:text-right">
@@ -117,15 +173,15 @@ const OrderPage = () => {
                                                 key={`${it.id || it.productId || i}-${orderId}`}
                                                 className="py-4 flex items-center gap-4"
                                             >
-                                                <div className="w-20 h-20 bg-base-200 rounded overflow-hidden flex-shrink-0">
-                                                    <img
+                                                <div className="w-20 h-20 bg-base-100 rounded flex items-center justify-center overflow-hidden">
+                                                <img
                                                         src={
                                                             it.image ||
                                                             "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=400&q=70"
                                                         }
                                                         alt={it.name}
-                                                        className="w-full h-full object-cover"
-                                                    />
+                                                        className="w-full h-full object-contain p-1 drop-shadow-sm"
+                                                />
                                                 </div>
                                                 <div className="flex-1 min-w-0">
                                                     <div className="font-medium truncate">{it.name}</div>

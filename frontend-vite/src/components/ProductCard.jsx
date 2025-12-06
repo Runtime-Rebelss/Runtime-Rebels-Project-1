@@ -60,46 +60,40 @@ function ProductCard({ product }) {
         <div className="card bg-base-200 shadow-sm hover:shadow-lg transition duration-200">
 
             {/* IMAGE */}
-            <Link to={`/product/${productId}`}>
-                <figure className="w-full h-full flex items-center justify-center overflow-hidden">
-                    <img
-                        className="w-full p-4 object-contain"
-                        src={product.imageUrl || product.image}
-                        alt={product.name}
-                    />
-                </figure>
-            </Link>
+            <div className="w-full h-64 flex items-center justify-center bg-gradient-to-b from-[#f8f1df] to-[#e6d7b6] overflow-hidden rounded-lg">
+                <img
+                    className="max-h-full max-w-full object-contain p-4"
+                    src={product.imageUrl || product.image}
+                    alt={product.name}
+                />
+            </div>
 
-            <div className="card-body">
+            <div className="card-body flex flex-col">
 
                 {/* TITLE */}
-                <h2 className="card-title text-base-content">
+                <h2 className="card-title text-base-content mb-1">
                     <Link to={`/product/${productId}`}>{product.name}</Link>
                 </h2>
 
-                {/* PRICE + (USER) ADD TO BAG ROW */}
-                <div className="flex justify-between items-center mt-2">
-
-                    {/* PRICE */}
-                    <div className="font-normal text-2xl">
-                        ${Number(product.price).toFixed(2)}
-                    </div>
-
-                    {/* USER BUTTON (unchanged layout) */}
-                    {!isAdmin && (
-                        <button
-                            className="btn btn-soft btn-primary rounded-full gap-2 transition"
-                            onClick={handleAddToBag}
-                        >
-                            <ShoppingBag size={18} />
-                            <span>Add to Bag</span>
-                        </button>
-                    )}
+                {/* PRICE (smaller + closer to title) */}
+                <div className="text-xl font-normal mb-2">
+                    ${Number(product.price).toFixed(2)}
                 </div>
 
-                {/* ADMIN BUTTONS — CENTERED BELOW PRICE */}
+                {/* USER BUTTON (only visible for customers) */}
+                {!isAdmin && (
+                    <button
+                        className="btn btn-soft btn-primary rounded-full gap-2 transition"
+                        onClick={handleAddToBag}
+                    >
+                        <ShoppingBag size={18} />
+                        <span>Add to Bag</span>
+                    </button>
+                )}
+
+                {/* ADMIN BUTTONS */}
                 {isAdmin && (
-                    <div className="flex justify-center mt-3">
+                    <div className="mt-auto flex justify-center">
                         <div className="flex gap-3">
 
                             <Link
@@ -120,6 +114,7 @@ function ProductCard({ product }) {
                         </div>
                     </div>
                 )}
+
             </div>
 
             {/* CONFIRM DELETE MODAL */}
