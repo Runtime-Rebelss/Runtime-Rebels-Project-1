@@ -3,15 +3,15 @@ import {useNavigate} from "react-router-dom";
 import Navbar from "../components/Navbar";
 import orderLib from "../lib/orders.js";
 import api from "../lib/axios";
+import Cookies from "js-cookie";
 import cartLib from "../lib/cart";
-import Cookies from "js-cookie"
 
 const OrderSuccessPage = () => {
     const [cartItems, setCartItems] = useState([]);
     const [total, setTotal] = useState(0);
     const [confirmation, setConfirmation] = useState("");
     const navigate = useNavigate();
-    const fullName = localStorage.getItem("userFullName") || "Valued Customer";
+    const fullName = Cookies.get("fullName") || "Valued Customer";
     const userId = Cookies.get("userId");
     const userEmail = Cookies.get("userEmail");
     const didRun = useRef(false);
@@ -80,7 +80,7 @@ const OrderSuccessPage = () => {
                     items: normalizedItems,
                     total: normalizedItems.reduce((sum, it) => sum + (Number(it.price) || 0) * (Number(it.quantity) || 1), 0),
                     status: "Paid",
-                    shipTo: {fullName: Cookies.get("userEmail") || "Guest Checkout"}
+                    shipTo: {fullName: Cookies.get("userEmail") || "Guest User"}
                 };
 
                 const existing = orderLib.readLocalOrders();

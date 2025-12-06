@@ -124,10 +124,12 @@ const LoginPage = () => {
                                 <button type="submit" className="btn btn-neutral w-full mt-4" disabled={loading}>
                                     {loading ? 'Logging in…' : 'Sign in'}
                                 </button>
+                                {/* Forgot Password Button */}
+                                <button type="button" onClick={() => navigate("/reset-password")} className="btn btn-link w-full mt-2">Forgot Password?
+                                </button>
                                 <div className="divider">Don't have an account?</div>
                                 {/* Signup Button */}
                                 <button type="button" onClick={() => navigate("/signup")} className="btn btn-neutral w-full mt-4">
-
                                     {loading ? 'Logging in…' : 'Sign up'}
                                 </button>
                             </div>

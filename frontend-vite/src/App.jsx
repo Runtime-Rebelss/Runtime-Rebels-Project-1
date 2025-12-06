@@ -14,6 +14,7 @@ import OrderDetailsPage from "./pages/OrderDetailsPage";
 import AdminPage from "./pages/auth/AdminPage";
 import AccountPage from "./pages/AccountPage";
 import UserInfoPage from "./pages/auth/UserInfoPage";
+import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
 
 function App() {
     return (
@@ -34,6 +35,7 @@ function App() {
                 <Route path="/admin" element={<AdminPage />} />
                 <Route path="/account" element={<AccountPage />} />
                 <Route path="/account/manage" element={<UserInfoPage />} />
+                <Route path="/reset-password" element={<ResetPasswordPage />} />
             </Routes>
         </div>
     );

@@ -3,6 +3,7 @@ import {useNavigate, useSearchParams} from "react-router";
 import api from "../lib/axios.js";
 import toast from "react-hot-toast";
 import Cookies from "js-cookie";
+import ResetPassword from "./ResetPassword.jsx";
 
 const UserInfo = () => {
     const [loading, setLoading] = useState(false);
@@ -72,40 +73,6 @@ const UserInfo = () => {
         }
         setLoading(false);
     };
-    // Update Password
-    const updatePassword = async () => {
-        if (newPassword !== confirmPassword) {
-            toast.error("Passwords do not match!");
-            return;
-        }
-
-        setLoading(true);
-
-        try {
-            const res = await api.put(
-                "/auth/updatePassword",
-                {
-                    email: Cookies.get("userEmail"),
-                    oldPassword,
-                    newPassword,
-                    confirmPassword
-                },
-                { withCredentials: true }
-            );
-
-            toast.success("Password updated!");
-            setEditPassword(true);
-            setOldPassword("");
-            setNewPassword("");
-            setConfirmPassword("");
-
-        } catch (err) {
-            toast.error(
-                err?.response?.data?.message || "Failed to update password"
-            );
-        }
-        setLoading(false);
-    };
 
     // Make it so that you can choose which field you want to edit, like it will be enabled
     // Need to add thing that checks for field that is being edited and then update it
@@ -118,7 +85,7 @@ const UserInfo = () => {
 
                     <div className="join">
                         <input
-                            className="input join-item w-full"
+                            className="input outline join-item w-full"
                             disabled={editName}
                             value={fullName}
                             onChange={(e) => setFullName(e.target.value)}
@@ -149,7 +116,7 @@ const UserInfo = () => {
 
                     <div className="join">
                         <input
-                            className="input join-item w-full"
+                            className="input outline join-item w-full"
                             disabled={editEmail}
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
@@ -172,52 +139,8 @@ const UserInfo = () => {
                         </button>
                     )}
                 </fieldset>
-
                 {/* Update Password */}
-                <fieldset className="fieldset bg-base-200 border p-4 rounded-box">
-                    <label className="label font-bold text-lg">Change Password</label>
-                    <div>
-                        <input
-                            type="password"
-                            className="input w-full mb-2"
-                            disabled={editPassword}
-                            value={oldPassword}
-                            onChange={(e) => setOldPassword(e.target.value)}
-                            placeholder="Old password"
-                        />
-                        <input
-                            type="password"
-                            className="input w-full mb-2"
-                            disabled={editPassword}
-                            value={newPassword}
-                            onChange={(e) => setNewPassword(e.target.value)}
-                            placeholder="New password"
-                        />
-                        <input
-                            type="password"
-                            className="input w-full mb-2"
-                            disabled={editPassword}
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                            placeholder="Confirm password"
-                        />
-                    </div>
-                    <button
-                        className="btn mt-2"
-                        onClick={() => setEditPassword(!editPassword)}
-                    >
-                        edit
-                    </button>
-                    {!editPassword && (
-                        <button
-                            className="btn btn-primary w-full mt-3"
-                            onClick={updatePassword}
-                            disabled={loading}
-                        >
-                            Save Password
-                        </button>
-                    )}
-                </fieldset>
+                <ResetPassword/>
             </div>
         </div>
     );
