@@ -3,40 +3,20 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar.jsx';
 import api from '../../lib/axios.js';
 import toast from 'react-hot-toast'
+import Cookies from "js-cookie"
 
 const SignUpPage = () => {
     const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState('');
+    const [isValid, setIsValid] = useState(true);
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
+    const [fullName, setFullName] = useState('');
     const [password, setPassword] = useState('');
     const [toastMsg, setToastMsg] = useState('');
     const [cartItems, setCartItems] = useState([]);
     const navigate = useNavigate();
     const acRef = useRef(null);
-
-    // If already logged in
-    useEffect(() => {
-        const already = localStorage.getItem('userId');
-        if (already) {
-            void preloadCart(already);
-        }
-    }, []);
-
-    const preloadCart = async (userId) => {
-        try {
-            const res = await fetch(`/api/carts/${encodeURIComponent(userId)}`);
-            if (!res.ok) return;
-            const data = await res.json();
-            const productIds =
-                (Array.isArray(data?.productIds) && data.productIds) ||
-                (Array.isArray(data?.productId) && data.productId) ||
-                [];
-            setCartItems(productIds);
-        } catch (err) {
-            console.warn('preloadCart failed', err);
-        }
-    };
 
     const extractUserId = (data) =>
         data?.userId || data?.id || data?._id || data?.user?.id || data?.user?._id || null;
@@ -54,16 +34,18 @@ const SignUpPage = () => {
             const userEmail = data?.email || email;
             setFirstName(firstName);
             setLastName(lastName);
+            setFullName(firstName + lastName);
 
             if (!userId) {
                 setToastMsg("Login response missing user id.");
                 return;
             }
 
-            localStorage.setItem("userId", userId);
-            localStorage.setItem("userEmail", userEmail);
-
-            await preloadCart(userId);
+            Cookies.set("userId", userId);
+            Cookies.set("userEmail", userEmail);
+            Cookies.set("firstName", firstName);
+            Cookies.set("lastName", lastName);
+            Cookies.set("fullName", fullName);
 
             navigate('/', { replace: true });
             toast.success('Signup successfully!');
@@ -71,9 +53,9 @@ const SignUpPage = () => {
         } catch (err) {
             const status = err?.response?.status;
             const serverMsg = err?.response?.data?.message || err?.response?.data?.error;
-            if (status === 404) setToastMsg(serverMsg || 'No account with that email');
-            else if (status === 401) setToastMsg(serverMsg || 'Incorrect password');
-            else setToastMsg(serverMsg || 'Login failed. Please try again.');
+            if (status === 403) setToastMsg(serverMsg || 'There is already an account associated with that email');
+            else if (status === 401) setToastMsg(serverMsg || 'Invalid password');
+            else setToastMsg(serverMsg || 'Sign up failed. Please try again.');
         } finally {
             setLoading(false);
         }

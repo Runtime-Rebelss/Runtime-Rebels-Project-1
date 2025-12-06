@@ -82,6 +82,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 || request.getServletPath().startsWith("/api/orders/")
                 || request.getServletPath().startsWith("/api/carts/")
                 || request.getServletPath().startsWith("/api/stripe/")
+                || request.getServletPath().startsWith("/api/auth/user")
                 || request.getServletPath().startsWith("/api/stripe/session/");
     }
 }

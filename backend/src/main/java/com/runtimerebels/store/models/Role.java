@@ -20,12 +20,12 @@ public enum Role {
                     CUSTOMER_DELETE
             )
     ),
-    SHOPKEEPER(
+    ADMIN(
             Set.of(
-                    SHOPKEEPER_CREATE,
-                    SHOPKEEPER_DELETE,
-                    SHOPKEEPER_UPDATE,
-                    SHOPKEEPER_READ
+                    ADMIN_CREATE,
+                    ADMIN_DELETE,
+                    ADMIN_UPDATE,
+                    ADMIN_READ
             )
     );
 

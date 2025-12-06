@@ -1,5 +1,7 @@
 package com.runtimerebels.store.controller;
 
+import com.runtimerebels.store.dao.UserRepository;
+import com.runtimerebels.store.models.User;
 import com.runtimerebels.store.models.dto.AuthenticateRequest;
 import com.runtimerebels.store.models.dto.AuthenticationResponse;
 import com.runtimerebels.store.services.AuthService;
@@ -8,15 +10,23 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import com.runtimerebels.store.models.dto.RegisterRequest;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 
 /**
@@ -38,6 +48,10 @@ public class AuthController {
     private final AuthService authService;
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+    private final UserRepository userRepository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @PostMapping("/signup")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) {
@@ -97,5 +111,93 @@ public class AuthController {
         response.addCookie(newAccess);
 
         return ResponseEntity.ok(tokens);
+    }
+
+    @PutMapping("/updateName")
+    public ResponseEntity<?> updateName(@RequestBody Map<String, String> body) {
+
+        String email = body.get("email");
+        String fullName = body.get("fullName");
+
+        Optional<User> userOpt = userRepository.findByEmail(email);
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.status(404).body(Map.of("message", "User not found"));
+        }
+
+        User user = userOpt.get();
+
+        String[] parts = fullName.trim().split(" ", 2);
+        String firstName = parts[0];
+        String lastName = parts.length > 1 ? parts[1] : "";
+
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setFullName(fullName);
+
+        userRepository.save(user);
+
+        return ResponseEntity.ok(Map.of(
+                "message", "Name updated",
+                "firstName", user.getFirstName(),
+                "lastName", user.getLastName(),
+                "fullName", user.getFullName()
+        ));
+    }
+
+    // Update user email
+    @PutMapping("/email")
+    public ResponseEntity<?> updateUser(@RequestBody Map<String, String> updates) {
+
+        String oldEmail = updates.get("oldEmail");
+        String newEmail = updates.get("newEmail");
+
+        Optional<User> existingUser = userRepository.findByEmail(oldEmail);
+
+        if (existingUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message", "User not found"));
+        }
+
+        User user = existingUser.get();
+
+        user.setEmail(newEmail);
+
+        userRepository.save(user);
+
+        return ResponseEntity.ok(Map.of(
+                "email", user.getEmail(),
+                "message", "User updated successfully"
+        ));
+    }
+
+    @PutMapping("/updatePassword")
+    public ResponseEntity<?> updatePassword(@RequestBody Map<String, String> body) {
+
+        String email = body.get("email");
+        String oldPassword = body.get("oldPassword");
+        String newPassword = body.get("newPassword");
+        String confirmPassword = body.get("confirmPassword");
+
+        Optional<User> userOpt = userRepository.findByEmail(email);
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.status(404).body(Map.of("message", "User not found"));
+        }
+
+        User user = userOpt.get();
+
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            return ResponseEntity.status(401).body(Map.of("message", "Old password incorrect"));
+        }
+
+        if (!newPassword.equals(confirmPassword)) {
+            return ResponseEntity.status(400).body(Map.of("message", "Passwords do not match"));
+        }
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+
+        return ResponseEntity.ok(Map.of(
+                "message", "Password updated successfully"
+        ));
     }
 }

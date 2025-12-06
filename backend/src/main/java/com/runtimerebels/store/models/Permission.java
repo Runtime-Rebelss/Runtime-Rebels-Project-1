@@ -10,10 +10,10 @@ public enum Permission {
     CUSTOMER_UPDATE("customer:update"),
     CUSTOMER_CREATE("customer:create"),
 
-    SHOPKEEPER_READ("shopkeeper:read"),
-    SHOPKEEPER_DELETE("shopkeeper:delete"),
-    SHOPKEEPER_UPDATE("shopkeeper:update"),
-    SHOPKEEPER_CREATE("shopkeeper:create");
+    ADMIN_READ("admin:read"),
+    ADMIN_DELETE("admin:delete"),
+    ADMIN_UPDATE("admin:update"),
+    ADMIN_CREATE("admin:create");
 
     @Getter
     private final String permission;

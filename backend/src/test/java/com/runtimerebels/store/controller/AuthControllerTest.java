@@ -1,5 +1,6 @@
 package com.runtimerebels.store.controller;
 
+import com.runtimerebels.store.dao.UserRepository;
 import com.runtimerebels.store.models.dto.AuthenticationResponse;
 import com.runtimerebels.store.services.AuthService;
 import com.runtimerebels.store.services.JwtService;
@@ -43,6 +44,9 @@ class AuthControllerTest {
 
     @MockBean
     private org.springframework.security.core.userdetails.UserDetailsService userDetailsService;
+
+    @MockBean
+    private UserRepository userRepository;
 
     @Test
     @DisplayName("POST /api/auth/refreshToken returns 401 when cookie missing")
@@ -89,7 +93,12 @@ class AuthControllerTest {
         Mockito.when(localMock.refreshWithToken(anyString())).thenThrow(new RuntimeException("Invalid refresh token"));
 
         // create controller with the mocked dependencies
-        AuthController controller = new AuthController(localMock, Mockito.mock(JwtService.class), Mockito.mock(org.springframework.security.core.userdetails.UserDetailsService.class));
+        AuthController controller = new AuthController(
+                localMock,
+                Mockito.mock(JwtService.class),
+                Mockito.mock(org.springframework.security.core.userdetails.UserDetailsService.class),
+                Mockito.mock(UserRepository.class)
+        );
 
         org.springframework.mock.web.MockHttpServletRequest req = new org.springframework.mock.web.MockHttpServletRequest();
         req.setCookies(new Cookie("access_refresh_token", "badToken"));

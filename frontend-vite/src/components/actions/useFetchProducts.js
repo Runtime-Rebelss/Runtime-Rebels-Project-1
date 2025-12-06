@@ -10,7 +10,7 @@ import { buildMergedParams } from '../../lib/query';
 
 /**
  * Hook to fetch products from backend.
- * 
+ *
  * @author Frank Gonzalez
  * @since 11-19-2025
  *
@@ -22,36 +22,36 @@ import { buildMergedParams } from '../../lib/query';
  */
 function useFetchProducts(inputParams, setProducts, setLoading, overrides = {}) {
 
-    
+
 
     const mergedParams = useMemo(() => buildMergedParams(inputParams, overrides), [inputParams, JSON.stringify(overrides)]);
 
-    
+
 
     /**
      * Perform the API request. Uses `categories` to build the URL.
      * @returns {Promise<void>}
      */
     const fetchProducts = async () => {
-      try {
-        // If mergedParams has any entries, request /products/results with the query string,
-        // otherwise request the base /products endpoint.
-        const qs = mergedParams ? mergedParams.toString() : '';
-        const url = qs ? `/products/results?${qs}` : '/products';
-        console.log(url);
-        const response = await api.get(url);
-        setProducts(response.data);
-      } catch (error) {
-        console.error('Error fetching products:', error);
-        toast.error('Failed to fetch products');
-      } finally {
-        setLoading(false);
-      }
+        try {
+            // If mergedParams has any entries, request /products/results with the query string,
+            // otherwise request the base /products endpoint.
+            const qs = mergedParams ? mergedParams.toString() : '';
+            const url = qs ? `/products/results?${qs}` : '/products';
+            console.log(url);
+            const response = await api.get(url);
+            setProducts(response.data);
+        } catch (error) {
+            console.error('Error fetching products:', error);
+            toast.error('Failed to fetch products');
+        } finally {
+            setLoading(false);
+        }
     };
 
     useEffect(() => {
-      setLoading(true);
-      fetchProducts();
+        setLoading(true);
+        fetchProducts();
     }, [mergedParams.toString()]);
 
     return { setProducts, setLoading, fetchProducts };

@@ -3,7 +3,7 @@ import React from "react";
 import toast from "react-hot-toast";
 import { ShoppingBag } from "lucide-react";
 import { addToCart } from "../lib/cart";
-
+import Cookies from "js-cookie"
 
 /**
  * ProductCard renders a single product tile used in lists and grids.
@@ -15,7 +15,7 @@ import { addToCart } from "../lib/cart";
  * @returns {Element}
  */
 function ProductCard({ product }) {
-    const userId = localStorage.getItem("userId");
+    const userId = Cookies.get("userId");
 
     // support multiple shapes (productId, id, _id)
     const productId =

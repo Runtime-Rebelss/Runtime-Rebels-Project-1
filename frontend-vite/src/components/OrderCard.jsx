@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import orderLib from "../lib/orders.js";
 import orderService from "../lib/orderService";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 
 function OrderCard({ order, detailsPage = false }) {
@@ -14,7 +15,7 @@ function OrderCard({ order, detailsPage = false }) {
         (s, it) => s + Number(it.price || 0) * Number(it.quantity || 1),
         0
     ));
-    const userEmail = localStorage.getItem("userEmail");
+    const fullName = Cookies.get("fullName");
 
     return (
         <div
@@ -34,7 +35,7 @@ function OrderCard({ order, detailsPage = false }) {
                 <div>
                     <div className="font-medium">Ship to</div>
                     <div className="opacity-70">
-                        {order.shipTo?.fullName || userEmail}
+                        {fullName || "Guest User"}
                     </div>
                 </div>
                 <div className="md:text-right">

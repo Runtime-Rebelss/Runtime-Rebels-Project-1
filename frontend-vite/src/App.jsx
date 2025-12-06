@@ -1,4 +1,3 @@
-
 import { Routes, Route } from "react-router-dom";
 
 import ProductPage from "./pages/ProductPage";
@@ -12,6 +11,10 @@ import OrderPage from "./pages/OrderPage";
 import LoginPage from "./pages/Auth/LoginPage.jsx";
 import SignUpPage from "./pages/Auth/SignUpPage.jsx";
 import OrderDetailsPage from "./pages/OrderDetailsPage";
+import AdminPage from "./pages/auth/AdminPage";
+import AccountPage from "./pages/AccountPage";
+import UserInfoPage from "./pages/auth/UserInfoPage";
+import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
 
 function App() {
     return (
@@ -29,6 +32,10 @@ function App() {
                 <Route path="/signup" element={<SignUpPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="details/:orderId" element={<OrderDetailsPage />} />
+                <Route path="/admin" element={<AdminPage />} />
+                <Route path="/account" element={<AccountPage />} />
+                <Route path="/account/manage" element={<UserInfoPage />} />
+                <Route path="/reset-password" element={<ResetPasswordPage />} />
             </Routes>
         </div>
     );

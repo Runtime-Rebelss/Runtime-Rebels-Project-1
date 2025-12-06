@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar.jsx';
 import api from '../../lib/axios.js';
 import toast from 'react-hot-toast'
+import Cookies from "js-cookie";
 
 const LoginPage = () => {
     const [loading, setLoading] = useState(false);
@@ -38,7 +39,7 @@ const LoginPage = () => {
 
         try {
             const res = await api.post('/auth/login', { email, password }, {withCredentials: true});
-            const data = res?.data ?? {};
+            const data = res.data;
 
             const userId = extractUserId(data);
             const userEmail = data?.email || email;
@@ -47,9 +48,18 @@ const LoginPage = () => {
                 setToastMsg("Login response missing user id.");
                 return;
             }
+            Cookies.set("firstName", data.firstName);
+            Cookies.set("lastName", data.lastName);
+            Cookies.set("userId", userId);
+            Cookies.set("userEmail", data.email);
+            Cookies.set("fullName", `${data.firstName} ${data.lastName}`);
+            console.log(Cookies.get("access_token"));
 
-            localStorage.setItem("userId", userId);
-            localStorage.setItem("userEmail", userEmail);
+            if (userEmail === "admin@gmail.com") {
+                console.log(Cookies.get("access_token"));
+                Cookies.set("adminEmail", userEmail);
+                Cookies.remove("userEmail");
+            }
 
             await preloadCart(userId);
 
@@ -69,7 +79,7 @@ const LoginPage = () => {
 
     // If already logged in
     useEffect(() => {
-        const already = localStorage.getItem("userId");
+        const already = Cookies.get("userId");
         if (already) {
             void preloadCart(already);
         }
@@ -112,13 +122,15 @@ const LoginPage = () => {
                             <div className="flex w-full flex-col">
                                 {/* Login Button */}
                                 <button type="submit" className="btn btn-neutral w-full mt-4" disabled={loading}>
-                                    {loading ? "Logging in…" : "Sign in"}
+                                    {loading ? 'Logging in…' : 'Sign in'}
+                                </button>
+                                {/* Forgot Password Button */}
+                                <button type="button" onClick={() => navigate("/reset-password")} className="btn btn-link w-full mt-2">Forgot Password?
                                 </button>
                                 <div className="divider">Don't have an account?</div>
                                 {/* Signup Button */}
-                                <button type="button" onClick={() => navigate("/signup")} className="btn btn-neutral w-full mt-4" disabled={loading}>
-
-                                    {loading ? "Logging in…" : "Sign in"}
+                                <button type="button" onClick={() => navigate("/signup")} className="btn btn-neutral w-full mt-4">
+                                    {loading ? 'Logging in…' : 'Sign up'}
                                 </button>
                             </div>
 

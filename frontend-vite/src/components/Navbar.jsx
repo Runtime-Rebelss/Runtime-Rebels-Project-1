@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { ShoppingCart, Search, User } from "lucide-react";
-import { useNavigate, useSearchParams } from "react-router";
+import React, {useEffect, useState} from "react";
+import {Link} from "react-router-dom";
+import {ShoppingCart, Search, User} from "lucide-react";
+import {useNavigate, useSearchParams} from "react-router";
 import cartLib from "../lib/cart.js";
 import api from "../lib/axios.js";
 import toast from "react-hot-toast";
 import formatString from "./actions/stringFormatter.js";
-import { buildMergedParams } from "../lib/query";
+import {buildMergedParams} from "../lib/query";
+import Cookies from "js-cookie";
 
 /**
  * Navbar component renders top navigation with category links, search and cart.
@@ -15,7 +16,7 @@ import { buildMergedParams } from "../lib/query";
  * @since 11-19-2025
  * @returns {JSX.Element}
  */
-const Navbar = ({ hideCart = false, hideCartCount = false }) => {
+const Navbar = ({hideCart = false, hideCartCount = false}) => {
     const categories = ["Men's", "Women's", "Jewelry", "Electronics", "Home & Garden"];
     const [cartCount, setCartCount] = useState(0);
     const [loading, setLoading] = useState(true);
@@ -30,20 +31,20 @@ const Navbar = ({ hideCart = false, hideCartCount = false }) => {
         err?.message === "canceled";
 
     const countFromGuest = () => {
-        const cart = cartLib.loadGuestCart?.() || { items: [] };
+        const cart = cartLib.loadGuestCart?.() || {items: []};
         const items = Array.isArray(cart.items) ? cart.items : [];
         return items.reduce((sum, it) => sum + (Number(it.quantity) || 1), 0);
     };
 
     const countFromServer = async (userId, signal) => {
-        const { data } = await api.get(`/carts/${encodeURIComponent(userId)}`, { signal });
+        const {data} = await api.get(`/carts/${encodeURIComponent(userId)}`, {signal});
         const qtys = Array.isArray(data?.quantity) ? data.quantity : [];
         return qtys.reduce((s, q) => s + (Number(q) || 1), 0);
     };
 
     // Initial load
     useEffect(() => {
-        const userId = localStorage.getItem("userId");
+        const userId = Cookies.get("userId");
         const ac = new AbortController();
 
         (async () => {
@@ -68,7 +69,7 @@ const Navbar = ({ hideCart = false, hideCartCount = false }) => {
     // Update count when cart changes
     useEffect(() => {
         const handler = async () => {
-            const userId = localStorage.getItem("userId");
+            const userId = Cookies.get("userId");
             if (!userId) {
                 setCartCount(countFromGuest());
                 return;
@@ -97,8 +98,7 @@ const Navbar = ({ hideCart = false, hideCartCount = false }) => {
     const handleSearch = (term) => {
         const trimmed = (term || "").trim();
         if (!trimmed) return;
-        // Create new params with only the search term (clear categories and sort)
-        const params = new URLSearchParams({ search: trimmed });
+        const params = buildMergedParams(searchParams, {search: trimmed});
         navigate(`/results?${params.toString()}`);
     };
 
@@ -109,8 +109,14 @@ const Navbar = ({ hideCart = false, hideCartCount = false }) => {
 
     const handleLogout = () => {
         try {
-            localStorage.removeItem("userId");
-            localStorage.removeItem("userEmail");
+            Cookies.remove("access_token");
+            Cookies.remove("access_refresh_token");
+            Cookies.remove("userId");
+            Cookies.remove("userEmail");
+            Cookies.remove("firstName");
+            Cookies.remove("lastName");
+            Cookies.remove("fullName");
+            Cookies.remove("adminEmail");
             toast.success("User logged out!");
             navigate("/");
             window.location.reload();
@@ -122,7 +128,8 @@ const Navbar = ({ hideCart = false, hideCartCount = false }) => {
         }
     };
 
-    const userId = localStorage.getItem("userId");
+    const userEmail = Cookies.get("userEmail");
+    const adminEmail = Cookies.get("adminEmail");
 
     return (
         <div className="bg-base-100 shadow-sm sticky top-0 z-50 flex flex-col">
@@ -186,52 +193,75 @@ const Navbar = ({ hideCart = false, hideCartCount = false }) => {
                             className="input input-bordered rounded-r-none w-full"
                         />
                         <button type="submit" className="btn btn-primary rounded-l-none">
-                            <Search className="h-5 w-5 text-white" />
+                            <Search className="h-5 w-5 text-white"/>
                         </button>
                     </form>
                 </div>
 
                 {/* RIGHT: orders / account / cart */}
                 <div className="flex items-center gap-2 ml-auto">
-                <Link to="/orders">
+                    <Link to="/orders">
                         <button className="btn btn-ghost">Orders</button>
                     </Link>
 
-                    {userId ? (
-                        <div className="dropdown dropdown-hover">
-                            <div tabIndex={0} role="button" className="btn btn-ghost btn-square">
-                                <User />
-                            </div>
-                            <ul
-                                tabIndex={-1}
-                                className="dropdown-content menu bg-base-100 rounded-box z-[60] w-52 p-2 shadow-sm"
-                            >
-                                <li>
-                                    <Link to="/account">
-                                        <button className="btn-ghost">Account</button>
-                                    </Link>
-                                </li>
-                                <li>
-                                    <button
-                                        onClick={handleLogout}
-                                        className="text-primary-600 underline text-sm hover:text-gray-900"
-                                    >
-                                        Sign Out
-                                    </button>
-                                </li>
-                            </ul>
-                        </div>
-                    ) : (
-                        <Link to="/login">
-                            <button className="btn btn-ghost">Sign in</button>
-                        </Link>
-                    )}
+                    {
+                        userEmail ? (
+                                <div className="dropdown dropdown-hover">
+                                    <div tabIndex={0} role="button" className="btn btn-ghost">
+                                        <User/>
+                                    </div>
+                                    <ul tabIndex="-1"
+                                        className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+                                        <li>
+                                            <Link to="/account">
+                                                <button className="btn-ghost">Account</button>
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <button onClick={handleLogout}
+                                                    className="text-primary-600 underline text-sm hover:text-gray-900">Sign
+                                                Out
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
+                            ) :
+                            adminEmail ? (
+                                <div className="dropdown dropdown-hover">
+                                    <div tabIndex={0} role="button" className="btn btn-ghost">
+                                        <User/>
+                                    </div>
+                                    <ul tabIndex="-1"
+                                        className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+                                        <li>
+                                            <Link to="/admin">
+                                                <button className="btn-ghost">Admin</button>
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link to="/account">
+                                                <button className="btn-ghost">Account</button>
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <button onClick={handleLogout}
+                                                    className="text-primary-600 underline text-sm hover:text-gray-900">Sign Out
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
+                            ) : (
+                                <Link to="/login">
+                                    <button className="btn btn-ghost">Sign in</button>
+                                </Link>
+                            )}
 
                     {!hideCart && (
                         <Link to="/cart" className="btn btn-ghost btn-circle relative">
-                            <ShoppingCart className="h-6 w-6" />
+                            <ShoppingCart className="h-6 w-6"/>
                             {!hideCartCount && cartCount > 0 && (
-                                <span className="absolute -top-1 -right-1 bg-primary text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
+                                <span
+                                    className="absolute -top-1 -right-1 bg-primary text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
                   {cartCount}
                 </span>
                             )}
@@ -252,7 +282,7 @@ const Navbar = ({ hideCart = false, hideCartCount = false }) => {
                         className="input input-bordered rounded-r-none w-full"
                     />
                     <button type="submit" className="btn btn-primary rounded-l-none">
-                        <Search className="h-5 w-5 text-white" />
+                        <Search className="h-5 w-5 text-white"/>
                     </button>
                 </form>
             </div>

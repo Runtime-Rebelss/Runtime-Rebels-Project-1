@@ -4,13 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Added untracked files">
+    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Updated OrderDetailsPage to use Cookies and Full Name">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/dto/LoggedUserResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/dto/LoggedUserResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/services/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/services/AuthService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/SignUpPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/SignUpPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/OrderPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/OrderPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/OrderSuccessPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/OrderSuccessPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/OrderController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/test/java/com/runtimerebels/store/controller/AuthControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/test/java/com/runtimerebels/store/controller/AuthControllerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/orderService.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/lib/orderService.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,17 +22,17 @@
         <option value="Record" />
         <option value="Enum" />
         <option value="Interface" />
-        <option value="JSX File" />
         <option value="Class" />
         <option value="package.json" />
         <option value="JavaScript File" />
+        <option value="JSX File" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="admin-henry" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -47,7 +46,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/Hlocke124/Runtime-Rebels-Project-1.git&quot;,
-    &quot;accountId&quot;: &quot;c092b729-09e8-4a5f-870e-9563811d8a5e&quot;
+    &quot;accountId&quot;: &quot;82aedb2d-abc9-4dc7-bdc8-8c73de7f3805&quot;
   }
 }</component>
   <component name="KubernetesApiPersistence">{}</component>
@@ -98,7 +97,7 @@
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;Spring Boot.ShoppingCartApplication.executor&quot;: &quot;Run&quot;,
     &quot;Spring Boot.StoreApplication.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;ordering-henry&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;account-henry&quot;,
     &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/wlock/OneDrive/Documents/Runtime-Rebels-Final/Runtime-Rebels-Project-1/backend/src/main/java/com/runtimerebels/store/services&quot;,
@@ -127,6 +126,7 @@
       <recent name="C:\Users\wlock\OneDrive\Documents\Runtime-Rebels-Final\Runtime-Rebels-Project-1\backend\src\main\java\com\runtimerebels\store\requestResponse" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\wlock\OneDrive\Documents\Runtime-Rebels-Project-1.2\frontend-vite\src\pages\Auth" />
       <recent name="C:\Users\wlock\OneDrive\Documents\Runtime-Rebels-Final\Runtime-Rebels-Project-1\frontend-vite\src\pages\Auth" />
       <recent name="C:\Users\wlock\OneDrive\Documents\Runtime-Rebels-Final\Runtime-Rebels-Project-1\frontend-vite" />
       <recent name="C:\Users\wlock\OneDrive\Documents\Runtime-Rebels-Final\Runtime-Rebels-Project-1\backend\src\test" />
@@ -290,86 +290,8 @@
       <workItem from="1764405959254" duration="3247000" />
       <workItem from="1764441248702" duration="16650000" />
       <workItem from="1764460598757" duration="11691000" />
-    </task>
-    <task id="LOCAL-00001" summary="Updated Code">
-      <option name="closed" value="true" />
-      <created>1759515139591</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1759515139591</updated>
-    </task>
-    <task id="LOCAL-00002" summary="Adjusted code">
-      <option name="closed" value="true" />
-      <created>1759520332615</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1759520332615</updated>
-    </task>
-    <task id="LOCAL-00003" summary="Adjusted code">
-      <option name="closed" value="true" />
-      <created>1759520338832</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1759520338832</updated>
-    </task>
-    <task id="LOCAL-00004" summary="Completely revamped file names">
-      <option name="closed" value="true" />
-      <created>1759527573216</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1759527573216</updated>
-    </task>
-    <task id="LOCAL-00005" summary="Completely revamped file names">
-      <option name="closed" value="true" />
-      <created>1759527587809</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1759527587809</updated>
-    </task>
-    <task id="LOCAL-00006" summary="Added &quot;Add to Cart&quot; API endpoint (POST/cart)&quot;">
-      <option name="closed" value="true" />
-      <created>1760051658086</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1760051658086</updated>
-    </task>
-    <task id="LOCAL-00007" summary="Added new front end code.">
-      <option name="closed" value="true" />
-      <created>1760051732037</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1760051732037</updated>
-    </task>
-    <task id="LOCAL-00008" summary="Added new front end code.">
-      <option name="closed" value="true" />
-      <created>1760052443053</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1760052443053</updated>
-    </task>
-    <task id="LOCAL-00009" summary="Updated Add to Cart API and added CartPage frontend">
-      <option name="closed" value="true" />
-      <created>1760405460217</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1760405460217</updated>
-    </task>
-    <task id="LOCAL-00010" summary="Updated Add to Cart API and added CartPage frontend">
-      <option name="closed" value="true" />
-      <created>1761088964720</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1761088964720</updated>
+      <workItem from="1764960923332" duration="13406000" />
+      <workItem from="1764974461866" duration="8215000" />
     </task>
     <task id="LOCAL-00011" summary="Pushed latest code">
       <option name="closed" value="true" />
@@ -659,7 +581,111 @@
       <option name="project" value="LOCAL" />
       <updated>1764468460380</updated>
     </task>
-    <option name="localTasksCounter" value="47" />
+    <task id="LOCAL-00047" summary="Added Admin code">
+      <option name="closed" value="true" />
+      <created>1764888445770</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1764888445770</updated>
+    </task>
+    <task id="LOCAL-00048" summary="Added Admin code">
+      <option name="closed" value="true" />
+      <created>1764889296224</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1764889296224</updated>
+    </task>
+    <task id="LOCAL-00049" summary="Updated messages in SignupPage">
+      <option name="closed" value="true" />
+      <created>1764891440752</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1764891440752</updated>
+    </task>
+    <task id="LOCAL-00050" summary="Switched User authorization to cookies">
+      <option name="closed" value="true" />
+      <created>1764893047969</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1764893047970</updated>
+    </task>
+    <task id="LOCAL-00051" summary="Added first and last name field">
+      <option name="closed" value="true" />
+      <created>1764894642711</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1764894642711</updated>
+    </task>
+    <task id="LOCAL-00052" summary="Added first and last name field">
+      <option name="closed" value="true" />
+      <created>1764894700684</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1764894700684</updated>
+    </task>
+    <task id="LOCAL-00053" summary="Updated Account Page">
+      <option name="closed" value="true" />
+      <created>1764895237817</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1764895237817</updated>
+    </task>
+    <task id="LOCAL-00054" summary="Updated Account Page">
+      <option name="closed" value="true" />
+      <created>1764960993424</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1764960993425</updated>
+    </task>
+    <task id="LOCAL-00055" summary="Added user info page">
+      <option name="closed" value="true" />
+      <created>1764968384536</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1764968384536</updated>
+    </task>
+    <task id="LOCAL-00056" summary="Added user info page">
+      <option name="closed" value="true" />
+      <created>1764970099697</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1764970099697</updated>
+    </task>
+    <task id="LOCAL-00057" summary="Added user info page">
+      <option name="closed" value="true" />
+      <created>1764971610942</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1764971610942</updated>
+    </task>
+    <task id="LOCAL-00058" summary="Users can change name, email and password in Account Page">
+      <option name="closed" value="true" />
+      <created>1764979463721</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1764979463721</updated>
+    </task>
+    <task id="LOCAL-00059" summary="Updated OrderDetailsPage to use Cookies and Full Name">
+      <option name="closed" value="true" />
+      <created>1764981803743</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1764981803743</updated>
+    </task>
+    <option name="localTasksCounter" value="60" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -717,14 +743,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Updated Code" />
-    <MESSAGE value="Adjusted code" />
-    <MESSAGE value="Completely revamped file names" />
-    <MESSAGE value="Added &quot;Add to Cart&quot; API endpoint (POST/cart)&quot;" />
-    <MESSAGE value="Added new front end code." />
-    <MESSAGE value="Updated Add to Cart API and added CartPage frontend" />
-    <MESSAGE value="Scamazon_Coming_Soon" />
-    <MESSAGE value="Pushed latest code" />
     <MESSAGE value="Added code to remove item from cart after purchase" />
     <MESSAGE value="Added programs for the login / sign up / user code" />
     <MESSAGE value="Added code to sign up / login, user specific carts and auth tokens" />
@@ -742,22 +760,14 @@
     <MESSAGE value="Merged main into ordering-henry" />
     <MESSAGE value="Fixed conflict issues" />
     <MESSAGE value="Added untracked files" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added untracked files" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/backend/src/test/CartServiceImpl.java</url>
-          <line>23</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/backend/src/test/CartServiceImpl.java</url>
-          <line>24</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="Added Admin code" />
+    <MESSAGE value="Updated messages in SignupPage" />
+    <MESSAGE value="Switched User authorization to cookies" />
+    <MESSAGE value="Added first and last name field" />
+    <MESSAGE value="Updated Account Page" />
+    <MESSAGE value="Added user info page" />
+    <MESSAGE value="Users can change name, email and password in Account Page" />
+    <MESSAGE value="Updated OrderDetailsPage to use Cookies and Full Name" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated OrderDetailsPage to use Cookies and Full Name" />
   </component>
 </project>

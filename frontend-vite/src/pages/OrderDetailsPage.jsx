@@ -34,7 +34,6 @@ const OrderDetailsPage = () => {
                 setLoading(false);
             }
         };
-
         // initial fetch
         fetchOrder();
 

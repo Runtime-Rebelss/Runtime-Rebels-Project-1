@@ -35,6 +35,9 @@ public class SecurityConfig {
                         // 1. CRITICAL: Explicitly allow the POST method for login first
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/signup").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/auth/email").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/auth/updateName").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/auth/updatePassword").permitAll()
                         .requestMatchers("/api/payments/**").permitAll()
                         // 2. All other public/whitelisted paths (General GETs, Swagger, etc.)
                         .requestMatchers(

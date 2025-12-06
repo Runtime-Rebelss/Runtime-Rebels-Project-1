@@ -5,6 +5,7 @@ import toast from 'react-hot-toast'
 import api from '../lib/axios'
 import cart from '../lib/cart'
 import Navbar from '../components/Navbar'
+import Cookies from "js-cookie"
 
 const ProductPage = () => {
     const { id } = useParams();
@@ -73,7 +74,7 @@ const ProductPage = () => {
                     <button
                         onClick={async () => {
                             try {
-                                const userId = localStorage.getItem('userId');
+                                const userId = Cookies.get('userId');
                                 await cart.addToCart({ userId, productId: product.id ?? product._id ?? product.productId ?? String(product.id), name: product.name, price: product.price, quantity: 1, image: product.imageUrl || product.image });
                                 toast.success(`Added ${product.name} to bag!`);
                             } catch (err) {

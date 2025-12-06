@@ -77,6 +77,8 @@ public class AuthService {
 
         var role = request.getRole() != null ? request.getRole() : Role.CUSTOMER;
 
+        var adminRole = request.getRole() != null ? request.getRole() : Role.ADMIN;
+
         var user = User.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
@@ -129,6 +131,9 @@ public class AuthService {
                     .refreshToken(refreshToken)
                     .userId(user.getId())
                     .username(user.getUsername())
+                    .firstName(user.getFirstName())
+                    .lastName(user.getLastName())
+                    .fullName(user.getFirstName() + " " + user.getLastName())
                     .email(user.getEmail())
                     .role(user.getRole().name())
                     .build();
