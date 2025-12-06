@@ -7,7 +7,7 @@ import Cookies from "js-cookie";
  * Returns an array of orders. For signed-in users the items are enriched.
  */
 export async function fetchOrders(signal) {
-    const userId = localStorage.getItem("userId");
+    const userId = Cookies.get("userId");
     if (!userId) {
         const guestOrder = orderLib.readLocalOrders();
         return Array.isArray(guestOrder) ? guestOrder : [guestOrder];

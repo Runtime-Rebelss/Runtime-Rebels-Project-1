@@ -49,6 +49,7 @@ public class AuthController {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
     private final UserRepository userRepository;
+
     @Autowired
     PasswordEncoder passwordEncoder;
 
