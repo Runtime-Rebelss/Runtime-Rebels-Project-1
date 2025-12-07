@@ -39,6 +39,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/auth/updateName").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/api/auth/updatePassword").permitAll()
                         .requestMatchers("/api/payments/**").permitAll()
+                        .requestMatchers("/api/email/**").permitAll()
                         // 2. All other public/whitelisted paths (General GETs, Swagger, etc.)
                         .requestMatchers(
                                 "/v3/api-docs/**",
