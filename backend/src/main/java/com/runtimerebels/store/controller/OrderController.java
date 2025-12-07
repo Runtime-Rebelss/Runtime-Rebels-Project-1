@@ -127,6 +127,31 @@ public class OrderController {
     }
 
     /**
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping("/guest")
+    public ResponseEntity<Order> createGuestOrder(@RequestBody Order request) {
+        Calendar calendar = Calendar.getInstance();
+
+        Order order = new Order();
+        order.setUserId("guest-" + calendar.getTimeInMillis()); // unique guest ID
+        order.setUserEmail("Guest");
+        order.setProductIds(request.getProductIds());
+        order.setQuantity(request.getQuantity());
+        order.setTotalPrice(request.getTotalPrice());
+        order.setStripeSessionId(request.getStripeSessionId());
+        order.setPaymentStatus("paid");
+        order.setOrderStatus(OrderStatus.PENDING);
+        order.setCreatedAt(calendar.getTime());
+        order.setProcessAt(null);
+
+        Order saved = orderRepository.save(order);
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+    }
+
+    /**
      * delete order by id
      *
      * @param orderId orderId

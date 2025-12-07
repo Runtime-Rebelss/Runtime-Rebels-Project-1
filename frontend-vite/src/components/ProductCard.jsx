@@ -1,9 +1,10 @@
-import { Link } from "react-router";
-import React from "react";
+import { Link } from "react-router-dom";
+import React, { useState } from "react";
 import toast from "react-hot-toast";
-import { ShoppingBag } from "lucide-react";
+import { ShoppingBag, Trash2 } from "lucide-react";
 import { addToCart } from "../lib/cart";
 import Cookies from "js-cookie"
+import { deleteProduct } from "../lib/products";
 
 /**
  * ProductCard renders a single product tile used in lists and grids.
@@ -16,8 +17,9 @@ import Cookies from "js-cookie"
  */
 function ProductCard({ product }) {
     const userId = Cookies.get("userId");
+    const isAdmin = Cookies.get("adminEmail") === "admin@gmail.com";
+    const [showConfirm, setShowConfirm] = useState(false);
 
-    // support multiple shapes (productId, id, _id)
     const productId =
         product?.productId ??
         product?.id ??
@@ -27,12 +29,6 @@ function ProductCard({ product }) {
     const handleAddToBag = async (e) => {
         e.preventDefault();
         e.stopPropagation();
-
-        if (!productId) {
-            console.error("No productId found on product:", product);
-            toast.error("Unable to add this item (missing id).");
-            return;
-        }
 
         try {
             await addToCart({
@@ -46,43 +42,110 @@ function ProductCard({ product }) {
 
             toast.success("Added to bag!");
         } catch (err) {
-            console.error("Failed to add to cart:", err);
             toast.error("Failed to add item");
         }
     };
 
-    return (
-        <div className="card bg-base-200 shadow-sm hover:shadow-lg transition-all duration-200">
-            {/* Only image/title navigate to the product detail page */}
-            <Link to={`/product/${productId}`}>
-                <figure className="w-full h-full flex items-center justify-center overflow-hidden">
-                    <img
-                        className="w-full p-4 object-contain"
-                        src={product.imageUrl || product.image}
-                        alt={product.name}
-                    />
-                </figure>
-            </Link>
+    const confirmDelete = async () => {
+        try {
+            await deleteProduct(productId);
+            toast.success("Product deleted.");
+            window.location.reload();
+        } catch (err) {
+            toast.error("Failed to delete.");
+        }
+    };
 
-            <div className="card-body">
-                <h2 className="card-title text-base-content">
+    return (
+        <div className="card bg-base-200 shadow-sm hover:shadow-lg transition duration-200">
+
+            {/* IMAGE */}
+            <div className="w-full h-64 flex items-center justify-center bg-gradient-to-b from-[#f8f1df] to-[#e6d7b6] overflow-hidden rounded-lg">
+                <img
+                    className="max-h-full max-w-full object-contain p-4"
+                    src={product.imageUrl || product.image}
+                    alt={product.name}
+                />
+            </div>
+
+            <div className="card-body flex flex-col justify-between">
+
+                {/* TITLE */}
+                <h2 className="card-title text-base-content mb-1">
                     <Link to={`/product/${productId}`}>{product.name}</Link>
                 </h2>
 
-                <div className="card-actions flex justify-between items-center mt-4">
-                    <div className="font-normal text-2xl">
+                {/* USER PRICE + BUTTON */}
+                {!isAdmin && (
+                    <div className="flex justify-between items-center mb-2">
+                        <div className="text-lg font-medium text-base-content/70">
+                            ${Number(product.price).toFixed(2)}
+                        </div>
+                        <button
+                            className="btn btn-soft btn-primary rounded-full gap-2 transition"
+                            onClick={handleAddToBag}
+                        >
+                            <ShoppingBag size={18} />
+                            <span>Add to Bag</span>
+                        </button>
+                    </div>
+                )}
+
+                {/* ADMIN PRICE */}
+                {isAdmin && (
+                    <div className="text-lg font-medium text-base-content/70 mb-2">
                         ${Number(product.price).toFixed(2)}
                     </div>
+                )}
 
-                    <button
-                        className="btn btn-soft btn-primary rounded-full gap-2"
-                        onClick={handleAddToBag}
-                    >
-                        <ShoppingBag />
-                        <span>Add to Bag</span>
-                    </button>
-                </div>
+                {/* ADMIN BUTTONS (ANCHOR TO BOTTOM) */}
+                {isAdmin && (
+                    <div className="mt-auto flex justify-center gap-3">
+                        <Link to={`/admin/edit/${productId}`}
+                              className="btn btn-soft btn-primary rounded-full px-4">
+                            Update
+                        </Link>
+
+                        <button
+                            className="btn btn-soft btn-error rounded-full flex items-center gap-1 px-4"
+                            onClick={() => setShowConfirm(true)}
+                        >
+                            <Trash2 size={16} />
+                            Remove
+                        </button>
+                    </div>
+                )}
             </div>
+
+            {/* CONFIRM DELETE MODAL */}
+            {showConfirm && (
+                <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+                    <div className="bg-white p-6 rounded-xl shadow-xl w-80 text-center">
+                        <h3 className="text-lg font-semibold">
+                            Are you sure?
+                        </h3>
+                        <p className="text-sm mt-2">
+                            This action cannot be undone.
+                        </p>
+
+                        <div className="mt-4 flex justify-center gap-3">
+                            <button
+                                className="btn btn-soft"
+                                onClick={() => setShowConfirm(false)}
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                className="btn btn-error"
+                                onClick={confirmDelete}
+                            >
+                                Yes, Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

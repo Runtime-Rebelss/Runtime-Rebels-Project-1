@@ -56,13 +56,10 @@ const AccountPage = () => {
     };
 
     const getTotal = (order) => {
-        const total =
-            order?.totalAmount ??
-            order?.total ??
-            order?.totalPrice ??
-            order?.orderTotal ??
-            0;
-        return `$${Number(total).toFixed(2)}`;
+        return orderLib.fmtUSD(order?.total ?? order?.items?.reduce(
+            (s, it) => s + Number(it.price || 0) * Number(it.quantity || 1),
+            0
+        ));
     };
 
     const getItemCount = (order) => {

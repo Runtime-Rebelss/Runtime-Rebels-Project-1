@@ -13,6 +13,8 @@ import SignUpPage from "./pages/Auth/SignUpPage.jsx";
 import OrderDetailsPage from "./pages/OrderDetailsPage";
 import AdminPage from "./pages/auth/AdminPage";
 import AccountPage from "./pages/AccountPage";
+import EditProductPage from "./pages/EditProductPage";
+import AddProductPage from "./pages/AddProductPage.jsx";
 import UserInfoPage from "./pages/auth/UserInfoPage";
 import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
 
@@ -34,6 +36,8 @@ function App() {
                 <Route path="details/:orderId" element={<OrderDetailsPage />} />
                 <Route path="/admin" element={<AdminPage />} />
                 <Route path="/account" element={<AccountPage />} />
+                <Route path="/admin/edit/:id" element={<EditProductPage />} />
+                <Route path="/admin/add" element={<AddProductPage />} />
                 <Route path="/account/manage" element={<UserInfoPage />} />
                 <Route path="/reset-password" element={<ResetPasswordPage />} />
             </Routes>

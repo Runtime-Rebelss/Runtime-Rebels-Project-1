@@ -33,71 +33,73 @@ const OrderSuccessPage = () => {
 
             if (!userId) {
                 if (sessionStorage.getItem(guestConfirmKey)) {
-                    // Accept either an array or an object with { items: [...] }
                     let items = [];
                     try {
                         const raw = localStorage.getItem("pendingGuestOrder") || "[]";
                         const parsed = JSON.parse(raw);
                         if (Array.isArray(parsed)) items = parsed;
-                        else if (parsed && Array.isArray(parsed.items)) items = parsed.items;
-                    } catch (e) {
-                        items = [];
-                    }
-
-                    const total = items.reduce(
-                        (s, it) => s + (Number(it.price) || 0) * (Number(it.quantity) || 1), 0
-                    );
+                        else if (parsed?.items) items = parsed.items;
+                    } catch {}
+                    const total = items.reduce((s, it) => s + (it.price * it.quantity), 0);
                     setCartItems(items);
                     setTotal(total);
                     return;
                 }
+
+                // NEW GUEST ORDER CREATION
                 let items = [];
                 try {
-                    const raw = localStorage.getItem("pendingGuestOrder");
-                    const parsed = raw ? JSON.parse(raw) : [];
-
+                    const raw = localStorage.getItem("pendingGuestOrder") || "[]";
+                    const parsed = JSON.parse(raw);
                     if (Array.isArray(parsed)) items = parsed;
-                    else if (parsed && Array.isArray(parsed.items)) items = parsed.items;
+                    else if (parsed?.items) items = parsed.items;
+                } catch {}
 
-                } catch (e) {
-                    console.warn("Failed to parse pendingGuestOrder:", e);
-                    items = [];
-                }
-
-                // Normalize items so they contain an `id` field (used by Product routes)
-                const normalizedItems = (items || []).map((it) => ({
-                    id: it.id || it.productId || it._id || "",
-                    productId: it.productId || it.id || it._id || "",
-                    name: it.name || it.productName || "Item",
-                    image: it.image || it.imageUrl || "",
-                    price: Number(it.price || it.unitPrice || 0),
-                    quantity: Number(it.quantity || it.qty || 1),
+                const normalizedItems = items.map(it => ({
+                    id: it.id || it.productId,
+                    productId: it.productId || it.id,
+                    name: it.name,
+                    image: it.image,
+                    price: Number(it.price),
+                    quantity: Number(it.quantity)
                 }));
 
-                const guestOrder = {
-                    id: "guest-" + Date.now(),
-                    createdAt: new Date(),
+                // BACKEND PAYLOAD
+                const guestPayload = {
+                    productIds: normalizedItems.map(it => it.productId),
+                    quantity: normalizedItems.map(it => it.quantity),
+                    totalPrice: normalizedItems.map(it => it.price * it.quantity),
+                    stripeSessionId: sessionId
+                };
+
+                // SAVE TO BACKEND
+                const saved = await api.post("/orders/guest", guestPayload);
+
+                // SAVE LOCALLY FOR GUEST ORDER HISTORY
+                const localOrder = {
+                    id: saved.data.id || "guest-" + Date.now(),
+                    createdAt: saved.data.createdAt,
+                    userEmail: "Guest",
                     items: normalizedItems,
-                    total: normalizedItems.reduce((sum, it) => sum + (Number(it.price) || 0) * (Number(it.quantity) || 1), 0),
-                    status: "Paid",
-                    shipTo: {fullName: Cookies.get("userEmail") || "Guest User"}
+                    total: normalizedItems.reduce((s, it) => s + it.price * it.quantity, 0)
                 };
 
                 const existing = orderLib.readLocalOrders();
-                orderLib.writeLocalOrders([...existing, guestOrder]);
+                orderLib.writeLocalOrders([...(existing || []), localOrder]);
 
-                sessionStorage.setItem(guestConfirmKey, "1");
-                // Update the cart
-                setCartItems(items);
-                setTotal(guestOrder.total);
+                // UPDATE UI
+                setCartItems(normalizedItems);
+                setTotal(localOrder.total);
 
-                // Clear only guestCart but leave lastOrderCart (so data persists for success)
-                localStorage.removeItem("guestCart");
+                //CLEAR CART PROPERLY
+                localStorage.removeItem("guestCart");          // ← FIXED
                 localStorage.removeItem("pendingGuestOrder");
-                window.dispatchEvent(new Event("cart-updated"));
 
+                window.dispatchEvent(new Event("cart-updated"));
+                sessionStorage.setItem(guestConfirmKey, "1");
                 return;
             }
+
             // Prevent duplicate user order creation
             if (sessionStorage.getItem(userConfirmKey)) {
                 const saved = JSON.parse(sessionStorage.getItem("confirmedOrder") || "{}");
