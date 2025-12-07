@@ -10,6 +10,7 @@ const AccountPage = () => {
     const userEmail = Cookies.get("userEmail");
     const userId = Cookies.get("userId");
     const firstName = Cookies.get("firstName");
+    const lastName = Cookies.get("lastName");
 
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -55,13 +56,10 @@ const AccountPage = () => {
     };
 
     const getTotal = (order) => {
-        const total =
-            order?.totalAmount ??
-            order?.total ??
-            order?.totalPrice ??
-            order?.orderTotal ??
-            0;
-        return `$${Number(total).toFixed(2)}`;
+        return orderLib.fmtUSD(order?.total ?? order?.items?.reduce(
+            (s, it) => s + Number(it.price || 0) * Number(it.quantity || 1),
+            0
+        ));
     };
 
     const getItemCount = (order) => {
@@ -139,10 +137,26 @@ const AccountPage = () => {
                                 </button>
                             </div>
                         </section>
+                        {/* Login & Security */}
+                        <section
+                            className="card bg-base-200 shadow-md hover:shadow-lg transition cursor-pointer"
+                            onClick={() => (window.location.href = "/account/manage")}
+                        >
+                            <div className="card-body">
+                                <h2 className="card-title">Login & Security</h2>
+                                <p className="text-sm text-base-content/70">
+                                    Edit login, and name
+                                </p>
+                                <button className="btn btn-primary btn-sm mt-3 w-fit">
+                                    View Login
+                                </button>
+                            </div>
+                        </section>
                     </div>
                 )}
             </main>
         </div>
+
     );
 };
 

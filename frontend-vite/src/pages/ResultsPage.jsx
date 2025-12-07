@@ -33,9 +33,28 @@ const ResultsPage = () => {
     )
   ).filter(Boolean);
 
+  // Check if user navigated here with a category (no search term)
+  // This indicates they clicked a category button from the navbar
+  const hasSearch = searchParams.has('search');
+  const hasCategory = searchParams.has('categories');
+  const preserveCategory = hasCategory && !hasSearch;
+
   // Pass the entire searchParams to the hook so it can build a consistent
   // request URL including both `search` and repeated `categories` params.
   useFetchProducts(searchParams, setProducts, setLoading);
+
+  const sortedProducts = useMemo(() => {
+    const sortParam = searchParams.get('sort');
+    if (!sortParam || products.length === 0) return products;
+
+    const sorted = [...products];
+    if (sortParam === 'low') {
+      sorted.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+    } else if (sortParam === 'high') {
+      sorted.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
+    }
+    return sorted;
+  }, [searchParams.get('sort'), products]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -47,10 +66,10 @@ const ResultsPage = () => {
       <div className='container mx-auto mt-8 mb-8'>
         <div className='flex justify-between items-center mt-4 relative'>
           <h1 className='text-3xl font-bold mb-6 text-center'>Results</h1>
-          <Filters categories={filterCategories} selectedCategories={categories} />
+          <Filters categories={filterCategories} selectedCategories={categories} preserveCategory={preserveCategory} />
         </div>
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
-          {products.map((product) => (
+          {sortedProducts.map((product) => (
             <ProductCard key={product._id} product={product} />
           ))}
         </div>

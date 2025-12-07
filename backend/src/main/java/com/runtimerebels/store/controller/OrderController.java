@@ -112,7 +112,7 @@ public class OrderController {
             }
         }
 
-        order.setPaymentStatus("paid");
+        order.setPaymentStatus("Paid");
         Order savedOrder = orderRepository.save(order);
         Cart cart = cartRepository.findByUserId(userId).orElseThrow(() -> new RuntimeException("Cart not found!"));
 
@@ -122,8 +122,33 @@ public class OrderController {
         cart.setTotalPrice(new ArrayList<>());
         cartRepository.save(cart);
 
-        System.out.println("Saved order with ID: " + savedOrder.getId());
+        System.out.println("Saved order with ID: " + savedOrder.getOrderId());
         return ResponseEntity.status(HttpStatus.CREATED).body(savedOrder);
+    }
+
+    /**
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping("/guest")
+    public ResponseEntity<Order> createGuestOrder(@RequestBody Order request) {
+        Calendar calendar = Calendar.getInstance();
+
+        Order order = new Order();
+        order.setUserId("guest-" + calendar.getTimeInMillis()); // unique guest ID
+        order.setUserEmail("Guest");
+        order.setProductIds(request.getProductIds());
+        order.setQuantity(request.getQuantity());
+        order.setTotalPrice(request.getTotalPrice());
+        order.setStripeSessionId(request.getStripeSessionId());
+        order.setPaymentStatus("paid");
+        order.setOrderStatus(OrderStatus.PENDING);
+        order.setCreatedAt(calendar.getTime());
+        order.setProcessAt(null);
+
+        Order saved = orderRepository.save(order);
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
     /**

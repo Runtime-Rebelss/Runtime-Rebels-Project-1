@@ -68,53 +68,53 @@ function ProductCard({ product }) {
                 />
             </div>
 
-            <div className="card-body flex flex-col">
+            <div className="card-body flex flex-col justify-between">
 
                 {/* TITLE */}
                 <h2 className="card-title text-base-content mb-1">
                     <Link to={`/product/${productId}`}>{product.name}</Link>
                 </h2>
 
-                {/* PRICE (smaller + closer to title) */}
-                <div className="text-xl font-normal mb-2">
-                    ${Number(product.price).toFixed(2)}
-                </div>
-
-                {/* USER BUTTON (only visible for customers) */}
+                {/* USER PRICE + BUTTON */}
                 {!isAdmin && (
-                    <button
-                        className="btn btn-soft btn-primary rounded-full gap-2 transition"
-                        onClick={handleAddToBag}
-                    >
-                        <ShoppingBag size={18} />
-                        <span>Add to Bag</span>
-                    </button>
-                )}
-
-                {/* ADMIN BUTTONS */}
-                {isAdmin && (
-                    <div className="mt-auto flex justify-center">
-                        <div className="flex gap-3">
-
-                            <Link
-                                to={`/admin/edit/${productId}`}
-                                className="btn btn-soft btn-primary rounded-full px-4"
-                            >
-                                Update
-                            </Link>
-
-                            <button
-                                className="btn btn-soft btn-error rounded-full flex items-center gap-1 px-4"
-                                onClick={() => setShowConfirm(true)}
-                            >
-                                <Trash2 size={16} />
-                                Remove
-                            </button>
-
+                    <div className="flex justify-between items-center mb-2">
+                        <div className="text-lg font-medium text-base-content/70">
+                            ${Number(product.price).toFixed(2)}
                         </div>
+                        <button
+                            className="btn btn-soft btn-primary rounded-full gap-2 transition"
+                            onClick={handleAddToBag}
+                        >
+                            <ShoppingBag size={18} />
+                            <span>Add to Bag</span>
+                        </button>
                     </div>
                 )}
 
+                {/* ADMIN PRICE */}
+                {isAdmin && (
+                    <div className="text-lg font-medium text-base-content/70 mb-2">
+                        ${Number(product.price).toFixed(2)}
+                    </div>
+                )}
+
+                {/* ADMIN BUTTONS (ANCHOR TO BOTTOM) */}
+                {isAdmin && (
+                    <div className="mt-auto flex justify-center gap-3">
+                        <Link to={`/admin/edit/${productId}`}
+                              className="btn btn-soft btn-primary rounded-full px-4">
+                            Update
+                        </Link>
+
+                        <button
+                            className="btn btn-soft btn-error rounded-full flex items-center gap-1 px-4"
+                            onClick={() => setShowConfirm(true)}
+                        >
+                            <Trash2 size={16} />
+                            Remove
+                        </button>
+                    </div>
+                )}
             </div>
 
             {/* CONFIRM DELETE MODAL */}
