@@ -160,6 +160,7 @@ public ResponseEntity<Order> confirmPayment(@PathVariable String userId, @Reques
         // Create the order
         Order order = new Order();
         order.setUserId(userId);
+        order.setFullName(request.getFullName());
         order.setProductIds(cart.getProductIds());
         order.setQuantity(cart.getQuantity());
         order.setTotalPrice(cart.getTotalPrice());

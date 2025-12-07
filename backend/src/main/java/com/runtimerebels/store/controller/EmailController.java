@@ -24,14 +24,17 @@ public class EmailController {
         
     }
 
+    // Accept JSON body from frontend instead of query params
+    public static class ConfirmationRequest {
+        public String name;
+        public String to;
+        public String orderNumber;
+        public String confirmationNumber;
+    }
+
     @PostMapping("/confirmation")
-    public String sendOrderConfirmationEmail(
-        @RequestParam(name="name") String name,
-        @RequestParam(name="to") String to,
-        @RequestParam(name="orderNumber") String orderNumber,
-        @RequestParam(name="confirmationNumber") String confirmationNumber
-    ) {
-        emailService.sendOrderConfirmationEmail(to, name, orderNumber, confirmationNumber);
-        return "Order confirmation email sent to " + to;
+    public String sendOrderConfirmationEmail(@RequestBody ConfirmationRequest req) {
+        emailService.sendOrderConfirmationEmail(req.to, req.name, req.orderNumber, req.confirmationNumber);
+        return "Order confirmation email sent to " + req.to;
     }
 }

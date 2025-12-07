@@ -31,6 +31,7 @@ public class Order {
 
     private String userId;
     private String userEmail;
+    private String fullName;
     private List<String> productIds;
     private List<Integer> quantity;
     private List<BigDecimal> totalPrice;
@@ -38,6 +39,7 @@ public class Order {
     private String orderId;
     private Date createdAt;
     private Date processAt;
+    private String confirmationNumber;
 
     private String deliveryName;
     private String deliveryContact;

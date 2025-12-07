@@ -4,6 +4,10 @@ import Cookies from "js-cookie"
 
 export async function saveOrder() {
     try {
+        // Extract sessionId from URL
+        const params = new URLSearchParams(window.location.search);
+        const sessionId = params.get("session_id");
+        
         console.log("Fetching Stripe session:", sessionId);
         const stripeRes = await fetch(`http://localhost:8080/api/stripe/session/${sessionId}`);
         const stripeSession = await stripeRes.json();
@@ -14,6 +18,17 @@ export async function saveOrder() {
         const address = shipping.address || {};
         const card = stripeSession.payment_method || {};
         const userId = Cookies.get("userId");
+
+        // Save the customer email from Stripe to cookies for use on success page
+        if (customerEmail && customerEmail !== "guest") {
+            Cookies.set("userEmail", customerEmail);
+        }
+
+        // Save the customer name from Stripe to cookies
+        const customerName = shipping.name || stripeSession.customer_details?.name;
+        if (customerName) {
+            Cookies.set("fullName", customerName);
+        }
 
         if (!userId) {
             const cart = cartLib.loadGuestCart();

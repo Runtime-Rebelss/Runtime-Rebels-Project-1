@@ -27,6 +27,30 @@ const OrderSuccessPage = () => {
 
             const params = new URLSearchParams(window.location.search);
             const sessionId = params.get("session_id");
+            
+            // For guests, try to get email/name from Stripe if not in cookies
+            let guestEmail = userEmail;
+            let guestName = fullName;
+            
+            if (!userId && sessionId && (!userEmail || userEmail === "Valued Customer")) {
+                try {
+                    const stripeRes = await fetch(`http://localhost:8080/api/stripe/session/${sessionId}`);
+                    const stripeSession = await stripeRes.json();
+                    guestEmail = stripeSession["customer_email"] || stripeSession.customer_details?.email || userEmail;
+                    guestName = (stripeSession.shipping_details?.name || stripeSession.customer_details?.name || fullName);
+                    
+                    // Save to cookies for future use
+                    if (guestEmail && guestEmail !== "guest") {
+                        Cookies.set("userEmail", guestEmail);
+                    }
+                    if (guestName) {
+                        Cookies.set("fullName", guestName);
+                    }
+                } catch (err) {
+                    console.warn("Failed to fetch Stripe session for guest email:", err);
+                }
+            }
+            
             // Used to separate guest and user orders
             const guestConfirmKey = `guest-confirm-${sessionId}`;
             const userConfirmKey = `user-confirm-${sessionId}`;
@@ -86,6 +110,26 @@ const OrderSuccessPage = () => {
                 const existing = orderLib.readLocalOrders();
                 orderLib.writeLocalOrders([...existing, guestOrder]);
 
+                // Send confirmation email for guest
+                console.log("Guest email details - to:", guestEmail, "name:", guestName, "orderNumber:", guestOrder.id);
+                
+                // Only send email if we have a valid email
+                if (guestEmail && guestEmail !== "Guest User" && guestEmail !== "guest") {
+                    try {
+                        await api.post("/email/confirmation", {
+                            to: guestEmail,
+                            name: guestName || "Valued Guest",
+                            orderNumber: guestOrder.id,
+                            confirmationNumber: randomCode
+                        });
+                        console.log("Guest confirmation email sent successfully");
+                    } catch (emailErr) {
+                        console.error("Failed to send guest confirmation email:", emailErr);
+                    }
+                } else {
+                    console.warn("Skipping guest email - no valid email address. guestEmail:", guestEmail);
+                }
+
                 sessionStorage.setItem(guestConfirmKey, "1");
                 // Update the cart
                 setCartItems(items);
@@ -138,9 +182,10 @@ const OrderSuccessPage = () => {
 
             // create backend order
             const orderPayload = {
-                fullName,
+                fullName: fullName,
                 userEmail,
                 userId,
+                confirmationNumber: randomCode,
                 productIds: pending.map(i => i.id || i.productId),
                 quantity: pending.map(i => i.quantity),
                 totalPrice: pending.map(i => (i.price || 0) * i.quantity),
@@ -151,6 +196,20 @@ const OrderSuccessPage = () => {
             };
 
             const created = await api.post(`/orders/create/${userId}`, orderPayload);
+
+            console.log("Email: ", userEmail)
+            console.log("Order response: ", created.data);
+            
+            // Extract the order ID from the response (could be _id or orderId)
+            const orderId = created.data?.orderId || created.data?._id || created.data?.id || "unknown-id";
+            
+            // Send confirmation email with the actual order data
+            await api.post("/email/confirmation", {
+                to: userEmail,
+                name: fullName || orderPayload.fullName || "Valued Customer",
+                orderNumber: orderId,
+                confirmationNumber: randomCode
+            });
 
             setCartItems(pending);
             // Needs fixed
