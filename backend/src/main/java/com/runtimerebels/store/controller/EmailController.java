@@ -12,15 +12,19 @@ public class EmailController {
     @Autowired
     private EmailService emailService;
 
+    public static class WelcomeRequest {
+        public String name;
+        public String to;
+    }
+
     // Example endpoint to send a test email
     // POST /api/email/send
     @PostMapping("/welcome")
     public String sendWelcomeEmail(
-        @RequestParam(name="name") String name,
-        @RequestParam(name="to") String to
+        @RequestBody WelcomeRequest req
     ) {
-        emailService.sendWelcomeEmail(to, name);
-        return "Welcome email sent to " + to;
+        emailService.sendWelcomeEmail(req.to, req.name);
+        return "Welcome email sent to " + req.to;
         
     }
 
