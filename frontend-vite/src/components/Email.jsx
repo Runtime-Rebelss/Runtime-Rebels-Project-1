@@ -18,7 +18,6 @@ const Email = () => {
         e.preventDefault();
         setLoading(true);
 
-        // --- 1. VALIDATE EMAIL FORMAT ---
         if (!validateEmailFormat(email)) {
             toast.error("Please enter a valid email address.");
             setLoading(false);
@@ -26,16 +25,15 @@ const Email = () => {
         }
 
         try {
-            const res = await api.get(`/api/auth/${email}`, { withCredentials: true });
+            const res = await api.get(`/auth/${email}`, { withCredentials: true });
             const data = res.data;
 
             const userEmail = data?.email || email;
             Cookies.set("userEmail", userEmail);
 
-            toast.success("Email found! Redirecting...");
+            toast.success("Email found!");
             navigate("/reset-password");
         } catch (error) {
-            // --- 2. DISPLAY EMAIL NOT REGISTERED MESSAGE ---
             if (error?.response?.status === 404) {
                 toast.error("Email not registered.");
             } else {

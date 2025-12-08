@@ -4,12 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Added orderConfirmation Lib, fixed issue with incorrect order total displaying">
-      <change afterPath="$PROJECT_DIR$/frontend-vite/src/components/Email.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/EmailPage.jsx" afterDir="false" />
+    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Fixed total not correctly displaying in Order Details Page and on Order Confirmation Page">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/ResetPassword.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/ResetPassword.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/Email.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/Email.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -295,22 +294,6 @@
       <workItem from="1764960923332" duration="13406000" />
       <workItem from="1764974461866" duration="8215000" />
       <workItem from="1765150584018" duration="10719000" />
-    </task>
-    <task id="LOCAL-00015" summary="Added programs for the login / sign up / user code">
-      <option name="closed" value="true" />
-      <created>1762473022038</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1762473022038</updated>
-    </task>
-    <task id="LOCAL-00016" summary="Added code to sign up / login, user specific carts and auth tokens">
-      <option name="closed" value="true" />
-      <created>1763507613845</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1763507613845</updated>
     </task>
     <task id="LOCAL-00017" summary="Added code to sign up / login, user specific carts and auth tokens">
       <option name="closed" value="true" />
@@ -688,7 +671,23 @@
       <option name="project" value="LOCAL" />
       <updated>1765162469937</updated>
     </task>
-    <option name="localTasksCounter" value="64" />
+    <task id="LOCAL-00064" summary="Fixed total not correctly displaying in Order Details Page and on Order Confirmation Page">
+      <option name="closed" value="true" />
+      <created>1765169863999</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1765169864000</updated>
+    </task>
+    <task id="LOCAL-00065" summary="Fixed total not correctly displaying in Order Details Page and on Order Confirmation Page">
+      <option name="closed" value="true" />
+      <created>1765170109546</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1765170109547</updated>
+    </task>
+    <option name="localTasksCounter" value="66" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -746,7 +745,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Fully implemented Order Page and can sign out" />
     <MESSAGE value="Added in OrderDetailsPage" />
     <MESSAGE value="Fully implemented OrderDetailsPage" />
     <MESSAGE value="Added fixes to get program running" />
@@ -771,6 +769,7 @@
     <MESSAGE value="Added code in account page to list orders from newest to oldest" />
     <MESSAGE value="Fixed product image in OrderCard and changed ship to from email to name" />
     <MESSAGE value="Added orderConfirmation Lib, fixed issue with incorrect order total displaying" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added orderConfirmation Lib, fixed issue with incorrect order total displaying" />
+    <MESSAGE value="Fixed total not correctly displaying in Order Details Page and on Order Confirmation Page" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed total not correctly displaying in Order Details Page and on Order Confirmation Page" />
   </component>
 </project>

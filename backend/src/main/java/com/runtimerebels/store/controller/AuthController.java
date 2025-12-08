@@ -200,4 +200,11 @@ public class AuthController {
                 "message", "Password updated successfully"
         ));
     }
+
+    @GetMapping("/{userEmail}")
+    public ResponseEntity<User> getUserEmail(@PathVariable String userEmail) {
+        return userRepository.findByEmail(userEmail)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 }
