@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Fixed product image in OrderCard and changed ship to from email to name">
-      <change afterPath="$PROJECT_DIR$/frontend-vite/src/lib/confirmOrder.js" afterDir="false" />
+    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Added orderConfirmation Lib, fixed issue with incorrect order total displaying">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/orders.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/lib/orders.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/Order.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/confirmOrder.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/lib/confirmOrder.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/OrderSuccessPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/OrderSuccessPage.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -161,9 +161,9 @@
       <option name="ALTERNATIVE_JRE_PATH" value="temurin-17" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <envs>
+        <env name="EMAIL_PASSWORD" value="yoccztrbeczxegnn" />
+        <env name="EMAIL_USERNAME" value="runtimerebelsproject@gmail.com" />
         <env name="MONGO_URI" value="mongodb+srv://Hlocke124:thepomel61@runtimerebels.otltnjb.mongodb.net/" />
-        <env name="&quot;EMAIL_USERNAME&quot;:" value="&quot;runtimerebelsproject@gmail.com&quot; " />
-        <env name="&quot;EMAIL_PASSWORD&quot;:" value="&quot;yoccztrbeczxegnn&quot;" />
       </envs>
       <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
       <module name="spring-boot" />
@@ -293,15 +293,7 @@
       <workItem from="1764460598757" duration="11691000" />
       <workItem from="1764960923332" duration="13406000" />
       <workItem from="1764974461866" duration="8215000" />
-      <workItem from="1765150584018" duration="10064000" />
-    </task>
-    <task id="LOCAL-00014" summary="Added programs for the login / sign up / user code">
-      <option name="closed" value="true" />
-      <created>1762313284601</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1762313284601</updated>
+      <workItem from="1765150584018" duration="10719000" />
     </task>
     <task id="LOCAL-00015" summary="Added programs for the login / sign up / user code">
       <option name="closed" value="true" />
@@ -687,7 +679,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765157473905</updated>
     </task>
-    <option name="localTasksCounter" value="63" />
+    <task id="LOCAL-00063" summary="Added orderConfirmation Lib, fixed issue with incorrect order total displaying">
+      <option name="closed" value="true" />
+      <created>1765162469937</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1765162469937</updated>
+    </task>
+    <option name="localTasksCounter" value="64" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -745,7 +745,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added code to sign up / login, user specific carts and auth tokens" />
     <MESSAGE value="Fully implemented Order Page and can sign out" />
     <MESSAGE value="Added in OrderDetailsPage" />
     <MESSAGE value="Fully implemented OrderDetailsPage" />
@@ -770,6 +769,7 @@
     <MESSAGE value="Updated OrderDetailsPage to use Cookies and Full Name" />
     <MESSAGE value="Added code in account page to list orders from newest to oldest" />
     <MESSAGE value="Fixed product image in OrderCard and changed ship to from email to name" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed product image in OrderCard and changed ship to from email to name" />
+    <MESSAGE value="Added orderConfirmation Lib, fixed issue with incorrect order total displaying" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added orderConfirmation Lib, fixed issue with incorrect order total displaying" />
   </component>
 </project>

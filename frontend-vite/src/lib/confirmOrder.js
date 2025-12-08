@@ -2,6 +2,7 @@
 
 import api from "./axios";
 import orderLib from "./orders";
+import Cookies from "js-cookie";
 
 /**
  * confirmOrder()
@@ -25,41 +26,81 @@ export async function confirmOrder({
                                        setTotal,
                                        setConfirmation,
                                    }) {
+    // Generate random confirmation number
     const randomCode = "SCZ-" + Math.floor(100000 + Math.random() * 900000);
     setConfirmation(randomCode);
 
     const params = new URLSearchParams(window.location.search);
     const sessionId = params.get("session_id");
 
+    // For guests, try to get email/name from Stripe if not in cookies
+    let guestEmail = userEmail;
+    let guestName = fullName;
+
+    if (!userId && sessionId && (!userEmail || userEmail === "Valued Customer")) {
+        try {
+            const stripeRes = await fetch(
+                `http://localhost:8080/api/stripe/session/${sessionId}`
+            );
+            const stripeSession = await stripeRes.json();
+            guestEmail =
+                stripeSession["customer_email"] ||
+                stripeSession.customer_details?.email ||
+                userEmail;
+            guestName =
+                stripeSession.shipping_details?.name ||
+                stripeSession.customer_details?.name ||
+                fullName;
+
+            // Save to cookies for future use
+            if (guestEmail && guestEmail !== "guest") {
+                Cookies.set("userEmail", guestEmail);
+            }
+            if (guestName) {
+                Cookies.set("fullName", guestName);
+            }
+        } catch (err) {
+            console.warn("Failed to fetch Stripe session for guest email:", err);
+        }
+    }
+
+    // Used to separate guest and user orders
     const guestConfirmKey = `guest-confirm-${sessionId}`;
     const userConfirmKey = `user-confirm-${sessionId}`;
 
+    /* ============================================================
+     * GUEST FLOW
+     * ============================================================ */
     if (!userId) {
+        // If we've already confirmed this guest order, just restore items to UI
         if (sessionStorage.getItem(guestConfirmKey)) {
             let items = [];
             try {
                 const raw = localStorage.getItem("pendingGuestOrder") || "[]";
                 const parsed = JSON.parse(raw);
-                items = Array.isArray(parsed) ? parsed : parsed.items;
-            } catch {
-            }
+                if (Array.isArray(parsed)) items = parsed;
+                else if (parsed?.items) items = parsed.items;
+            } catch {}
 
-            const total = items.reduce((s, it) => s + it.price * it.quantity, 0);
+            const total = items.reduce(
+                (s, it) => s + Number(it.price || 0) * Number(it.quantity || 1),
+                0
+            );
             setCartItems(items);
             setTotal(total);
             return;
         }
 
-        // Guest order
+        // NEW GUEST ORDER CREATION
         let items = [];
         try {
             const raw = localStorage.getItem("pendingGuestOrder") || "[]";
             const parsed = JSON.parse(raw);
-            items = Array.isArray(parsed) ? parsed : parsed.items;
-        } catch {
-        }
+            if (Array.isArray(parsed)) items = parsed;
+            else if (parsed?.items) items = parsed.items;
+        } catch {}
 
-        const normalized = items.map(it => ({
+        const normalizedItems = items.map((it) => ({
             id: it.id || it.productId,
             productId: it.productId || it.id,
             name: it.name,
@@ -68,33 +109,70 @@ export async function confirmOrder({
             quantity: Number(it.quantity),
         }));
 
-        // Backend payload
+        // BACKEND PAYLOAD (line totals per item)
         const guestPayload = {
-            productIds: normalized.map(it => it.productId),
-            quantity: normalized.map(it => it.quantity),
-            totalPrice: normalized.map(it => it.price * it.quantity),
+            productIds: normalizedItems.map((it) => it.productId),
+            quantity: normalizedItems.map((it) => it.quantity),
+            totalPrice: normalizedItems.map((it) => it.price * it.quantity),
             stripeSessionId: sessionId,
         };
 
+        // SAVE TO BACKEND
         const saved = await api.post("/orders/guest", guestPayload);
 
-        // Save local guest order history
+        // SAVE LOCALLY FOR GUEST ORDER HISTORY
         const localOrder = {
             id: saved.data.id || "guest-" + Date.now(),
             createdAt: saved.data.createdAt,
             userEmail: "Guest",
-            items: normalized,
-            total: normalized.reduce((s, it) => s + it.price * it.quantity, 0),
+            items: normalizedItems,
+            total: normalizedItems.reduce(
+                (s, it) => s + it.price * it.quantity,
+                0
+            ),
         };
 
-        const existing = orderLib.readLocalOrders();
-        orderLib.writeLocalOrders([...(existing || []), localOrder]);
+        const existing = orderLib.readLocalOrders() || [];
+        orderLib.writeLocalOrders([...existing, localOrder]);
 
-        // Update UI
-        setCartItems(normalized);
+        // Send confirmation email for guest (if we have an email)
+        console.log(
+            "Guest email details - to:",
+            guestEmail,
+            "name:",
+            guestName,
+            "orderNumber:",
+            localOrder.id
+        );
+
+        if (
+            guestEmail &&
+            guestEmail !== "Guest User" &&
+            guestEmail !== "guest"
+        ) {
+            try {
+                await api.post("/email/confirmation", {
+                    to: guestEmail,
+                    name: guestName || "Valued Guest",
+                    orderNumber: localOrder.id,
+                    confirmationNumber: randomCode,
+                });
+                console.log("Guest confirmation email sent successfully");
+            } catch (emailErr) {
+                console.error("Failed to send guest confirmation email:", emailErr);
+            }
+        } else {
+            console.warn(
+                "Skipping guest email - no valid email address. guestEmail:",
+                guestEmail
+            );
+        }
+
+        // UPDATE UI
+        setCartItems(normalizedItems);
         setTotal(localOrder.total);
 
-        // Clear guest storage
+        // CLEAR CART PROPERLY
         localStorage.removeItem("guestCart");
         localStorage.removeItem("pendingGuestOrder");
 
@@ -103,68 +181,72 @@ export async function confirmOrder({
         return;
     }
 
-    // User already confirmed? Restore UI
+    /* ============================================================
+     * SIGNED-IN USER FLOW
+     * ============================================================ */
+
+    // Prevent duplicate user order creation
     if (sessionStorage.getItem(userConfirmKey)) {
-        const saved = JSON.parse(sessionStorage.getItem("confirmedOrder") || "{}");
+        const saved = JSON.parse(
+            sessionStorage.getItem("confirmedOrder") || "{}"
+        );
 
         if (saved.productIds) {
+            // Rebuild UI items from stored order using unit prices
             const items = await Promise.all(
                 saved.productIds.map(async (pid, i) => {
-                    const {data: product} = await api.get(`/products/${pid}`);
-                    const qty = saved.quantity[i];
-                    const lineTotal = saved.totalPrice[i];
+                    const { data: product } = await api.get(`/products/${pid}`);
+                    const qty = Number(saved.quantity[i] || 1);
+                    const lineTotal = Number(saved.totalPrice[i] || 0);
+                    const unitPrice = qty > 0 ? lineTotal / qty : 0;
 
                     return {
                         id: pid,
                         name: product.name,
                         image: product.image || product.imageUrl,
                         quantity: qty,
-                        price: lineTotal / qty,
+                        price: unitPrice, // unit price
                     };
                 })
             );
 
             setCartItems(items);
-            setTotal(items.reduce((s, it) => s + it.price * it.quantity, 0));
+            setTotal(
+                items.reduce(
+                    (s, it) =>
+                        s +
+                        Number(it.price || 0) * Number(it.quantity || 1),
+                    0
+                )
+            );
             return;
         }
     }
 
-    // Create user order
+    // NEW user order creation
     let pending = [];
     try {
         pending = JSON.parse(localStorage.getItem("pendingServerOrder") || "[]");
     } catch {
+        pending = [];
     }
 
     if (!pending.length) {
         console.warn("No pendingServerOrder snapshot found.");
         return;
     }
-    // Gets correct order
-    const enriched = await Promise.all(
-        pending.map(async item => {
-            const {data: product} = await api.get(`/products/${item.id || item.productId}`);
 
-            return {
-                id: item.id || item.productId,
-                quantity: Number(item.quantity),
-                name: product.name,
-                image: product.image || product.imageUrl,
-                price: Number(product.price), // authoritative unit price
-            };
-        })
-    );
-
-    // Create backend order
+    // Build payload with line totals per item
     const orderPayload = {
         fullName,
         userEmail,
         userId,
         confirmationNumber: randomCode,
-        productIds: enriched.map(i => i.id),
-        quantity: enriched.map(i => i.quantity),
-        totalPrice: enriched.map(i => i.price * i.quantity),
+        productIds: pending.map((i) => i.id || i.productId),
+        quantity: pending.map((i) => i.quantity),
+        totalPrice: pending.map(
+            (i) => Number(i.price || 0) * Number(i.quantity || 1)
+        ),
         stripeSessionId: sessionId,
         paymentStatus: "Paid",
         orderStatus: "PENDING",
@@ -173,14 +255,54 @@ export async function confirmOrder({
 
     const created = await api.post(`/orders/create/${userId}`, orderPayload);
 
-    // Save dedupe snapshot
+    console.log("Email: ", userEmail);
+    console.log("Order response: ", created.data);
+
+    // Extract the order ID from the response (could be _id or orderId)
+    const orderId =
+        created.data?.orderId ||
+        created.data?._id ||
+        created.data?.id ||
+        "unknown-id";
+
+    // Send confirmation email with the actual order data
+    try {
+        await api.post("/email/confirmation", {
+            to: userEmail,
+            name: fullName || orderPayload.fullName || "Valued Customer",
+            orderNumber: orderId,
+            confirmationNumber: randomCode,
+        });
+    } catch (emailErr) {
+        console.error("Failed to send user confirmation email:", emailErr);
+    }
+
+    // 🔑 Normalize items for UI: fetch product info and compute unit price
+    const items = await Promise.all(
+        orderPayload.productIds.map(async (pid, i) => {
+            const { data: product } = await api.get(`/products/${pid}`);
+            const qty = Number(orderPayload.quantity[i] || 1);
+            const lineTotal = Number(orderPayload.totalPrice[i] || 0);
+            const unitPrice = qty > 0 ? lineTotal / qty : 0;
+
+            return {
+                id: pid,
+                name: product.name,
+                image: product.image || product.imageUrl,
+                quantity: qty,
+                price: unitPrice, // unit price
+            };
+        })
+    );
+
+    setCartItems(items);
+    setTotal(items.reduce((s, it) => s + it.price * it.quantity, 0));
+
+    // Save order snapshot for dedupe
     sessionStorage.setItem("confirmedOrder", JSON.stringify(orderPayload));
     sessionStorage.setItem(userConfirmKey, "1");
 
-    // Update UI
-    setCartItems(enriched);
-    setTotal(enriched.reduce((s, it) => s + it.price * it.quantity, 0));
-
+    // Clear pending server order
     localStorage.removeItem("pendingServerOrder");
     window.dispatchEvent(new Event("cart-updated"));
 }
