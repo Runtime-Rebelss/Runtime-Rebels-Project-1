@@ -34,7 +34,7 @@ const SignUpPage = () => {
             const userEmail = data?.email || email;
             setFirstName(firstName);
             setLastName(lastName);
-            setFullName(firstName + lastName);
+            setFullName(firstName + " " + lastName);
 
             if (!userId) {
                 setToastMsg("Login response missing user id.");
@@ -49,6 +49,11 @@ const SignUpPage = () => {
 
             navigate('/', { replace: true });
             toast.success('Signup successfully!');
+
+            await api.post('/email/welcome', {
+                to: userEmail,
+                name: firstName,
+            });
 
         } catch (err) {
             const status = err?.response?.status;

@@ -122,7 +122,7 @@ public class OrderController {
         cart.setTotalPrice(new ArrayList<>());
         cartRepository.save(cart);
 
-        System.out.println("Saved order with ID: " + savedOrder.getId());
+        System.out.println("Saved order with ID: " + savedOrder.getOrderId());
         return ResponseEntity.status(HttpStatus.CREATED).body(savedOrder);
     }
 
@@ -166,5 +166,42 @@ public class OrderController {
         }
         orderRepository.deleteById(orderId);
         return ResponseEntity.ok("Order deleted.");
+    }
+
+    /**
+     * confirm payment
+     *
+     * @param userId userId
+     * @return {@link ResponseEntity}
+     * @see ResponseEntity
+     * @see Order
+     * @throws Exception java.lang. exception
+     */
+    @PostMapping("/confirm/{userId}")
+    public ResponseEntity<Order> confirmPayment(@PathVariable String userId, @RequestBody Order request) throws Exception {
+        Cart cart = cartRepository.findByUserId(userId).orElseThrow(() -> new RuntimeException("Cart not found!"));
+        Calendar calendar = Calendar.getInstance();
+
+        // Create the order
+        Order order = new Order();
+        order.setUserId(userId);
+        order.setFullName(request.getFullName());
+        order.setProductIds(cart.getProductIds());
+        order.setQuantity(cart.getQuantity());
+        order.setTotalPrice(cart.getTotalPrice());
+        order.setStripeSessionId(request.getStripeSessionId());
+        order.setPaymentStatus("paid");
+        order.setOrderStatus(OrderStatus.PENDING);
+        order.setCreatedAt(calendar.getTime());
+        order.setProcessAt(null);
+        orderRepository.save(order);
+
+        // Remove item(s) from cart
+        cart.setProductIds(new ArrayList<>());
+        cart.setQuantity(new ArrayList<>());
+        cart.setTotalPrice(new ArrayList<>());
+        cartRepository.save(cart);
+
+        return ResponseEntity.ok(order);
     }
 }
