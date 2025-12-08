@@ -24,8 +24,8 @@
         <option value="Interface" />
         <option value="Class" />
         <option value="package.json" />
-        <option value="JSX File" />
         <option value="JavaScript File" />
+        <option value="JSX File" />
       </list>
     </option>
   </component>

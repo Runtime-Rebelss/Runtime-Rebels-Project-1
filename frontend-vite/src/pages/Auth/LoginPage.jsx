@@ -125,7 +125,7 @@ const LoginPage = () => {
                                     {loading ? 'Logging in…' : 'Sign in'}
                                 </button>
                                 {/* Forgot Password Button */}
-                                <button type="button" onClick={() => navigate("/reset-password")} className="btn btn-link w-full mt-2">Forgot Password?
+                                <button type="button" onClick={() => navigate("/email-reset-password")} className="btn btn-link w-full mt-2">Forgot Password?
                                 </button>
                                 <div className="divider">Don't have an account?</div>
                                 {/* Signup Button */}

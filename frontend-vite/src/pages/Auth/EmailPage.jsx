@@ -1,4 +1,3 @@
-import RestPassword from "../../components/ResetPassword";
 import Navbar from "../../components/Navbar.jsx";
 import Email from "../../components/Email.jsx";
 
