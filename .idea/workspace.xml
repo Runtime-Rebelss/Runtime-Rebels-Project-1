@@ -5,8 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Fixed product image in OrderCard and changed ship to from email to name">
+      <change afterPath="$PROJECT_DIR$/frontend-vite/src/lib/confirmOrder.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/Order.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/orders.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/lib/orders.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/OrderSuccessPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/OrderSuccessPage.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -22,8 +23,8 @@
         <option value="Interface" />
         <option value="Class" />
         <option value="package.json" />
-        <option value="JavaScript File" />
         <option value="JSX File" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -292,15 +293,7 @@
       <workItem from="1764460598757" duration="11691000" />
       <workItem from="1764960923332" duration="13406000" />
       <workItem from="1764974461866" duration="8215000" />
-      <workItem from="1765150584018" duration="6766000" />
-    </task>
-    <task id="LOCAL-00013" summary="Added code to remove item from cart after purchase">
-      <option name="closed" value="true" />
-      <created>1762068524828</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1762068524828</updated>
+      <workItem from="1765150584018" duration="10064000" />
     </task>
     <task id="LOCAL-00014" summary="Added programs for the login / sign up / user code">
       <option name="closed" value="true" />
@@ -686,7 +679,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765156019423</updated>
     </task>
-    <option name="localTasksCounter" value="62" />
+    <task id="LOCAL-00062" summary="Fixed product image in OrderCard and changed ship to from email to name">
+      <option name="closed" value="true" />
+      <created>1765157473905</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1765157473905</updated>
+    </task>
+    <option name="localTasksCounter" value="63" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

@@ -5,6 +5,7 @@ import orderLib from "../lib/orders.js";
 import api from "../lib/axios";
 import Cookies from "js-cookie";
 import cartLib from "../lib/cart";
+import {confirmOrder} from "../lib/confirmOrder.js";
 
 const OrderSuccessPage = () => {
     const [cartItems, setCartItems] = useState([]);
@@ -15,158 +16,23 @@ const OrderSuccessPage = () => {
     const userId = Cookies.get("userId");
     const userEmail = Cookies.get("userEmail");
     const didRun = useRef(false);
-
     useEffect(() => {
-        // Stop from running twice
         if (didRun.current) return;
         didRun.current = true;
-        const confirmOrder = async () => {
-            // Generate random confirmation number
-            const randomCode = "SCZ-" + Math.floor(100000 + Math.random() * 900000);
-            setConfirmation(randomCode);
 
-            const params = new URLSearchParams(window.location.search);
-            const sessionId = params.get("session_id");
-            // Used to separate guest and user orders
-            const guestConfirmKey = `guest-confirm-${sessionId}`;
-            const userConfirmKey = `user-confirm-${sessionId}`;
-
-            if (!userId) {
-                if (sessionStorage.getItem(guestConfirmKey)) {
-                    let items = [];
-                    try {
-                        const raw = localStorage.getItem("pendingGuestOrder") || "[]";
-                        const parsed = JSON.parse(raw);
-                        if (Array.isArray(parsed)) items = parsed;
-                        else if (parsed?.items) items = parsed.items;
-                    } catch {}
-                    const total = items.reduce((s, it) => s + (it.price * it.quantity), 0);
-                    setCartItems(items);
-                    setTotal(total);
-                    return;
-                }
-                // NEW GUEST ORDER CREATION
-                let items = [];
-                try {
-                    const raw = localStorage.getItem("pendingGuestOrder") || "[]";
-                    const parsed = JSON.parse(raw);
-                    if (Array.isArray(parsed)) items = parsed;
-                    else if (parsed?.items) items = parsed.items;
-                } catch {}
-
-                const normalizedItems = items.map(it => ({
-                    id: it.id || it.productId,
-                    productId: it.productId || it.id,
-                    name: it.name,
-                    image: it.image,
-                    price: Number(it.price),
-                    quantity: Number(it.quantity)
-                }));
-
-                // BACKEND PAYLOAD
-                const guestPayload = {
-                    productIds: normalizedItems.map(it => it.productId),
-                    quantity: normalizedItems.map(it => it.quantity),
-                    totalPrice: normalizedItems.map(it => it.price * it.quantity),
-                    stripeSessionId: sessionId
-                };
-
-                // SAVE TO BACKEND
-                const saved = await api.post("/orders/guest", guestPayload);
-
-                // SAVE LOCALLY FOR GUEST ORDER HISTORY
-                const localOrder = {
-                    id: saved.data.id || "guest-" + Date.now(),
-                    createdAt: saved.data.createdAt,
-                    userEmail: "Guest",
-                    items: normalizedItems,
-                    total: normalizedItems.reduce((s, it) => s + it.price * it.quantity, 0)
-                };
-
-                const existing = orderLib.readLocalOrders();
-                orderLib.writeLocalOrders([...(existing || []), localOrder]);
-
-                // UPDATE UI
-                setCartItems(normalizedItems);
-                setTotal(localOrder.total);
-
-                //CLEAR CART PROPERLY
-                localStorage.removeItem("guestCart");          // ← FIXED
-                localStorage.removeItem("pendingGuestOrder");
-
-                window.dispatchEvent(new Event("cart-updated"));
-                sessionStorage.setItem(guestConfirmKey, "1");
-                return;
-            }
-
-            // Prevent duplicate user order creation
-            if (sessionStorage.getItem(userConfirmKey)) {
-                const saved = JSON.parse(sessionStorage.getItem("confirmedOrder") || "{}");
-
-                if (saved.productIds) {
-                    const items = await Promise.all(
-                        saved.productIds.map(async (pid, i) => {
-                            const {data: product} = await api.get(`/products/${pid}`);
-                            const qty = saved.quantity[i];
-                            const lineTotal = saved.totalPrice[i];
-                            return {
-                                id: pid,
-                                name: product.name,
-                                image: product.image || product.imageUrl,
-                                quantity: qty,
-                                price: lineTotal / qty
-                            };
-                        })
-                    );
-
-                    setCartItems(items);
-                    setTotal(items.reduce((s, it) => s + (Number(it.price) || 0) * (Number(it.quantity) || 0), 0));
-                    return;
-                }
-            }
-
-            let pending = [];
-            try {
-                pending = JSON.parse(localStorage.getItem("pendingServerOrder") || "[]");
-            } catch {
-                pending = [];
-            }
-
-            if (!pending.length) {
-                console.warn("No pendingServerOrder snapshot found.");
-                return;
-            }
-
-            // create backend order
-            const orderPayload = {
-                fullName,
-                userEmail,
-                userId,
-                confirmationNumber: randomCode,
-                productIds: pending.map(i => i.id || i.productId),
-                quantity: pending.map(i => i.quantity),
-                totalPrice: pending.map(i => (i.price || 0) * i.quantity),
-                stripeSessionId: sessionId,
-                paymentStatus: "Paid",
-                orderStatus: "PENDING",
-                createdAt: new Date().toISOString()
-            };
-
-            const created = await api.post(`/orders/create/${userId}`, orderPayload);
-
-            setCartItems(pending);
-            // Needs fixed
-            setTotal(orderPayload.totalPrice.reduce((s, t) => s + Number(t), 0));
-
-            localStorage.removeItem("pendingServerOrder");
-            window.dispatchEvent(new Event("cart-updated"));
-        };
-        confirmOrder();
+        confirmOrder({
+            fullName,
+            userId,
+            userEmail,
+            setCartItems,
+            setTotal,
+            setConfirmation,
+        });
     }, []);
 
     return (
         <div className="min-h-screen bg-base-200">
-            <Navbar hideCartCount={true} />
+            <Navbar hideCartCount={true}/>
 
             <div className="max-w-4xl mx-auto px-4 py-10 text-center">
                 <div className="bg-green-100 text-green-800 p-4 rounded mb-8">
@@ -197,7 +63,7 @@ const OrderSuccessPage = () => {
                                         <td>
                                             <div className="flex items-center gap-3">
                                                 <div className="mask mask-squircle w-14 h-14">
-                                                    <img src={it.image} className="object-cover" />
+                                                    <img src={it.image} className="object-cover"/>
                                                 </div>
                                                 <span className="font-medium">{it.name}</span>
                                             </div>
@@ -226,7 +92,8 @@ const OrderSuccessPage = () => {
                         className="btn btn-primary"
                         onClick={() => {
                             orderLib.clearDedupeKey()
-                            navigate("/")}}
+                            navigate("/")
+                        }}
                     >
                         Continue Shopping
                     </button>
@@ -235,7 +102,8 @@ const OrderSuccessPage = () => {
                         className="btn btn-outline"
                         onClick={() => {
                             orderLib.clearDedupeKey()
-                            navigate("/orders")}}
+                            navigate("/orders")
+                        }}
                     >
                         View My Orders
                     </button>

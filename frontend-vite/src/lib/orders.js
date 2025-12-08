@@ -49,43 +49,40 @@ export function clearDedupeKey() {
 export async function loadServerOrders(userId, signal) {
     if (!userId) return [];
     const { data: orderList } = await api.get(`/orders/user/${encodeURIComponent(userId)}`, { signal });
+
     if (!Array.isArray(orderList)) return [];
 
     return await Promise.all(
         orderList.map(async (order) => {
-            const productIds = Array.isArray(order.productIds) ? order.productIds : [];
-            const quantities = Array.isArray(order.quantity) ? order.quantity : [];
-            const finalPrices = Array.isArray(order.totalPrice) ? order.totalPrice : [];
+            const productIds = order.productIds || [];
+            const quantities = order.quantity || [];
+            const totals = order.totalPrice || [];
 
             const items = await Promise.all(
-                productIds.map(async (productId, index) => {
+                productIds.map(async (productId, i) => {
                     try {
-                        const {data: product} = await api.get(`/products/${encodeURIComponent(productId)}`, {signal});
-                        const quantity = Number(quantities?.[index] ?? 1) || 1;
-                        const basePrice =
-                            Number(finalPrices?.[index]) ||
-                            Number(product?.finalPrice) ||
-                            Number(product?.price) ||
-                            0;
-                        console.log(product.name);
+                        const { data: product } = await api.get(`/products/${productId}`, { signal });
+
+                        const quantity = Number(quantities[i] || 1);
+                        const lineTotal = Number(totals[i] || 0);
+
+                        // Change from line to unit price
+                        const unitPrice = quantity > 0 ? lineTotal / quantity : 0;
+
                         return {
                             id: productId,
-                            name: product?.name ?? "Item",
-                            image:
-                                product?.image ||
-                                product?.imageUrl ||
-                                "https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-                            price: Math.max(0, basePrice),
+                            name: product.name,
+                            image: product.image || product.imageUrl,
+                            price: unitPrice,
                             quantity,
                         };
-                    } catch (e) {
-                        console.warn("Failed to load product", productId, e);
+                    } catch {
                         return null;
                     }
                 })
             );
-
-            return {...order, items: items.filter(Boolean)};
+            return {...order, items: items.filter(Boolean),
+            };
         })
     );
 }
