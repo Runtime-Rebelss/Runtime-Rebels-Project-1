@@ -13,7 +13,6 @@ export function loadGuestCart() {
         const raw = localStorage.getItem(GUEST_KEY);
         const parsed = raw ? JSON.parse(raw) : {items: []};
         if (!Array.isArray(parsed.items)) return {items: []};
-        // Normalize items (tolerate older shapes)
         const items = parsed.items
             .filter(Boolean)
             .map((it) => ({
@@ -51,6 +50,50 @@ export async function loadServerCart(userId, signal) {
         {signal}
     );
 
+    if (Array.isArray(cart?.items)) {
+        const items = cart.items
+            .filter(Boolean)
+            .map((it) => {
+                const product = it?.product ?? {};
+                const quantity = Number(it?.quantity ?? 1) || 1;
+                const unitPrice = Number(product?.price ?? product?.finalPrice ?? 0) || 0;
+                return {
+                    id: product?.id || product?._id || '',
+                    productId: product?.id || product?._id || '',
+                    name: product?.name || 'Item',
+                    image: product?.image || product?.imageUrl || '',
+                    price: unitPrice,
+                    quantity,
+                };
+            })
+            .filter((it) => it.productId);
+
+        // Attempt to enrich any products that don't have full data by fetching missing product details
+        const needsFetch = items.filter(it => !it.name || !it.price || !it.image);
+        if (needsFetch.length === 0) return items;
+
+        // For simplicity, fetch product details for all items in parallel and override
+        const enriched = await Promise.all(items.map(async (it) => {
+            try {
+                const {data: product} = await api.get(`/products/${encodeURIComponent(it.productId)}`, {signal});
+                const unitPrice = Number(product?.price ?? product?.finalPrice ?? it.price ?? 0) || 0;
+                return {
+                    id: it.productId,
+                    productId: it.productId,
+                    name: product?.name ?? it.name,
+                    image: product?.image || product?.imageUrl || it.image,
+                    price: unitPrice,
+                    quantity: it.quantity,
+                };
+            } catch {
+                return it;
+            }
+        }));
+
+        return enriched.filter(Boolean);
+    }
+
+    // Fallback: older server shape using parallel arrays
     const productIds = Array.isArray(cart?.productIds) ? cart.productIds : [];
     const quantities = Array.isArray(cart?.quantity) ? cart.quantity : [];
     const totalPrices = Array.isArray(cart?.totalPrice) ? cart.totalPrice : [];

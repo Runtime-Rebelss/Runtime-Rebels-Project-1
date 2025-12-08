@@ -11,44 +11,7 @@ function calcTotal(items) {
     return items.reduce((s, it) => s + (Number(it.price) || 0) * (Number(it.quantity) || 0), 0);
 }
 
-// Added for when we add actual users
-async function loadServerCart(userId, signal) {
-    const { data: cartData } = await api.get(`/carts/${encodeURIComponent(userId)}`, { signal });
-    const productIds = Array.isArray(cartData?.productIds) ? cartData.productIds : [];
-    const quantities = Array.isArray(cartData?.quantity) ? cartData.quantity : [];
-    const finalPrices = Array.isArray(cartData?.totalPrice) ? cartData.totalPrice : [];
-
-    const items = await Promise.all(
-        productIds
-            .filter((pid) => typeof pid === 'string' && pid.trim().length > 0)
-            .map(async (productId, index) => {
-                try {
-                    const { data: product } = await api.get(`/products/${encodeURIComponent(productId)}`, { signal });
-
-                    const quantity = Number(quantities?.[index] ?? 1) || 1;
-                    const basePrice =
-                        Number(finalPrices?.[index]) ||
-                        Number(product?.finalPrice) ||
-                        Number(product?.price) ||
-                        0;
-
-                    return {
-                        id: productId,
-                        name: product?.name ?? 'Item',
-                        image:
-                            product?.image ||
-                            product?.imageUrl ||
-                            'https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                        price: Math.max(0, basePrice),
-                        quantity,
-                    };
-                } catch {
-                    if (isAbort(e)) throw e; // bubble abort once
-                    return null;                }
-            })
-    );
-    return items.filter(Boolean);
-}
+// Use the shared loader in src/lib/cart.js which understands both old and new server shapes
 
 // Need to add stuff so can make an actual account
 const CartPage = () => {
@@ -92,7 +55,7 @@ const CartPage = () => {
             setIsGuest(false);
 
             try {
-                const items = await loadServerCart(userId, ac.signal);
+                const items = await cartLib.loadServerCart(userId, ac.signal);
                 setCartItems(items);
             } catch (err) {
                 if (isAbort(err)) return; // ignore expected cancellations
@@ -128,7 +91,7 @@ const CartPage = () => {
 
             const ac = new AbortController();
             try {
-                const items = await loadServerCart(uId, ac.signal);
+                const items = await cartLib.loadServerCart(uId, ac.signal);
                 setCartItems(items);
             } catch (err) {
                 if (err?.name !== "AbortError") {
@@ -197,8 +160,6 @@ const CartPage = () => {
         try {
             setLoading(true);
             const url = await cartLib.handleCheckout(userId, controller.signal);
-            // Create a pending cart here
-            //sessionStorage.setItem("pendingCart", JSON.stringify(cartItems));
             window.location.href = url;
         } catch (err) {
             if (err?.name === "AbortError") {

@@ -38,6 +38,9 @@ const Navbar = ({hideCart = false, hideCartCount = false}) => {
 
     const countFromServer = async (userId, signal) => {
         const {data} = await api.get(`/carts/${encodeURIComponent(userId)}`, {signal});
+        if (Array.isArray(data?.items)) {
+            return data.items.reduce((s, it) => s + (Number(it?.quantity) || 1), 0);
+        }
         const qtys = Array.isArray(data?.quantity) ? data.quantity : [];
         return qtys.reduce((s, q) => s + (Number(q) || 1), 0);
     };

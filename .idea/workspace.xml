@@ -6,9 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Fixed total not correctly displaying in Order Details Page and on Order Confirmation Page">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/AuthController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/Email.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/Email.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/CartController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/CartController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/OrderController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/Cart.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/Cart.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/CartItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/CartItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/Navbar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/Navbar.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/cart.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/lib/cart.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/LoginPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/LoginPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/CartPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/CartPage.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,6 +59,9 @@
 }</component>
   <component name="MavenRunner">
     <option name="skipTests" value="true" />
+  </component>
+  <component name="PackageJsonUpdateNotifier">
+    <dismissed value="$PROJECT_DIR$/backend/package.json" />
   </component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="ProjectErrors" />
@@ -294,6 +302,7 @@
       <workItem from="1764960923332" duration="13406000" />
       <workItem from="1764974461866" duration="8215000" />
       <workItem from="1765150584018" duration="10719000" />
+      <workItem from="1765234460117" duration="2425000" />
     </task>
     <task id="LOCAL-00017" summary="Added code to sign up / login, user specific carts and auth tokens">
       <option name="closed" value="true" />

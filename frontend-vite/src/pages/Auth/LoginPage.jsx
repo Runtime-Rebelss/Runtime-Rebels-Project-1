@@ -19,11 +19,13 @@ const LoginPage = () => {
             const res = await fetch(`/api/carts/${encodeURIComponent(userId)}`);
             if (!res.ok) return;
             const data = await res.json();
-            const productIds =
-                (Array.isArray(data?.productIds) && data.productIds) ||
-                (Array.isArray(data?.productId) && data.productId) ||
-                [];
-            setCartItems(productIds);
+            let ids = [];
+            if (Array.isArray(data?.items)) {
+                ids = data.items.map(it => it?.product?.id || it?.product?._id).filter(Boolean);
+            } else {
+                ids = (Array.isArray(data?.productIds) && data.productIds) || (Array.isArray(data?.productId) && data.productId) || [];
+            }
+            setCartItems(ids);
         } catch (err) {
             console.warn('preloadCart failed', err);
         }

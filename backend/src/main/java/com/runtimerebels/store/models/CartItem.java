@@ -1,21 +1,32 @@
 package com.runtimerebels.store.models;
 
+import java.math.BigDecimal;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Document
 public class CartItem {
-    @Id
-    private String productId;
+
+    /**
+     * Embedded product snapshot for the item
+     */
     private Product product;
-    private double price;
     private Integer quantity;
+
+    public BigDecimal getItemTotal() {
+        if (product == null || product.getPrice() == null || quantity == null) {
+            return BigDecimal.ZERO;
+        }
+        try {
+            return product.getPrice().multiply(new BigDecimal(quantity));
+        } catch (Exception e) {
+            return BigDecimal.ZERO;
+        }
+    }
 }
