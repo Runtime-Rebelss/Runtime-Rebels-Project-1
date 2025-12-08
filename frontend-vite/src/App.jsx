@@ -17,6 +17,7 @@ import EditProductPage from "./pages/EditProductPage";
 import AddProductPage from "./pages/AddProductPage.jsx";
 import UserInfoPage from "./pages/auth/UserInfoPage";
 import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
+import EnterEmailPage from "./pages/auth/EmailPage";
 
 function App() {
     return (
@@ -40,6 +41,7 @@ function App() {
                 <Route path="/admin/add" element={<AddProductPage />} />
                 <Route path="/account/manage" element={<UserInfoPage />} />
                 <Route path="/reset-password" element={<ResetPasswordPage />} />
+                <Route path="/email-reset-password" element={<EnterEmailPage />} />
             </Routes>
         </div>
     );

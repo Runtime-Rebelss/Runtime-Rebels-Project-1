@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from "react";
-import {useNavigate, useSearchParams} from "react-router";
+import React, { useState } from "react";
+import { useNavigate, useLocation } from "react-router";
 import api from "../lib/axios.js";
 import toast from "react-hot-toast";
 import Cookies from "js-cookie";
@@ -7,15 +7,19 @@ import Cookies from "js-cookie";
 const ResetPassword = () => {
     const [loading, setLoading] = useState(false);
 
-    const [email, setEmail] = useState("");
-    const [fullName, setFullName] = useState("");
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
-    const [editName, setEditName] = useState(true);
-    const [editEmail, setEditEmail] = useState(true);
-    const [editPassword, setEditPassword] = useState(true);
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    // Check if we are on the reset-password page
+    const isResetPassword = location.pathname === "/reset-password";
+
+    // If reset page → inputs enabled (false)
+    // Else → disabled (true)
+    const [editPassword, setEditPassword] = useState(!isResetPassword);
 
     // Update Password
     const updatePassword = async () => {
@@ -30,36 +34,42 @@ const ResetPassword = () => {
             const res = await api.put(
                 "/auth/updatePassword",
                 {
-                    email: Cookies.get("userEmail"),
+                    email: Cookies.get("userEmail") || sessionStorage.getItem("userEmail"),
                     oldPassword,
                     newPassword,
                     confirmPassword
                 },
-                {withCredentials: true}
+                { withCredentials: true }
             );
 
-            toast.success("Password updated!");
-            setEditPassword(true);
-            setOldPassword("");
-            setNewPassword("");
-            setConfirmPassword("");
-
+            if (oldPassword === newPassword) {
+                toast.error("Password must be different from old password!");
+            } else {
+                toast.success("Password updated!");
+                setEditPassword(true);
+                setOldPassword("");
+                setNewPassword("");
+                setConfirmPassword("");
+                sessionStorage.removeItem("userEmail");
+                navigate("/login");
+            }
         } catch (err) {
-            toast.error(
-                err?.response?.data?.message || "Failed to update password"
-            );
+            toast.error(err?.response?.data?.message || "Failed to update password");
         }
+
         setLoading(false);
     };
-    // Make it so that you can choose which field you want to edit, like it will be enabled
-    // Need to add thing that checks for field that is being edited and then update it
+
     return (
         <div className="flex justify-center py-8">
             <div className="space-y-12 w-full max-w-md">
+
                 {/* Update Password */}
                 <fieldset className="fieldset bg-base-200 border p-4 rounded-box">
                     <label className="label font-bold text-lg">Change Password</label>
+
                     <div>
+                        {/* Old Password (Required unless it's reset-password page) */}
                         <input
                             type="password"
                             className="input outline w-full mb-2"
@@ -68,6 +78,7 @@ const ResetPassword = () => {
                             onChange={(e) => setOldPassword(e.target.value)}
                             placeholder="Old password"
                         />
+
                         <input
                             type="password"
                             className="input outline w-full mb-2"
@@ -76,6 +87,7 @@ const ResetPassword = () => {
                             onChange={(e) => setNewPassword(e.target.value)}
                             placeholder="New password"
                         />
+
                         <input
                             type="password"
                             className="input outline w-full mb-2"
@@ -85,13 +97,19 @@ const ResetPassword = () => {
                             placeholder="Confirm password"
                         />
                     </div>
-                    <button
-                        className="btn-outline btn mt-2"
-                        onClick={() => setEditPassword(!editPassword)}
-                    >
-                        edit
-                    </button>
-                    {!editPassword && (
+
+                    {/* EDIT BUTTON — only if NOT on reset-password */}
+                    {!isResetPassword && editPassword && (
+                        <button
+                            className="btn-outline btn mt-2"
+                            onClick={() => setEditPassword(false)}
+                        >
+                            Edit
+                        </button>
+                    )}
+
+                    {/* SAVE BUTTON — only on reset-password OR when editing */}
+                    {(isResetPassword || !editPassword) && (
                         <button
                             className="btn btn-primary w-full mt-3"
                             onClick={updatePassword}

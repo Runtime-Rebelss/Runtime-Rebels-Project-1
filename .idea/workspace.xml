@@ -5,9 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Added orderConfirmation Lib, fixed issue with incorrect order total displaying">
+      <change afterPath="$PROJECT_DIR$/frontend-vite/src/components/Email.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/EmailPage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/confirmOrder.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/lib/confirmOrder.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/orderService.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/lib/orderService.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/ResetPassword.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/ResetPassword.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,7 +32,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="account-henry" />
+        <entry key="$PROJECT_DIR$" value="admin-henry" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
