@@ -22,24 +22,76 @@ export async function fetchOrders(signal) {
  */
 export async function fetchOrderDetails(orderId, signal) {
     const userId = Cookies.get("userId");
+
     if (!userId) {
         const local = orderLib.readLocalOrders();
-        const order = (Array.isArray(local) ? local : [local]).find((o) => (o.id || o._id) === orderId);
+        const order = (Array.isArray(local) ? local : [local]).find(
+            (o) => (o.id || o._id) === orderId
+        );
+
         if (!order) return { order: null, products: [], items: [] };
 
-        // For guest orders, `order.items` is typically the item array.
         const items = order.items || [];
         return { order, products: items, items };
     }
 
-    // Signed-in: backend returns { order, products }
-    const res = await api.get(`/orders/details/${encodeURIComponent(orderId)}`, { signal });
-    // Some controllers return the order and products directly — normalize shape
+    const res = await api.get(
+        `/orders/details/${encodeURIComponent(orderId)}`,
+        { signal }
+    );
+
     const payload = res.data || {};
-    const order = payload.order ?? payload; // fallback if response is the order itself
-    const products = payload.products ?? payload.products ?? payload.products ?? payload.products ?? payload.products ?? [];
-    // if products is a list of Product, use them as items
-    return { order, products, items: products };
+    const order = payload.order ?? payload;
+
+    const productIds = order.productIds || [];
+    const quantities = order.quantity || [];
+    const lineTotals = order.totalPrice || [];
+
+    const items = await Promise.all(
+        productIds.map(async (pid, i) => {
+            try {
+                const { data: product } = await api.get(`/products/${pid}`, {
+                    signal,
+                });
+
+                const qty = Number(quantities[i] ?? 1);
+                const lineTotal = Number(lineTotals[i] ?? 0);
+                const unitPrice = qty > 0 ? lineTotal / qty : 0;
+
+                return {
+                    id: pid,
+                    name: product.name,
+                    image: product.image || product.imageUrl,
+                    quantity: qty,
+                    price: unitPrice,
+                };
+            } catch (err) {
+                console.warn("Failed loading product for order:", pid, err);
+
+                const qty = Number(quantities[i] ?? 1);
+                const lineTotal = Number(lineTotals[i] ?? 0);
+                const unitPrice = qty > 0 ? lineTotal / qty : 0;
+
+                return {
+                    id: pid,
+                    name: "Unknown Product",
+                    image: "",
+                    quantity: qty,
+                    price: unitPrice,
+                };
+            }
+        })
+    );
+
+    return {
+        order: {
+            ...order,
+            items,
+            total: items.reduce((s, it) => s + it.price * it.quantity, 0),
+        },
+        products: items,
+        items,
+    };
 }
 
 export default { fetchOrders, fetchOrderDetails };

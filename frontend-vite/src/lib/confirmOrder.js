@@ -33,7 +33,6 @@ export async function confirmOrder({
     const params = new URLSearchParams(window.location.search);
     const sessionId = params.get("session_id");
 
-    // For guests, try to get email/name from Stripe if not in cookies
     let guestEmail = userEmail;
     let guestName = fullName;
 
@@ -52,7 +51,6 @@ export async function confirmOrder({
                 stripeSession.customer_details?.name ||
                 fullName;
 
-            // Save to cookies for future use
             if (guestEmail && guestEmail !== "guest") {
                 Cookies.set("userEmail", guestEmail);
             }
@@ -68,11 +66,8 @@ export async function confirmOrder({
     const guestConfirmKey = `guest-confirm-${sessionId}`;
     const userConfirmKey = `user-confirm-${sessionId}`;
 
-    /* ============================================================
-     * GUEST FLOW
-     * ============================================================ */
     if (!userId) {
-        // If we've already confirmed this guest order, just restore items to UI
+        // For if guest has confirmed key already
         if (sessionStorage.getItem(guestConfirmKey)) {
             let items = [];
             try {
@@ -181,10 +176,6 @@ export async function confirmOrder({
         return;
     }
 
-    /* ============================================================
-     * SIGNED-IN USER FLOW
-     * ============================================================ */
-
     // Prevent duplicate user order creation
     if (sessionStorage.getItem(userConfirmKey)) {
         const saved = JSON.parse(
@@ -277,7 +268,6 @@ export async function confirmOrder({
         console.error("Failed to send user confirmation email:", emailErr);
     }
 
-    // 🔑 Normalize items for UI: fetch product info and compute unit price
     const items = await Promise.all(
         orderPayload.productIds.map(async (pid, i) => {
             const { data: product } = await api.get(`/products/${pid}`);
