@@ -35,7 +35,7 @@ function OrderCard({ order, detailsPage = false }) {
                 <div>
                     <div className="font-medium">Ship to</div>
                     <div className="opacity-70">
-                        {order.userEmail
+                        {fullName
                             || (order.shipTo?.fullName && order.shipTo.fullName !== "Guest Checkout" ? order.shipTo.fullName : "Guest")}
                     </div>
                 </div>
@@ -56,7 +56,7 @@ function OrderCard({ order, detailsPage = false }) {
                     >
                         <div className="w-20 h-20 flex items-center justify-center">
                             <img
-                                src={it.image}
+                                src={it.imageUrl || it.image}
                                 alt={it.name}
                                 className="max-w-full max-h-full object-contain"
                                 style={{ filter: "drop-shadow(0px 1px 2px rgba(0,0,0,0.12))" }}

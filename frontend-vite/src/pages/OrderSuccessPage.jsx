@@ -45,7 +45,6 @@ const OrderSuccessPage = () => {
                     setTotal(total);
                     return;
                 }
-
                 // NEW GUEST ORDER CREATION
                 let items = [];
                 try {
@@ -137,12 +136,12 @@ const OrderSuccessPage = () => {
                 console.warn("No pendingServerOrder snapshot found.");
                 return;
             }
-
             // create backend order
             const orderPayload = {
                 fullName,
                 userEmail,
                 userId,
+                confirmationNumber: randomCode,
                 productIds: pending.map(i => i.id || i.productId),
                 quantity: pending.map(i => i.quantity),
                 totalPrice: pending.map(i => (i.price || 0) * i.quantity),
@@ -160,7 +159,6 @@ const OrderSuccessPage = () => {
 
             localStorage.removeItem("pendingServerOrder");
             window.dispatchEvent(new Event("cart-updated"));
-
         };
         confirmOrder();
     }, []);

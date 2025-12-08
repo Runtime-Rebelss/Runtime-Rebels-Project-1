@@ -36,7 +36,9 @@ public class Order {
     private List<BigDecimal> totalPrice;
     private OrderStatus orderStatus;
     private String orderId;
+    private String fullName;
     private Date createdAt;
+    private String confirmationNumber;
     private Date processAt;
 
     private String deliveryName;
