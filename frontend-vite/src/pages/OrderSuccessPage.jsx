@@ -136,6 +136,7 @@ const OrderSuccessPage = () => {
                 console.warn("No pendingServerOrder snapshot found.");
                 return;
             }
+
             // create backend order
             const orderPayload = {
                 fullName,

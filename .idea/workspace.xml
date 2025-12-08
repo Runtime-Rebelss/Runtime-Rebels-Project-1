@@ -4,13 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Added code in account page to list orders from newest to oldest">
+    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Fixed product image in OrderCard and changed ship to from email to name">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/OrderController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/Order.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/OrderCard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/OrderCard.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/AccountPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/AccountPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/CartPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/CartPage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/OrderSuccessPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/OrderSuccessPage.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -165,6 +161,8 @@
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <envs>
         <env name="MONGO_URI" value="mongodb+srv://Hlocke124:thepomel61@runtimerebels.otltnjb.mongodb.net/" />
+        <env name="&quot;EMAIL_USERNAME&quot;:" value="&quot;runtimerebelsproject@gmail.com&quot; " />
+        <env name="&quot;EMAIL_PASSWORD&quot;:" value="&quot;yoccztrbeczxegnn&quot;" />
       </envs>
       <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
       <module name="spring-boot" />
@@ -294,15 +292,7 @@
       <workItem from="1764460598757" duration="11691000" />
       <workItem from="1764960923332" duration="13406000" />
       <workItem from="1764974461866" duration="8215000" />
-      <workItem from="1765150584018" duration="5367000" />
-    </task>
-    <task id="LOCAL-00012" summary="Pushed latest code">
-      <option name="closed" value="true" />
-      <created>1762059692910</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1762059692910</updated>
+      <workItem from="1765150584018" duration="6766000" />
     </task>
     <task id="LOCAL-00013" summary="Added code to remove item from cart after purchase">
       <option name="closed" value="true" />
@@ -688,7 +678,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765075372609</updated>
     </task>
-    <option name="localTasksCounter" value="61" />
+    <task id="LOCAL-00061" summary="Fixed product image in OrderCard and changed ship to from email to name">
+      <option name="closed" value="true" />
+      <created>1765156019423</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1765156019423</updated>
+    </task>
+    <option name="localTasksCounter" value="62" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -746,7 +744,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added programs for the login / sign up / user code" />
     <MESSAGE value="Added code to sign up / login, user specific carts and auth tokens" />
     <MESSAGE value="Fully implemented Order Page and can sign out" />
     <MESSAGE value="Added in OrderDetailsPage" />
@@ -771,6 +768,7 @@
     <MESSAGE value="Users can change name, email and password in Account Page" />
     <MESSAGE value="Updated OrderDetailsPage to use Cookies and Full Name" />
     <MESSAGE value="Added code in account page to list orders from newest to oldest" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added code in account page to list orders from newest to oldest" />
+    <MESSAGE value="Fixed product image in OrderCard and changed ship to from email to name" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed product image in OrderCard and changed ship to from email to name" />
   </component>
 </project>

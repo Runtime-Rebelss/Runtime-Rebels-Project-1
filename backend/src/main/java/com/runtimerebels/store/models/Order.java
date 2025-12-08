@@ -15,7 +15,7 @@ import java.util.List;
  * Stores user info, ordered product IDs, quantities, total price,
  * delivery details, and payment status for persistence in MongoDB.
  *
- * @author Haley Kenney
+ * @author Haley Kenney, Henry Locke
  *
  */
 
