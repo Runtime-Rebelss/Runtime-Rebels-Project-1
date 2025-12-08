@@ -56,13 +56,10 @@ const AccountPage = () => {
     };
 
     const getTotal = (order) => {
-        const total =
-            order?.totalAmount ??
-            order?.total ??
-            order?.totalPrice ??
-            order?.orderTotal ??
-            0;
-        return `$${Number(total).toFixed(2)}`;
+        return orderLib.fmtUSD(order?.total ?? order?.items?.reduce(
+            (s, it) => s + Number(it.price || 0) * Number(it.quantity || 1),
+            0
+        ));
     };
 
     const getItemCount = (order) => {
@@ -106,7 +103,7 @@ const AccountPage = () => {
                                     </p>
                                 ) : (
                                     <ul className="space-y-3 max-h-56 overflow-y-auto text-sm">
-                                        {orders.slice(0, 5).map((order) => (
+                                        {revOrder.slice(0, 5).map((order) => (
                                             <li
                                                 key={order._id || order.id}
                                                 className="border-b border-base-300 pb-2 last:border-0"

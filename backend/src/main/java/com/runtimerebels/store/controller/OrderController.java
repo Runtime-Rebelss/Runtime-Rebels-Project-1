@@ -127,6 +127,31 @@ public class OrderController {
     }
 
     /**
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping("/guest")
+    public ResponseEntity<Order> createGuestOrder(@RequestBody Order request) {
+        Calendar calendar = Calendar.getInstance();
+
+        Order order = new Order();
+        order.setUserId("guest-" + calendar.getTimeInMillis()); // unique guest ID
+        order.setUserEmail("Guest");
+        order.setProductIds(request.getProductIds());
+        order.setQuantity(request.getQuantity());
+        order.setTotalPrice(request.getTotalPrice());
+        order.setStripeSessionId(request.getStripeSessionId());
+        order.setPaymentStatus("paid");
+        order.setOrderStatus(OrderStatus.PENDING);
+        order.setCreatedAt(calendar.getTime());
+        order.setProcessAt(null);
+
+        Order saved = orderRepository.save(order);
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+    }
+
+    /**
      * delete order by id
      *
      * @param orderId orderId
@@ -153,7 +178,7 @@ public class OrderController {
      * @throws Exception java.lang. exception
      */
     @PostMapping("/confirm/{userId}")
-public ResponseEntity<Order> confirmPayment(@PathVariable String userId, @RequestBody Order request) throws Exception {
+    public ResponseEntity<Order> confirmPayment(@PathVariable String userId, @RequestBody Order request) throws Exception {
         Cart cart = cartRepository.findByUserId(userId).orElseThrow(() -> new RuntimeException("Cart not found!"));
         Calendar calendar = Calendar.getInstance();
 

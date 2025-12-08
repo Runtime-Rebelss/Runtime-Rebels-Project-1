@@ -239,11 +239,6 @@ const Navbar = ({hideCart = false, hideCartCount = false}) => {
                                             </Link>
                                         </li>
                                         <li>
-                                            <Link to="/account">
-                                                <button className="btn-ghost">Account</button>
-                                            </Link>
-                                        </li>
-                                        <li>
                                             <button onClick={handleLogout}
                                                     className="text-primary-600 underline text-sm hover:text-gray-900">Sign Out
                                             </button>

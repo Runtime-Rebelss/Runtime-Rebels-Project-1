@@ -35,7 +35,8 @@ function OrderCard({ order, detailsPage = false }) {
                 <div>
                     <div className="font-medium">Ship to</div>
                     <div className="opacity-70">
-                        {fullName || "Guest User"}
+                        {order.userEmail
+                            || (order.shipTo?.fullName && order.shipTo.fullName !== "Guest Checkout" ? order.shipTo.fullName : "Guest")}
                     </div>
                 </div>
                 <div className="md:text-right">
@@ -53,15 +54,12 @@ function OrderCard({ order, detailsPage = false }) {
                         key={`${it.id || it.productId || i}-${orderId}`}
                         className="py-4 flex items-center gap-4"
                     >
-                        <div className="w-20 h-20 bg-base-200 rounded overflow-hidden flex-shrink-0">
+                        <div className="w-20 h-20 flex items-center justify-center">
                             <img
-                                src={
-                                    it.image ||
-                                    it.imageUrl ||
-                                    "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=400&q=70"
-                                }
+                                src={it.image}
                                 alt={it.name}
-                                className="w-full h-full p-1 object-contain"
+                                className="max-w-full max-h-full object-contain"
+                                style={{ filter: "drop-shadow(0px 1px 2px rgba(0,0,0,0.12))" }}
                             />
                         </div>
                         <div className="flex-1 min-w-0">

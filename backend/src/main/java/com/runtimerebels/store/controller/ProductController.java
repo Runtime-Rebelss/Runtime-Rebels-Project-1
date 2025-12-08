@@ -152,6 +152,8 @@ public class ProductController {
                     product.setName(productDetails.getName());
                     product.setDescription(productDetails.getDescription());
                     product.setPrice(productDetails.getPrice());
+                    product.setImageUrl(productDetails.getImageUrl());
+                    product.setCategories(productDetails.getCategories());
                     Product updatedProduct = productRepository.save(product);
                     return ResponseEntity.ok(updatedProduct);
                 })
