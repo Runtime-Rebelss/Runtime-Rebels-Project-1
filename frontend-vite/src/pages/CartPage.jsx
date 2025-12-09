@@ -11,9 +11,6 @@ function calcTotal(items) {
     return items.reduce((s, it) => s + (Number(it.price) || 0) * (Number(it.quantity) || 0), 0);
 }
 
-// Use the shared loader in src/lib/cart.js which understands both old and new server shapes
-
-// Need to add stuff so can make an actual account
 const CartPage = () => {
     const [cartItems, setCartItems] = useState([]);
     const [total, setTotal] = useState(0);

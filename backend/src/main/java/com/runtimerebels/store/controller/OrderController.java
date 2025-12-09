@@ -3,6 +3,7 @@ package com.runtimerebels.store.controller;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -45,6 +46,8 @@ public class OrderController {
     private CartRepository cartRepository;
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private StripeSessionController stripeSessionController;
 
     // Get all orders
     @GetMapping
@@ -119,6 +122,44 @@ public class OrderController {
             }
         }
 
+        if (order.getStripeSessionId() != null) {
+            try {
+                Map<String, Object> session = stripeSessionController.getSession(order.getStripeSessionId());
+                if (session != null) {
+                    Map<String, Object> shipping = (Map<String, Object>) session.get("shipping_details");
+                    String stripeFullName = null;
+                    if (shipping != null) {
+                        Object shippingName = shipping.get("name");
+                        if (shippingName != null) {
+                            stripeFullName = shippingName.toString();
+                        }
+                        order.setDeliveryName((String) shipping.get("name"));
+                        Map<String, Object> addr = (Map<String, Object>) shipping.get("address");
+                        if (addr != null) {
+                            order.setDeliveryAddress((String) addr.get("line1"));
+                            order.setDeliveryCity((String) addr.get("city"));
+                            order.setDeliveryState((String) addr.get("state"));
+                        }
+                    }
+                    Map<String, Object> cust = (Map<String, Object>) session.get("customer_details");
+                    if (cust != null) {
+                        if (stripeFullName == null) {
+                            Object custName = cust.get("name");
+                            if (custName != null) {
+                                stripeFullName = custName.toString();
+                            }
+                        }
+                        order.setDeliveryContact((String) cust.get("phone"));
+                    }
+                    if ((order.getFullName() == null || order.getFullName().trim().isEmpty()) && stripeFullName != null) {
+                        order.setFullName(stripeFullName);
+                    }
+                }
+            } catch (Exception e) {
+                System.err.println("Failed to fetch stripe session for order creation: " + e.getMessage());
+            }
+        }
+
         order.setPaymentStatus("Paid");
         Order savedOrder = orderRepository.save(order);
         Cart cart = cartRepository.findByUserId(userId).orElseThrow(() -> new RuntimeException("Cart not found!"));
@@ -147,6 +188,44 @@ public class OrderController {
         order.setQuantity(request.getQuantity());
         order.setTotalPrice(request.getTotalPrice());
         order.setStripeSessionId(request.getStripeSessionId());
+        
+        if (request.getStripeSessionId() != null) {
+            try {
+                Map<String, Object> session = stripeSessionController.getSession(request.getStripeSessionId());
+                if (session != null) {
+                    Map<String, Object> shipping = (Map<String, Object>) session.get("shipping_details");
+                    String stripeFullName = null;
+                    if (shipping != null) {
+                        Object shippingName = shipping.get("name");
+                        if (shippingName != null) {
+                            stripeFullName = shippingName.toString();
+                        }
+                        order.setDeliveryName((String) shipping.get("name"));
+                        Map<String, Object> addr = (Map<String, Object>) shipping.get("address");
+                        if (addr != null) {
+                            order.setDeliveryAddress((String) addr.get("line1"));
+                            order.setDeliveryCity((String) addr.get("city"));
+                            order.setDeliveryState((String) addr.get("state"));
+                        }
+                    }
+                    Map<String, Object> cust = (Map<String, Object>) session.get("customer_details");
+                    if (cust != null) {
+                        if (stripeFullName == null) {
+                            Object custName = cust.get("name");
+                            if (custName != null) {
+                                stripeFullName = custName.toString();
+                            }
+                        }
+                        order.setDeliveryContact((String) cust.get("phone"));
+                    }
+                    if ((order.getFullName() == null || order.getFullName().trim().isEmpty()) && stripeFullName != null) {
+                        order.setFullName(stripeFullName);
+                    }
+                }
+            } catch (Exception e) {
+                System.err.println("Failed to fetch stripe session for guest order: " + e.getMessage());
+            }
+        }
         order.setPaymentStatus("paid");
         order.setOrderStatus(OrderStatus.PENDING);
         order.setCreatedAt(calendar.getTime());
@@ -213,6 +292,44 @@ public class OrderController {
         order.setQuantity(quantities);
         order.setTotalPrice(totalPrices);
         order.setStripeSessionId(request.getStripeSessionId());
+        // If we have a stripe session id, attempt to fetch shipping/customer details and prefer shipping name for fullname
+        if (request.getStripeSessionId() != null) {
+            try {
+                Map<String, Object> session = stripeSessionController.getSession(request.getStripeSessionId());
+                if (session != null) {
+                    Map<String, Object> shipping = (Map<String, Object>) session.get("shipping_details");
+                    String stripeFullName = null;
+                    if (shipping != null) {
+                        Object shippingName = shipping.get("name");
+                        if (shippingName != null) {
+                            stripeFullName = shippingName.toString();
+                        }
+                        order.setDeliveryName((String) shipping.get("name"));
+                        Map<String, Object> addr = (Map<String, Object>) shipping.get("address");
+                        if (addr != null) {
+                            order.setDeliveryAddress((String) addr.get("line1"));
+                            order.setDeliveryCity((String) addr.get("city"));
+                            order.setDeliveryState((String) addr.get("state"));
+                        }
+                    }
+                    Map<String, Object> cust = (Map<String, Object>) session.get("customer_details");
+                    if (cust != null) {
+                        if (stripeFullName == null) {
+                            Object custName = cust.get("name");
+                            if (custName != null) {
+                                stripeFullName = custName.toString();
+                            }
+                        }
+                        order.setDeliveryContact((String) cust.get("phone"));
+                    }
+                    if ((order.getFullName() == null || order.getFullName().trim().isEmpty()) && stripeFullName != null) {
+                        order.setFullName(stripeFullName);
+                    }
+                }
+            } catch (Exception e) {
+                System.err.println("Failed to fetch stripe session for confirmPayment: " + e.getMessage());
+            }
+        }
         order.setPaymentStatus("Paid");
         order.setOrderStatus(OrderStatus.PENDING);
         order.setCreatedAt(calendar.getTime());

@@ -21,8 +21,6 @@ const LoginPage = () => {
             const data = await res.json();
             let ids = [];
             if (Array.isArray(data?.items)) {
-                ids = data.items.map(it => it?.product?.id || it?.product?._id).filter(Boolean);
-            } else {
                 ids = (Array.isArray(data?.productIds) && data.productIds) || (Array.isArray(data?.productId) && data.productId) || [];
             }
             setCartItems(ids);
@@ -55,7 +53,6 @@ const LoginPage = () => {
             Cookies.set("userId", userId);
             Cookies.set("userEmail", data.email);
             Cookies.set("fullName", `${data.firstName} ${data.lastName}`);
-            console.log(Cookies.get("access_token"));
 
             if (userEmail === "admin@gmail.com") {
                 console.log(Cookies.get("access_token"));

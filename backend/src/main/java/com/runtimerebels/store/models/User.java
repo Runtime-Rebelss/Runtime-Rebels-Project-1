@@ -13,8 +13,6 @@ import java.util.Collection;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Getter
-@Setter
 @Document
 public class User implements UserDetails {
     @Id

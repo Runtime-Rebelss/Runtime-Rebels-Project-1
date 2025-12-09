@@ -41,18 +41,18 @@ const SignUpPage = () => {
                 return;
             }
 
+            Cookies.set("firstName", data.firstName);
+            Cookies.set("lastName", data.lastName);
             Cookies.set("userId", userId);
-            Cookies.set("userEmail", userEmail);
-            Cookies.set("firstName", firstName);
-            Cookies.set("lastName", lastName);
-            Cookies.set("fullName", fullName);
+            Cookies.set("userEmail", data.email);
+            Cookies.set("fullName", `${data.firstName} ${data.lastName}`);
 
             navigate('/', { replace: true });
-            toast.success('Signup successfully!');
+            toast.success('Sign up successfully!');
 
             await api.post('/email/welcome', {
                 to: userEmail,
-                name: firstName,
+                name: `${firstName} ${lastName}`,
             });
 
         } catch (err) {
@@ -69,7 +69,6 @@ const SignUpPage = () => {
     return (
         <div className="min-h-screen bg-base-200">
             <Navbar cartItems={cartItems} />
-
             <div className="container mx-auto px-4 py-8">
                 <div className="flex justify-center py-16">
                     <form onSubmit={handleSignup} className="space-y-6 w-full max-w-sm">
