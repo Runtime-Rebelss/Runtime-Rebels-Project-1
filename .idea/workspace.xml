@@ -6,9 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Fixed total not correctly displaying in Order Details Page and on Order Confirmation Page">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/AuthController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/Email.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/Email.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/.gitignore" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,7 +29,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="admin-henry" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -45,7 +43,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/Hlocke124/Runtime-Rebels-Project-1.git&quot;,
-    &quot;accountId&quot;: &quot;82aedb2d-abc9-4dc7-bdc8-8c73de7f3805&quot;
+    &quot;accountId&quot;: &quot;c092b729-09e8-4a5f-870e-9563811d8a5e&quot;
   }
 }</component>
   <component name="KubernetesApiPersistence">{}</component>
@@ -70,52 +68,53 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.ShoppingCartApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Application.StoreApplication (2).executor&quot;: &quot;Run&quot;,
-    &quot;Application.StoreApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.spring-boot/docker-compose.yaml: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;JavaScript Debug.index.html.executor&quot;: &quot;Run&quot;,
-    &quot;Maven.spring-boot [install].executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;Node.js.AddToCartButton.jsx.executor&quot;: &quot;Run&quot;,
-    &quot;Node.js.App.js.executor&quot;: &quot;Run&quot;,
-    &quot;Node.js.App.jsx.executor&quot;: &quot;Run&quot;,
-    &quot;Node.js.ProductList.jsx.executor&quot;: &quot;Run&quot;,
-    &quot;Node.js.main.jsx.executor&quot;: &quot;Run&quot;,
-    &quot;Notification.DisplayName-DoNotAsk-DatabaseConfigFileWatcher.found&quot;: &quot;New/updated database configurations found&quot;,
-    &quot;Notification.DoNotAsk-DatabaseConfigFileWatcher.found&quot;: &quot;true&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Spring Boot.ShoppingCartApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.StoreApplication.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/wlock/OneDrive/Documents/Runtime-Rebels-Final/Runtime-Rebels-Project-1/backend/src/main/java/com/runtimerebels/store/services&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\wlock\\AppData\\Roaming\\JetBrains\\IntelliJIdea2025.2\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
+    "Application.ShoppingCartApplication.executor": "Run",
+    "Application.StoreApplication (2).executor": "Run",
+    "Application.StoreApplication.executor": "Run",
+    "Docker.spring-boot/docker-compose.yaml: Compose Deployment.executor": "Run",
+    "JavaScript Debug.index.html.executor": "Run",
+    "Maven.spring-boot [install].executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Node.js.AddToCartButton.jsx.executor": "Run",
+    "Node.js.App.js.executor": "Run",
+    "Node.js.App.jsx.executor": "Run",
+    "Node.js.ProductList.jsx.executor": "Run",
+    "Node.js.main.jsx.executor": "Run",
+    "Notification.DisplayName-DoNotAsk-DatabaseConfigFileWatcher.found": "New/updated database configurations found",
+    "Notification.DoNotAsk-DatabaseConfigFileWatcher.found": "true",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Spring Boot.ShoppingCartApplication.executor": "Run",
+    "Spring Boot.StoreApplication.executor": "Run",
+    "git-widget-placeholder": "main",
+    "junie.onboarding.icon.badge.shown": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/wlock/OneDrive/Documents/Runtime-Rebels-Final/Runtime-Rebels-Project-1/backend/src/main/java/com/runtimerebels/store/services",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "to.speed.mode.migration.done": "true",
+    "ts.external.directory.path": "C:\\Users\\wlock\\AppData\\Roaming\\JetBrains\\IntelliJIdea2025.2\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mongo&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mongo"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\wlock\OneDrive\Documents\Runtime-Rebels-Final\Runtime-Rebels-Project-1\backend\src\main\java\com\runtimerebels\store\services" />
@@ -294,6 +293,9 @@
       <workItem from="1764960923332" duration="13406000" />
       <workItem from="1764974461866" duration="8215000" />
       <workItem from="1765150584018" duration="10719000" />
+      <workItem from="1765231095379" duration="74000" />
+      <workItem from="1765231719172" duration="466000" />
+      <workItem from="1765403262114" duration="247000" />
     </task>
     <task id="LOCAL-00017" summary="Added code to sign up / login, user specific carts and auth tokens">
       <option name="closed" value="true" />
