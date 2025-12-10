@@ -4,9 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Fixed total not correctly displaying in Order Details Page and on Order Confirmation Page">
+    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Updated the .gitignore">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -162,7 +163,13 @@
       <envs>
         <env name="EMAIL_PASSWORD" value="yoccztrbeczxegnn" />
         <env name="EMAIL_USERNAME" value="runtimerebelsproject@gmail.com" />
+        <env name="FRONTEND_CANCEL_URL" value="http://localhost:5173/order-cancel" />
+        <env name="FRONTEND_SUCCESS_URL" value="http://localhost:5173/order-success?session_id={CHECKOUT_SESSION_ID}" />
+        <env name="JWT_EXPIRATION" value="253402300799" />
+        <env name="JWT_SECRET" value="8d4fed75477d160c393db8a22edce23a5ae7971b4533077d89ac0016dd92c879d21791073310294924cb896443a8214cfdc129baa42af8b3030a397382a93532" />
         <env name="MONGO_URI" value="mongodb+srv://Hlocke124:thepomel61@runtimerebels.otltnjb.mongodb.net/" />
+        <env name="STRIPE_SECRET_KEY" value="sk_test_51SLYkb3QiWxEqXaxuZrJfgh3HwuEd6SplfSxR9YQ2h3akEUt5YD04kxRNImHZQ6Ka0SbS28ETgt329SkQ5mVPo3t008u4coqgi" />
+        <env name="JWT_REFRESH_EXPIRATION" value="604800000" />
       </envs>
       <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
       <module name="spring-boot" />
@@ -295,15 +302,7 @@
       <workItem from="1765150584018" duration="10719000" />
       <workItem from="1765231095379" duration="74000" />
       <workItem from="1765231719172" duration="466000" />
-      <workItem from="1765403262114" duration="247000" />
-    </task>
-    <task id="LOCAL-00017" summary="Added code to sign up / login, user specific carts and auth tokens">
-      <option name="closed" value="true" />
-      <created>1763602014396</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1763602014396</updated>
+      <workItem from="1765403262114" duration="661000" />
     </task>
     <task id="LOCAL-00018" summary="Added code to sign up / login, user specific carts and auth tokens">
       <option name="closed" value="true" />
@@ -689,7 +688,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765170109547</updated>
     </task>
-    <option name="localTasksCounter" value="66" />
+    <task id="LOCAL-00066" summary="Updated the .gitignore">
+      <option name="closed" value="true" />
+      <created>1765403548922</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1765403548922</updated>
+    </task>
+    <option name="localTasksCounter" value="67" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -747,7 +754,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added in OrderDetailsPage" />
     <MESSAGE value="Fully implemented OrderDetailsPage" />
     <MESSAGE value="Added fixes to get program running" />
     <MESSAGE value="Added Guest functionality to Cart and Order Pages" />
@@ -772,6 +778,7 @@
     <MESSAGE value="Fixed product image in OrderCard and changed ship to from email to name" />
     <MESSAGE value="Added orderConfirmation Lib, fixed issue with incorrect order total displaying" />
     <MESSAGE value="Fixed total not correctly displaying in Order Details Page and on Order Confirmation Page" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed total not correctly displaying in Order Details Page and on Order Confirmation Page" />
+    <MESSAGE value="Updated the .gitignore" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated the .gitignore" />
   </component>
 </project>
