@@ -1,15 +1,10 @@
-# ============================
-#   IDE / Editor Settings
-# ============================
+# --- IDE ---
 .idea/
 .vscode/
+.github/
 *.iml
 
-# ============================
-#   GitHub workflows (optional)
-#   Remove IF you want GH Actions public
-# ============================
-.github/
+# --- Maven (Spring Boot backend) ---
 
 # ============================
 #   Operating System Files
@@ -21,54 +16,13 @@ Thumbs.db
 #   Java / Spring Boot Backend
 # ============================
 backend/target/
-backend/.classpath
-backend/.project
-backend/.settings/
+backend/node_modules/
 
-# Sensitive Spring config files (DO NOT COMMIT)
-backend/src/main/resources/application.properties
-backend/src/main/resources/application-local.properties
-backend/src/main/resources/application-dev.properties
-backend/src/main/resources/application-prod.properties
-
-# Logs
-backend/*.log
-
-# Maven
-backend/.mvn/
-backend/mvnw
-backend/mvnw.cmd
-
-# ============================
-#   React + Vite Frontend
-# ============================
+# --- Node (React frontend) ---
 frontend-vite/node_modules/
-frontend-vite/.vite/
-frontend-vite/dist/
-
-# ENV files (VERY IMPORTANT)
 frontend-vite/.env
-frontend-vite/.env.local
-frontend-vite/.env.*.local
+frontend-vite/.vite/
 
-# ============================
-#   Common Node / Java
-# ============================
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# ============================
-#   Extras
-# ============================
-*.log
-*.tmp
-*.bak
-
-# ============================
-#   Database Dumps (DO NOT COMMIT)
-# ============================
-*.sql
-*.db
-dump/
+# --- OS system files ---
+.DS_Store
+Thumbs.db
