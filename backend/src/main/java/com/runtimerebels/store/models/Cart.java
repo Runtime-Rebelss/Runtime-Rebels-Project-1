@@ -4,12 +4,13 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
 @AllArgsConstructor
@@ -22,14 +23,10 @@ public class Cart {
     private String id;
 
     private String userId;
-    private List<String> productIds;
-    private List<Integer> quantity;
-    private List<BigDecimal> totalPrice;
+    private List<CartItem> items;
 
-    public Cart(String userId, List<String> productIds, List<Integer> quantity, List<BigDecimal> totalPrice) {
+    public Cart(String userId, List<CartItem> items) {
         this.userId = userId;
-        this.productIds = productIds != null ? new ArrayList<>(productIds) : new ArrayList<>();
-        this.quantity = quantity != null ? new ArrayList<>(quantity) : new ArrayList<>();
-        this.totalPrice = totalPrice != null ? new ArrayList<>(totalPrice) : new ArrayList<>();
+        this.items = items != null ? new ArrayList<>(items) : new ArrayList<>();
     }
 }

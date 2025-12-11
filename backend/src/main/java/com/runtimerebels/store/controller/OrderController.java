@@ -3,32 +3,37 @@ package com.runtimerebels.store.controller;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Optional;
 
-import com.runtimerebels.store.dao.CartRepository;
-import com.runtimerebels.store.dao.ProductRepository;
-import com.runtimerebels.store.models.Cart;
-import com.runtimerebels.store.models.OrderStatus;
-import com.runtimerebels.store.models.Product;
-import com.runtimerebels.store.models.dto.OrderResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.runtimerebels.store.models.Order;
+import com.runtimerebels.store.dao.CartRepository;
 import com.runtimerebels.store.dao.OrderRepository;
+import com.runtimerebels.store.dao.ProductRepository;
+import com.runtimerebels.store.models.Cart;
+import com.runtimerebels.store.models.CartItem;
+import com.runtimerebels.store.models.Order;
+import com.runtimerebels.store.models.OrderStatus;
+import com.runtimerebels.store.models.Product;
+import com.runtimerebels.store.models.dto.OrderResponse;
 
 /**
- * REST controller for managing customer orders.
- * Handles endpoints for creating new orders and retrieving existing ones.
- * Communicates with the {@link OrderRepository} for persistence.
+ * REST controller for managing customer orders. Handles endpoints for creating
+ * new orders and retrieving existing ones. Communicates with the
+ * {@link OrderRepository} for persistence.
  *
  * Base URL: /api/orders
  *
  * @author Haley Kenney, Henry Locke
  */
-
 @RestController
 @RequestMapping("/api/orders")
 public class OrderController {
@@ -43,7 +48,9 @@ public class OrderController {
 
     // Get all orders
     @GetMapping
-    public List<Order> getAllOrders() { return orderRepository.findAll(); }
+    public List<Order> getAllOrders() {
+        return orderRepository.findAll();
+    }
 
     /**
      * get orders by user id
@@ -116,10 +123,8 @@ public class OrderController {
         Order savedOrder = orderRepository.save(order);
         Cart cart = cartRepository.findByUserId(userId).orElseThrow(() -> new RuntimeException("Cart not found!"));
 
-        // Remove item(s) from cart
-        cart.setProductIds(new ArrayList<>());
-        cart.setQuantity(new ArrayList<>());
-        cart.setTotalPrice(new ArrayList<>());
+        // Clear cart items
+        cart.setItems(new ArrayList<>());
         cartRepository.save(cart);
 
         System.out.println("Saved order with ID: " + savedOrder.getOrderId());
@@ -186,20 +191,36 @@ public class OrderController {
         Order order = new Order();
         order.setUserId(userId);
         order.setFullName(request.getFullName());
-        order.setProductIds(cart.getProductIds());
-        order.setQuantity(cart.getQuantity());
-        order.setTotalPrice(cart.getTotalPrice());
+        // Map cart items into order product lists
+        List<String> productIds = new ArrayList<>();
+        List<Integer> quantities = new ArrayList<>();
+        List<java.math.BigDecimal> totalPrices = new ArrayList<>();
+        if (cart.getItems() != null) {
+            for (CartItem it : cart.getItems()) {
+                if (it == null || it.getProduct() == null) {
+                    continue;
+                }
+                productIds.add(it.getProduct().getId());
+                Integer qty = it.getQuantity();
+                if (qty == null) {
+                    qty = 0;
+                }
+                quantities.add(qty);
+                totalPrices.add(it.getItemTotal());
+            }
+        }
+        order.setProductIds(productIds);
+        order.setQuantity(quantities);
+        order.setTotalPrice(totalPrices);
         order.setStripeSessionId(request.getStripeSessionId());
-        order.setPaymentStatus("paid");
+        order.setPaymentStatus("Paid");
         order.setOrderStatus(OrderStatus.PENDING);
         order.setCreatedAt(calendar.getTime());
         order.setProcessAt(null);
         orderRepository.save(order);
 
         // Remove item(s) from cart
-        cart.setProductIds(new ArrayList<>());
-        cart.setQuantity(new ArrayList<>());
-        cart.setTotalPrice(new ArrayList<>());
+        cart.setItems(new ArrayList<>());
         cartRepository.save(cart);
 
         return ResponseEntity.ok(order);

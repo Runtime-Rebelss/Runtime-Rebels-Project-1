@@ -11,10 +11,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.runtimerebels.store.models.Cart;
+import com.runtimerebels.store.models.CartItem;
+import com.runtimerebels.store.models.Product;
+import com.runtimerebels.store.dao.ProductRepository;
 import com.runtimerebels.store.dao.CartRepository;
 
 /**
- *  cart controller
+ * cart controller
+ *  * @author Henry Locke
  *
  */
 @RestController
@@ -23,6 +27,9 @@ public class CartController {
 
     @Autowired
     CartRepository cartRepository;
+
+    @Autowired
+    ProductRepository productRepository;
 
     /**
      * get all carts
@@ -47,16 +54,10 @@ public class CartController {
     @GetMapping("/{userId}")
     public ResponseEntity<Cart> getCart(@PathVariable String userId) {
         Cart cart = cartRepository.findByUserId(userId)
-                .orElse(new Cart(userId, new ArrayList<>(), new ArrayList<>(), new ArrayList<>()));
+                .orElse(new Cart(userId, new ArrayList<>()));
 
-        int minLength = Math.min(
-                Math.min(cart.getProductIds().size(), cart.getQuantity().size()),
-                cart.getTotalPrice().size());
-
-        if (minLength < cart.getProductIds().size()) {
-            cart.setProductIds(new ArrayList<>(cart.getProductIds().subList(0, minLength)));
-            cart.setQuantity(new ArrayList<>(cart.getQuantity().subList(0, minLength)));
-            cart.setTotalPrice(new ArrayList<>(cart.getTotalPrice().subList(0, minLength)));
+        if (cart.getItems() == null) {
+            cart.setItems(new ArrayList<>());
         }
 
         return new ResponseEntity<>(cart, HttpStatus.OK);
@@ -74,40 +75,43 @@ public class CartController {
      * @see Cart
      */
     @PostMapping("/add")
-    public ResponseEntity<Cart> addToCart(@RequestParam String userId, @RequestParam String productId, @RequestParam(defaultValue = "1") int quantity, @RequestParam BigDecimal totalPrice) {
-        // Check input
-        if (quantity <= 0 || totalPrice.compareTo(BigDecimal.ZERO) <= 0) {
+    public ResponseEntity<Cart> addToCart(@RequestParam String userId, @RequestParam String productId, @RequestParam(defaultValue = "1") int quantity, @RequestParam(required = false) BigDecimal totalPrice) {
+        if (quantity <= 0) {
             return ResponseEntity.badRequest().build();
         }
 
+        Optional<Product> maybeProduct = productRepository.findById(productId);
+        if (maybeProduct.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+        Product product = maybeProduct.get();
+
         Cart cart = cartRepository.findByUserId(userId)
-                .orElse(new Cart(userId, new ArrayList<>(), new ArrayList<>(), new ArrayList<>()));
+                .orElse(new Cart(userId, new ArrayList<>()));
 
-        // ensure non-null lists
-        if (cart.getProductIds() == null) cart.setProductIds(new ArrayList<>());
-        if (cart.getQuantity() == null) cart.setQuantity(new ArrayList<>());
-        if (cart.getTotalPrice() == null) cart.setTotalPrice(new ArrayList<>());
-
-        // Find existing product
-        int productIdIndex = cart.getProductIds().indexOf(productId);
-
-        if (productIdIndex >= 0) {
-            // Update existing items
-            cart.getQuantity().set(productIdIndex, cart.getQuantity().get(productIdIndex) + quantity);
-            cart.getTotalPrice().set(productIdIndex, totalPrice);
-        } else {
-            // Add new item
-            cart.getProductIds().add(productId);
-            cart.getQuantity().add(quantity);
-            cart.getTotalPrice().add(totalPrice);
+        if (cart.getItems() == null) {
+            cart.setItems(new ArrayList<>());
         }
 
-        int minLength = Math.min(Math.min(cart.getProductIds().size(), cart.getQuantity().size()), cart.getTotalPrice().size());
+        List<CartItem> items = cart.getItems();
 
-        cart.setProductIds(new ArrayList<>(cart.getProductIds().subList(0, minLength)));
-        cart.setQuantity(new ArrayList<>(cart.getQuantity().subList(0, minLength)));
-        cart.setTotalPrice(new ArrayList<>(cart.getTotalPrice().subList(0, minLength)));
+        int index = -1;
+        for (int i = 0; i < items.size(); i++) {
+            CartItem it = items.get(i);
+            if (it != null && it.getProduct() != null && productId.equals(it.getProduct().getId())) {
+                index = i;
+                break;
+            }
+        }
 
+        if (index >= 0) {
+            CartItem existing = items.get(index);
+            existing.setQuantity(existing.getQuantity() + quantity);
+        } else {
+            items.add(new CartItem(product, quantity));
+        }
+
+        cart.setItems(items);
         cartRepository.save(cart);
         return ResponseEntity.ok(cart);
     }
@@ -124,18 +128,26 @@ public class CartController {
      */
     @PutMapping("/update")
     public ResponseEntity<Cart> updateCart(@RequestParam String userId, @RequestParam String productId, @RequestParam int quantity) {
-
         Optional<Cart> cartOptional = cartRepository.findByUserId(userId);
         if (cartOptional.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         Cart cart = cartOptional.get();
-        List<String> products = cart.getProductIds();
-        List<Integer> quantities = cart.getQuantity();
-        List<BigDecimal> totalPrices = cart.getTotalPrice();
+        if (cart.getItems() == null) {
+            cart.setItems(new ArrayList<>());
+        }
 
-        int index = products.indexOf(productId);
+        List<CartItem> items = cart.getItems();
+        int index = -1;
+        for (int i = 0; i < items.size(); i++) {
+            CartItem it = items.get(i);
+            if (it != null && it.getProduct() != null && productId.equals(it.getProduct().getId())) {
+                index = i;
+                break;
+            }
+        }
+
         if (index < 0) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -145,19 +157,12 @@ public class CartController {
         }
 
         if (quantity == 0) {
-            // Remove all arrays
-            products.remove(index);
-            quantities.remove(index);
-            totalPrices.remove(index);
+            items.remove(index);
         } else {
-            // Update quantity only
-            quantities.set(index, quantity);
+            items.get(index).setQuantity(quantity);
         }
 
-        cart.setProductIds(products);
-        cart.setQuantity(quantities);
-        cart.setTotalPrice(totalPrices);
-
+        cart.setItems(items);
         cartRepository.save(cart);
         return new ResponseEntity<>(cart, HttpStatus.OK);
     }
@@ -177,26 +182,27 @@ public class CartController {
         if (optionalCart.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
         Cart cart = optionalCart.get();
-        List<String> products = cart.getProductIds();
-        List<Integer> quantities = cart.getQuantity();
-        List<BigDecimal> finalPrices = cart.getTotalPrice();
+        if (cart.getItems() == null) {
+            cart.setItems(new ArrayList<>());
+        }
 
-        int index = products.indexOf(productId);
+        List<CartItem> items = cart.getItems();
+        int index = -1;
+        for (int i = 0; i < items.size(); i++) {
+            CartItem it = items.get(i);
+            if (it != null && it.getProduct() != null && productId.equals(it.getProduct().getId())) {
+                index = i;
+                break;
+            }
+        }
+
         if (index < 0) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        // Remove from arrays
-        products.remove(index);
-        quantities.remove(index);
-        finalPrices.remove(index);
-
-        cart.setProductIds(products);
-        cart.setQuantity(quantities);
-        cart.setTotalPrice(finalPrices);
-
+        items.remove(index);
+        cart.setItems(items);
         cartRepository.save(cart);
         return new ResponseEntity<>(cart, HttpStatus.OK);
     }
