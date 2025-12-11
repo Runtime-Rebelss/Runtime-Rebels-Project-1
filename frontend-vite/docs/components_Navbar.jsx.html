@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>components/Navbar.jsx - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#Filters">Filters</a></li><li><a href="global.html#Hero">Hero</a></li><li><a href="global.html#Navbar">Navbar</a></li><li><a href="global.html#ProductCard">ProductCard</a></li><li><a href="global.html#useFetchProducts">useFetchProducts</a></li></ul>
+    
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">components/Navbar.jsx</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, {useEffect, useState} from "react";
+import { Link } from "react-router-dom";
+import { ShoppingCart, Search } from "lucide-react";
+import cartLib from "../lib/cart.js";
+
+/**
+ * Navbar component renders top navigation with category links, search and cart.
+ * 
+ * @author Frank Gonzalez, Haley Kenney
+ * @since 11-19-2025
+ * @returns {JSX.Element}
+ */
+const Navbar = ({ hideCart = false, hideCartCount = false }) => {
+    const categories = ["Men's", "Women's", "Jewelry", "Electronics", "Home &amp; Garden"];
+    const [cartCount, setCartCount] = useState(0);
+
+// load initial count
+    useEffect(() => {
+        const items = cartLib.loadGuestCart?.();
+        const count = items.reduce((sum, it) => sum + (it.quantity || 1), 0);
+        setCartCount(count);
+    }, []);
+
+// update count
+    useEffect(() => {
+        const handler = () => {
+            const items = cartLib.loadGuestCart?.();
+            const count = items.reduce((sum, it) => sum + (it.quantity || 1), 0);
+            setCartCount(count);
+        };
+
+        window.addEventListener("cart-updated", handler);
+        return () => window.removeEventListener("cart-updated", handler);
+    }, []);
+
+    return (
+        &lt;div className="navbar bg-base-100 shadow-sm px-4 sticky top-0 z-50">
+            {/* LEFT — Dropdown for small screens */}
+            &lt;div className="navbar-start lg:hidden">
+                &lt;div className="dropdown">
+                    &lt;div tabIndex={0} role="button" className="btn btn-ghost">
+                        &lt;svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            &lt;path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M4 6h16M4 12h16M4 18h16"
+                            />
+                        &lt;/svg>
+                    &lt;/div>
+                    &lt;ul
+                        tabIndex={0}
+                        className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+                    >
+                        {categories.map((cat) => (
+                            &lt;li key={cat}>
+                                &lt;Link to={`/results?categories=${cat.toLowerCase()}`}>{cat}&lt;/Link>
+                            &lt;/li>
+                        ))}
+                    &lt;/ul>
+                &lt;/div>
+            &lt;/div>
+
+            {/* CENTER — Logo (moves center on small, left on large) */}
+            &lt;div className="navbar-center lg:navbar-start">
+                &lt;Link
+                    to="/"
+                    className="btn btn-ghost normal-case text-2xl font-bold tracking-wide"
+                >
+                    scamazon
+                &lt;/Link>
+            &lt;/div>
+
+            {/* CENTER (on large screens) — Category menu */}
+            &lt;div className="absolute left-1/2 transform -translate-x-1/2 hidden lg:block">
+                &lt;ul className="menu menu-horizontal px-1">
+                    {categories.map((cat) => (
+                        &lt;li key={cat}>
+                            &lt;Link
+                                to={`/results?categories=${cat.toLowerCase()}`}
+                                className="font-semibold hover:text-primary transition"
+                            >
+                                {cat}
+                            &lt;/Link>
+                        &lt;/li>
+                    ))}
+                &lt;/ul>
+            &lt;/div>
+
+            {/* RIGHT — Search + Cart */}
+            &lt;div className="navbar-end gap-2">
+                {/*  search text box only visible on large screen */}
+                &lt;div className="hidden lg:flex">
+                    &lt;div className="form-control">
+                        &lt;div className="input-group">
+                            &lt;input
+                                type="text"
+                                placeholder="Search products..."
+                                name="searchbar"
+                                className="input input-bordered w-48 xl:w-64"
+                            />
+                            &lt;button className="btn btn-square btn-primary">
+                                &lt;Search className="h-5 w-5 text-white" />
+                            &lt;/button>
+                        &lt;/div>
+                    &lt;/div>
+                &lt;/div>
+
+                {/*  ensures search icon is always visible */}
+                &lt;button className="btn btn-ghost btn-circle lg:hidden">
+                    &lt;Search className="h-5 w-5" />
+                &lt;/button>
+
+                {/* new cart icon with item count  */}
+                &lt;Link to="/cart" className="btn btn-ghost btn-circle relative">
+                    &lt;ShoppingCart className="h-6 w-6" />
+                    {!hideCartCount &amp;&amp; cartCount > 0 &amp;&amp; (
+                        &lt;span className="absolute -top-1 -right-1 bg-primary text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
+                            {cartCount}
+                        &lt;/span>
+                    )}
+                &lt;/Link>
+            &lt;/div>
+        &lt;/div>
+    );
+};
+
+export default Navbar;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Fri Nov 21 2025 18:03:45 GMT-0800 (Pacific Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>

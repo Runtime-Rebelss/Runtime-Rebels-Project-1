@@ -1,0 +1,354 @@
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ShoppingBag, Trash2, Plus, Minus } from 'lucide-react';
+import cartLib from "../lib/cart.js";
+import api from "../lib/axios.js";
+import toast from "react-hot-toast";
+import Cookies from "js-cookie"
+
+const Cart = () => {
+    const [cartItems, setCartItems] = useState([]);
+    const [total, setTotal] = useState(0);
+    const [loading, setLoading] = useState(true);
+    const [showCheckoutPrompt, setShowCheckoutPrompt] = useState(false);
+    const [isGuest, setIsGuest] = useState(false);
+
+    const navigate = useNavigate();
+    const userId = Cookies.get("userId");
+
+    useEffect(() => {
+        let ac = new AbortController();
+
+        const load = async () => {
+            setLoading(true);
+            const isAbort = (err) =>
+                err?.name === "AbortError" ||
+                err?.code === "ERR_CANCELED" ||
+                err?.message === "canceled";
+
+            if (!userId) {
+                // Guest mode
+                setIsGuest(true);
+                const items = cartLib.loadGuestCart();
+                setCartItems(
+                    items.map((it) => ({
+                        id: it.id,
+                        name: it.name,
+                        image: it.image,
+                        price: Number(it.price || 0),
+                        quantity: Number(it.quantity || 1),
+                    }))
+                );
+                setLoading(false);
+                return;
+            }
+
+            setIsGuest(false);
+
+            try {
+                const items = await cartLib.loadServerCart(userId, ac.signal);
+                setCartItems(items);
+            } catch (err) {
+                if (isAbort(err)) return;
+                console.error('Error fetching cart:', err);
+                toast.error('Failed to fetch cart :(');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        load();
+        return () => ac.abort();
+    }, [userId]);
+
+    useEffect(() => {
+        const handler = async () => {
+            const uId = Cookies.get("userId");
+
+            if (!uId) {
+                const items = cartLib.loadGuestCart();
+                setCartItems(
+                    items.map((it) => ({
+                        id: it.id,
+                        name: it.name,
+                        image: it.image,
+                        price: Number(it.price || 0),
+                        quantity: Number(it.quantity || 1),
+                    }))
+                );
+                return;
+            }
+
+            const ac = new AbortController();
+            try {
+                const items = await cartLib.loadServerCart(uId, ac.signal);
+                setCartItems(items);
+            } catch (err) {
+                if (err?.name !== "AbortError") {
+                    console.warn("cart-updated reload failed:", err);
+                }
+            }
+        };
+        window.addEventListener("cart-updated", handler);
+        return () => window.removeEventListener("cart-updated", handler);
+    }, []);
+
+    useEffect(() => {
+        setTotal(cartLib.calcTotal(cartItems));
+    }, [cartItems]);
+
+    const updateQuantity = async (productId, newQty) => {
+        if (newQty < 1) newQty = 1;
+
+        try {
+            if (!userId) {
+                await cartLib.updateQuantity(null, productId, newQty);
+                setCartItems(cartItems.map((it) =>
+                    it.id === productId ? { ...it, quantity: newQty } : it
+                ));
+                window.dispatchEvent(new Event("cart-updated"));
+                return;
+            }
+            await api.put(`/carts/update`, null, { params: { userId, productId, quantity: newQty } });
+
+            setCartItems(cartItems.map((it) =>
+                it.id === productId ? { ...it, quantity: newQty } : it));
+            window.dispatchEvent(new Event("cart-updated"));
+        } catch (err) {
+            console.error("Error updating quantity:", err);
+            toast.error("Failed to update quantity");
+        }
+    };
+
+    const removeItem = async (productId) => {
+        try {
+            if (!userId) {
+                await cartLib.removeItem(null, productId);
+                setCartItems(cartItems.filter((it) => it.id !== productId));
+                return;
+            }
+            await api.put(`/carts/update`, null, { params: { userId, productId, quantity: 0 } });
+            setCartItems(cartItems.filter((it) => it.id !== productId));
+            window.dispatchEvent(new Event("cart-updated"));
+        } catch (err) {
+            console.error('Error removing item:', err);
+            toast.error('Failed to remove item');
+        }
+    };
+
+    const handleCheckout = async () => {
+        try {
+            setLoading(true);
+            const url = await cartLib.handleCheckout(userId, cartItems);
+            window.location.href = url;
+        } catch (err) {
+            if (err?.name === "AbortError") {
+                console.log("Checkout aborted");
+                return;
+            }
+            console.error("Checkout failed:", err);
+            toast.error(err?.message || 'Failed to start checkout');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const proceedToCheckout = async () => {
+        if (cartItems.length === 0) return;
+        if (!Cookies.get("userId")) {
+            setShowCheckoutPrompt(true);
+            return;
+        }
+        await handleCheckout();
+    }
+
+    return (
+        <div className="container mx-auto px-4 py-8">
+            <div className="mb-6 text-center">
+                <h1 className="text-3xl font-semibold">Your Cart</h1>
+                <p className="text-base-content/60">
+                    {isGuest ? 'Guest cart' : 'Signed-in cart'}
+                </p>
+            </div>
+
+            {loading ? (
+                <div className="flex justify-center py-16">
+                    <span className="loading loading-spinner loading-lg"/>
+                </div>
+            ) : cartItems.length === 0 ? (
+                <div className="card bg-base-100 border border-base-300">
+                    <div className="card-body items-center text-center">
+                        <div className="avatar placeholder mb-4">
+                            <div className="indicator">
+                                <ShoppingBag className="w-10 h-10"/>
+                            </div>
+                        </div>
+                        <h3 className="card-title font-normal">Your cart is empty</h3>
+                        <p className="text-base-content/70">Browse products and add something you like.</p>
+                        <div className="card-actions mt-4">
+                            <button onClick={() => navigate('/')} className="btn btn-primary">
+                                Explore Products
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            ) : (
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    {/* Items */}
+                    <div className="lg:col-span-2">
+                        <div className="card bg-base-100 border border-base-300">
+                            <div className="card-body p-0">
+                                <div className="overflow-x-auto">
+                                    <table className="table">
+                                        <thead>
+                                        <tr>
+                                            <th>Product</th>
+                                            <th className="w-40">Quantity</th>
+                                            <th className="text-right">Price</th>
+                                            <th></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {cartItems.map((it) => {
+                                            return (
+                                                <tr key={it.id}>
+                                                    <td>
+                                                        <div className="flex items-center gap-3">
+                                                            <div className="mask mask-squircle w-14 h-14">
+                                                                <img
+                                                                    src={
+                                                                        it.image ||
+                                                                        'https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+                                                                    }
+                                                                    alt={it.name}
+                                                                />
+                                                            </div>
+                                                            <div>
+                                                                <div className="font-medium">{it.name}</div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div className="join">
+                                                            <button
+                                                                className="btn join-item"
+                                                                onClick={() => updateQuantity(it.id, it.quantity - 1)}
+                                                                disabled={it.quantity <= 1}
+                                                            >
+                                                                <Minus className="w-4 h-4"/>
+                                                            </button>
+                                                            <input
+                                                                className="input input-bordered w-16 text-center join-item"
+                                                                readOnly
+                                                                value={it.quantity}
+                                                            />
+                                                            <button
+                                                                className="btn join-item"
+                                                                onClick={() => updateQuantity(it.id, it.quantity + 1)}
+                                                            >
+                                                                <Plus className="w-4 h-4"/>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                    <td className="text-right">${Number(it.price || 0).toLocaleString()}</td>
+                                                    <td className="text-right">
+                                                        <button
+                                                            className="btn btn-ghost text-error"
+                                                            onClick={() => removeItem(it.id)}
+                                                            title="Remove item"
+                                                        >
+                                                            <Trash2 className="w-5 h-5"/>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {/* Summary */}
+                    <div>
+                        <div className="card bg-base-100 border border-base-300 sticky top-20">
+                            <div className="card-body">
+                                <h3 className="card-title">Order Summary</h3>
+                                <div className="mt-2 space-y-2">
+                                    <div className="flex justify-between">
+                                        <span>Subtotal</span>
+                                        <span>${Number(total || 0).toLocaleString()}</span>
+                                    </div>
+                                </div>
+                                <p className="text-sm text-base-content/60 mt-3">
+                                    Shipping and total calculated at checkout.
+                                </p>
+                                <div className="card-actions mt-4">
+                                    <button
+                                        className="btn btn-primary w-full"
+                                        disabled={cartItems.length === 0}
+                                        onClick={proceedToCheckout}
+                                    >
+                                        Pay with Stripe
+                                    </button>
+                                    <button
+                                        className="btn btn-outline w-full"
+                                        onClick={() => navigate("/")}
+                                    >
+                                        Continue Shopping
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Guest checkout prompt modal */}
+            {showCheckoutPrompt && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                    <div className="bg-base-100 p-6 rounded-lg shadow-lg max-w-md w-full text-center space-y-4">
+                        <h2 className="text-xl font-semibold">
+                            Members get free shipping on orders $50+
+                        </h2>
+                        <p className="text-base-content/70">
+                            Sign in to save your cart and enjoy exclusive member benefits.
+                        </p>
+
+                        <div className="flex flex-col gap-2 mt-4">
+                            <button
+                                className="btn btn-primary w-full"
+                                onClick={() => navigate("/login")}
+                            >
+                                Login
+                            </button>
+                            <button
+                                className="btn btn-outline w-full"
+                                onClick={() => navigate("/signup")}
+                            >
+                                Sign Up
+                            </button>
+                            <button
+                                className="btn btn-neutral w-full"
+                                onClick={() => {
+                                    setShowCheckoutPrompt(false);
+                                    handleCheckout();
+                                }}
+                            >
+                                Continue as Guest
+                            </button>
+                        </div>
+                        <button
+                            className="btn btn-sm btn-ghost mt-3"
+                            onClick={() => setShowCheckoutPrompt(false)}
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};
+
+export default Cart;
