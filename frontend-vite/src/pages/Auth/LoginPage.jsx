@@ -1,0 +1,149 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Navbar from '../../components/Navbar.jsx';
+import api from '../../lib/axios.js';
+import toast from 'react-hot-toast'
+import Cookies from "js-cookie";
+
+const LoginPage = () => {
+    const [loading, setLoading] = useState(false);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [toastMsg, setToastMsg] = useState('');
+    const [cartItems, setCartItems] = useState([]);
+    const navigate = useNavigate();
+    const acRef = useRef(null);
+
+    const preloadCart = async (userId) => {
+        try {
+            const res = await fetch(`/api/carts/${encodeURIComponent(userId)}`);
+            if (!res.ok) return;
+            const data = await res.json();
+            const productIds =
+                (Array.isArray(data?.productIds) && data.productIds) ||
+                (Array.isArray(data?.productId) && data.productId) ||
+                [];
+            setCartItems(productIds);
+        } catch (err) {
+            console.warn('preloadCart failed', err);
+        }
+    };
+
+    const extractUserId = (data) =>
+        data?.userId || data?.id || data?._id || data?.user?.id || data?.user?._id || null;
+
+    const handleLogin = async(e) => {
+        e.preventDefault();
+        setToastMsg('');
+        setLoading(true);
+
+        try {
+            const res = await api.post('/auth/login', { email, password }, {withCredentials: true});
+            const data = res.data;
+
+            const userId = extractUserId(data);
+            const userEmail = data?.email || email;
+
+            if (!userId) {
+                setToastMsg("Login response missing user id.");
+                return;
+            }
+            Cookies.set("firstName", data.firstName);
+            Cookies.set("lastName", data.lastName);
+            Cookies.set("userId", userId);
+            Cookies.set("userEmail", data.email);
+            Cookies.set("fullName", `${data.firstName} ${data.lastName}`);
+            console.log(Cookies.get("access_token"));
+
+            if (userEmail === "admin@gmail.com") {
+                console.log(Cookies.get("access_token"));
+                Cookies.set("adminEmail", userEmail);
+                Cookies.remove("userEmail");
+            }
+
+            await preloadCart(userId);
+
+            navigate('/', { replace: true });
+            toast.success('Login successfully!');
+
+        } catch (err) {
+            const status = err?.response?.status;
+            const serverMsg = err?.response?.data?.message || err?.response?.data?.error;
+            if (status === 404) setToastMsg(serverMsg || 'No account with that email');
+            else if (status === 401) setToastMsg(serverMsg || 'Incorrect password');
+            else setToastMsg(serverMsg || 'Login failed. Please try again.');
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    // If already logged in
+    useEffect(() => {
+        const already = Cookies.get("userId");
+        if (already) {
+            void preloadCart(already);
+        }
+    }, []);
+
+    return (
+        <div className="min-h-screen bg-base-200">
+            <Navbar cartItems={cartItems} />
+
+            <div className="container mx-auto px-4 py-8">
+                <div className="flex justify-center py-16">
+                    <form onSubmit={handleLogin} className="space-y-6 w-full max-w-sm">
+                        <fieldset className="fieldset bg-base-200 border-base-300 rounded-box border p-4">
+                            {/* Email */}
+                            <label htmlFor="email" className="label">Email</label>
+                            <input
+                                id="email"
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="input w-full"
+                                placeholder="you@example.com"
+                                required
+                                autoComplete="email"
+                            />
+
+                            {/* Password */}
+                            <label htmlFor="password" className="label">Password</label>
+                            <input
+                                id="password"
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="input w-full"
+                                placeholder="••••••••"
+                                required
+                                autoComplete="current-password"
+                            />
+
+                            <div className="flex w-full flex-col">
+                                {/* Login Button */}
+                                <button type="submit" className="btn btn-neutral w-full mt-4" disabled={loading}>
+                                    {loading ? 'Logging in…' : 'Sign in'}
+                                </button>
+                                {/* Forgot Password Button */}
+                                <button type="button" onClick={() => navigate("/email-reset-password")} className="btn btn-link w-full mt-2">Forgot Password?
+                                </button>
+                                <div className="divider">Don't have an account?</div>
+                                {/* Signup Button */}
+                                <button type="button" onClick={() => navigate("/signup")} className="btn btn-neutral w-full mt-4">Sign up
+                                </button>
+                            </div>
+
+                            {!!toastMsg && (
+                                <div role="alert" className="alert alert-error mt-3">
+                                    <span>{toastMsg}</span>
+                                </div>
+                            )}
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default LoginPage;
