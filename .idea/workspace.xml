@@ -4,15 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Update Cart page and Navbar">
-      <change afterPath="$PROJECT_DIR$/.env.example" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CODE_OF_CONDUCT.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CONTRIBUTING.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LICENSE" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SECURITY.md" afterDir="false" />
+    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Updated Cart to use CartItems now">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/config/JwtAuthFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/config/JwtAuthFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/cart.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/lib/cart.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,7 +29,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="public-henry" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -121,6 +115,9 @@
     ]
   }
 }</component>
+  <component name="ReactorSettings">
+    <option name="notificationShown" value="true" />
+  </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\wlock\OneDrive\Documents\Runtime-Rebels-Final\Runtime-Rebels-Project-1\backend\src\main\java\com\runtimerebels\store\services" />
@@ -310,14 +307,6 @@
       <workItem from="1765403262114" duration="661000" />
       <workItem from="1765409156297" duration="18012000" />
       <workItem from="1765432729831" duration="462000" />
-    </task>
-    <task id="LOCAL-00020" summary="Fully implemented Order Page and can sign out">
-      <option name="closed" value="true" />
-      <created>1763616410100</created>
-      <option name="number" value="00020" />
-      <option name="presentableId" value="LOCAL-00020" />
-      <option name="project" value="LOCAL" />
-      <updated>1763616410100</updated>
     </task>
     <task id="LOCAL-00021" summary="Added in OrderDetailsPage">
       <option name="closed" value="true" />
@@ -703,7 +692,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765422846944</updated>
     </task>
-    <option name="localTasksCounter" value="69" />
+    <task id="LOCAL-00069" summary="Updated Cart to use CartItems now">
+      <option name="closed" value="true" />
+      <created>1765482152363</created>
+      <option name="number" value="00069" />
+      <option name="presentableId" value="LOCAL-00069" />
+      <option name="project" value="LOCAL" />
+      <updated>1765482152363</updated>
+    </task>
+    <option name="localTasksCounter" value="70" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -761,7 +758,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added Guest functionality to Cart and Order Pages" />
     <MESSAGE value="Fixed Ordering Issues with User and Guest Cart and refactor code -&gt; Still dupes orders." />
     <MESSAGE value="Fixed duping issue" />
     <MESSAGE value="Fixed order duping issue" />
@@ -786,7 +782,8 @@
     <MESSAGE value="Updated the .gitignore" />
     <MESSAGE value="public v" />
     <MESSAGE value="Fixed Cart" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed Cart" />
+    <MESSAGE value="Updated Cart to use CartItems now" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated Cart to use CartItems now" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>
