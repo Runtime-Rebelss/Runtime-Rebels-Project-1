@@ -1,0 +1,10 @@
+node_modules
+dist
+build
+.vscode
+.idea
+target
+*.log
+*.tmp
+.env
+
