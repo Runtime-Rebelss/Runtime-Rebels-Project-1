@@ -106,19 +106,31 @@ const Navbar = ({hideCart = false, hideCartCount = false}) => {
     };
 
     const handleLogout = async() => {
+        setLoading(true);
         try {
             await api.post("/auth/logout", null, {withCredentials: true});
+            // Clear cookies
             Cookies.remove("userId");
             Cookies.remove("userEmail");
             Cookies.remove("firstName");
             Cookies.remove("lastName");
             Cookies.remove("fullName");
             Cookies.remove("adminEmail");
+            // Clear localStorage tokens if any
+            try {
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('token');
+                localStorage.removeItem('userEmail');
+                localStorage.removeItem('userId');
+            } catch (e) {
+                // ignore localStorage errors
+                console.warn('Failed to clear localStorage during logout', e);
+            }
             toast.success("User logged out!");
             navigate("/");
             window.location.reload();
         } catch (error) {
-            console.error("Failed to sign out");
+            console.error("Failed to sign out", error);
             toast.error("Failed to sign out");
         } finally {
             setLoading(false);
@@ -134,42 +146,6 @@ const Navbar = ({hideCart = false, hideCartCount = false}) => {
             <div className="w-full flex items-center gap-4 px-4 py-2">
                 {/* LEFT: hamburger + logo */}
                 <div className="flex items-center gap-2">
-                    {/* Hamburger only on small screens */}
-                    <div className="dropdown lg:hidden">
-                        <div tabIndex={0} role="button" className="btn btn-ghost btn-square">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-6 w-6"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="M4 6h16M4 12h16M4 18h16"
-                                />
-                            </svg>
-                        </div>
-                        <ul
-                            tabIndex={0}
-                            className="menu menu-sm dropdown-content mt-3 z-[60] p-2 shadow bg-base-100 rounded-box w-52"
-                        >
-                            {categories.map((cat) => (
-                                <li key={cat}>
-                                    <Link
-                                        to={`/results?${buildMergedParams(searchParams, {
-                                            categories: [formatString(cat)],
-                                        }).toString()}`}
-                                    >
-                                        {cat}
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-
                     <Link
                         to="/"
                         className="btn btn-ghost normal-case text-2xl font-bold tracking-wide px-0"

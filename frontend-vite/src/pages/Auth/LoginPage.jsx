@@ -18,7 +18,23 @@ const LoginPage = () => {
         try {
             const res = await fetch(`/api/carts/${encodeURIComponent(userId)}`);
             if (!res.ok) return;
-            const data = await res.json();
+
+            const contentType = (res.headers.get('content-type') || '').toLowerCase();
+            if (!contentType.includes('application/json')) {
+                // Avoid trying to parse HTML (e.g. when the server returns an HTML error page)
+                const text = await res.text();
+                console.warn('preloadCart aborted: unexpected content-type', contentType, text?.slice?.(0, 200));
+                return;
+            }
+
+            let data;
+            try {
+                data = await res.json();
+            } catch (parseErr) {
+                console.warn('preloadCart: failed to parse JSON response', parseErr);
+                return;
+            }
+
             const productIds =
                 (Array.isArray(data?.productIds) && data.productIds) ||
                 (Array.isArray(data?.productId) && data.productId) ||

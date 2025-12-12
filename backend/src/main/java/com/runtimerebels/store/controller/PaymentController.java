@@ -13,6 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.runtimerebels.store.models.Order;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -31,6 +34,8 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/payments")
 public class PaymentController {
+
+    private static final Logger log = LoggerFactory.getLogger(PaymentController.class);
 
     @Autowired
     private CartRepository cartRepository;
@@ -146,7 +151,7 @@ public class PaymentController {
         // Create the session
         Session session = Session.create(paramsBuilder.build());
 
-        System.out.println("Stripe Checkout session created for: " + req.customerEmail());
+        log.info("Stripe Checkout session created for: {}", req.customerEmail());
 
         return ResponseEntity.ok().body(new CreateCheckoutResponse(session.getUrl()));
     }

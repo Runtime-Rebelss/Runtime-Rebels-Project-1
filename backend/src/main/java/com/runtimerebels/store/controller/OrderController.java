@@ -25,6 +25,8 @@ import com.runtimerebels.store.models.Order;
 import com.runtimerebels.store.models.OrderStatus;
 import com.runtimerebels.store.models.Product;
 import com.runtimerebels.store.models.dto.OrderResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * REST controller for managing customer orders. Handles endpoints for creating
@@ -38,6 +40,8 @@ import com.runtimerebels.store.models.dto.OrderResponse;
 @RestController
 @RequestMapping("/api/orders")
 public class OrderController {
+
+    private static final Logger log = LoggerFactory.getLogger(OrderController.class);
 
     @Autowired
     private OrderRepository orderRepository;
@@ -109,7 +113,7 @@ public class OrderController {
      */ // Create new order
     @PostMapping("create/{userId}")
     public ResponseEntity<Order> createOrder(@PathVariable String userId, @RequestBody Order order) {
-        System.out.println("Received order: " + order);
+        log.info("Received order: {}", order);
         // Prevents dupe
         order.setUserId(userId);
 
@@ -117,7 +121,7 @@ public class OrderController {
         if (order.getStripeSessionId() != null) {
             List<Order> existingOrders = orderRepository.findByStripeSessionId(order.getStripeSessionId());
             if (!existingOrders.isEmpty()) {
-                System.out.println("Duplicate order detected, ignoring...");
+                log.info("Duplicate order detected for stripeSessionId={}, ignoring...", order.getStripeSessionId());
                 return ResponseEntity.ok(existingOrders.get(0));
             }
         }
@@ -156,7 +160,7 @@ public class OrderController {
                     }
                 }
             } catch (Exception e) {
-                System.err.println("Failed to fetch stripe session for order creation: " + e.getMessage());
+                log.warn("Failed to fetch stripe session for order creation: {}", e.getMessage(), e);
             }
         }
 
@@ -168,7 +172,7 @@ public class OrderController {
         cart.setItems(new ArrayList<>());
         cartRepository.save(cart);
 
-        System.out.println("Saved order with ID: " + savedOrder.getOrderId());
+        log.info("Saved order with ID: {}", savedOrder.getOrderId());
         return ResponseEntity.status(HttpStatus.CREATED).body(savedOrder);
     }
 
@@ -223,7 +227,7 @@ public class OrderController {
                     }
                 }
             } catch (Exception e) {
-                System.err.println("Failed to fetch stripe session for guest order: " + e.getMessage());
+                log.warn("Failed to fetch stripe session for guest order: {}", e.getMessage(), e);
             }
         }
         order.setPaymentStatus("paid");
@@ -327,7 +331,7 @@ public class OrderController {
                     }
                 }
             } catch (Exception e) {
-                System.err.println("Failed to fetch stripe session for confirmPayment: " + e.getMessage());
+                log.warn("Failed to fetch stripe session for confirmPayment: {}", e.getMessage(), e);
             }
         }
         order.setPaymentStatus("Paid");

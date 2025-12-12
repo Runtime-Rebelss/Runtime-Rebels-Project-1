@@ -7,6 +7,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Map;
@@ -15,15 +18,17 @@ import java.util.stream.Collectors;
 @Configuration
 public class DataSeeder {
 
+    private static final Logger log = LoggerFactory.getLogger(DataSeeder.class);
+
     @Bean
     CommandLineRunner seedDatabase(ProductRepository repository) {
         return args -> {
-            System.out.println("Checking if Fake Store API data needs to be seeded...");
+            log.info("Checking if Fake Store API data needs to be seeded...");
             RestTemplate restTemplate = new RestTemplate();
 
             // Only seed if not already populated
             if (repository.count() < 20) {
-                System.out.println("Fetching data from Fake Store API...");
+                log.info("Fetching data from Fake Store API...");
                 Object[] fakeStoreResponse = restTemplate.getForObject("https://fakestoreapi.com/products", Object[].class);
 
                 // Convert JSON response to a list of maps
@@ -49,13 +54,13 @@ public class DataSeeder {
                         p.setPrice(BigDecimal.valueOf(price));
                         p.setImageUrl(imageUrl);
                         repository.save(p);
-                        System.out.println("Added: " + name + " (" + category + ")");
+                        log.info("Added: {} ({})", name, category);
                     }
                 });
 
-                System.out.println("Seeding complete! Total products: " + repository.count());
+                log.info("Seeding complete! Total products: {}", repository.count());
             } else {
-                System.out.println("Products already exist, skipping seeding.");
+                log.info("Products already exist, skipping seeding.");
             }
         };
     }

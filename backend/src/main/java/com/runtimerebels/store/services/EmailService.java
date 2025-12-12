@@ -9,12 +9,16 @@ import org.springframework.mail.SimpleMailMessage;
 import jakarta.mail.internet.MimeMessage;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 
 @Service
 public class EmailService {
     
+    private static final Logger log = LoggerFactory.getLogger(EmailService.class);
+
     @Autowired
     private JavaMailSender mailSender;
 
@@ -29,7 +33,7 @@ public class EmailService {
         message.setText(text);
         mailSender.send(message);
 
-        System.out.println("Email sent to " + to);
+        log.info("Email sent to {}", to);
     }
 
     public void sendWelcomeEmail(String to, String name) {
@@ -48,7 +52,7 @@ public class EmailService {
             helper.setFrom("runtimerebelsproject@gmail.com");
             mailSender.send(mimeMessage);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Failed to send welcome email to {}", to, e);
         }
     }
 
@@ -70,7 +74,7 @@ public class EmailService {
             helper.setFrom("runtimerebelsproject@gmail.com");
             mailSender.send(mimeMessage);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Failed to send order confirmation email to {}", to, e);
         }
     }
 }
