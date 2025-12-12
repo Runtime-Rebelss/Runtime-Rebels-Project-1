@@ -5,9 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Updated Cart to use CartItems now">
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/OrderController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/services/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/services/AuthService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/SignUpPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/SignUpPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,12 +39,12 @@
     &quot;assignee&quot;: &quot;Hlocke124&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/Hlocke124/Runtime-Rebels-Project-1.git&quot;,
-    &quot;accountId&quot;: &quot;c092b729-09e8-4a5f-870e-9563811d8a5e&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/Hlocke124/Runtime-Rebels-Project-1.git",
+    "accountId": "82aedb2d-abc9-4dc7-bdc8-8c73de7f3805"
   }
-}</component>
+}]]></component>
   <component name="KubernetesApiPersistence">{}</component>
   <component name="KubernetesApiProvider">{
   &quot;isMigrated&quot;: true
@@ -308,14 +306,7 @@
       <workItem from="1765403262114" duration="661000" />
       <workItem from="1765409156297" duration="18012000" />
       <workItem from="1765432729831" duration="462000" />
-    </task>
-    <task id="LOCAL-00022" summary="Added in OrderDetailsPage">
-      <option name="closed" value="true" />
-      <created>1763680083042</created>
-      <option name="number" value="00022" />
-      <option name="presentableId" value="LOCAL-00022" />
-      <option name="project" value="LOCAL" />
-      <updated>1763680083042</updated>
+      <workItem from="1765576600309" duration="294000" />
     </task>
     <task id="LOCAL-00023" summary="Fully implemented OrderDetailsPage">
       <option name="closed" value="true" />
@@ -701,7 +692,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765482487707</updated>
     </task>
-    <option name="localTasksCounter" value="71" />
+    <task id="LOCAL-00071" summary="Updated Cart to use CartItems now">
+      <option name="closed" value="true" />
+      <created>1765482842795</created>
+      <option name="number" value="00071" />
+      <option name="presentableId" value="LOCAL-00071" />
+      <option name="project" value="LOCAL" />
+      <updated>1765482842795</updated>
+    </task>
+    <option name="localTasksCounter" value="72" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
