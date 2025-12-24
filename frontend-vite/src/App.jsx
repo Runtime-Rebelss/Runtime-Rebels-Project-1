@@ -18,6 +18,8 @@ import AddProductPage from "./pages/AddProductPage.jsx";
 import UserInfoPage from "./pages/auth/UserInfoPage";
 import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
 import EnterEmailPage from "./pages/auth/EmailPage";
+import AddressesPage from "./pages/auth/AddressesPage";
+import AddAddressPage from "./pages/auth/AddAddressPage.jsx";
 
 function App() {
     return (
@@ -42,6 +44,8 @@ function App() {
                 <Route path="/account/manage" element={<UserInfoPage />} />
                 <Route path="/reset-password" element={<ResetPasswordPage />} />
                 <Route path="/email-reset-password" element={<EnterEmailPage />} />
+                <Route path="/account/addresses" element={<AddressesPage />} />
+                <Route path="/account/add/address" element={<AddAddressPage />} />
             </Routes>
         </div>
     );

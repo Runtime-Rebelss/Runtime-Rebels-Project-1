@@ -5,15 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Fixed total not correctly displaying in Order Details Page and on Order Confirmation Page">
+      <change afterPath="$PROJECT_DIR$/frontend-vite/src/components/AddressCard.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-vite/src/components/Addresses.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/AddAddressPage.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/AddressesPage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/config/JwtAuthFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/config/JwtAuthFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/OrderController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/services/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/services/AuthService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/cart.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/lib/cart.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/AccountPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/AccountPage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/LoginPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/LoginPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/SignUpPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/SignUpPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/CartPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/CartPage.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -171,7 +170,13 @@
       <envs>
         <env name="EMAIL_PASSWORD" value="yoccztrbeczxegnn" />
         <env name="EMAIL_USERNAME" value="runtimerebelsproject@gmail.com" />
+        <env name="FRONTEND_CANCEL_URL" value="http://localhost:5173/order-cancel" />
+        <env name="FRONTEND_SUCCESS_URL" value="http://localhost:5173/order-success?session_id\={CHECKOUT_SESSION_ID}" />
+        <env name="JWT_EXPIRATION" value="253402300799" />
+        <env name="JWT_REFRESH_EXPIRATION" value="604800000" />
+        <env name="JWT_SECRET" value="8d4fed75477d160c393db8a22edce23a5ae7971b4533077d89ac0016dd92c879d21791073310294924cb896443a8214cfdc129baa42af8b3030a397382a93532" />
         <env name="MONGO_URI" value="mongodb+srv://Hlocke124:thepomel61@runtimerebels.otltnjb.mongodb.net/" />
+        <env name="STRIPE_SECRET_KEY" value="sk_test_51SLYkb3QiWxEqXaxuZrJfgh3HwuEd6SplfSxR9YQ2h3akEUt5YD04kxRNImHZQ6Ka0SbS28ETgt329SkQ5mVPo3t008u4coqgi" />
       </envs>
       <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
       <module name="spring-boot" />
@@ -780,5 +785,13 @@
     <MESSAGE value="Added orderConfirmation Lib, fixed issue with incorrect order total displaying" />
     <MESSAGE value="Fixed total not correctly displaying in Order Details Page and on Order Confirmation Page" />
     <option name="LAST_COMMIT_MESSAGE" value="Fixed total not correctly displaying in Order Details Page and on Order Confirmation Page" />
+  </component>
+  <component name="github-copilot-workspace">
+    <instructionFileLocations>
+      <option value=".github/instructions" />
+    </instructionFileLocations>
+    <promptFileLocations>
+      <option value=".github/prompts" />
+    </promptFileLocations>
   </component>
 </project>

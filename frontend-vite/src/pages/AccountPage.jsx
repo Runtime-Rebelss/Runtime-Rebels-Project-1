@@ -151,6 +151,21 @@ const AccountPage = () => {
                                 </button>
                             </div>
                         </section>
+                        {/* Your Addresses */}
+                        <section
+                            className="card bg-base-200 shadow-md hover:shadow-lg transition cursor-pointer"
+                            onClick={() => (window.location.href = "/account/addresses")}
+                        >
+                            <div className="card-body">
+                                <h2 className="card-title">Your Addresses</h2>
+                                <p className="text-sm text-base-content/70">
+                                    Edit and view your addresses
+                                </p>
+                                <button className="btn btn-primary btn-sm mt-3 w-fit">
+                                    View Addresses
+                                </button>
+                            </div>
+                        </section>
                     </div>
                 )}
             </main>

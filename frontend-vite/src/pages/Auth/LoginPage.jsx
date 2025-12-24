@@ -129,7 +129,7 @@ const LoginPage = () => {
                                 <div className="divider">Don't have an account?</div>
                                 {/* Signup Button */}
                                 <button type="button" onClick={() => navigate("/signup")} className="btn btn-neutral w-full mt-4">
-                                    {loading ? 'Logging in…' : 'Sign up'}
+                                    Sign up
                                 </button>
                             </div>
 
