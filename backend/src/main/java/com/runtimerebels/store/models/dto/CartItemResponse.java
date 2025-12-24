@@ -1,5 +1,6 @@
 package com.runtimerebels.store.models.dto;
 
+import com.runtimerebels.store.models.Product;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,10 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoggedUserResponse {
+public class CartItemResponse {
     private String id;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String mobileNumber;
+    private Product product;
 }

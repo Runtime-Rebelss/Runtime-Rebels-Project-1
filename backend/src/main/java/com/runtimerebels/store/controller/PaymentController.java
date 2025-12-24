@@ -1,22 +1,21 @@
 package com.runtimerebels.store.controller;
 
-import com.runtimerebels.store.dao.CartRepository;
-import com.runtimerebels.store.dao.OrderRepository;
-import com.runtimerebels.store.models.Cart;
-import com.runtimerebels.store.models.OrderStatus;
+import com.runtimerebels.store.dao.AddressRepository;
+import com.runtimerebels.store.models.Address;
 import com.runtimerebels.store.models.dto.CheckoutRequest;
+import com.stripe.model.Customer;
 import com.stripe.model.checkout.Session;
+import com.stripe.param.CustomerCreateParams;
 import com.stripe.param.checkout.SessionCreateParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.runtimerebels.store.models.Order;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * REST controller for handling Stripe payment operations.
@@ -32,17 +31,14 @@ import java.util.Optional;
 @RequestMapping("/api/payments")
 public class PaymentController {
 
-    @Autowired
-    private CartRepository cartRepository;
-
-    @Autowired
-    private OrderRepository orderRepository;
-
     @Value("${frontend.successUrl}")
     private String successUrl;
 
     @Value("${frontend.cancelUrl}")
     private String cancelUrl;
+
+    @Autowired
+    private AddressRepository addressRepository;
 
     /**
      * Creates a new Stripe Checkout Session for the given order request.
@@ -115,32 +111,76 @@ public class PaymentController {
                 .setCancelUrl(cancelUrl)
                 .addAllLineItem(lineItems)
 
-                // Require billing address and contact info
-                .setBillingAddressCollection(SessionCreateParams.BillingAddressCollection.REQUIRED)
-
-                // Require shipping address
-                .setShippingAddressCollection(
-                        SessionCreateParams.ShippingAddressCollection.builder()
-                                .addAllowedCountry(SessionCreateParams.ShippingAddressCollection.AllowedCountry.US)
-                                .build()
-                )
-
                 // Add shipping choices
                 .addShippingOption(standard)
                 .addShippingOption(expedited)
 
-                // Request contact info fields directly from Stripe
+                // Request contact info
                 .setPhoneNumberCollection(
                         SessionCreateParams.PhoneNumberCollection.builder().setEnabled(true).build()
                 )
 
-                // Ask Stripe to collect the customer's email at checkout
+                // Get customer email at checkout
                 .setCustomerCreation(SessionCreateParams.CustomerCreation.ALWAYS)
                 .setSubmitType(SessionCreateParams.SubmitType.PAY);
 
-        // include email if already known (logged-in users)
-        if (req.customerEmail() != null && !req.customerEmail().isBlank()) {
-            paramsBuilder.setCustomerEmail(req.customerEmail());
+        // If there is an addressId
+        boolean b = req.customerEmail() != null && !req.customerEmail().isBlank();
+        if (req.addressId() != null && !req.addressId().isBlank()) {
+            Address address = addressRepository.findById(req.addressId())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Address"));
+
+            CustomerCreateParams.Builder customerBuilder = CustomerCreateParams.builder();
+            if (b) {
+                customerBuilder.setEmail(req.customerEmail());
+                // prefill email in checkout
+                paramsBuilder.setCustomerEmail(req.customerEmail());
+            }
+
+            if (address.getName() != null) customerBuilder.setName(address.getName());
+            if (address.getPhoneNumber() != null) customerBuilder.setPhone(address.getPhoneNumber());
+
+            customerBuilder.setAddress(
+                    CustomerCreateParams.Address.builder()
+                            .setLine1(address.getAddress())
+                            .setCity(address.getCity())
+                            .setState(address.getState())
+                            .setPostalCode(address.getZipCode())
+                            .setCountry(address.getCountry())
+                            .build()
+            );
+
+            customerBuilder.setShipping(
+                    CustomerCreateParams.Shipping.builder()
+                            .setName(address.getName())
+                            .setPhone(address.getPhoneNumber())
+                            .setAddress(
+                                    CustomerCreateParams.Shipping.Address.builder()
+                                            .setLine1(address.getAddress())
+                                            .setCity(address.getCity())
+                                            .setState(address.getState())
+                                            .setPostalCode(address.getZipCode())
+                                            .setCountry(address.getCountry())
+                                            .build()
+                            )
+                            .build()
+            );
+
+            Customer customer = Customer.create(customerBuilder.build());
+            paramsBuilder.setCustomer(customer.getId());
+
+        } else {
+            // No address provided
+            paramsBuilder.setShippingAddressCollection(
+                    SessionCreateParams.ShippingAddressCollection.builder()
+                            .addAllowedCountry(SessionCreateParams.ShippingAddressCollection.AllowedCountry.US)
+                            .build()
+            );
+
+            // If email provided, prefill it
+            if (b) {
+                paramsBuilder.setCustomerEmail(req.customerEmail());
+            }
         }
 
         // Create the session

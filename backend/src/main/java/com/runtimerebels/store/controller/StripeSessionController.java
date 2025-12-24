@@ -20,7 +20,14 @@ public class StripeSessionController {
         Stripe.apiKey = stripeSecretKey;
 
         // Retrieve checkout session
-        Session session = Session.retrieve(id);
+        Session session = Session.retrieve(
+                id,
+                com.stripe.param.checkout.SessionRetrieveParams.builder()
+                        .addExpand("shipping_details")
+                        .addExpand("customer_details")
+                        .build(),
+                null
+        );
         Map<String, Object> response = new HashMap<>();
 
         // Basic info

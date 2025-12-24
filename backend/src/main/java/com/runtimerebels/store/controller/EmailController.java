@@ -36,6 +36,8 @@ public class EmailController {
         public String confirmationNumber;
     }
 
+    // Create thing to send confirmation email to verify account here
+
     @PostMapping("/confirmation")
     public String sendOrderConfirmationEmail(@RequestBody ConfirmationRequest req) {
         emailService.sendOrderConfirmationEmail(req.to, req.name, req.orderNumber, req.confirmationNumber);

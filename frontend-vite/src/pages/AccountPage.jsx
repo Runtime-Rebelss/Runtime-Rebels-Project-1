@@ -67,6 +67,14 @@ const AccountPage = () => {
         return Array.isArray(products) ? products.length : 0;
     };
 
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center h-screen">
+                <span className="loading loading-spinner loading-xl"></span>
+            </div>
+        );
+    }
+
     return (
         <div>
             <Navbar />
@@ -120,7 +128,6 @@ const AccountPage = () => {
                                 )}
                             </div>
                         </section>
-
                         {/* YOUR ORDERS */}
                         <section
                             className="card bg-base-200 shadow-md hover:shadow-lg transition cursor-pointer"
@@ -136,7 +143,7 @@ const AccountPage = () => {
                                 </button>
                             </div>
                         </section>
-                        {/* Login & Security */}
+                        {/* LOGIN & SECURITY */}
                         <section
                             className="card bg-base-200 shadow-md hover:shadow-lg transition cursor-pointer"
                             onClick={() => (window.location.href = "/account/manage")}
@@ -148,6 +155,21 @@ const AccountPage = () => {
                                 </p>
                                 <button className="btn btn-primary btn-sm mt-3 w-fit">
                                     View Login
+                                </button>
+                            </div>
+                        </section>
+                        {/* YOUR ADDRESSES */}
+                        <section
+                            className="card bg-base-200 shadow-md hover:shadow-lg transition cursor-pointer"
+                            onClick={() => (window.location.href = "/account/addresses")}
+                        >
+                            <div className="card-body">
+                                <h2 className="card-title">Your Addresses</h2>
+                                <p className="text-sm text-base-content/70">
+                                    Edit and view your addresses
+                                </p>
+                                <button className="btn btn-primary btn-sm mt-3 w-fit">
+                                    View Addresses
                                 </button>
                             </div>
                         </section>

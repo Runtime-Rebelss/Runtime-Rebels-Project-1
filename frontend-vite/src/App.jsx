@@ -13,11 +13,14 @@ import SignUpPage from "./pages/Auth/SignUpPage.jsx";
 import OrderDetailsPage from "./pages/OrderDetailsPage";
 import AdminPage from "./pages/auth/AdminPage";
 import AccountPage from "./pages/AccountPage";
-import EditProductPage from "./pages/EditProductPage";
+import EditProductPage from "./pages/auth/EditProductPage";
 import AddProductPage from "./pages/AddProductPage.jsx";
 import UserInfoPage from "./pages/auth/UserInfoPage";
 import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
 import EnterEmailPage from "./pages/auth/EmailPage";
+import AddressesPage from "./pages/auth/AddressesPage";
+import AddAddressPage from "./pages/auth/AddAddressPage.jsx";
+import EditAddressPage from "./pages/auth/EditAddressPage.jsx";
 
 function App() {
     return (
@@ -42,6 +45,9 @@ function App() {
                 <Route path="/account/manage" element={<UserInfoPage />} />
                 <Route path="/reset-password" element={<ResetPasswordPage />} />
                 <Route path="/email-reset-password" element={<EnterEmailPage />} />
+                <Route path="/account/addresses" element={<AddressesPage />} />
+                <Route path="/account/add/address" element={<AddAddressPage />} />
+                <Route path="/account/edit/address/:id" element={<EditAddressPage />} />
             </Routes>
         </div>
     );

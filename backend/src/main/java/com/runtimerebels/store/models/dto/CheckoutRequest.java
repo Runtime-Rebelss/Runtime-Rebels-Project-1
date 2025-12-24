@@ -17,7 +17,8 @@ import java.util.List;
 
 public record CheckoutRequest(
         List<Item> items,
-        String shippingMethod,    // std vs exp
+        String shippingMethod,// std vs exp
+        String addressId,
         String customerEmail,
         boolean savePaymentMethod // if true we’ll create/attach a Stripe Customer
 ) {
