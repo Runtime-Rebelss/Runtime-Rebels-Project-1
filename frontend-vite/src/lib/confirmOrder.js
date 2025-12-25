@@ -292,6 +292,9 @@ export async function confirmOrder({
     sessionStorage.setItem("confirmedOrder", JSON.stringify(orderPayload));
     sessionStorage.setItem(userConfirmKey, "1");
 
+    sessionStorage.removeItem("confirmedOrder");
+    sessionStorage.removeItem(userConfirmKey);
+
     // Clear pending server order
     localStorage.removeItem("pendingServerOrder");
     window.dispatchEvent(new Event("cart-updated"));

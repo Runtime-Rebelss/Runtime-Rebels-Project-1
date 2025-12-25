@@ -20,6 +20,7 @@ const AddressCard = ({ address }) => {
             <div className="card-body flex flex-col justify-between">
                 <h2 className="card-title text-base-content mb-1">Default</h2>
                 <p>A card component has a figure, a body part, and inside body there are title and actions parts</p>
+
                 <div className="card-actions justify-end">
                     <button className="btn btn-primary">Edit</button>
                     <button className="btn btn-primary">Remove</button>

@@ -35,7 +35,6 @@ public class Order {
     private List<Integer> quantity;
     private List<BigDecimal> totalPrice;
     private OrderStatus orderStatus;
-    private String orderId;
     private Date createdAt;
     private String confirmationNumber;
     private Date processAt;

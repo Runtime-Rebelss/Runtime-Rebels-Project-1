@@ -13,6 +13,12 @@ const AddAddressPage = () => {
     const [countries, setCountries] = useState(Country.getAllCountries());
     const [states, setStates] = useState([]);
     const [cities, setCities] = useState([]);
+    const [name, setName] = useState("");
+    const [number, setNumber] = useState("");
+    const [address, setAddress] = useState("");
+    const [unit, setUnit] = useState("");
+    const [city, setCity] = useState("");
+    const [zipCode, setZipCode] = useState("");
 
     const [selectedCountry, setSelectedCountry] = useState(null);
     const [selectedState, setSelectedState] = useState(null);
@@ -47,28 +53,27 @@ const AddAddressPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!formData.name || !formData.number || !formData.address || !formData.unit || !formData.city || !formData.zipCode) {
+        if (!formData.name || !formData.number || !formData.address || !formData.city || !formData.zipCode) {
             toast.error("Please fill all required fields.");
             return;
         }
 
+        const userId = Cookies.get("userId");
+
         try {
-            await api.post("/products", {
+            await api.post(`/address/add/${userId}`, {
                 name: formData.name,
-                description: formData.description,
-                price: parseFloat(formData.price),
-                imageUrl: formData.imageUrl,
-                categories: formData.categories
+                number: formData.number,
+                address: formData.address,
+                city: formData.city,
+                zipCode: formData.zipCode
             });
 
             setShowSuccess(true);
 
-            setTimeout(() => {
-                navigate("/admin");
-            }, 1400);
         } catch (err) {
             console.error(err);
-            toast.error("Failed to add product.");
+            toast.error("Failed to add address.");
         }
     };
 
@@ -137,7 +142,7 @@ const AddAddressPage = () => {
                     </div>
                     {/* UNIT OR SUITE NUMBER */}
                     <div>
-                        <label className="label">Unit or suite number</label>
+                        <label className="label">Unit or suite number (Optional)</label>
                         <input
                             type="text"
                             name="unit"
@@ -145,6 +150,7 @@ const AddAddressPage = () => {
                             className="input input-bordered w-full"
                             value={formData.unit}
                             onChange={handleChange}
+                            o
                         />
                     </div>
                     {/* CITY */}
@@ -185,16 +191,6 @@ const AddAddressPage = () => {
                     </button>
                 </form>
             </div>
-
-            {/* SUCCESS ANIMATION OVERLAY */}
-            {showSuccess && (
-                <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-                    <div
-                        className="animate-bounce bg-green-500 text-white px-10 py-6 rounded-xl shadow-xl text-xl font-bold">
-                        Product Added! 🎉
-                    </div>
-                </div>
-            )}
         </div>
     );
 };

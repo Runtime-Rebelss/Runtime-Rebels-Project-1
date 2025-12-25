@@ -61,7 +61,6 @@ const LoginPage = () => {
             }
 
             await preloadCart(userId);
-
             navigate('/', { replace: true });
             toast.success('Login successfully!');
 
@@ -75,7 +74,6 @@ const LoginPage = () => {
             setLoading(false);
         }
     }
-
     // If already logged in
     useEffect(() => {
         const already = Cookies.get("userId");
@@ -87,7 +85,6 @@ const LoginPage = () => {
     return (
         <div className="min-h-screen bg-base-200">
             <Navbar cartItems={cartItems} />
-
             <div className="container mx-auto px-4 py-8">
                 <div className="flex justify-center py-16">
                     <form onSubmit={handleLogin} className="space-y-6 w-full max-w-sm">

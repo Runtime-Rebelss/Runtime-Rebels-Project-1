@@ -1,16 +1,13 @@
 package com.runtimerebels.store.controller;
 
 import com.runtimerebels.store.dao.AddressRepository;
-import com.runtimerebels.store.dao.UserRepository;
 import com.runtimerebels.store.models.Address;
-import com.runtimerebels.store.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/address")
