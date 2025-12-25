@@ -1,10 +1,10 @@
-import React, { useState, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import React, {useState, useMemo} from "react";
+import {useNavigate} from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import toast from "react-hot-toast";
 import Cookies from "js-cookie";
 import api from "../../lib/axios";
-import { Country, State, City } from 'country-state-city';
+import {Country, State, City} from 'country-state-city';
 
 const AddAddressPage = () => {
     const navigate = useNavigate();
@@ -27,13 +27,19 @@ const AddAddressPage = () => {
     });
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
+        const {name, value} = e.target;
+        setFormData((prev) => ({...prev, [name]: value}));
     };
 
     const handleCategoryChange = (e) => {
         const values = Array.from(e.target.selectedOptions, (opt) => opt.value);
-        setFormData((prev) => ({ ...prev, categories: values }));
+        setFormData((prev) => ({...prev, categories: values}));
+    };
+
+    const handleCountryChange = (country) => {
+        setSelectedCountry(country);
+        setStates(State.getStatesOfCountry(country.isoCode));
+        setCities([]);
     };
 
     const handleSubmit = async (e) => {
@@ -66,7 +72,7 @@ const AddAddressPage = () => {
 
     return (
         <div className="min-h-screen bg-base-200">
-            <Navbar />
+            <Navbar/>
 
             <div className="container mx-auto px-4 py-10">
                 <h1 className="text-3xl font-bold mb-6 text-center">
@@ -79,17 +85,22 @@ const AddAddressPage = () => {
                 >
                     {/* COUNTRY */}
                     <div>
-                    <label className="label flex">Country/Region</label>
-                    <select defaultValue="Country" className="select select-neutral">
-                        <option disabled={true}>Select Country</option>
-                        {countries.map((country) => (
-                            <option key={country.id} value={country.id}>{country.name}</option>
-                        ))}
-                    </select>
+                        <label className="label flex">Country/Region</label>
+                        <select defaultValue="United States" className="select select-neutral w-full"
+                                onChange={(e) =>
+                                    handleCountryChange(
+                                        countries.find((c) => c.isoCode === e.target.value),
+                                    )
+                                }>
+                            <option value="">Select Country</option>
+                            {countries.map((country) => (
+                                <option key={country.isoCode} value={country.isoCode}>{country.name}</option>
+                            ))}
+                        </select>
                     </div>
                     {/* NAME */}
                     <div>
-                        <label className="label">Product Name</label>
+                        <label className="label">Full name</label>
                         <input
                             type="text"
                             name="name"
@@ -99,46 +110,75 @@ const AddAddressPage = () => {
                             required
                         />
                     </div>
-
-                    {/* DESCRIPTION */}
+                    {/* PHONE NUMBER */}
                     <div>
-                        <label className="label">Description</label>
-                        <textarea
-                            name="description"
-                            className="textarea textarea-bordered w-full"
-                            rows="4"
-                            value={formData.description}
-                            onChange={handleChange}
-                            required
-                        ></textarea>
-                    </div>
-
-                    {/* PRICE */}
-                    <div>
-                        <label className="label">Price ($)</label>
+                        <label className="label">Phone number</label>
                         <input
                             type="number"
-                            step="0.01"
-                            name="price"
+                            name="number"
                             className="input input-bordered w-full"
-                            value={formData.price}
+                            value={formData.name}
                             onChange={handleChange}
                             required
                         />
                     </div>
-
-                    {/* IMAGE URL */}
+                    {/* STREET ADDRESS */}
                     <div>
-                        <label className="label">Image URL (optional)</label>
+                        <label className="label">Street address</label>
                         <input
                             type="text"
-                            name="imageUrl"
+                            name="address"
+                            placeholder="Street address or P.O. Box"
+                            className="input input-bordered w-full"
+                            value={formData.name}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+                    {/* UNIT OR SUITE NUMBER */}
+                    <div>
+                        <label className="label">Unit or suite number</label>
+                        <input
+                            type="text"
+                            name="unit"
+                            placeholder="Apt, suite, unit, building, floor, etc."
                             className="input input-bordered w-full"
                             value={formData.imageUrl}
                             onChange={handleChange}
                         />
                     </div>
-
+                    {/* CITY */}
+                    <div className="flex">
+                        <label className="label grid">City
+                            <input
+                                type="text"
+                                name="city"
+                                className="input input-bordered"
+                                value={formData.name}
+                                onChange={handleChange}
+                                required
+                            />
+                        </label>
+                        {/* STATE */}
+                        <label className="label grid mx-4">State
+                            <select defaultValue="State" disabled={!selectedCountry} className="select select-neutral">
+                                {states.map((state) => (
+                                    <option key={state.isoCode} value={state.isoCode}>{state.name}</option>
+                                ))}
+                            </select>
+                        </label>
+                        {/* ZIP CODE */}
+                        <label className="label grid flex">ZIP Code
+                            <input
+                                type="text"
+                                name="zipCode"
+                                className="input input-bordered"
+                                value={formData.name}
+                                onChange={handleChange}
+                                required
+                            />
+                        </label>
+                    </div>
                     {/* CATEGORY DROPDOWN */}
                     <div>
                         <label className="label">Categories</label>
@@ -175,7 +215,8 @@ const AddAddressPage = () => {
             {/* SUCCESS ANIMATION OVERLAY */}
             {showSuccess && (
                 <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-                    <div className="animate-bounce bg-green-500 text-white px-10 py-6 rounded-xl shadow-xl text-xl font-bold">
+                    <div
+                        className="animate-bounce bg-green-500 text-white px-10 py-6 rounded-xl shadow-xl text-xl font-bold">
                         Product Added! 🎉
                     </div>
                 </div>
