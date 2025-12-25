@@ -129,7 +129,7 @@ const SignUpPage = () => {
 
                             {/* Signup Button */}
                             <button type="submit" className="btn btn-neutral w-full mt-4" disabled={loading}>
-                                {loading ? 'Logging in…' : 'Sign up'}
+                                {loading ? 'Signing up…' : 'Sign up'}
                             </button>
                         </fieldset>
                     </form>

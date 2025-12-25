@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/address")
@@ -22,6 +23,14 @@ public class AddressController {
         return addressRepository.findAll();
     }
 
+    // Find via addressId
+    @GetMapping("/{addressId}")
+    public ResponseEntity<Address> getAddresses(@PathVariable String addressId) {
+        return addressRepository.findById(addressId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     // Get address by userId
     @GetMapping("/{userId}")
     public ResponseEntity<List<Address>> getAddressesByUserId(@PathVariable String userId) {
@@ -34,7 +43,7 @@ public class AddressController {
     }
 
     // Creates a new address for a user
-    @PostMapping("add/{userId}")
+    @PostMapping("/add/{userId}")
     public ResponseEntity<Address> AddAddress(@PathVariable String userId, @RequestBody Address address) {
         address.setUserId(userId);
         Address savedAddress = addressRepository.save(address);
@@ -45,9 +54,12 @@ public class AddressController {
     public ResponseEntity<Address> deleteAddress(@PathVariable String addressId) {
         // Check if the address exists
         if (!addressRepository.existsById(addressId)) {
+            System.out.println("poop");
             return ResponseEntity.notFound().build();
         }
+        // Delete the address
         addressRepository.deleteById(addressId);
+
         return ResponseEntity.ok().build();
     }
 }

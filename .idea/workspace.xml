@@ -5,16 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Added backend support for address code">
+      <change afterPath="$PROJECT_DIR$/frontend-vite/src/lib/addresses.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/config/JwtAuthFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/config/JwtAuthFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/config/SecurityConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/AddressController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/AddressController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/OrderController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/StripeSessionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/StripeSessionController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/Order.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/AddressCard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/AddressCard.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/Navbar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/Navbar.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/confirmOrder.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/lib/confirmOrder.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/AddAddressPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/AddAddressPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/LoginPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/LoginPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/SignUpPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/SignUpPage.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,10 +25,10 @@
         <option value="Record" />
         <option value="Enum" />
         <option value="package.json" />
-        <option value="JavaScript File" />
         <option value="JSX File" />
         <option value="Class" />
         <option value="Interface" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -315,6 +313,7 @@
       <workItem from="1765234460117" duration="2425000" />
       <workItem from="1766621279707" duration="535000" />
       <workItem from="1766621859493" duration="14086000" />
+      <workItem from="1766685594573" duration="5424000" />
     </task>
     <task id="LOCAL-00022" summary="Added in OrderDetailsPage">
       <option name="closed" value="true" />

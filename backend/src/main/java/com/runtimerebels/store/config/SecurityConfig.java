@@ -41,7 +41,6 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "api/auth/userEmail").permitAll()
                         .requestMatchers("/api/payments/**").permitAll()
                         .requestMatchers("/api/email/**").permitAll()
-                        .requestMatchers("/api/address/**").permitAll()
                         // 2. All other public/whitelisted paths (General GETs, Swagger, etc.)
                         .requestMatchers(
                                 "/v3/api-docs/**",
@@ -57,7 +56,10 @@ public class SecurityConfig {
                                 "/api/carts/update",
                                 "/api/products/category",
                                 "/api/auth/**",
-                                "/api/auth/email"
+                                "/api/auth/email",
+                                "/api/address/**",
+                                "/api/address/delete"
+
                         ).permitAll()
                         // 3. Keep this essential rule for CORS pre-flight requests
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()

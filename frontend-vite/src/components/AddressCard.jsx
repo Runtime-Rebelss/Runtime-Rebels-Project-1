@@ -4,13 +4,28 @@ import toast from "react-hot-toast";
 import { ShoppingBag, Trash2 } from "lucide-react";
 import { addToCart } from "../lib/cart";
 import Cookies from "js-cookie"
-import { deleteProduct } from "../lib/products";
+import { removeAddress } from "../lib/addresses";
 
 const AddressCard = ({ address }) => {
     const [isDefault, setIsDefault] = useState(false);
 
     const handleIsDefaultChange = () => {
         setIsDefault(!isDefault);
+    }
+
+    const addressId =
+        address?.addressId ??
+        address?.id ??
+        address?._id ??
+        "";
+
+    const removeAddresses = async () => {
+        try {
+            await removeAddress(addressId);
+            toast.success("Address removed.");
+        } catch (error) {
+            toast.error("Failed to remove address.");
+        }
     }
 
     return (
@@ -33,8 +48,10 @@ const AddressCard = ({ address }) => {
                 <h2 className="card-title text-base-content mb-1">Card Title</h2>
                 <p>A card component has a figure, a body part, and inside body there are title and actions parts</p>
                 <div className="card-actions justify-end">
+                {/* Need an edit backend thing */}
                 <button className="btn btn-primary">Edit</button>
-                <button className="btn btn-primary">Remove</button>
+                {/* Need the remove backend code here */}
+                <button onClick={removeAddresses} className="btn btn-primary">Remove</button>
                 <button onClick={handleIsDefaultChange} className="btn btn-primary">Set as Default</button>
                 </div>
             </div>
