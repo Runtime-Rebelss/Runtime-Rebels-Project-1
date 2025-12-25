@@ -20,9 +20,11 @@ const AddAddressPage = () => {
 
     const [formData, setFormData] = useState({
         name: "",
-        description: "",
-        price: "",
-        imageUrl: "",
+        number: "",
+        address: "",
+        unit: "",
+        city: "",
+        zipCode: "",
         categories: []
     });
 
@@ -45,7 +47,7 @@ const AddAddressPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!formData.name || !formData.description || !formData.price) {
+        if (!formData.name || !formData.number || !formData.address || !formData.unit || !formData.city || !formData.zipCode) {
             toast.error("Please fill all required fields.");
             return;
         }
@@ -73,12 +75,10 @@ const AddAddressPage = () => {
     return (
         <div className="min-h-screen bg-base-200">
             <Navbar/>
-
             <div className="container mx-auto px-4 py-10">
                 <h1 className="text-3xl font-bold mb-6 text-center">
                     Add New Address
                 </h1>
-
                 <form
                     onSubmit={handleSubmit}
                     className="max-w-xl mx-auto bg-base-100 p-6 rounded-lg shadow-md space-y-4"
@@ -117,7 +117,7 @@ const AddAddressPage = () => {
                             type="number"
                             name="number"
                             className="input input-bordered w-full"
-                            value={formData.name}
+                            value={formData.number}
                             onChange={handleChange}
                             required
                         />
@@ -130,7 +130,7 @@ const AddAddressPage = () => {
                             name="address"
                             placeholder="Street address or P.O. Box"
                             className="input input-bordered w-full"
-                            value={formData.name}
+                            value={formData.address}
                             onChange={handleChange}
                             required
                         />
@@ -143,7 +143,7 @@ const AddAddressPage = () => {
                             name="unit"
                             placeholder="Apt, suite, unit, building, floor, etc."
                             className="input input-bordered w-full"
-                            value={formData.imageUrl}
+                            value={formData.unit}
                             onChange={handleChange}
                         />
                     </div>
@@ -154,7 +154,7 @@ const AddAddressPage = () => {
                                 type="text"
                                 name="city"
                                 className="input input-bordered"
-                                value={formData.name}
+                                value={formData.city}
                                 onChange={handleChange}
                                 required
                             />
@@ -162,6 +162,7 @@ const AddAddressPage = () => {
                         {/* STATE */}
                         <label className="label grid mx-4">State
                             <select defaultValue="State" disabled={!selectedCountry} className="select select-neutral">
+                                <option value="">Select</option>
                                 {states.map((state) => (
                                     <option key={state.isoCode} value={state.isoCode}>{state.name}</option>
                                 ))}
@@ -173,41 +174,14 @@ const AddAddressPage = () => {
                                 type="text"
                                 name="zipCode"
                                 className="input input-bordered"
-                                value={formData.name}
+                                value={formData.zipCode}
                                 onChange={handleChange}
                                 required
                             />
                         </label>
                     </div>
-                    {/* CATEGORY DROPDOWN */}
-                    <div>
-                        <label className="label">Categories</label>
-                        <select
-                            name="categories"
-                            className="select select-bordered w-full"
-                            multiple
-                            value={formData.categories}
-                            onChange={handleCategoryChange}
-                        >
-                            <option value="Men's">Men's</option>
-                            <option value="Women's">Women's</option>
-                            <option value="Jewelry">Jewelry</option>
-                            <option value="Electronics">Electronics</option>
-                            <option value="Home & Garden">Home & Garden</option>
-                        </select>
-                        <p className="text-xs mt-1 opacity-70">(Hold CTRL/CMD to select multiple)</p>
-                    </div>
-
                     <button type="submit" className="btn btn-primary w-full mt-4">
-                        Add Product
-                    </button>
-
-                    <button
-                        type="button"
-                        className="btn btn-neutral w-full mt-2"
-                        onClick={() => navigate("/admin")}
-                    >
-                        Cancel
+                        Add Address
                     </button>
                 </form>
             </div>

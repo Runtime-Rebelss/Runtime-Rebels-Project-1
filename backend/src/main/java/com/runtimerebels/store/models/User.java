@@ -22,6 +22,7 @@ public class User implements UserDetails {
     private String fullName;
     @Indexed(unique = false)
     private String email;
+    private String address;
     private String mobileNumber;
     private String password;
     private Role role = Role.CUSTOMER;

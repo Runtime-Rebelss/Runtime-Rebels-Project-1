@@ -25,7 +25,6 @@ import java.util.List;
 @Builder
 @Document(collection = "orders")
 public class Order {
-
     @Id
     private String id;
 
