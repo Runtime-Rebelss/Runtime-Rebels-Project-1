@@ -4,15 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Fixed total not correctly displaying in Order Details Page and on Order Confirmation Page">
-      <change afterPath="$PROJECT_DIR$/frontend-vite/src/components/AddressCard.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend-vite/src/components/Addresses.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/AddAddressPage.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/AddressesPage.jsx" afterDir="false" />
+    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Added new Address code for account page">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/AccountPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/AccountPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/LoginPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/LoginPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/AddressCard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/AddressCard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/AddAddressPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/AddAddressPage.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -308,14 +303,6 @@
       <workItem from="1764974461866" duration="8215000" />
       <workItem from="1765150584018" duration="10719000" />
       <workItem from="1765234460117" duration="2425000" />
-    </task>
-    <task id="LOCAL-00017" summary="Added code to sign up / login, user specific carts and auth tokens">
-      <option name="closed" value="true" />
-      <created>1763602014396</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1763602014396</updated>
     </task>
     <task id="LOCAL-00018" summary="Added code to sign up / login, user specific carts and auth tokens">
       <option name="closed" value="true" />
@@ -701,7 +688,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765170109547</updated>
     </task>
-    <option name="localTasksCounter" value="66" />
+    <task id="LOCAL-00066" summary="Added new Address code for account page">
+      <option name="closed" value="true" />
+      <created>1766620262256</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1766620262257</updated>
+    </task>
+    <option name="localTasksCounter" value="67" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -759,7 +754,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added in OrderDetailsPage" />
     <MESSAGE value="Fully implemented OrderDetailsPage" />
     <MESSAGE value="Added fixes to get program running" />
     <MESSAGE value="Added Guest functionality to Cart and Order Pages" />
@@ -784,7 +778,8 @@
     <MESSAGE value="Fixed product image in OrderCard and changed ship to from email to name" />
     <MESSAGE value="Added orderConfirmation Lib, fixed issue with incorrect order total displaying" />
     <MESSAGE value="Fixed total not correctly displaying in Order Details Page and on Order Confirmation Page" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed total not correctly displaying in Order Details Page and on Order Confirmation Page" />
+    <MESSAGE value="Added new Address code for account page" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added new Address code for account page" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>
