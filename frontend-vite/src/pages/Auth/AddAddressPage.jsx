@@ -1,15 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import toast from "react-hot-toast";
 import Cookies from "js-cookie";
 import api from "../../lib/axios";
-import Select from 'react-select-country-list';
+import { Country, State, City } from 'country-state-city';
 
 const AddAddressPage = () => {
     const navigate = useNavigate();
     const isAdmin = Cookies.get("adminEmail") === "admin@gmail.com";
     const [showSuccess, setShowSuccess] = useState(false);
+    const [countries, setCountries] = useState(Country.getAllCountries());
+    const [states, setStates] = useState([]);
+    const [cities, setCities] = useState([]);
+
+    const [selectedCountry, setSelectedCountry] = useState(null);
+    const [selectedState, setSelectedState] = useState(null);
+
 
     const [formData, setFormData] = useState({
         name: "",
@@ -18,11 +25,6 @@ const AddAddressPage = () => {
         imageUrl: "",
         categories: []
     });
-
-    if (!isAdmin) {
-        toast.error("Unauthorized");
-        navigate("/");
-    }
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -75,6 +77,16 @@ const AddAddressPage = () => {
                     onSubmit={handleSubmit}
                     className="max-w-xl mx-auto bg-base-100 p-6 rounded-lg shadow-md space-y-4"
                 >
+                    {/* COUNTRY */}
+                    <div>
+                    <label className="label flex">Country/Region</label>
+                    <select defaultValue="Country" className="select select-neutral">
+                        <option disabled={true}>Select Country</option>
+                        {countries.map((country) => (
+                            <option key={country.id} value={country.id}>{country.name}</option>
+                        ))}
+                    </select>
+                    </div>
                     {/* NAME */}
                     <div>
                         <label className="label">Product Name</label>

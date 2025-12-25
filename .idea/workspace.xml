@@ -6,7 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Added new Address code for account page">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/AddressCard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/AddressCard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/AddAddressPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/AddAddressPage.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -303,14 +306,8 @@
       <workItem from="1764974461866" duration="8215000" />
       <workItem from="1765150584018" duration="10719000" />
       <workItem from="1765234460117" duration="2425000" />
-    </task>
-    <task id="LOCAL-00018" summary="Added code to sign up / login, user specific carts and auth tokens">
-      <option name="closed" value="true" />
-      <created>1763609717765</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1763609717765</updated>
+      <workItem from="1766621279707" duration="535000" />
+      <workItem from="1766621859493" duration="1248000" />
     </task>
     <task id="LOCAL-00019" summary="Added code to sign up / login, user specific carts and auth tokens">
       <option name="closed" value="true" />
@@ -696,7 +693,15 @@
       <option name="project" value="LOCAL" />
       <updated>1766620262257</updated>
     </task>
-    <option name="localTasksCounter" value="67" />
+    <task id="LOCAL-00067" summary="Added new Address code for account page">
+      <option name="closed" value="true" />
+      <created>1766621061149</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1766621061149</updated>
+    </task>
+    <option name="localTasksCounter" value="68" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
