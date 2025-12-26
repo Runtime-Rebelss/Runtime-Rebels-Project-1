@@ -1,16 +1,33 @@
-import React, {useState} from 'react';
+import React, { useEffect, useState } from 'react'
 import {Link} from "react-router-dom";
 import Navbar from '../../components/Navbar.jsx';
+import { useParams, useNavigate } from 'react-router'
 import toast from 'react-hot-toast';
-import ProductCard from "../../components/ProductCard";
-import useFetchProducts from "../../components/actions/useFetchProducts";
-import Hero from "../../components/Hero";
-import Cookies from "js-cookie";
-import UserInfo from "../../components/UserInfo.jsx";
 import AddressCard from '../../components/AddressCard.jsx';
+import addressService from "../../lib/addresses.js";
+import api from "../../lib/axios.js";
+import Cookies from "js-cookie";
 
 const AddressesPage = () => {
+    const [address, setAddress] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const userId = Cookies.get("userId");
 
+    useEffect(() => {
+        const fetchAddress = async () => {
+                    try {
+                        const response = await api.get(`/address/user/${userId}`);
+                        setAddress(response.data);
+                    } catch (error) {
+                        console.log("addressId:", addressId);
+                        console.error("Error fetching address:", error);
+                        toast.error("Failed to load address!");
+                    } finally {
+                        setLoading(false);
+                    }
+                };
+                fetchAddress();
+            }, []);
     return (
         <div>
             <Navbar/>
@@ -25,7 +42,9 @@ const AddressesPage = () => {
                     </Link>
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
-                    <AddressCard/>)
+                    {address.map(addr => (
+                        <AddressCard key={addr.id} address={addr} />
+                    ))}
                 </div>
             </div>
         </div>

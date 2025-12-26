@@ -4,24 +4,25 @@ import toast from "react-hot-toast";
 import { ShoppingBag, Trash2 } from "lucide-react";
 import { addToCart } from "../lib/cart";
 import Cookies from "js-cookie"
-import { removeAddress } from "../lib/addresses";
+import addressService from "../lib/addresses";
 
 const AddressCard = ({ address }) => {
     const [isDefault, setIsDefault] = useState(false);
+    const [isUnit, setIsUnit] = useState(false);
+    const addressId = address?.id || address?._id || "";
+    const userId = Cookies.get("userId");
 
     const handleIsDefaultChange = () => {
         setIsDefault(!isDefault);
     }
 
-    const addressId =
-        address?.addressId ??
-        address?.id ??
-        address?._id ??
-        "";
+    const handleIsUnitChange = () => {
+        setIsUnit(!isUnit);
+    }
 
     const removeAddresses = async () => {
         try {
-            await removeAddress(addressId);
+            await addressService.removeAddress(addressId);
             toast.success("Address removed.");
         } catch (error) {
             toast.error("Failed to remove address.");
@@ -46,7 +47,20 @@ const AddressCard = ({ address }) => {
             {!isDefault && (
                 <div className="card-body flex flex-col justify-between">
                 <h2 className="card-title text-base-content mb-1">Card Title</h2>
-                <p>A card component has a figure, a body part, and inside body there are title and actions parts</p>
+                <p>
+                    <Link to={`/address/${addressId}`}>{address.address}</Link>
+                </p>
+                <p>
+                    <Link to={`/address/${addressId}`}>{address.city + ", " + address.state + " " + address.zipCode}</Link>
+                </p>
+                <p>
+                    {/* Need to remove the space */}
+                    {!isUnit && (
+                        <Link to={`/address/${addressId}`}>{address.unit}</Link>)}
+                </p>
+                <p>
+                    <Link to={`/address/${addressId}`}>{address.zipCode}</Link>
+                </p>
                 <div className="card-actions justify-end">
                 {/* Need an edit backend thing */}
                 <button className="btn btn-primary">Edit</button>

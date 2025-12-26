@@ -32,7 +32,7 @@ public class AddressController {
     }
 
     // Get address by userId
-    @GetMapping("/{userId}")
+    @GetMapping("/user/{userId}")
     public ResponseEntity<List<Address>> getAddressesByUserId(@PathVariable String userId) {
         List<Address> addresses = addressRepository.findByUserId(userId);
 

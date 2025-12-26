@@ -12,21 +12,11 @@ import java.util.Map;
 @RequestMapping("/api/stripe")
 public class StripeSessionController {
 
-    @Value("${stripe.secret.key:}")
+    @Value("${stripe.secret.key}")
     private String stripeSecretKey;
 
     @GetMapping("/session/{id}")
     public Map<String, Object> getSession(@PathVariable String id) throws Exception {
-        // prefer property, fall back to environment variable STRIPE_SECRET_KEY
-        if (stripeSecretKey == null || stripeSecretKey.trim().isEmpty()) {
-            stripeSecretKey = System.getenv("STRIPE_SECRET_KEY");
-        }
-
-        if (stripeSecretKey == null || stripeSecretKey.trim().isEmpty()) {
-            // explicit, helpful error so callers can detect missing configuration
-            throw new IllegalStateException("Stripe secret key is not configured. Set 'stripe.secret.key' in application.properties or the STRIPE_SECRET_KEY environment variable.");
-        }
-
         Stripe.apiKey = stripeSecretKey;
 
         // Retrieve checkout session
