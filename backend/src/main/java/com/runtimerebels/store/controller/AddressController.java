@@ -47,6 +47,12 @@ public class AddressController {
     public ResponseEntity<Address> AddAddress(@PathVariable String userId, @RequestBody Address address) {
         address.setUserId(userId);
         Address savedAddress = addressRepository.save(address);
+        // If it is the first address, set it as default (adjust this)
+        if (address.getAddress() == null) {
+            address.setDefault(true);
+        }
+        address.setDefault(false);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(savedAddress);
     }
 
@@ -62,4 +68,5 @@ public class AddressController {
 
         return ResponseEntity.ok().build();
     }
+
 }

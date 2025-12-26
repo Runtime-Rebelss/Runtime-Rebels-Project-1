@@ -23,4 +23,5 @@ public class Address {
     private String unit;
     private String state;
     private String zipCode;
+    private boolean isDefault = false;
 }

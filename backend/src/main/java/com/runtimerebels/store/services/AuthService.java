@@ -50,7 +50,6 @@ public class AuthService {
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .email(user.getEmail())
-                .mobileNumber(user.getMobileNumber())
                 .build();
     }
 
@@ -82,7 +81,6 @@ public class AuthService {
         var user = User.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
-                .mobileNumber(request.getMobileNumber())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(role)

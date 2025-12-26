@@ -7,6 +7,7 @@ export async function removeAddress(addressId) {
     if (!userId) return;
     // Deletes the address for the user
     await api.delete(`/address/delete/${addressId}`);
+    window.location.reload();
 }
 
 export async function getAddressById(addressId) {
