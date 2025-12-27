@@ -42,15 +42,32 @@ public class AddressController {
         return ResponseEntity.ok(addresses);
     }
 
+    @PutMapping("/default/{addressId}")
+    public ResponseEntity<Address> defaultAddress(@PathVariable String addressId) {
+        Optional<Address> opt = addressRepository.findById(addressId);
+        // Check if address exists
+        if (opt.isPresent()) {
+            Address address = opt.get();
+            // Set all other addresses for the user to not default
+            List<Address> userAddresses = addressRepository.findByUserId(address.getUserId());
+            for (Address addr : userAddresses) {
+                if (addr.isDefault()) {
+                    addr.setDefault(false);
+                    addressRepository.save(addr);
+                }
+            }
+            // Set the selected address as default
+            address.setDefault(true);
+            Address updatedAddress = addressRepository.save(address);
+            return ResponseEntity.ok(updatedAddress);
+        }
+        return ResponseEntity.notFound().build();
+    }
     // Creates a new address for a user
     @PostMapping("/add/{userId}")
     public ResponseEntity<Address> AddAddress(@PathVariable String userId, @RequestBody Address address) {
         address.setUserId(userId);
         Address savedAddress = addressRepository.save(address);
-        // If it is the first address, set it as default (adjust this)
-        if (address.getAddress() == null) {
-            address.setDefault(true);
-        }
         address.setDefault(false);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(savedAddress);

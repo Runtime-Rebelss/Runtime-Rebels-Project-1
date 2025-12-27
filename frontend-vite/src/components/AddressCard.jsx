@@ -15,7 +15,7 @@ const AddressCard = ({address}) => {
     const [showConfirm, setShowConfirm] = useState(false);
 
     const handleIsDefaultChange = () => {
-        setIsDefault(isDefault);
+        setIsDefault(!isDefault);
     }
 
     const handleIsUnitChange = () => {
@@ -35,12 +35,13 @@ const AddressCard = ({address}) => {
 
     // Default button - When clicked set the address as default and then when another address
     // is clicked as default, the previous default is unset
+    // Need to call the backend
 
     return (
-        <div className="card card-border bg-base-200 shadow-sm transition duration-200 justify-center w-full">
+        <div className="card card-border bg-base-200 shadow-sm transition duration-200">
             {/* DEFAULT ADDRESS */}
             {isDefault && (
-                <div className="card-body flex flex-col justify-between ">
+                <div className="card-body flex flex-col justify-between">
                     <h2 className="card-title text-base-content mb-1">Default</h2>
                     <p>
                         <Link to={`/address/${addressId}`}>{address.address}</Link>
@@ -57,9 +58,12 @@ const AddressCard = ({address}) => {
                     <p>
                         <Link to={`/address/${addressId}`}>{address.zipCode}</Link>
                     </p>
-                    <div className="card-actions justify-end">
-                        <button className="mt-auto flex justify-center gap-3">Edit</button>
-                        <button className="btn btn-soft btn-error rounded-full flex items-center gap-1 px-4">Remove
+                    <div className="mt-auto flex justify-front gap-2">
+                    {/* Need an edit backend thing */}
+                        <button className="mt-auto btn btn-primary flex justify-center">Edit</button>
+                        {/* Need the remove backend code here */}
+                        <button onClick={() => setShowConfirm(true)}
+                                className="btn btn-primary flex items-center gap-1 px-4">Remove
                         </button>
                     </div>
                 </div>
@@ -67,7 +71,7 @@ const AddressCard = ({address}) => {
             {/* NOT DEFAULT ADDRESS */}
             {!isDefault && (
                 <div className="card-body flex flex-col justify-between">
-                    <h2 className="card-title text-base-content mb-1">Card Title</h2>
+                    <h2 className="card-title text-base-content mb-1"></h2>
                     <p>
                         <Link to={`/address/${addressId}`}>{address.address}</Link>
                     </p>
@@ -83,7 +87,7 @@ const AddressCard = ({address}) => {
                     <p>
                         <Link to={`/address/${addressId}`}>{address.zipCode}</Link>
                     </p>
-                    <div className="card-actions justify-front">
+                    <div className="mt-auto flex justify-center gap-2">
                         {/* Need an edit backend thing */}
                         <button className="mt-auto btn btn-primary flex justify-center">Edit</button>
                         {/* Need the remove backend code here */}
@@ -95,18 +99,16 @@ const AddressCard = ({address}) => {
                     </div>
                 </div>
             )}
-
             {/* CONFIRM DELETE MODAL */}
             {showConfirm && (
-                <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+                <div className="fixed inset-0 flex items-center justify-center z-50">
                     <div className="bg-white p-6 rounded-xl shadow-xl w-80 text-center">
                         <h3 className="text-lg font-semibold">
-                            Are you sure?
+                            Remove this address?
                         </h3>
                         <p className="text-sm mt-2">
                             This action cannot be undone.
                         </p>
-
                         <div className="mt-4 flex justify-center gap-3">
                             <button
                                 className="btn btn-soft"
