@@ -1,28 +1,19 @@
 import React, {useState, useEffect} from "react";
-import {useNavigate} from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import toast from "react-hot-toast";
+import {useNavigate} from "react-router-dom";
 import Cookies from "js-cookie";
 import api from "../../lib/axios";
 import {Country, State, City} from 'country-state-city';
 
 const AddAddressPage = () => {
     const navigate = useNavigate();
-    const isAdmin = Cookies.get("adminEmail") === "admin@gmail.com";
     const [showSuccess, setShowSuccess] = useState(false);
     const [countries, setCountries] = useState(Country.getAllCountries());
     const [states, setStates] = useState([]);
-    const [cities, setCities] = useState([]);
-    const [name, setName] = useState("");
-    const [number, setNumber] = useState("");
-    const [address, setAddress] = useState("");
-    const [unit, setUnit] = useState("");
-    const [city, setCity] = useState("");
-    const [zipCode, setZipCode] = useState("");
 
     const [selectedCountry, setSelectedCountry] = useState("");
-    const [selectedState, setSelectedState] = useState(null);
-
+    const [selectedState, setSelectedState] = useState("");
 
     const [formData, setFormData] = useState({
         name: "",
@@ -31,7 +22,9 @@ const AddAddressPage = () => {
         unit: "",
         city: "",
         zipCode: "",
-        categories: []
+        state: "",
+        country: "",
+        phoneNumber: ""
     });
 
     const handleChange = (e) => {
@@ -40,17 +33,12 @@ const AddAddressPage = () => {
     };
 
     const handleCountryChange = (country) => {
-        setSelectedCountry(country?.isoCode || "");
-        setStates(State.getStatesOfCountry(country.isoCode));
+        const countryStates = State.getStatesOfCountry(country.isoCode);
 
-        useEffect(() => {
-            console.log("Country:", selectedCountry);
-            console.log("State:", selectedState);
-        }, [selectedCountry, selectedState]);
-
+        setSelectedCountry(country.name);
+        setStates(countryStates);
+        setSelectedState(countryStates.length > 0 ? "" : null);
     };
-
-
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -69,11 +57,13 @@ const AddAddressPage = () => {
                 address: formData.address,
                 city: formData.city,
                 zipCode: formData.zipCode,
-
-                unit: formData.unit
+                state: states.length > 0 ? selectedState : null,
+                country: selectedCountry,
+                unit: formData.unit,
+                phoneNumber: formData.phoneNumber
             });
             toast.success("Address added successfully!");
-            //navigate("/account/addresses");
+            navigate("/account/addresses");
             setShowSuccess(true);
 
         } catch (err) {
@@ -99,12 +89,12 @@ const AddAddressPage = () => {
                         <select value={selectedCountry} className="select select-neutral w-full"
                                 onChange={(e) =>
                                     handleCountryChange(
-                                        countries.find((c) => c.isoCode === e.target.value),
+                                        countries.find((c) => c.name === e.target.value),
                                     )
                                 }>
                             <option value="" disabled>Select Country</option>
                             {countries.map((country) => (
-                                <option key={country.isoCode} value={country.isoCode}>{country.name}</option>
+                                <option key={country.name} value={country.name}>{country.name}</option>
                             ))}
                         </select>
                     </div>
@@ -170,16 +160,24 @@ const AddAddressPage = () => {
                             />
                         </label>
                         {/* STATE */}
+                        {states.length > 0 &&
                         <label className="label grid mx-4">State
-                            <select defaultValue="State" disabled={!selectedCountry} className="select select-neutral">
+                            <select
+                                value={selectedState || ""}
+                                onChange={(e) => setSelectedState(e.target.value)}
+                                className="select select-neutral"
+                                required
+                            >
                                 <option value="">Select</option>
                                 {states.map((state) => (
-                                    <option key={state.isoCode} value={state.isoCode}>{state.name}</option>
+                                    <option key={state.isoCode} value={state.isoCode}>
+                                        {state.name}</option>
                                 ))}
                             </select>
                         </label>
+                        }
                         {/* ZIP CODE */}
-                        <label className="label grid flex">ZIP Code
+                        <label className="label grid flex mx-4">ZIP Code
                             <input
                                 type="text"
                                 name="zipCode"

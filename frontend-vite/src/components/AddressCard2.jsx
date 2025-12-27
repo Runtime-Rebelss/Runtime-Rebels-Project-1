@@ -1,33 +1,20 @@
 import {Link} from "react-router-dom";
 import React, {useState} from "react";
 import toast from "react-hot-toast";
-import {ShoppingBag, Trash2} from "lucide-react";
-import {addToCart} from "../lib/cart";
-import Cookies from "js-cookie"
 import addressService from "../lib/addresses";
+import Cookies from "js-cookie";
 
-const AddressCard = ({address, isDefault}) => {
-    const [isOther, setIsOther] = useState(false);
+const AddressCard2 = ({address, isDefault = false}) => {
     const [isUnit, setIsUnit] = useState(false);
     const addressId = address?.id || address?._id || "";
-    const userId = Cookies.get("userId");
     const [showConfirm, setShowConfirm] = useState(false);
-
-    const handleIsDefaultChange = () => {
-        setIsDefault(!isDefault);
-    }
-
-    const handleIsUnitChange = () => {
-        setIsUnit(!isUnit);
-    }
 
     // Need backend code to make the default address change in database
     const setAsDefaultAddress = async () => {
         try {
             // Call backend to set this address as default
-            await addressService.setDefaultAddress(addressId);
-            setIsDefault(!isDefault);
             toast.success("Address set as default.");
+            await addressService.setDefaultAddress(addressId);
         } catch (error) {
             toast.error("Failed to set as default address.");
         }
@@ -52,6 +39,7 @@ const AddressCard = ({address, isDefault}) => {
             {isDefault && (
                 <div className="card-body flex flex-col justify-between">
                     <h2 className="card-title text-base-content mb-1">Default</h2>
+                    <div className="">{Cookies.get("fullName")}</div>
                     <div>
                         <Link to={`/address/${addressId}`}>{address.address}</Link>
                     </div>
@@ -65,12 +53,12 @@ const AddressCard = ({address, isDefault}) => {
                             <Link to={`/address/${addressId}`}>{address.unit}</Link>)}
                     </div>
                     <div>
-                        <Link to={`/address/${addressId}`}>{address.zipCode}</Link>
+                        <Link to={`/address/${addressId}`}>{address.country}</Link>
                     </div>
                     <div className="mt-auto flex justify-front gap-2">
-                    {/* Need an edit backend thing */}
+                        {/* Need an edit backend thing */}
                         <button className="mt-auto btn btn-primary flex justify-center">Edit</button>
-                        {/* Need the remove backend code here */}
+                        {/* REMOVE ADDRESS */}
                         <button onClick={() => setShowConfirm(true)}
                                 className="btn btn-primary flex items-center gap-1 px-4">Remove
                         </button>
@@ -81,21 +69,25 @@ const AddressCard = ({address, isDefault}) => {
             {!isDefault && (
                 <div className="card-body flex flex-col justify-between">
                     <h2 className="card-title text-base-content mb-1"></h2>
-                    <p>
+                    <div className="">{Cookies.get("fullName")}</div>
+                    <div>
                         <Link to={`/address/${addressId}`}>{address.address}</Link>
-                    </p>
-                    <p>
+                    </div>
+                    <div>
                         <Link
                             to={`/address/${addressId}`}>{address.city + ", " + address.state + " " + address.zipCode}</Link>
-                    </p>
-                    <p>
+                    </div>
+                    <div>
                         {/* Need to remove the space */}
                         {!isUnit && (
-                            <Link to={`/address/${addressId}`}>{address.unit}</Link>)}
-                    </p>
-                    <p>
-                        <Link to={`/address/${addressId}`}>{address.zipCode}</Link>
-                    </p>
+                            <Link to={`/address/${addressId}`}>{address.unit || ""}</Link>)}
+                    </div>
+                    <div>
+                        <Link to={`/address/${addressId}`}>{address.country}</Link>
+                    </div>
+                    <div>
+                        <Link to={`/address/${addressId}`}>{address.phoneNumber}</Link>
+                    </div>
                     <div className="mt-auto flex justify-center gap-2">
                         {/* Need an edit backend thing */}
                         <button className="mt-auto btn btn-primary flex justify-center">Edit</button>
@@ -136,4 +128,4 @@ const AddressCard = ({address, isDefault}) => {
     )
 }
 
-export default AddressCard;
+export default AddressCard2;

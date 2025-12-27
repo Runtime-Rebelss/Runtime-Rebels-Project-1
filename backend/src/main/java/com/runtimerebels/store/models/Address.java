@@ -23,5 +23,6 @@ public class Address {
     private String unit;
     private String state;
     private String zipCode;
+    private Integer phoneNumber;
     private boolean isDefault;
 }

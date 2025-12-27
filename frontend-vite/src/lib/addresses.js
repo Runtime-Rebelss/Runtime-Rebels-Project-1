@@ -6,6 +6,7 @@ export async function getAddressById(addressId) {
 }
 
 export async function setDefaultAddress(addressId) {
+    window.location.reload();
     return api.put(`/address/default/${addressId}`);
 }
 
