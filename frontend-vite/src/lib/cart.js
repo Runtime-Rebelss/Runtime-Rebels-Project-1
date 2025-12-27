@@ -45,10 +45,7 @@ export function saveGuestCart(data) {
 export async function loadServerCart(userId, signal) {
     if (!userId) return [];
 
-    const {data: cart} = await api.get(
-        `/carts/${encodeURIComponent(userId)}`,
-        {signal}
-    );
+    const {data: cart} = await api.get(`/carts/${encodeURIComponent(userId)}`, {signal});
 
     if (Array.isArray(cart?.items)) {
         const items = cart.items

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import {Link} from "react-router-dom";
 import Navbar from '../../components/Navbar.jsx';
-import { useParams, useNavigate } from 'react-router'
+import {useParams, useNavigate} from 'react-router'
 import toast from 'react-hot-toast';
 import AddressCard from '../../components/AddressCard.jsx';
 import addressService from "../../lib/addresses.js";
@@ -15,19 +15,19 @@ const AddressesPage = () => {
 
     useEffect(() => {
         const fetchAddress = async () => {
-                    try {
-                        const response = await api.get(`/address/user/${userId}`);
-                        setAddress(response.data);
-                    } catch (error) {
-                        console.log("addressId:", addressId);
-                        console.error("Error fetching address:", error);
-                        toast.error("Failed to load address!");
-                    } finally {
-                        setLoading(false);
-                    }
-                };
-                fetchAddress();
-            }, []);
+            try {
+                const response = await api.get(`/address/user/${userId}`);
+                setAddress(response.data);
+            } catch (error) {
+                console.error("Error fetching address:", error);
+                toast.error("Failed to load address!");
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchAddress();
+    }, [userId]);
+
     return (
         <div>
             <Navbar/>
@@ -43,7 +43,7 @@ const AddressesPage = () => {
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
                     {address.map(addr => (
-                        <AddressCard key={addr.id} address={addr} />
+                        <AddressCard key={addr.id} address={addr} default={addr.default}/>
                     ))}
                 </div>
             </div>

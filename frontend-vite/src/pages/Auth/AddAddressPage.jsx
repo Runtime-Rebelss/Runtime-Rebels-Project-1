@@ -1,4 +1,4 @@
-import React, {useState, useMemo} from "react";
+import React, {useState, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import toast from "react-hot-toast";
@@ -20,7 +20,7 @@ const AddAddressPage = () => {
     const [city, setCity] = useState("");
     const [zipCode, setZipCode] = useState("");
 
-    const [selectedCountry, setSelectedCountry] = useState(null);
+    const [selectedCountry, setSelectedCountry] = useState("");
     const [selectedState, setSelectedState] = useState(null);
 
 
@@ -39,16 +39,18 @@ const AddAddressPage = () => {
         setFormData((prev) => ({...prev, [name]: value}));
     };
 
-    const handleCategoryChange = (e) => {
-        const values = Array.from(e.target.selectedOptions, (opt) => opt.value);
-        setFormData((prev) => ({...prev, categories: values}));
+    const handleCountryChange = (country) => {
+        setSelectedCountry(country?.isoCode || "");
+        setStates(State.getStatesOfCountry(country.isoCode));
+
+        useEffect(() => {
+            console.log("Country:", selectedCountry);
+            console.log("State:", selectedState);
+        }, [selectedCountry, selectedState]);
+
     };
 
-    const handleCountryChange = (country) => {
-        setSelectedCountry(country);
-        setStates(State.getStatesOfCountry(country.isoCode));
-        setCities([]);
-    };
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -66,9 +68,12 @@ const AddAddressPage = () => {
                 number: formData.number,
                 address: formData.address,
                 city: formData.city,
-                zipCode: formData.zipCode
-            });
+                zipCode: formData.zipCode,
 
+                unit: formData.unit
+            });
+            toast.success("Address added successfully!");
+            //navigate("/account/addresses");
             setShowSuccess(true);
 
         } catch (err) {
@@ -91,13 +96,13 @@ const AddAddressPage = () => {
                     {/* COUNTRY */}
                     <div>
                         <label className="label flex">Country/Region</label>
-                        <select defaultValue="United States" className="select select-neutral w-full"
+                        <select value={selectedCountry} className="select select-neutral w-full"
                                 onChange={(e) =>
                                     handleCountryChange(
                                         countries.find((c) => c.isoCode === e.target.value),
                                     )
                                 }>
-                            <option value="">Select Country</option>
+                            <option value="" disabled>Select Country</option>
                             {countries.map((country) => (
                                 <option key={country.isoCode} value={country.isoCode}>{country.name}</option>
                             ))}
@@ -150,7 +155,6 @@ const AddAddressPage = () => {
                             className="input input-bordered w-full"
                             value={formData.unit}
                             onChange={handleChange}
-                            o
                         />
                     </div>
                     {/* CITY */}

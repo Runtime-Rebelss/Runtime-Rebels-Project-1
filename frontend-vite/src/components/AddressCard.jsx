@@ -23,6 +23,16 @@ const AddressCard = ({address}) => {
     }
 
     // Need backend code to make the default address change in database
+    const setAsDefaultAddress = async () => {
+        try {
+            // Call backend to set this address as default
+            await addressService.setDefaultAddress(addressId);
+            setIsDefault(!isDefault);
+            toast.success("Address set as default.");
+        } catch (error) {
+            toast.error("Failed to set as default address.");
+        }
+    }
 
     const removeAddresses = async () => {
         try {
@@ -95,7 +105,7 @@ const AddressCard = ({address}) => {
                                 className="btn btn-primary flex items-center gap-1 px-4">Remove
                         </button>
                         {/* When set as default and then another address is clicked to be default, the previous default is unset */}
-                        <button onClick={handleIsDefaultChange} className="btn btn-primary">Set as Default</button>
+                        <button onClick={setAsDefaultAddress} className="btn btn-primary">Set as Default</button>
                     </div>
                 </div>
             )}
