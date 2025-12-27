@@ -136,7 +136,7 @@ const AccountPage = () => {
                                 </button>
                             </div>
                         </section>
-                        {/* Login & Security */}
+                        {/* LOGIN & SECURITY */}
                         <section
                             className="card bg-base-200 shadow-md hover:shadow-lg transition cursor-pointer"
                             onClick={() => (window.location.href = "/account/manage")}
@@ -151,7 +151,7 @@ const AccountPage = () => {
                                 </button>
                             </div>
                         </section>
-                        {/* Your Addresses */}
+                        {/* YOUR ADDRESSES */}
                         <section
                             className="card bg-base-200 shadow-md hover:shadow-lg transition cursor-pointer"
                             onClick={() => (window.location.href = "/account/addresses")}

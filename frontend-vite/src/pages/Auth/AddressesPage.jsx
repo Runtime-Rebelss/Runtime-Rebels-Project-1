@@ -12,7 +12,6 @@ const AddressesPage = () => {
     const [address, setAddress] = useState([]);
     const [loading, setLoading] = useState(true);
     const userId = Cookies.get("userId");
-    const [isDefault, setIsDefault] = useState(false);
 
     useEffect(() => {
         const fetchAddress = async () => {
@@ -28,6 +27,11 @@ const AddressesPage = () => {
         };
         fetchAddress();
     }, [userId]);
+
+    const defaultFirst = address.slice();
+
+    // When button "set default" is clicked, move that address to the front of the list
+    defaultFirst.sort((a, b) => a.default - b.default);
 
     return (
         <div>
@@ -45,7 +49,7 @@ const AddressesPage = () => {
                         Add Address
                     </Link>
                     </div>
-                    {address.map(addr => (
+                    {defaultFirst.map(addr => (
                         <AddressCard key={addr.id} address={addr} isDefault={addr.default}/>
                     ))}
                 </div>

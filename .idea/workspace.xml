@@ -4,14 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Updated code for the address program">
-      <change afterPath="$PROJECT_DIR$/frontend-vite/src/components/AddressCard2.jsx" afterDir="false" />
+    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Fixed default card">
+      <change afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/EditAddressPage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/AddressController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/AddressController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/Address.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/Address.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/AddressCard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/AddressCard.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/addresses.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/lib/addresses.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/AddressCard2.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/AddressCard2.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/AccountPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/AccountPage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/AddAddressPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/AddAddressPage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/AddressesPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/AddressesPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/EditProductPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/EditProductPage.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -131,8 +134,8 @@
       <recent name="C:\Users\wlock\OneDrive\Documents\Runtime-Rebels-Final\Runtime-Rebels-Project-1\backend\src\main\java\com\runtimerebels\store\requestResponse" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\wlock\OneDrive\Documents\Runtime-Rebels-Project-1.2\frontend-vite\src\pages\Auth" />
       <recent name="C:\Users\wlock\OneDrive\Documents\Runtime-Rebels-Final\Runtime-Rebels-Project-1\frontend-vite\src\pages\Auth" />
+      <recent name="C:\Users\wlock\OneDrive\Documents\Runtime-Rebels-Project-1.2\frontend-vite\src\pages\Auth" />
       <recent name="C:\Users\wlock\OneDrive\Documents\Runtime-Rebels-Final\Runtime-Rebels-Project-1\frontend-vite" />
       <recent name="C:\Users\wlock\OneDrive\Documents\Runtime-Rebels-Final\Runtime-Rebels-Project-1\backend\src\test" />
       <recent name="C:\Users\wlock\OneDrive\Documents\Runtime-Rebels-Project-1.2" />
@@ -314,15 +317,8 @@
       <workItem from="1766621859493" duration="14086000" />
       <workItem from="1766685594573" duration="15085000" />
       <workItem from="1766777488387" duration="8702000" />
-      <workItem from="1766791475007" duration="19422000" />
-    </task>
-    <task id="LOCAL-00027" summary="Added Guest functionality to Cart and Order Pages">
-      <option name="closed" value="true" />
-      <created>1764373352269</created>
-      <option name="number" value="00027" />
-      <option name="presentableId" value="LOCAL-00027" />
-      <option name="project" value="LOCAL" />
-      <updated>1764373352269</updated>
+      <workItem from="1766791475007" duration="22932000" />
+      <workItem from="1766865678950" duration="2915000" />
     </task>
     <task id="LOCAL-00028" summary="Added Guest functionality to Cart and Order Pages">
       <option name="closed" value="true" />
@@ -708,7 +704,15 @@
       <option name="project" value="LOCAL" />
       <updated>1766803165324</updated>
     </task>
-    <option name="localTasksCounter" value="76" />
+    <task id="LOCAL-00076" summary="Fixed default card">
+      <option name="closed" value="true" />
+      <created>1766813584204</created>
+      <option name="number" value="00076" />
+      <option name="presentableId" value="LOCAL-00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1766813584204</updated>
+    </task>
+    <option name="localTasksCounter" value="77" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -766,7 +770,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Fixed duping issue" />
     <MESSAGE value="Fixed order duping issue" />
     <MESSAGE value="Removed old debug messages" />
     <MESSAGE value="Added cookies based authToken" />
@@ -791,19 +794,8 @@
     <MESSAGE value="Added backend support for address code" />
     <MESSAGE value="Added get method for address backend" />
     <MESSAGE value="Updated code for the address program" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated code for the address program" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/frontend-vite/src/components/AddressCard2.jsx</url>
-          <line>76</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="Fixed default card" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed default card" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>

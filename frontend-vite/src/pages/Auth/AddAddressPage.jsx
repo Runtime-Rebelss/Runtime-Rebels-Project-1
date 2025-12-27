@@ -17,14 +17,13 @@ const AddAddressPage = () => {
 
     const [formData, setFormData] = useState({
         name: "",
-        number: "",
+        phoneNumber: "",
         address: "",
         unit: "",
         city: "",
         zipCode: "",
         state: "",
         country: "",
-        phoneNumber: ""
     });
 
     const handleChange = (e) => {
@@ -43,7 +42,7 @@ const AddAddressPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!formData.name || !formData.number || !formData.address || !formData.city || !formData.zipCode) {
+        if (!formData.name || !formData.phoneNumber || !formData.address || !formData.city || !formData.zipCode) {
             toast.error("Please fill all required fields.");
             return;
         }
@@ -53,14 +52,13 @@ const AddAddressPage = () => {
         try {
             await api.post(`/address/add/${userId}`, {
                 name: formData.name,
-                number: formData.number,
                 address: formData.address,
                 city: formData.city,
                 zipCode: formData.zipCode,
                 state: states.length > 0 ? selectedState : null,
                 country: selectedCountry,
                 unit: formData.unit,
-                phoneNumber: formData.phoneNumber
+                phoneNumber: formData.phoneNumber,
             });
             toast.success("Address added successfully!");
             navigate("/account/addresses");
@@ -114,10 +112,10 @@ const AddAddressPage = () => {
                     <div>
                         <label className="label">Phone number</label>
                         <input
-                            type="number"
-                            name="number"
+                            type="tel"
+                            name="phoneNumber"
                             className="input input-bordered w-full"
-                            value={formData.number}
+                            value={formData.phoneNumber}
                             onChange={handleChange}
                             required
                         />

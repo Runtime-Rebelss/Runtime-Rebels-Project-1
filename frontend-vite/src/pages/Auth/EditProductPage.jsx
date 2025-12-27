@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar";
+import Navbar from "../../components/Navbar.jsx";
 import toast from "react-hot-toast";
-import { getProductById, updateProduct } from "../lib/products";
+import { getProductById, updateProduct } from "../../lib/products.js";
 import Cookies from "js-cookie";
 
 const EditProductPage = () => {

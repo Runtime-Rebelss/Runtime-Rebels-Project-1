@@ -69,8 +69,26 @@ public class AddressController {
         address.setUserId(userId);
         Address savedAddress = addressRepository.save(address);
         address.setDefault(false);
-
+        // Return new address
         return ResponseEntity.status(HttpStatus.CREATED).body(savedAddress);
+    }
+
+    @PutMapping("/update/{addressId}")
+    public ResponseEntity<Address> updateAddress(@PathVariable String addressId, @RequestBody Address updatedAddress) {
+        return addressRepository.findById(addressId)
+                .map(address -> {
+                    // Update address fields
+                    address.setCountry(updatedAddress.getCountry());
+                    address.setAddress(updatedAddress.getAddress());
+                    address.setCity(updatedAddress.getCity());
+                    address.setUnit(updatedAddress.getUnit());
+                    address.setState(updatedAddress.getState());
+                    address.setZipCode(updatedAddress.getZipCode());
+                    address.setPhoneNumber(updatedAddress.getPhoneNumber());
+                    Address savedAddress = addressRepository.save(address);
+                    return ResponseEntity.ok(savedAddress);
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/delete/{addressId}")

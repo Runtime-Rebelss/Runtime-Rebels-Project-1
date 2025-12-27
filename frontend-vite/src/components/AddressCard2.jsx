@@ -2,9 +2,11 @@ import {Link} from "react-router-dom";
 import React, {useState} from "react";
 import toast from "react-hot-toast";
 import addressService from "../lib/addresses";
+import {useNavigate} from "react-router-dom";
 import Cookies from "js-cookie";
 
 const AddressCard2 = ({address, isDefault = false}) => {
+    const navigate = useNavigate();
     const [isUnit, setIsUnit] = useState(false);
     const addressId = address?.id || address?._id || "";
     const [showConfirm, setShowConfirm] = useState(false);
@@ -32,6 +34,7 @@ const AddressCard2 = ({address, isDefault = false}) => {
     // Default button - When clicked set the address as default and then when another address
     // is clicked as default, the previous default is unset
     // Need to call the backend
+    // Make the default addy the first one
 
     return (
         <div className="card card-border bg-base-200 shadow-sm transition duration-200">
@@ -54,6 +57,9 @@ const AddressCard2 = ({address, isDefault = false}) => {
                     </div>
                     <div>
                         <Link to={`/address/${addressId}`}>{address.country}</Link>
+                    </div>
+                    <div className="flex items-center gap-1">Phone Number:
+                        <Link to={`/address/${addressId}`}>{ address.phoneNumber}</Link>
                     </div>
                     <div className="mt-auto flex justify-front gap-2">
                         {/* Need an edit backend thing */}
@@ -85,17 +91,20 @@ const AddressCard2 = ({address, isDefault = false}) => {
                     <div>
                         <Link to={`/address/${addressId}`}>{address.country}</Link>
                     </div>
-                    <div>
-                        <Link to={`/address/${addressId}`}>{address.phoneNumber}</Link>
+                    <div className="flex items-center gap-1">Phone Number:
+                        <Link to={`/address/${addressId}`}>{ address.phoneNumber}</Link>
                     </div>
                     <div className="mt-auto flex justify-center gap-2">
                         {/* Need an edit backend thing */}
-                        <button className="mt-auto btn btn-primary flex justify-center">Edit</button>
-                        {/* Need the remove backend code here */}
+                        <button className="mt-auto btn btn-primary flex justify-center" onClick={() => navigate(`/account/edit/address/${addressId}`)}
+                        >
+                            Edit
+                        </button>
+                        {/* REMOVE ADDRESS */}
                         <button onClick={() => setShowConfirm(true)}
                                 className="btn btn-primary flex items-center gap-1 px-4">Remove
                         </button>
-                        {/* When set as default and then another address is clicked to be default, the previous default is unset */}
+                        {/* SET AS DEFAULT ADDRESS */}
                         <button onClick={setAsDefaultAddress} className="btn btn-primary">Set as Default</button>
                     </div>
                 </div>
