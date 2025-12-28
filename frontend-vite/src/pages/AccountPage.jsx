@@ -120,7 +120,6 @@ const AccountPage = () => {
                                 )}
                             </div>
                         </section>
-
                         {/* YOUR ORDERS */}
                         <section
                             className="card bg-base-200 shadow-md hover:shadow-lg transition cursor-pointer"

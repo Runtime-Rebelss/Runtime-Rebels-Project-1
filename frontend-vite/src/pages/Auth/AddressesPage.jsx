@@ -31,7 +31,7 @@ const AddressesPage = () => {
     const defaultFirst = address.slice();
 
     // When button "set default" is clicked, move that address to the front of the list
-    defaultFirst.sort((a, b) => a.default - b.default);
+    defaultFirst.sort((a, b) => b.default - a.default);
 
     return (
         <div>
@@ -44,7 +44,7 @@ const AddressesPage = () => {
                     <div className="card bg-base-200">
                     <Link
                         to="/account/add/address"
-                        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 justify-center items-center h-full btn btn-ghost"
+                        className="justify-center items-center h-full btn btn-ghost"
                     >
                         Add Address
                     </Link>

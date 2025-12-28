@@ -129,7 +129,6 @@ const LoginPage = () => {
                                     Sign up
                                 </button>
                             </div>
-
                             {!!toastMsg && (
                                 <div role="alert" className="alert alert-error mt-3">
                                     <span>{toastMsg}</span>

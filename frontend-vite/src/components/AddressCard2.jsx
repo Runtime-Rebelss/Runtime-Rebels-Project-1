@@ -24,17 +24,18 @@ const AddressCard2 = ({address, isDefault = false}) => {
 
     const removeAddresses = async () => {
         try {
+            // Check if isDefault is true!!
+            if (isDefault) {
+                toast.error("Please set another address as default before removing this one.");
+                setShowConfirm(false);
+                return;
+            }
             await addressService.removeAddress(addressId);
             toast.success("Address removed.");
         } catch (error) {
             toast.error("Failed to remove address.");
         }
     }
-
-    // Default button - When clicked set the address as default and then when another address
-    // is clicked as default, the previous default is unset
-    // Need to call the backend
-    // Make the default addy the first one
 
     return (
         <div className="card card-border bg-base-200 shadow-sm transition duration-200">
@@ -43,29 +44,32 @@ const AddressCard2 = ({address, isDefault = false}) => {
                 <div className="card-body flex flex-col justify-between">
                     <h2 className="card-title text-base-content mb-1">Default</h2>
                     <div className="">{Cookies.get("fullName")}</div>
-                    <div>
+                    <li className="flex items-center">
                         <Link to={`/address/${addressId}`}>{address.address}</Link>
-                    </div>
-                    <div>
-                        <Link
-                            to={`/address/${addressId}`}>{address.city + ", " + address.state + " " + address.zipCode}</Link>
-                    </div>
-                    <div>
+                    </li>
+                    <li className="flex items-center">
+                        {address.state != null ? (
+                            address.city + ", " + address.state + " " + address.zipCode
+                        ) : (
+                            address.city + ", " + address.zipCode)}
+                    </li>
+                    <li className="flex items-center">
                         {/* Need to remove the space */}
-                        {!isUnit && (
-                            <Link to={`/address/${addressId}`}>{address.unit}</Link>)}
-                    </div>
-                    <div>
-                        <Link to={`/address/${addressId}`}>{address.country}</Link>
-                    </div>
-                    <div className="flex items-center gap-1">Phone Number:
-                        <Link to={`/address/${addressId}`}>{ address.phoneNumber}</Link>
-                    </div>
+                        {address.unit > 0 && (address.unit) ?
+                            address.unit :
+                        <div></div>}
+                    </li>
+                    <li className="flex items-center">
+                        {address.country}
+                    </li>
+                    <li className="flex items-center">
+                        Phone Number:&nbsp;{address.phoneNumber}
+                    </li>
                     <div className="mt-auto flex justify-front gap-2">
                         {/* Need an edit backend thing */}
                         <button className="mt-auto btn btn-primary flex justify-center">Edit</button>
                         {/* REMOVE ADDRESS */}
-                        <button onClick={() => setShowConfirm(true)}
+                        <button onClick={() => removeAddresses()}
                                 className="btn btn-primary flex items-center gap-1 px-4">Remove
                         </button>
                     </div>
@@ -76,27 +80,31 @@ const AddressCard2 = ({address, isDefault = false}) => {
                 <div className="card-body flex flex-col justify-between">
                     <h2 className="card-title text-base-content mb-1"></h2>
                     <div className="">{Cookies.get("fullName")}</div>
-                    <div>
+                    <li className="flex items-center">
                         <Link to={`/address/${addressId}`}>{address.address}</Link>
-                    </div>
-                    <div>
-                        <Link
-                            to={`/address/${addressId}`}>{address.city + ", " + address.state + " " + address.zipCode}</Link>
-                    </div>
-                    <div>
+                    </li>
+                    <li className="flex items-center">
+                        {address.state != null ? (
+                            address.city + ", " + address.state + " " + address.zipCode
+                        ) : (
+                            address.city + ", " + address.zipCode)}
+                    </li>
+                    <li className="flex items-center">
                         {/* Need to remove the space */}
-                        {!isUnit && (
-                            <Link to={`/address/${addressId}`}>{address.unit || ""}</Link>)}
-                    </div>
-                    <div>
-                        <Link to={`/address/${addressId}`}>{address.country}</Link>
-                    </div>
-                    <div className="flex items-center gap-1">Phone Number:
-                        <Link to={`/address/${addressId}`}>{ address.phoneNumber}</Link>
-                    </div>
+                        {address.unit > 0 && (address.unit) ?
+                            address.unit :
+                            <div></div>}
+                    </li>
+                    <li className="flex items-center">
+                        {address.country}
+                    </li>
+                    <li className="flex items-center">
+                        Phone Number:&nbsp;{address.phoneNumber}
+                    </li>
                     <div className="mt-auto flex justify-center gap-2">
                         {/* Need an edit backend thing */}
-                        <button className="mt-auto btn btn-primary flex justify-center" onClick={() => navigate(`/account/edit/address/${addressId}`)}
+                        <button className="mt-auto btn btn-primary flex justify-center"
+                                onClick={() => navigate(`/account/edit/address/${addressId}`)}
                         >
                             Edit
                         </button>

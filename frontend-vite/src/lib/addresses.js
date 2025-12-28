@@ -10,6 +10,10 @@ export async function setDefaultAddress(addressId) {
     return api.put(`/address/default/${addressId}`);
 }
 
+export async function updateAddress(addressId) {
+    return api.post(`/address/update/${addressId}`);
+}
+
 export async function removeAddress(addressId) {
     const userId = Cookies.get("userId");
     // Check if address exists
@@ -19,4 +23,4 @@ export async function removeAddress(addressId) {
     return await api.delete(`/address/delete/${addressId}`);
 }
 
-export default { getAddressById, setDefaultAddress, removeAddress };
+export default { getAddressById, setDefaultAddress, updateAddress, removeAddress };
