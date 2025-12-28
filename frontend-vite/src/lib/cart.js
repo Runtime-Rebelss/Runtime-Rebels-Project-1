@@ -245,6 +245,10 @@ export async function handleCheckout(userId, signal) {
         const response = await api.post("/payments/create-checkout-session", {
             items: cartItems,
             customerEmail: Cookies.get("userEmail") || null,
+            metadata: {
+                checkoutType: userId ? "server" : "guest",
+                userId: userId || "guest",
+            },
             savePaymentMethod: false,
         }, {signal});
         return response.data.url;
@@ -266,6 +270,10 @@ export async function handleCheckout(userId, signal) {
     const response = await api.post("/payments/create-checkout-session", {
         items: cartItems,
         customerEmail: userEmail,
+        metadata: {
+            checkoutType: userId ? "server" : "guest",
+            userId: userId || "guest",
+        },
         savePaymentMethod: true,
     }, {signal});
 

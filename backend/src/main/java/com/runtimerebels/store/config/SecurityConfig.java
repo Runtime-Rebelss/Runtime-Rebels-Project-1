@@ -58,7 +58,11 @@ public class SecurityConfig {
                                 "/api/auth/**",
                                 "/api/auth/email",
                                 "/api/address/**",
-                                "/api/address/delete"
+                                "/api/address/",
+                                "/api/address/delete",
+                                "/api/address/update",
+                                "/api/email/**",
+                                "/api/payments/**"
 
                         ).permitAll()
                         // 3. Keep this essential rule for CORS pre-flight requests

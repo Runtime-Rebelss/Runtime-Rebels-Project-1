@@ -67,13 +67,11 @@ export async function saveOrder() {
 // checkout with Stripe
 export async function handleCheckout() {
     try {
-        setLoading(true);
         const userId = Cookies.get('userId');
         // get items from local cart
         const cartItems = api.get(`/carts/${userId}`);
         if (!cartItems || cartItems.length === 0) {
             alert('Your cart is empty!');
-            setLoading(false);
             return;
         }
 
@@ -91,7 +89,6 @@ export async function handleCheckout() {
         console.error('Error starting checkout:', error);
         alert('Failed to start checkout. Please try again.');
     } finally {
-        setLoading(false);
     }
 }
 

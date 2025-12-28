@@ -11,7 +11,6 @@ const AddressCard2 = ({address, isDefault = false}) => {
     const addressId = address?.id || address?._id || "";
     const [showConfirm, setShowConfirm] = useState(false);
 
-    // Need backend code to make the default address change in database
     const setAsDefaultAddress = async () => {
         try {
             // Call backend to set this address as default
@@ -66,8 +65,12 @@ const AddressCard2 = ({address, isDefault = false}) => {
                         Phone Number:&nbsp;{address.phoneNumber}
                     </li>
                     <div className="mt-auto flex justify-front gap-2">
-                        {/* Need an edit backend thing */}
-                        <button className="mt-auto btn btn-primary flex justify-center">Edit</button>
+                        {/* EDIT ADDRESS */}
+                        <button className="mt-auto btn btn-primary flex justify-center"
+                                onClick={() => navigate(`/account/edit/address/${addressId}`)}
+                        >
+                            Edit
+                        </button>
                         {/* REMOVE ADDRESS */}
                         <button onClick={() => removeAddresses()}
                                 className="btn btn-primary flex items-center gap-1 px-4">Remove
@@ -79,9 +82,9 @@ const AddressCard2 = ({address, isDefault = false}) => {
             {!isDefault && (
                 <div className="card-body flex flex-col justify-between">
                     <h2 className="card-title text-base-content mb-1"></h2>
-                    <div className="">{Cookies.get("fullName")}</div>
+                    <div className="">{address.name}</div>
                     <li className="flex items-center">
-                        <Link to={`/address/${addressId}`}>{address.address}</Link>
+                        {address.address}
                     </li>
                     <li className="flex items-center">
                         {address.state != null ? (
@@ -89,20 +92,20 @@ const AddressCard2 = ({address, isDefault = false}) => {
                         ) : (
                             address.city + ", " + address.zipCode)}
                     </li>
-                    <li className="flex items-center">
                         {/* Need to remove the space */}
-                        {address.unit > 0 && (address.unit) ?
-                            address.unit :
-                            <div></div>}
-                    </li>
-                    <li className="flex items-center">
+                        {address.unit && (
+                            <li className="flex items-center">
+                                {address.unit}
+                            </li>
+                        )}
+                            <li className="flex items-center">
                         {address.country}
                     </li>
                     <li className="flex items-center">
                         Phone Number:&nbsp;{address.phoneNumber}
                     </li>
                     <div className="mt-auto flex justify-center gap-2">
-                        {/* Need an edit backend thing */}
+                        {/* EDIT ADDRESS */}
                         <button className="mt-auto btn btn-primary flex justify-center"
                                 onClick={() => navigate(`/account/edit/address/${addressId}`)}
                         >

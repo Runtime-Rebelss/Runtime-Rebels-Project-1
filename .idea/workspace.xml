@@ -6,12 +6,13 @@
   <component name="ChangeListManager">
     <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Added in phone number for addressCard">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/AddressController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/AddressController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/Address.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/Address.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/AddressCard2.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/AddressCard2.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/addresses.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/lib/addresses.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/AccountPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/AccountPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/AddressesPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/AddressesPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/cart.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/lib/cart.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/checkout.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/lib/checkout.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/EditAddressPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/EditAddressPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/LoginPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/LoginPage.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -316,6 +317,7 @@
       <workItem from="1766777488387" duration="8702000" />
       <workItem from="1766791475007" duration="22932000" />
       <workItem from="1766865678950" duration="11005000" />
+      <workItem from="1766956738207" duration="7408000" />
     </task>
     <task id="LOCAL-00029" summary="Added Guest functionality to Cart and Order Pages">
       <option name="closed" value="true" />

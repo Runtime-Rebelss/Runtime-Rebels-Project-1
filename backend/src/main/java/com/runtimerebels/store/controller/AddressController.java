@@ -78,6 +78,7 @@ public class AddressController {
         return addressRepository.findById(addressId)
                 .map(address -> {
                     // Update address fields
+                    address.setName(updatedAddress.getName());
                     address.setCountry(updatedAddress.getCountry());
                     address.setAddress(updatedAddress.getAddress());
                     address.setCity(updatedAddress.getCity());
