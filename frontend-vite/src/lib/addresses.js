@@ -10,8 +10,8 @@ export async function setDefaultAddress(addressId) {
     return api.put(`/address/default/${addressId}`);
 }
 
-export async function updateAddress(addressId) {
-    return api.post(`/address/update/${addressId}`);
+export async function updateAddress(addressId, data) {
+    return api.put(`/address/update/${addressId}`, data);
 }
 
 export async function removeAddress(addressId) {

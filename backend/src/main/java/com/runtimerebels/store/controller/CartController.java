@@ -15,6 +15,7 @@ import com.runtimerebels.store.models.CartItem;
 import com.runtimerebels.store.models.Product;
 import com.runtimerebels.store.dao.ProductRepository;
 import com.runtimerebels.store.dao.CartRepository;
+import com.runtimerebels.store.models.User;
 
 /**
  * cart controller

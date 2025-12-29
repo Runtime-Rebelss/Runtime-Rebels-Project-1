@@ -2,21 +2,17 @@ import React, {useEffect, useState} from 'react'
 import {useNavigate, useParams} from 'react-router'
 import toast from 'react-hot-toast';
 import NavBar from '../../components/Navbar.jsx';
-import addressService, {getAddressById} from "../../lib/addresses.js";
-import {Country, State, City} from 'country-state-city';
+import addressService from "../../lib/addresses.js";
+import {Country, State } from 'country-state-city';
 
 const EditAddressPage = () => {
     const [address, setAddress] = useState(null);
-    const addressId = address?.id || address?._id || "";
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const {id} = useParams();
 
     const [countries, setCountries] = useState(Country.getAllCountries());
     const [states, setStates] = useState([]);
-
-    const [selectedCountry, setSelectedCountry] = useState("");
-    const [selectedState, setSelectedState] = useState("");
 
     useEffect(() => {
         // Fetch the address data
@@ -43,28 +39,32 @@ const EditAddressPage = () => {
         };
 
         fetchData();
-    }, [addressId, navigate]);
+    }, [id, navigate]);
 
-    const handleCountryChange = (country) => {
+    // Load the countries and states
+    useEffect(() => {
+        if (!address?.country) return;
+        // Load the countries
+        const country = Country.getAllCountries()
+            .find(c => c.name === address.country);
+        
+        if (!country) return;
+        
         const countryStates = State.getStatesOfCountry(country.isoCode);
-
-        setSelectedCountry(country.name);
         setStates(countryStates);
-        setSelectedState(countryStates.length > 0 ? "" : null);
-    };
-
+    }, [address?.country]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            await addressService.updateAddress(addressId, {
+            await addressService.updateAddress(id, {
                 name: address.name,
-                country: selectedCountry,
+                country: address.country,
                 address: address.address,
                 city: address.city,
                 unit: address.unit,
-                state: states.length > 0 ? selectedState : null,
+                state: address.state,
                 zipCode: address.zipCode,
                 phoneNumber: address.phoneNumber
             });
@@ -215,11 +215,10 @@ const EditAddressPage = () => {
                         </label>
                     </div>
                     <button type="submit" className="btn btn-primary w-full mt-4">
-                        Add Address
+                        Update Address
                     </button>
                 </form>
             </div>
-
         </div>
     )
 }

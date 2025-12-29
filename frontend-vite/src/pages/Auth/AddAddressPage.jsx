@@ -1,10 +1,10 @@
-import React, {useState, useEffect} from "react";
+import React, { useState } from "react";
 import Navbar from "../../components/Navbar";
 import toast from "react-hot-toast";
 import {useNavigate} from "react-router-dom";
 import Cookies from "js-cookie";
 import api from "../../lib/axios";
-import {Country, State, City} from 'country-state-city';
+import {Country, State } from 'country-state-city';
 
 const AddAddressPage = () => {
     const navigate = useNavigate();

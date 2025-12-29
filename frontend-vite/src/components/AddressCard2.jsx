@@ -42,9 +42,9 @@ const AddressCard2 = ({address, isDefault = false}) => {
             {isDefault && (
                 <div className="card-body flex flex-col justify-between">
                     <h2 className="card-title text-base-content mb-1">Default</h2>
-                    <div className="">{Cookies.get("fullName")}</div>
+                    <div className="">{address.name}</div>
                     <li className="flex items-center">
-                        <Link to={`/address/${addressId}`}>{address.address}</Link>
+                        {address.address}
                     </li>
                     <li className="flex items-center">
                         {address.state != null ? (

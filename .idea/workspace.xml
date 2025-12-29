@@ -4,15 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Added in phone number for addressCard">
+    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Created Edit Address Page">
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/CartController2.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/services/CartService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-vite/src/lib/cart2.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-vite/src/pages/CartPage2.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/AddressController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/AddressController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/Address.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/Address.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/CartController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/CartController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/AddressCard2.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/AddressCard2.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/cart.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/lib/cart.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/checkout.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/lib/checkout.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/Addresses.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/Cart.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/addresses.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/lib/addresses.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/AccountPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/AccountPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/AddAddressPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/AddAddressPage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/EditAddressPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/EditAddressPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/CartPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/CartPage.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,10 +30,10 @@
         <option value="Record" />
         <option value="Enum" />
         <option value="package.json" />
-        <option value="Class" />
         <option value="Interface" />
         <option value="JavaScript File" />
         <option value="JSX File" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -317,15 +322,8 @@
       <workItem from="1766777488387" duration="8702000" />
       <workItem from="1766791475007" duration="22932000" />
       <workItem from="1766865678950" duration="11005000" />
-      <workItem from="1766956738207" duration="7408000" />
-    </task>
-    <task id="LOCAL-00029" summary="Added Guest functionality to Cart and Order Pages">
-      <option name="closed" value="true" />
-      <created>1764375989211</created>
-      <option name="number" value="00029" />
-      <option name="presentableId" value="LOCAL-00029" />
-      <option name="project" value="LOCAL" />
-      <updated>1764375989211</updated>
+      <workItem from="1766956738207" duration="8357000" />
+      <workItem from="1766988073823" duration="8639000" />
     </task>
     <task id="LOCAL-00030" summary="Added Guest functionality to Cart and Order Pages">
       <option name="closed" value="true" />
@@ -711,7 +709,15 @@
       <option name="project" value="LOCAL" />
       <updated>1766869544029</updated>
     </task>
-    <option name="localTasksCounter" value="78" />
+    <task id="LOCAL-00078" summary="Created Edit Address Page">
+      <option name="closed" value="true" />
+      <created>1766965070523</created>
+      <option name="number" value="00078" />
+      <option name="presentableId" value="LOCAL-00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1766965070523</updated>
+    </task>
+    <option name="localTasksCounter" value="79" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -769,7 +775,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Removed old debug messages" />
     <MESSAGE value="Added cookies based authToken" />
     <MESSAGE value="Fixed duplication issue with orders and refactored code for OrderPage, CheckoutPage, and CartPage" />
     <MESSAGE value="Merged main into ordering-henry" />
@@ -794,7 +799,8 @@
     <MESSAGE value="Updated code for the address program" />
     <MESSAGE value="Fixed default card" />
     <MESSAGE value="Added in phone number for addressCard" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added in phone number for addressCard" />
+    <MESSAGE value="Created Edit Address Page" />
+    <option name="LAST_COMMIT_MESSAGE" value="Created Edit Address Page" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>
