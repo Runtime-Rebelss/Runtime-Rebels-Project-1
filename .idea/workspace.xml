@@ -4,19 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Created Edit Address Page">
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/CartController2.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/services/CartService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend-vite/src/lib/cart2.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend-vite/src/pages/CartPage2.jsx" afterDir="false" />
+    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Fixed issues with edit address page and refactor Cart code">
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/dto/CartItemResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/dto/CartResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-vite/src/components/actions/useCart.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/CartController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/CartController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/AddressCard2.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/AddressCard2.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/Addresses.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/Cart.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/addresses.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/lib/addresses.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/AccountPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/AccountPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/AddAddressPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/AddAddressPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/EditAddressPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/EditAddressPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/CartController2.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/Cart.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/Cart.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/cart.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/lib/cart.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/AddressesPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/AddressesPage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/CartPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/CartPage.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -31,9 +27,9 @@
         <option value="Enum" />
         <option value="package.json" />
         <option value="Interface" />
-        <option value="JavaScript File" />
         <option value="JSX File" />
         <option value="Class" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -63,9 +59,6 @@
 }</component>
   <component name="MavenRunner">
     <option name="skipTests" value="true" />
-  </component>
-  <component name="PackageJsonUpdateNotifier">
-    <dismissed value="$PROJECT_DIR$/backend/package.json" />
   </component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="ProjectErrors" />
@@ -142,6 +135,9 @@
       <recent name="C:\Users\wlock\OneDrive\Documents\Runtime-Rebels-Final\Runtime-Rebels-Project-1\frontend-vite" />
       <recent name="C:\Users\wlock\OneDrive\Documents\Runtime-Rebels-Final\Runtime-Rebels-Project-1\backend\src\test" />
       <recent name="C:\Users\wlock\OneDrive\Documents\Runtime-Rebels-Project-1.2" />
+    </key>
+    <key name="es6.move.members.recent.items">
+      <recent name="C:\Users\wlock\OneDrive\Documents\Runtime-Rebels-Final\Runtime-Rebels-Project-1\frontend-vite\src\components\actions\useCart.js" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="com.runtimerebels.store.controller" />
@@ -323,15 +319,7 @@
       <workItem from="1766791475007" duration="22932000" />
       <workItem from="1766865678950" duration="11005000" />
       <workItem from="1766956738207" duration="8357000" />
-      <workItem from="1766988073823" duration="8639000" />
-    </task>
-    <task id="LOCAL-00030" summary="Added Guest functionality to Cart and Order Pages">
-      <option name="closed" value="true" />
-      <created>1764377396339</created>
-      <option name="number" value="00030" />
-      <option name="presentableId" value="LOCAL-00030" />
-      <option name="project" value="LOCAL" />
-      <updated>1764377396339</updated>
+      <workItem from="1766988073823" duration="11660000" />
     </task>
     <task id="LOCAL-00031" summary="Added Guest functionality to Cart and Order Pages">
       <option name="closed" value="true" />
@@ -717,7 +705,15 @@
       <option name="project" value="LOCAL" />
       <updated>1766965070523</updated>
     </task>
-    <option name="localTasksCounter" value="79" />
+    <task id="LOCAL-00079" summary="Fixed issues with edit address page and refactor Cart code">
+      <option name="closed" value="true" />
+      <created>1766997003037</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1766997003037</updated>
+    </task>
+    <option name="localTasksCounter" value="80" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -775,7 +771,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added cookies based authToken" />
     <MESSAGE value="Fixed duplication issue with orders and refactored code for OrderPage, CheckoutPage, and CartPage" />
     <MESSAGE value="Merged main into ordering-henry" />
     <MESSAGE value="Fixed conflict issues" />
@@ -800,7 +795,8 @@
     <MESSAGE value="Fixed default card" />
     <MESSAGE value="Added in phone number for addressCard" />
     <MESSAGE value="Created Edit Address Page" />
-    <option name="LAST_COMMIT_MESSAGE" value="Created Edit Address Page" />
+    <MESSAGE value="Fixed issues with edit address page and refactor Cart code" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed issues with edit address page and refactor Cart code" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>

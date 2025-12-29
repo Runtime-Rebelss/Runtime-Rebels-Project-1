@@ -40,14 +40,20 @@ const AddressesPage = () => {
                 <div className='flex justify-between items-center mt-4 relative'>
                     <h1 className="text-3xl font-bold mb-6 text-center">Your Addresses</h1>
                 </div>
+                <div className="breadcrumbs text-sm">
+                    <ul>
+                        <li><a href="http://localhost:5173/account">Your Account</a></li>
+                        <li><a href="http://localhost:5173/account/addresses">Your Addresses</a></li>
+                    </ul>
+                </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6'>
                     <div className="card bg-base-200">
-                    <Link
-                        to="/account/add/address"
-                        className="justify-center items-center h-full btn btn-ghost"
-                    >
-                        Add Address
-                    </Link>
+                        <Link
+                            to="/account/add/address"
+                            className="justify-center items-center h-full btn btn-ghost"
+                        >
+                            Add Address
+                        </Link>
                     </div>
                     {defaultFirst.map(addr => (
                         <AddressCard key={addr.id} address={addr} isDefault={addr.default}/>

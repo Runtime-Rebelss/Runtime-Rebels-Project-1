@@ -33,7 +33,7 @@ export function loadGuestCart() {
 }
 
 export function saveGuestCart(data) {
-    const items = Array.isArray(data) ? data : data.items;
+    const items = Array.isArray(data) ? data : (data.items ?? []);
     localStorage.setItem(GUEST_KEY, JSON.stringify({items}));
 }
 
@@ -183,29 +183,40 @@ export async function addToCart({userId, productId, name, price, quantity = 1, i
     return {source: "server", data: res.data};
 }
 
-export async function updateQuantity({productId, quantity}) {
+export async function updateQuantity({productId, quantity, userId}) {
     if (!productId) throw new Error("Product Id is required");
 
-    let qty = Number(quantity);
-    if (!Number.isFinite(qty)) qty = 1;
-    if (qty < 0) qty = 0;
+    // If userId passed or cookie exists, call server API
+    const uid = userId || Cookies.get("userId");
+    const qty = Number(quantity);
+    if (!Number.isFinite(qty)) throw new Error("Invalid quantity");
+    if (qty < 0) throw new Error("Invalid quantity");
 
+    if (uid) {
+        // server-side update
+        await api.put(`/carts/update`, null, { params: { userId: uid, productId, quantity: qty}});
+        try { window.dispatchEvent(new CustomEvent("cart-updated", {detail: {source: "server"}})); } catch {}
+        return {source: "server"};
+    }
+
+    // Guest cart update
     const cart = loadGuestCart();
     const items = Array.isArray(cart.items) ? [...cart.items] : [];
 
-    const idx = items.findIndex(it => it.productId === productId);
-    if (idx === -1) return;
+    const idx = items.findIndex(it => it.productId === productId || it.id === productId);
+    if (idx === -1) return {source: "guest", items};
 
     if (qty === 0) items.splice(idx, 1);
     else items[idx].quantity = qty;
 
-    saveGuestCart({items});
+    saveGuestCart(items);
 
-    window.dispatchEvent(new Event("cart-updated"));
+    try { window.dispatchEvent(new Event("cart-updated")); } catch {}
+    return {source: "guest", items};
 }
 
 /**
- * Remove an item from a signed-in user's cart.
+ * Remove an item (guest or signed-in user).
  */
 export async function removeItem(productId) {
     if (!productId) return;
@@ -221,11 +232,28 @@ export async function removeItem(productId) {
         // Save guest cart
         saveGuestCart(filtered);
         // Update navbar
-        window.dispatchEvent(new Event("cart-updated"));
+        try { window.dispatchEvent(new Event("cart-updated")); } catch {}
+        return {source: "guest", items: filtered};
+    }
+
+    // Server Code
+    try {
+        await api.delete(`/carts/remove`, { params: { userId, productId } });
+        try { window.dispatchEvent(new CustomEvent("cart-updated", {detail: {source: "server"}})); } catch {}
+        return {source: "server"};
+    } catch (err) {
+        // Fallback: try update with 0 quantity (older endpoints)
+        try {
+            await api.put(`/carts/update`, null, { params: { userId, productId, quantity: 0 } });
+            try { window.dispatchEvent(new CustomEvent("cart-updated", {detail: {source: "server"}})); } catch {}
+            return {source: "server"};
+        } catch (err2) {
+            throw err2;
+        }
     }
 }
 
-// Method to handle checking out
+// Method to handle checkout
 export async function handleCheckout(userId, signal) {
     const userEmail = Cookies.get("userEmail");
 
@@ -280,15 +308,23 @@ export async function handleCheckout(userId, signal) {
     return response.data.url;
 }
 
-export const clearGuestCart = () => {
-    if (!isGuest) return;
-    const ok = window.confirm('Clear your guest cart? This will remove all items stored on this device.');
-    if (!ok) return;
-    cartLib.saveGuestCart([]);
-    setCartItems([]);
-};
+export function clearGuestCart(shouldConfirm = true) {
+    if (shouldConfirm) {
+        const ok = window.confirm('Clear your guest cart? This will remove all items stored on this device.');
+        if (!ok) return false;
+    }
+    localStorage.removeItem(GUEST_KEY);
+    try { window.dispatchEvent(new Event("cart-updated")); } catch {}
+    return true;
+}
 
 export default {
-    loadGuestCart, saveGuestCart, loadServerCart, addToCart, updateQuantity,
-    removeItem, handleCheckout, clearGuestCart,
+    loadGuestCart,
+    saveGuestCart,
+    loadServerCart,
+    addToCart,
+    updateQuantity,
+    removeItem,
+    handleCheckout,
+    clearGuestCart,
 };
