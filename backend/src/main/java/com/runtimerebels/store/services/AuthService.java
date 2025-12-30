@@ -8,7 +8,7 @@ import com.runtimerebels.store.dao.TokenRepository;
 import com.runtimerebels.store.dao.UserRepository;
 import com.runtimerebels.store.models.dto.AuthenticateRequest;
 import com.runtimerebels.store.models.dto.AuthenticationResponse;
-import com.runtimerebels.store.models.dto.LoggedUserResponse;
+import com.runtimerebels.store.models.dto.UserResponse;
 import com.runtimerebels.store.models.dto.RegisterRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -43,9 +43,9 @@ public class AuthService {
         tokenRepository.save(token);
     }
 
-    public LoggedUserResponse fetchLoggedInUserByToken(HttpServletRequest request) {
+    public UserResponse fetchLoggedInUserByToken(HttpServletRequest request) {
         User user = getUserByToken(request, jwtService, this.userRepository);
-        return LoggedUserResponse.builder()
+        return UserResponse.builder()
                 .id(user.getId())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())

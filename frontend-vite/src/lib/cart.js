@@ -171,7 +171,7 @@ export async function addToCart({userId, productId, name, price, quantity = 1, i
             productId
         )}&quantity=${encodeURIComponent(
             qty
-        )}&totalPrice=${encodeURIComponent(totalPrice)}`
+        )}`
     );
 
     try {
@@ -285,8 +285,8 @@ export async function handleCheckout(userId, signal) {
     const serverItems = await loadServerCart(userId, signal);
 
     // Save the order info
-    localStorage.removeItem("pendingServerOrder");
-    localStorage.setItem("pendingServerOrder", JSON.stringify(serverItems));
+    sessionStorage.removeItem("pendingServerOrder");
+    sessionStorage.setItem("pendingServerOrder", JSON.stringify(serverItems));
 
     const cartItems = serverItems.map(item => ({
         name: item.name,

@@ -217,7 +217,7 @@ export async function confirmOrder({
     // NEW user order creation
     let pending = [];
     try {
-        pending = JSON.parse(localStorage.getItem("pendingServerOrder") || "[]");
+        pending = JSON.parse(sessionStorage.getItem("pendingServerOrder") || "[]");
     } catch {
         pending = [];
     }
@@ -296,6 +296,6 @@ export async function confirmOrder({
     sessionStorage.removeItem(userConfirmKey);
 
     // Clear pending server order
-    localStorage.removeItem("pendingServerOrder");
+    sessionStorage.removeItem("pendingServerOrder");
     window.dispatchEvent(new Event("cart-updated"));
 }

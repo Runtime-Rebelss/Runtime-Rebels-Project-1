@@ -30,17 +30,21 @@ export async function saveOrder() {
             Cookies.set("fullName", customerName);
         }
 
+        let cart = [];
         if (!userId) {
-            const cart = cartLib.loadGuestCart();
+            const guest = cartLib.loadGuestCart();
+            cart = guest.items || [];
         } else {
-            api.post(`/orders/confirm/${userId}`);
+            cart = await cartLib.loadServerCart(userId);
+            // Inform backend to confirm the server order if needed
+            api.post(`/orders/confirm/${userId}`).catch(() => {});
         }
 
         const orderData = {
-            userEmail: customerEmail || email || userEmail,
-            productIds: cart.map(it => it.productId),
+            userEmail: customerEmail || Cookies.get('userEmail'),
+            productIds: cart.map(it => it.productId || it.id),
             quantities: cart.map(it => it.quantity),
-            totalPrice: cart.reduce((sum, it) => sum + it.price * it.quantity, 0),
+            totalPrice: cart.reduce((sum, it) => sum + (it.price || 0) * (it.quantity || 0), 0),
             deliveryName: shipping.name || stripeSession.customer_details?.name || "Guest",
             deliveryContact: stripeSession.customer_details?.phone || "unknown",
             deliveryAddress: address.line1 || "N/A",
@@ -68,21 +72,54 @@ export async function saveOrder() {
 export async function handleCheckout() {
     try {
         const userId = Cookies.get('userId');
-        // get items from local cart
-        const cartItems = api.get(`/carts/${userId}`);
-        if (!cartItems || cartItems.length === 0) {
-            alert('Your cart is empty!');
-            return;
+        // get items from local cart or server
+        let items = [];
+        if (!userId) {
+            const guest = cartLib.loadGuestCart();
+            if (!Array.isArray(guest.items) || guest.items.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+            items = guest.items;
+        } else {
+            const serverItems = await cartLib.loadServerCart(userId);
+            if (!Array.isArray(serverItems) || serverItems.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+            items = serverItems;
         }
 
-        const items = cartItems.map(item => ({
+        const payloadItems = items.map(item => ({
             name: item.name,
-            unitAmount: Math.round(item.price * 100), // dollars → cents
+            unitAmount: Math.round((item.price || 0) * 100), // dollars → cents
             currency: 'usd',
             quantity: item.quantity
         }));
 
-        const response = await api.post('/payments/create-checkout-session', {items});
+        const customerEmail = Cookies.get('userEmail') || null;
+        const body = { items: payloadItems, customerEmail };
+
+        // If logged in, include addressId (default or first) so backend can prefill Stripe customer/shipping
+        if (userId) {
+            try {
+                const { data: addresses } = await api.get(`/address/user/${encodeURIComponent(userId)}`);
+                if (Array.isArray(addresses) && addresses.length > 0) {
+                    const defaultAddr = addresses.find(a => a.default) || addresses[0];
+                    body.addressId = defaultAddr?.id ?? defaultAddr?._id ?? null;
+                }
+            } catch (err) {
+                console.warn('Unable to fetch addresses for checkout', err);
+            }
+
+            // If we still don't have an addressId, ask user to set one and stop
+            if (!body.addressId) {
+                alert('Please add and set a default shipping address in your account before checking out.');
+                return;
+            }
+        }
+
+        const response = await api.post('/payments/create-checkout-session', body);
         const {url} = response.data;
         window.location.href = url;
     } catch (error) {

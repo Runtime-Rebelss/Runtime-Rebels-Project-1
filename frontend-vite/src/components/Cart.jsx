@@ -186,7 +186,6 @@ const Cart = () => {
 
     const proceedToCheckout = async () => {
         if (cartItems.length === 0) return;
-        // Can change to authToken if wanted
         if (!Cookies.get("userId")) {
             setShowCheckoutPrompt(true);
             return;
@@ -210,7 +209,8 @@ const Cart = () => {
                 <div className="mb-6 text-center">
                     <h1 className="text-3xl font-semibold">Your Cart</h1>
                     <p className="text-base-content/60">
-                        {'Signed-in cart'}
+                        {isGuest ? 'Guest cart' :
+                        'Signed-in cart'}
                     </p>
                 </div>
 
