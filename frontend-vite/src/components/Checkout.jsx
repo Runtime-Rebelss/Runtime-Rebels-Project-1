@@ -4,7 +4,7 @@ import addressService from "../lib/addresses.js";
 import {Link} from "react-router-dom";
 import CartCard from "./CartCard.jsx";
 
-const Checkout = (cartItems = [], onUpdateQuantity, onRemove) => {
+const Checkout = ({ cartItems = [], onUpdateQuantity, onRemove }) => {
     const [showCheckoutPrompt, setShowCheckoutPrompt] = useState(false);
     const [address, setAddress] = useState(null);
 
@@ -48,7 +48,7 @@ const Checkout = (cartItems = [], onUpdateQuantity, onRemove) => {
             {/* DELIVERY NAME */}
             <div className="flex justify-between items-center ">
                 <h1 className="text-xl font-bold">Delivering to {address?.name || fullName}</h1>
-                <a className="link link-hover link-accent" href="http://localhost:5173/checkout/address">Change</a>
+                <Link className="link link-hover link-accent" to="/checkout/address">Change</Link>
             </div>
             {/* DELIVERY ADDRESS */}
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6'>
@@ -65,6 +65,7 @@ const Checkout = (cartItems = [], onUpdateQuantity, onRemove) => {
             {/* PAYMENT METHOD - Implement Stripe here */}
             <div className="text-1xl font-semibold mb-6">
                 Payment method
+
             </div>
             {/* PRODUCT(S) TO BE PURCHASED */}
             <div>

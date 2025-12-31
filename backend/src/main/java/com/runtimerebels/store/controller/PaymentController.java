@@ -106,6 +106,7 @@ public class PaymentController {
 
         // Build the checkout session parameters
         SessionCreateParams.Builder paramsBuilder = SessionCreateParams.builder()
+                .setUiMode(SessionCreateParams.UiMode.EMBEDDED)
                 .setMode(SessionCreateParams.Mode.PAYMENT)
                 .setSuccessUrl(successUrl)
                 .setCancelUrl(cancelUrl)

@@ -4,15 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Added CheckoutAddressPage">
-      <change afterPath="$PROJECT_DIR$/frontend-vite/src/components/actions/normalizeItem.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend-vite/src/lib/cartHandler.js" afterDir="false" />
+    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Updated Checkout Page">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/CartContent.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/CartContent.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/Checkout.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/Checkout.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/actions/useCart.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/CheckoutCard.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/cart.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/lib/cart.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/CartPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/CartPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/CheckoutCard.jsx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/CheckoutPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/CheckoutPage.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -322,15 +317,7 @@
       <workItem from="1766988073823" duration="11660000" />
       <workItem from="1767041077826" duration="13463000" />
       <workItem from="1767134266465" duration="14992000" />
-      <workItem from="1767205009783" duration="9021000" />
-    </task>
-    <task id="LOCAL-00035" summary="Removed old debug messages">
-      <option name="closed" value="true" />
-      <created>1764441644438</created>
-      <option name="number" value="00035" />
-      <option name="presentableId" value="LOCAL-00035" />
-      <option name="project" value="LOCAL" />
-      <updated>1764441644438</updated>
+      <workItem from="1767205009783" duration="9710000" />
     </task>
     <task id="LOCAL-00036" summary="Added cookies based authToken">
       <option name="closed" value="true" />
@@ -716,7 +703,15 @@
       <option name="project" value="LOCAL" />
       <updated>1767207015737</updated>
     </task>
-    <option name="localTasksCounter" value="84" />
+    <task id="LOCAL-00084" summary="Updated Checkout Page">
+      <option name="closed" value="true" />
+      <created>1767214117591</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1767214117591</updated>
+    </task>
+    <option name="localTasksCounter" value="85" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -807,9 +802,9 @@
     <MESSAGE value="Fixed issues with edit address page and refactor Cart code" />
     <MESSAGE value="Updated Stripe Checkout to use default address from address page" />
     <MESSAGE value="Refactored the Cart, created CartCard, CartSummary, and CartContent" />
-    <MESSAGE value="Updated Checkout Page" />
     <MESSAGE value="Added CheckoutAddressPage" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added CheckoutAddressPage" />
+    <MESSAGE value="Updated Checkout Page" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated Checkout Page" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>

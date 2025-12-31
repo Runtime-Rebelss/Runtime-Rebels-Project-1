@@ -42,14 +42,16 @@ const CheckoutPage = () => {
                 }
 
                 const items = await cartLib.loadServerCart(userId, ac.signal);
-                setCartItems(items.map(it => ({
+                const mapped = items.map(it => ({
                     id: it.id || it.productId,
                     productId: it.productId || it.id,
                     name: it.name,
                     image: it.image,
                     price: Number(it.price || 0),
                     quantity: Number(it.quantity || 1),
-                })));
+                }));
+                console.debug('[CheckoutPage] loaded server cart items:', mapped);
+                setCartItems(mapped);
             } catch (err) {
                 if (err?.name === 'AbortError' || err?.code === 'ERR_CANCELED') return;
                 console.warn('Cart load failed', err);
@@ -69,7 +71,7 @@ const CheckoutPage = () => {
             <Checkout
             cartItems={cartItems}
             onUpdateQuantity={handleUpdateQuantity}
-            onRemoveItem={handleRemove}
+            onRemove={handleRemove}
             />
         </div>
     )
