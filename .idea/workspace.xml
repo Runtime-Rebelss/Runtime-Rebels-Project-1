@@ -4,13 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Updated Checkout Page">
-      <change afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/CheckoutAddressPage.jsx" afterDir="false" />
+    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Added CheckoutAddressPage">
+      <change afterPath="$PROJECT_DIR$/frontend-vite/src/components/actions/normalizeItem.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-vite/src/lib/cartHandler.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/CartContent.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/CartContent.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/Checkout.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/Checkout.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/actions/useCart.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/CheckoutCard.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/cart.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/lib/cart.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/AddressesPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/AddressesPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/CartPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/CartPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/CheckoutPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/CheckoutPage.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,9 +27,9 @@
         <option value="Enum" />
         <option value="package.json" />
         <option value="Interface" />
-        <option value="JavaScript File" />
         <option value="Class" />
         <option value="JSX File" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -319,15 +322,7 @@
       <workItem from="1766988073823" duration="11660000" />
       <workItem from="1767041077826" duration="13463000" />
       <workItem from="1767134266465" duration="14992000" />
-      <workItem from="1767205009783" duration="1944000" />
-    </task>
-    <task id="LOCAL-00034" summary="Fixed order duping issue">
-      <option name="closed" value="true" />
-      <created>1764409294386</created>
-      <option name="number" value="00034" />
-      <option name="presentableId" value="LOCAL-00034" />
-      <option name="project" value="LOCAL" />
-      <updated>1764409294386</updated>
+      <workItem from="1767205009783" duration="9021000" />
     </task>
     <task id="LOCAL-00035" summary="Removed old debug messages">
       <option name="closed" value="true" />
@@ -713,7 +708,15 @@
       <option name="project" value="LOCAL" />
       <updated>1767145172282</updated>
     </task>
-    <option name="localTasksCounter" value="83" />
+    <task id="LOCAL-00083" summary="Added CheckoutAddressPage">
+      <option name="closed" value="true" />
+      <created>1767207015737</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1767207015737</updated>
+    </task>
+    <option name="localTasksCounter" value="84" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -781,7 +784,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added untracked files" />
     <MESSAGE value="Added Admin code" />
     <MESSAGE value="Updated messages in SignupPage" />
     <MESSAGE value="Switched User authorization to cookies" />
@@ -806,7 +808,8 @@
     <MESSAGE value="Updated Stripe Checkout to use default address from address page" />
     <MESSAGE value="Refactored the Cart, created CartCard, CartSummary, and CartContent" />
     <MESSAGE value="Updated Checkout Page" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated Checkout Page" />
+    <MESSAGE value="Added CheckoutAddressPage" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added CheckoutAddressPage" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>

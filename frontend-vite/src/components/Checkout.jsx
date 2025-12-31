@@ -2,16 +2,15 @@ import React, {useState, useEffect} from "react";
 import Cookies from "js-cookie";
 import addressService from "../lib/addresses.js";
 import {Link} from "react-router-dom";
+import CartCard from "./CartCard.jsx";
 
-const Checkout = () => {
+const Checkout = (cartItems = [], onUpdateQuantity, onRemove) => {
     const [showCheckoutPrompt, setShowCheckoutPrompt] = useState(false);
     const [address, setAddress] = useState(null);
 
-    // Prefer a stored full name, fall back to userEmail or generic
-    const fullName = Cookies.get("fullName") || Cookies.get("userEmail") || "Guest";
+    const fullName = Cookies.get("fullName") || "Guest";
 
     useEffect(() => {
-        // Try to load user's addresses (if signed in) so we can show the delivery address
         const userId = Cookies.get("userId");
         if (!userId) return;
 
@@ -30,7 +29,6 @@ const Checkout = () => {
         return () => { cancelled = true; };
     }, []);
 
-    // Helper to safely format address fields
     const renderAddressLine = (addr) => {
         if (!addr) return null;
         const address = addr.address || "";
@@ -42,6 +40,8 @@ const Checkout = () => {
         const parts = [address, city, state, zip, country].filter(Boolean);
         return parts.join(', ');
     }
+
+    const items = Array.isArray(cartItems) ? cartItems : [];
 
     return (
         <div className="container mx-auto px-4 py-8">
@@ -65,7 +65,17 @@ const Checkout = () => {
             {/* PAYMENT METHOD - Implement Stripe here */}
             <div className="text-1xl font-semibold mb-6">
                 Payment method
-
+            </div>
+            {/* PRODUCT(S) TO BE PURCHASED */}
+            <div>
+            {items.map((it) => (
+                <CartCard
+                    key={it.productId || it.id}
+                    item={it}
+                    onUpdateQuantity={onUpdateQuantity}
+                    onRemove={onRemove}
+                />
+            ))}
             </div>
         </div>
     )

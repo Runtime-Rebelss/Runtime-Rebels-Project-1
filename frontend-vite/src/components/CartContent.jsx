@@ -4,15 +4,11 @@ import {useNavigate} from "react-router-dom";
 import cartLib from "../lib/cart.js";
 
 const CartContent = ({
-                         loading,
                          cartItems,
                          onUpdateQuantity,
                          onRemove,
                      }) => {
     const navigate = useNavigate();
-
-    // Note: loading is handled at the page level. Don't hide the cart rows here so
-    // individual CartCard components aren't replaced by a spinner during background syncs.
 
     if (!Array.isArray(cartItems) || cartItems.length === 0) {
         return (

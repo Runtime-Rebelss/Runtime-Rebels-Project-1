@@ -1,6 +1,7 @@
 import api from "./axios";
 import Cookies from "js-cookie"
 import addressLib from "./addresses.js";
+import normalizeItem from "../components/actions/normalizeItem.js";
 
 const GUEST_KEY = "guestCart";
 
@@ -10,31 +11,29 @@ const GUEST_KEY = "guestCart";
 // Creates a guest cart, unique to local host
 export function loadGuestCart() {
     try {
-        const raw = localStorage.getItem(GUEST_KEY);
-        const parsed = raw ? JSON.parse(raw) : {items: []};
-        if (!Array.isArray(parsed.items)) return {items: []};
-        const items = parsed.items
-            .filter(Boolean)
-            .map((it) => ({
-                productId: it.productId ?? it.id ?? it._id ?? '',
-                name: it.name ?? 'Item',
-                price: Number(it.price ?? it.finalPrice ?? it.itemTotal ?? 0),
-                image:
-                    it.image ||
-                    it.imageUrl ||
-                    'https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                quantity: Math.max(1, Number(it.quantity ?? 1)),
-            }))
-            .filter((it) => it.productId);
-        return {items};
+        const raw = JSON.parse(localStorage.getItem(GUEST_KEY));
+        const items = Array.isArray(raw?.items) ? raw.items : [];
+
+        return {
+            items: items
+                .filter(Boolean)
+                .map((it) => normalizeItem({
+                    productId: it.productId || it.id,
+                    name: it.name,
+                    image: it.image || it.imageUrl,
+                    price: Number(it.price ?? it.finalPrice ?? it.itemTotal),
+                    quantity: Number(it.quantity || 1),
+                })
+                )
+                .filter(it => it.productId),
+        };
     } catch {
         return {items: []};
     }
 }
 
-export function saveGuestCart(data) {
-    const items = Array.isArray(data) ? data : (data.items ?? []);
-    localStorage.setItem(GUEST_KEY, JSON.stringify({items}));
+export const saveGuestCart = (items) => {
+    localStorage.setItem(GUEST_KEY, JSON.stringify({ items: Array.isArray(items) ? items : items.items}));
 }
 
 /**

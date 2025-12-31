@@ -6,6 +6,7 @@ import Cookies from "js-cookie"
 import CartContent from '../components/CartContent.jsx';
 import CartSummary from '../components/CartSummary.jsx';
 import { useNavigate } from 'react-router-dom';
+import cartHandler from '../lib/cartHandler.js';
 
 const CartPage = () => {
     const userId = Cookies.get("userId");
@@ -15,10 +16,12 @@ const CartPage = () => {
     const [loading, setLoading] = useState(true);
 
     const navigate = useNavigate();
-
-    // ref used to ignore the next cart-updated event when we perform an optimistic update
-    // (defined outside so handlers below can use it)
     const ignoreNextCartUpdatedRef = useRef(false);
+
+    const {handleUpdateQuantity, handleRemove} = cartHandler({
+        setCartItems,
+        ignoreNextCartUpdatedRef,
+    });
 
     useEffect(() => {
         const ac = new AbortController();
@@ -79,50 +82,6 @@ const CartPage = () => {
             window.removeEventListener('cart-updated', onCartUpdated);
         };
     }, [userId]);
-
-    const handleUpdateQuantity = async (productId, newQty) => {
-        console.debug('handleUpdateQuantity called', {productId, newQty});
-        // Update local state immediately
-        setCartItems(prev => {
-            const items = Array.isArray(prev) ? [...prev] : [];
-            const idx = items.findIndex(it => it.productId === productId || it.id === productId);
-            if (idx === -1) {
-                console.warn('updateQuantity: product not found in state', productId);
-                return items;
-            }
-            if (Number(newQty) === 0) {
-                items.splice(idx, 1);
-            } else {
-                items[idx] = { ...items[idx], quantity: Number(newQty) };
-            }
-            return items;
-        });
-
-        // Prevent the following cart-updated event from triggering a reload
-        ignoreNextCartUpdatedRef.current = true;
-        try {
-            const res = await cartLib.updateQuantity(productId, newQty, userId);
-            console.debug('cartLib.updateQuantity result', res);
-        } catch (err) {
-            console.warn('updateQuantity failed, reloading cart', err);
-            // Force a full reload by clearing the ignore flag and dispatching a synthetic event
-            ignoreNextCartUpdatedRef.current = false;
-            window.dispatchEvent(new Event('cart-updated'));
-        }
-    };
-
-    // Optimistic remove handler
-    const handleRemove = async (productId) => {
-        setCartItems(prev => (Array.isArray(prev) ? prev.filter(it => it.productId !== productId && it.id !== productId) : prev));
-        ignoreNextCartUpdatedRef.current = true;
-        try {
-            await cartLib.removeItem(productId);
-        } catch (err) {
-            console.warn('removeItem failed, reloading cart', err);
-            ignoreNextCartUpdatedRef.current = false;
-            window.dispatchEvent(new Event('cart-updated'));
-        }
-    };
 
     return (
         <div className="min-h-screen bg-base-200">
