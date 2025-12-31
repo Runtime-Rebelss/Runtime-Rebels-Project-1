@@ -1,22 +1,20 @@
 import CartCard from "./CartCard";
 import {ShoppingBag} from "lucide-react";
 import {useNavigate} from "react-router-dom";
+import cartLib from "../lib/cart.js";
 
 const CartContent = ({
                          loading,
                          cartItems,
+                         onUpdateQuantity,
+                         onRemove,
                      }) => {
     const navigate = useNavigate();
 
-    if (loading) {
-        return (
-            <div className="flex justify-center py-16">
-                <span className="loading loading-spinner loading-lg"/>
-            </div>
-        );
-    }
+    // Note: loading is handled at the page level. Don't hide the cart rows here so
+    // individual CartCard components aren't replaced by a spinner during background syncs.
 
-    if (cartItems.length === 0) {
+    if (!Array.isArray(cartItems) || cartItems.length === 0) {
         return (
             <div className="card bg-base-100 border">
                 <div className="card-body items-center text-center">
@@ -34,26 +32,32 @@ const CartContent = ({
     }
 
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2">
-                <table className="table">
-                    <thead>
-                    <tr>
-                        <th>Product</th>
-                        <th className="w-40">Quantity</th>
-                        <th className="text-right">Price</th>
-                        <th/>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {cartItems.map((it) => (
-                        <CartCard
-                            key={it.productId || it.id}
-                            item={it}
-                        />
-                    ))}
-                    </tbody>
-                </table>
+        <div>
+            <div className="card bg-base-100 border">
+                <div className="card-body p-0">
+                    <div className="overflow-x-auto">
+                        <table className="table table-compact">
+                            <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th className="w-40">Quantity</th>
+                                <th className="text-right">Price</th>
+                                <th/>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {cartItems.map((it) => (
+                                <CartCard
+                                    key={it.productId || it.id}
+                                    item={it}
+                                    onUpdateQuantity={onUpdateQuantity}
+                                    onRemove={onRemove}
+                                />
+                            ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     );

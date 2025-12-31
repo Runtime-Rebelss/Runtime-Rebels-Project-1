@@ -4,22 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Updated Stripe Checkout to use default address from address page">
-      <change afterPath="$PROJECT_DIR$/frontend-vite/src/components/CartCard.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend-vite/src/components/CartContent.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend-vite/src/components/CartSummary.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend-vite/src/components/Checkout.jsx" afterDir="false" />
+    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Refactored the Cart, created CartCard, CartSummary, and CartContent">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/config/JwtAuthFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/config/JwtAuthFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/AddressController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/AddressController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/PaymentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/PaymentController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/Cart.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/addresses.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/lib/addresses.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/axios.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/lib/axios.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/CartCard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/CartCard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/CartContent.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/CartContent.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/CartSummary.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/CartSummary.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/cart.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/lib/cart.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/cart2.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/CartPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/CartPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/CartPage2.jsx" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -327,15 +318,7 @@
       <workItem from="1766956738207" duration="8357000" />
       <workItem from="1766988073823" duration="11660000" />
       <workItem from="1767041077826" duration="13463000" />
-      <workItem from="1767134266465" duration="6138000" />
-    </task>
-    <task id="LOCAL-00032" summary="Fixed Ordering Issues with User and Guest Cart and refactor code -&gt; Still dupes orders.">
-      <option name="closed" value="true" />
-      <created>1764409002686</created>
-      <option name="number" value="00032" />
-      <option name="presentableId" value="LOCAL-00032" />
-      <option name="project" value="LOCAL" />
-      <updated>1764409002686</updated>
+      <workItem from="1767134266465" duration="9636000" />
     </task>
     <task id="LOCAL-00033" summary="Fixed Ordering Issues with User and Guest Cart and refactor code -&gt; Still dupes orders.">
       <option name="closed" value="true" />
@@ -721,7 +704,15 @@
       <option name="project" value="LOCAL" />
       <updated>1767053752158</updated>
     </task>
-    <option name="localTasksCounter" value="81" />
+    <task id="LOCAL-00081" summary="Refactored the Cart, created CartCard, CartSummary, and CartContent">
+      <option name="closed" value="true" />
+      <created>1767141510241</created>
+      <option name="number" value="00081" />
+      <option name="presentableId" value="LOCAL-00081" />
+      <option name="project" value="LOCAL" />
+      <updated>1767141510242</updated>
+    </task>
+    <option name="localTasksCounter" value="82" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -789,7 +780,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Merged main into ordering-henry" />
     <MESSAGE value="Fixed conflict issues" />
     <MESSAGE value="Added untracked files" />
     <MESSAGE value="Added Admin code" />
@@ -814,7 +804,8 @@
     <MESSAGE value="Created Edit Address Page" />
     <MESSAGE value="Fixed issues with edit address page and refactor Cart code" />
     <MESSAGE value="Updated Stripe Checkout to use default address from address page" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated Stripe Checkout to use default address from address page" />
+    <MESSAGE value="Refactored the Cart, created CartCard, CartSummary, and CartContent" />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactored the Cart, created CartCard, CartSummary, and CartContent" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>

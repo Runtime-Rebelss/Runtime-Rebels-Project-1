@@ -288,7 +288,6 @@ export async function handleCheckout(userId, signal) {
             const def = addrs.find(a => a?.isDefault) || null;
             addressId = def?.id ?? def?._id ?? null;
         } catch (err) {
-            // fallback: try older endpoint that requires an address id (not used here)
             try {
                 const resp2 = await addressLib.getDefaultAddressById(userId);
                 addressId = resp2?.data?.id ?? resp2?.data?._id ?? null;
@@ -361,6 +360,10 @@ export function clearGuestCart(shouldConfirm = true) {
     return true;
 }
 
+export function calcTotal(items) {
+    return items.reduce((s, it) => s + (Number(it.price) || 0) * (Number(it.quantity) || 0), 0);
+}
+
 export default {
     loadGuestCart,
     saveGuestCart,
@@ -370,4 +373,5 @@ export default {
     removeItem,
     handleCheckout,
     clearGuestCart,
+    calcTotal,
 };
