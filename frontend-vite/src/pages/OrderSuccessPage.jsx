@@ -2,9 +2,7 @@ import React, {useEffect, useState, useRef} from "react";
 import {useNavigate} from "react-router-dom";
 import Navbar from "../components/Navbar";
 import orderLib from "../lib/orders.js";
-import api from "../lib/axios";
 import Cookies from "js-cookie";
-import cartLib from "../lib/cart";
 import {confirmOrder} from "../lib/confirmOrder";
 
 const OrderSuccessPage = () => {
@@ -22,14 +20,60 @@ const OrderSuccessPage = () => {
         if (didRun.current) return;
         didRun.current = true;
 
-        confirmOrder({
-            fullName,
-            userId,
-            userEmail,
-            setCartItems,
-            setTotal,
-            setConfirmation,
-        });
+        (async () => {
+            try {
+                await confirmOrder({
+                    fullName,
+                    userId,
+                    userEmail,
+                    setCartItems,
+                    setTotal,
+                    setConfirmation,
+                });
+            } catch (err) {
+                console.warn('confirmOrder failed', err);
+            }
+
+            // Guest fallback: if confirmOrder did not populate items for guests,
+            // try reading pendingGuestOrder or guestCart from localStorage.
+            if (!userId) {
+                try {
+                    let raw = localStorage.getItem('pendingGuestOrder');
+                    if (!raw) raw = localStorage.getItem('guestCart');
+                    if (raw) {
+                        const parsed = JSON.parse(raw);
+                        let items = [];
+                        if (Array.isArray(parsed)) items = parsed;
+                        else if (Array.isArray(parsed?.items)) items = parsed.items;
+
+                        if (items.length > 0 && cartItems.length === 0) {
+                            // Normalize items
+                            const normalized = items.map(it => {
+                                const unitAmt = it.unitAmount || it.unit_amount || it.unitAmt;
+                                const price = unitAmt ? (Number(unitAmt) / 100) : (it.price ? Number(it.price) : 0);
+                                return {
+                                    id: it.id || it.productId || it._id || null,
+                                    productId: it.productId || it.id || it._id || null,
+                                    name: it.name || it.productName || 'Item',
+                                    image: it.image || it.imageUrl || '',
+                                    price: Number(isFinite(price) ? price : 0),
+                                    quantity: Number(it.quantity || it.qty || 1) || 1,
+                                };
+                            });
+
+                            setCartItems(normalized);
+                            const t = normalized.reduce((s, it) => s + (Number(it.price || 0) * Number(it.quantity || 1)), 0);
+                            setTotal(t);
+
+                            // If we don't have a confirmation number yet, create a fallback
+                            setConfirmation(prev => prev || ('GUEST-' + Math.floor(100000 + Math.random() * 900000)));
+                        }
+                    }
+                } catch (err) {
+                    console.warn('Failed to read guest pending order from localStorage', err);
+                }
+            }
+        })();
     }, [fullName, userId, userEmail]);
 
     return (
@@ -45,7 +89,7 @@ const OrderSuccessPage = () => {
                 <div className="bg-base-100 border border-base-300 p-6 rounded-lg shadow">
                     <h2 className="text-lg font-semibold mb-4">Order Confirmation</h2>
                     <p className="text-sm text-base-content/70 mb-8">
-                        Confirmation Number:{" "}
+                        Confirmation Number: {" "}
                         <span className="font-bold text-primary">{confirmation}</span>
                     </p>
 
@@ -61,18 +105,18 @@ const OrderSuccessPage = () => {
                                 </thead>
                                 <tbody>
                                 {cartItems.map((it, index) => (
-                                    <tr key={index}>
+                                    <tr key={it.productId || it.id || index}>
                                         <td>
                                             <div className="flex items-center gap-3">
                                                 <div className="mask mask-squircle w-14 h-14">
-                                                    <img src={it.image} className="object-cover" />
+                                                    <img src={it.image} alt={it.name || 'Product image'} className="object-cover" />
                                                 </div>
                                                 <span className="font-medium">{it.name}</span>
                                             </div>
                                         </td>
                                         <td className="text-center">{it.quantity}</td>
                                         <td className="text-right">
-                                            ${(it.price * it.quantity).toFixed(2)}
+                                            ${(Number(it.price || 0) * Number(it.quantity || 1)).toFixed(2)}
                                         </td>
                                     </tr>
                                 ))}

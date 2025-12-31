@@ -34,7 +34,8 @@ function OrderCard({ order, detailsPage = false }) {
                 </div>
                 <div>
                     <div className="font-medium">Ship to</div>
-                    <div className="opacity-70">
+                    {/* Add Address stuff here, pull from order address */}
+                    <div className="opacity-70 tooltip tooltip-bottom" data-tip={fullName + order.deliveryAddress}>
                         {fullName
                             || (order.shipTo?.fullName && order.shipTo.fullName !== "Guest Checkout" ? order.shipTo.fullName : "Guest")}
                     </div>
