@@ -50,7 +50,7 @@ const AddressesPage = () => {
                     <div className="card bg-base-200">
                         <Link
                             to="/account/add/address"
-                            className="justify-center items-center h-full btn btn-ghost"
+                            className="text-lg justify-center items-center h-full btn btn-ghost"
                         >
                             Add Address
                         </Link>

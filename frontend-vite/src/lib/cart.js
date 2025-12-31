@@ -257,14 +257,12 @@ export async function removeItem(...args) {
         try { window.dispatchEvent(new Event("cart-updated")); } catch {}
         return {source: "guest", items: filtered};
     }
-
     // Server Code
     try {
         await api.delete(`/carts/remove`, { params: { userId, productId } });
         try { window.dispatchEvent(new CustomEvent("cart-updated", {detail: {source: "server"}})); } catch {}
         return {source: "server"};
     } catch (err) {
-        // Fallback: try update with 0 quantity (older endpoints)
         try {
             await api.put(`/carts/update`, null, { params: { userId, productId, quantity: 0 } });
             try { window.dispatchEvent(new CustomEvent("cart-updated", {detail: {source: "server"}})); } catch {}
@@ -281,7 +279,6 @@ export async function handleCheckout(userId, signal) {
 
     let addressId = null;
     if (userId) {
-        // Try to get the user's addresses and find the default one
         try {
             const resp = await addressLib.getAddressesByUserId(userId);
             const addrs = resp?.data ?? [];

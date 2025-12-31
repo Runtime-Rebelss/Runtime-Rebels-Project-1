@@ -45,10 +45,12 @@ const Checkout = () => {
 
     return (
         <div className="container mx-auto px-4 py-8">
-            {/* DELIVERY ADDRESS */}
-            <div className="text-1xl font-semibold mb-6">
-                Delivering to {address?.name || fullName}
+            {/* DELIVERY NAME */}
+            <div className="flex justify-between items-center ">
+                <h1 className="text-xl font-bold">Delivering to {address?.name || fullName}</h1>
+                <a className="link link-hover link-accent" href="http://localhost:5173/checkout/address">Change</a>
             </div>
+            {/* DELIVERY ADDRESS */}
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6'>
             {address ? (
                 <div className="mb-4">

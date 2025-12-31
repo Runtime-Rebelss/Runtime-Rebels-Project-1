@@ -21,6 +21,7 @@ import EnterEmailPage from "./pages/auth/EmailPage";
 import AddressesPage from "./pages/auth/AddressesPage";
 import AddAddressPage from "./pages/auth/AddAddressPage.jsx";
 import EditAddressPage from "./pages/auth/EditAddressPage.jsx";
+import CheckoutAddressPage from "./pages/auth/CheckoutAddressPage.jsx";
 
 function App() {
     return (
@@ -48,6 +49,7 @@ function App() {
                 <Route path="/account/addresses" element={<AddressesPage />} />
                 <Route path="/account/add/address" element={<AddAddressPage />} />
                 <Route path="/account/edit/address/:id" element={<EditAddressPage />} />
+                <Route path="/checkout/address" element={<CheckoutAddressPage />} />
             </Routes>
         </div>
     );
