@@ -31,6 +31,20 @@ public class AddressController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/default/{addressId}")
+    public ResponseEntity<Address> getDefaultAddress(@PathVariable String addressId) {
+        Optional<Address> addresses = addressRepository.findById(addressId);
+
+        if (addresses.isPresent()) {
+            Address address = addresses.get();
+            // Check if the address is default
+            if (address.isDefault()) {
+                return ResponseEntity.ok(address);
+            }
+        }
+        return ResponseEntity.notFound().build();
+    }
+
     // Get address by userId
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<Address>> getAddressesByUserId(@PathVariable String userId) {

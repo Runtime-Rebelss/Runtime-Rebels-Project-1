@@ -4,21 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Fixed issues with edit address page and refactor Cart code">
+    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Updated Stripe Checkout to use default address from address page">
+      <change afterPath="$PROJECT_DIR$/frontend-vite/src/components/CartCard.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-vite/src/components/CartContent.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-vite/src/components/CartSummary.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-vite/src/components/Checkout.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/config/JwtAuthFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/config/JwtAuthFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/AddressController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/AddressController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/PaymentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/PaymentController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/dto/CartItemResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/dto/CartItemResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/dto/CartResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/dto/CartResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/dto/CheckoutRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/dto/CheckoutRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/dto/LoggedUserResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/dto/UserResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/services/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/services/AuthService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/services/CartService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/services/CartService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/services/EmailService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/services/EmailService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/Cart.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/Cart.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/Cart.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/addresses.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/lib/addresses.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/axios.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/lib/axios.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/cart.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/lib/cart.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/checkout.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/lib/checkout.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/confirmOrder.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/lib/confirmOrder.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/OrderCancelPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/OrderCancelPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/cart2.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/CartPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/CartPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/CartPage2.jsx" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,9 +33,9 @@
         <option value="Enum" />
         <option value="package.json" />
         <option value="Interface" />
-        <option value="JSX File" />
         <option value="JavaScript File" />
         <option value="Class" />
+        <option value="JSX File" />
       </list>
     </option>
   </component>
@@ -325,15 +326,8 @@
       <workItem from="1766865678950" duration="11005000" />
       <workItem from="1766956738207" duration="8357000" />
       <workItem from="1766988073823" duration="11660000" />
-      <workItem from="1767041077826" duration="10564000" />
-    </task>
-    <task id="LOCAL-00031" summary="Added Guest functionality to Cart and Order Pages">
-      <option name="closed" value="true" />
-      <created>1764377687023</created>
-      <option name="number" value="00031" />
-      <option name="presentableId" value="LOCAL-00031" />
-      <option name="project" value="LOCAL" />
-      <updated>1764377687023</updated>
+      <workItem from="1767041077826" duration="13463000" />
+      <workItem from="1767134266465" duration="6138000" />
     </task>
     <task id="LOCAL-00032" summary="Fixed Ordering Issues with User and Guest Cart and refactor code -&gt; Still dupes orders.">
       <option name="closed" value="true" />
@@ -719,7 +713,15 @@
       <option name="project" value="LOCAL" />
       <updated>1766997003037</updated>
     </task>
-    <option name="localTasksCounter" value="80" />
+    <task id="LOCAL-00080" summary="Updated Stripe Checkout to use default address from address page">
+      <option name="closed" value="true" />
+      <created>1767053752157</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1767053752158</updated>
+    </task>
+    <option name="localTasksCounter" value="81" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -739,6 +741,11 @@
     <option featureType="dependencySupport" implementationName="java:org.projectlombok:lombok" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
+    <option name="OPEN_GENERIC_TABS">
+      <map>
+        <entry key="de5fb4fb-5299-4720-bd09-84f9330b8f0b" value="TOOL_WINDOW" />
+      </map>
+    </option>
     <option name="RECENT_FILTERS">
       <map>
         <entry key="Branch">
@@ -773,11 +780,15 @@
             </State>
           </value>
         </entry>
+        <entry key="de5fb4fb-5299-4720-bd09-84f9330b8f0b">
+          <value>
+            <State />
+          </value>
+        </entry>
       </map>
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Fixed duplication issue with orders and refactored code for OrderPage, CheckoutPage, and CartPage" />
     <MESSAGE value="Merged main into ordering-henry" />
     <MESSAGE value="Fixed conflict issues" />
     <MESSAGE value="Added untracked files" />
@@ -802,7 +813,8 @@
     <MESSAGE value="Added in phone number for addressCard" />
     <MESSAGE value="Created Edit Address Page" />
     <MESSAGE value="Fixed issues with edit address page and refactor Cart code" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed issues with edit address page and refactor Cart code" />
+    <MESSAGE value="Updated Stripe Checkout to use default address from address page" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated Stripe Checkout to use default address from address page" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>

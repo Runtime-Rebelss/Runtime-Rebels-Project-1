@@ -1,6 +1,6 @@
 import api from "./axios";
-import toast from "react-hot-toast";
 import Cookies from "js-cookie"
+import addressLib from "./addresses.js";
 
 const GUEST_KEY = "guestCart";
 
@@ -130,8 +130,17 @@ export async function loadServerCart(userId, signal) {
 
 /**
  * Add item to cart (guest or signed-in user).
+ * Supports either addToCart({userId, productId, ...}) or addToCart(productId, quantity, userId, name, price, image)
  */
-export async function addToCart({userId, productId, name, price, quantity = 1, image = ""}) {
+export async function addToCart(...args) {
+    let opts = {};
+    if (args.length === 1 && typeof args[0] === 'object') opts = args[0];
+    else {
+        const [productId, quantity = 1, userId, name = '', price = 0, image = ''] = args;
+        opts = { productId, quantity, userId, name, price, image };
+    }
+    const { userId, productId, name, price, quantity = 1, image = "" } = opts;
+
     if (!productId) throw new Error("Product Id is required");
 
     if (!userId) {
@@ -183,10 +192,19 @@ export async function addToCart({userId, productId, name, price, quantity = 1, i
     return {source: "server", data: res.data};
 }
 
-export async function updateQuantity({productId, quantity, userId}) {
+/**
+ * updateQuantity supports updateQuantity({productId, quantity, userId}) or updateQuantity(productId, quantity, userId)
+ */
+export async function updateQuantity(...args) {
+    let productId, quantity, userId;
+    if (args.length === 1 && typeof args[0] === 'object') {
+        ({ productId, quantity, userId } = args[0]);
+    } else {
+        [productId, quantity, userId] = args;
+    }
+
     if (!productId) throw new Error("Product Id is required");
 
-    // If userId passed or cookie exists, call server API
     const uid = userId || Cookies.get("userId");
     const qty = Number(quantity);
     if (!Number.isFinite(qty)) throw new Error("Invalid quantity");
@@ -217,8 +235,12 @@ export async function updateQuantity({productId, quantity, userId}) {
 
 /**
  * Remove an item (guest or signed-in user).
+ * Supports removeItem(productId) or removeItem({productId})
  */
-export async function removeItem(productId) {
+export async function removeItem(...args) {
+    let productId;
+    if (args.length === 1 && typeof args[0] === 'object') productId = args[0].productId;
+    else productId = args[0];
     if (!productId) return;
 
     const userId = Cookies.get("userId");
@@ -257,6 +279,25 @@ export async function removeItem(productId) {
 export async function handleCheckout(userId, signal) {
     const userEmail = Cookies.get("userEmail");
 
+    let addressId = null;
+    if (userId) {
+        // Try to get the user's addresses and find the default one
+        try {
+            const resp = await addressLib.getAddressesByUserId(userId);
+            const addrs = resp?.data ?? [];
+            const def = addrs.find(a => a?.isDefault) || null;
+            addressId = def?.id ?? def?._id ?? null;
+        } catch (err) {
+            // fallback: try older endpoint that requires an address id (not used here)
+            try {
+                const resp2 = await addressLib.getDefaultAddressById(userId);
+                addressId = resp2?.data?.id ?? resp2?.data?._id ?? null;
+            } catch (err2) {
+                addressId = null;
+            }
+        }
+    }
+
     if (!userId) {
         const {items} = loadGuestCart();
         // Save the order info as an array of items (OrderSuccessPage expects an array)
@@ -276,6 +317,7 @@ export async function handleCheckout(userId, signal) {
             metadata: {
                 checkoutType: userId ? "server" : "guest",
                 userId: userId || "guest",
+                addressId: addressId || null,
             },
             savePaymentMethod: false,
         }, {signal});
@@ -298,6 +340,7 @@ export async function handleCheckout(userId, signal) {
     const response = await api.post("/payments/create-checkout-session", {
         items: cartItems,
         customerEmail: userEmail,
+        addressId: addressId || null,
         metadata: {
             checkoutType: userId ? "server" : "guest",
             userId: userId || "guest",
