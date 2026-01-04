@@ -99,7 +99,6 @@ const CartPage = () => {
                     </h1>
                     <p className="text-base-content/60 mt-2">{isGuest ? 'Guest cart' : 'Signed-in cart'}</p>
                 </div>
-
                 {/* Cart List on left and Summary on right */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div className="lg:col-span-2">

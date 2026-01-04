@@ -174,19 +174,19 @@ const Navbar = ({hideCart = false, hideCartCount = false}) => {
                     {
                         userEmail ? (
                                 <div className="dropdown dropdown-hover">
-                                    <div tabIndex={0} role="button" className="btn btn-ghost">
+                                    <div tabIndex={0} role="button" className="btn btn-ghost link-hover">
                                         <User/>
                                     </div>
                                     <ul tabIndex="-1"
                                         className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
                                         <li>
                                             <Link to="/account">
-                                                <button className="btn-ghost">Account</button>
+                                                <button className="link-hover hover:text-primary">Account</button>
                                             </Link>
                                         </li>
                                         <li>
                                             <button onClick={handleLogout}
-                                                    className="text-primary-600 underline text-sm hover:text-gray-900">Sign
+                                                    className="text-primary-600 link-hover text-sm hover:text-primary">Sign
                                                 Out
                                             </button>
                                         </li>

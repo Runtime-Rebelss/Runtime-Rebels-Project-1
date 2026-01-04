@@ -2,7 +2,7 @@ import cartLib from "./cart.js";
 import api from "./axios.js";
 import Cookies from "js-cookie"
 
-export async function saveOrder() {
+export const saveOrder = async () => {
     try {
         // Extract sessionId from URL
         const params = new URLSearchParams(window.location.search);
@@ -69,7 +69,7 @@ export async function saveOrder() {
 }
 
 // checkout with Stripe
-export async function handleCheckout() {
+export const handleCheckout = async () => {
     try {
         const userId = Cookies.get('userId');
         // get items from local cart or server
@@ -129,4 +129,8 @@ export async function handleCheckout() {
     }
 }
 
-export default {saveOrder, handleCheckout};
+export const createPaymentIntent = async (payload) => {
+    return await api.post(`/payments/create-payment-intent`, payload);
+}
+
+export default {saveOrder, handleCheckout, createPaymentIntent};

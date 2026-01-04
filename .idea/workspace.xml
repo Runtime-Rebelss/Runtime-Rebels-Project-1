@@ -5,9 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Updated Checkout Page">
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/dto/PaymentRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/dto/PaymentResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/services/PaymentService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-vite/src/components/CheckoutCard.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-vite/src/components/CheckoutForm.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-vite/src/pages/PaymentPage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/PaymentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/PaymentController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/App.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/Checkout.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/Checkout.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/CheckoutCard.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/Navbar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/Navbar.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/axios.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/lib/axios.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/checkout.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/lib/checkout.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/AccountPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/AccountPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/CartPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/CartPage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/CheckoutPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/CheckoutPage.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -22,9 +36,9 @@
         <option value="Enum" />
         <option value="package.json" />
         <option value="Interface" />
+        <option value="JavaScript File" />
         <option value="Class" />
         <option value="JSX File" />
-        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -125,11 +139,11 @@
       <recent name="C:\Users\wlock\OneDrive\Documents\Runtime-Rebels-Final\Runtime-Rebels-Project-1\backend\src\main\java\com\runtimerebels\store\requestResponse" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\wlock\OneDrive\Documents\Runtime-Rebels-Final\Runtime-Rebels-Project-1\frontend-vite\src\pages" />
       <recent name="C:\Users\wlock\OneDrive\Documents\Runtime-Rebels-Final\Runtime-Rebels-Project-1\frontend-vite\src\pages\Auth" />
       <recent name="C:\Users\wlock\OneDrive\Documents\Runtime-Rebels-Project-1.2\frontend-vite\src\pages\Auth" />
       <recent name="C:\Users\wlock\OneDrive\Documents\Runtime-Rebels-Final\Runtime-Rebels-Project-1\frontend-vite" />
       <recent name="C:\Users\wlock\OneDrive\Documents\Runtime-Rebels-Final\Runtime-Rebels-Project-1\backend\src\test" />
-      <recent name="C:\Users\wlock\OneDrive\Documents\Runtime-Rebels-Project-1.2" />
     </key>
     <key name="es6.move.members.recent.items">
       <recent name="C:\Users\wlock\OneDrive\Documents\Runtime-Rebels-Final\Runtime-Rebels-Project-1\frontend-vite\src\components\actions\useCart.js" />
@@ -176,6 +190,7 @@
         <env name="JWT_SECRET" value="8d4fed75477d160c393db8a22edce23a5ae7971b4533077d89ac0016dd92c879d21791073310294924cb896443a8214cfdc129baa42af8b3030a397382a93532" />
         <env name="MONGO_URI" value="mongodb+srv://Hlocke124:thepomel61@runtimerebels.otltnjb.mongodb.net/" />
         <env name="STRIPE_SECRET_KEY" value="sk_test_51SLYkb3QiWxEqXaxuZrJfgh3HwuEd6SplfSxR9YQ2h3akEUt5YD04kxRNImHZQ6Ka0SbS28ETgt329SkQ5mVPo3t008u4coqgi" />
+        <env name="STRIPE_PUBLIC_KEY" value="pk_test_51SLYkb3QiWxEqXax1ummJuaMtq93LWDR30efeSt6vgs1kCCrM8eD9HJVBVIQtEeuG4TALnDMeeUXFYNby05Xnb2l00kdur3mCG" />
       </envs>
       <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
       <module name="spring-boot" />
@@ -317,15 +332,10 @@
       <workItem from="1766988073823" duration="11660000" />
       <workItem from="1767041077826" duration="13463000" />
       <workItem from="1767134266465" duration="14992000" />
-      <workItem from="1767205009783" duration="9710000" />
-    </task>
-    <task id="LOCAL-00036" summary="Added cookies based authToken">
-      <option name="closed" value="true" />
-      <created>1764447010798</created>
-      <option name="number" value="00036" />
-      <option name="presentableId" value="LOCAL-00036" />
-      <option name="project" value="LOCAL" />
-      <updated>1764447010798</updated>
+      <workItem from="1767205009783" duration="16493000" />
+      <workItem from="1767306021465" duration="1606000" />
+      <workItem from="1767313879169" duration="4926000" />
+      <workItem from="1767386226599" duration="9193000" />
     </task>
     <task id="LOCAL-00037" summary="Added cookies based authToken">
       <option name="closed" value="true" />
@@ -711,7 +721,15 @@
       <option name="project" value="LOCAL" />
       <updated>1767214117591</updated>
     </task>
-    <option name="localTasksCounter" value="85" />
+    <task id="LOCAL-00085" summary="Updated Checkout Page">
+      <option name="closed" value="true" />
+      <created>1767215026229</created>
+      <option name="number" value="00085" />
+      <option name="presentableId" value="LOCAL-00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1767215026229</updated>
+    </task>
+    <option name="localTasksCounter" value="86" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

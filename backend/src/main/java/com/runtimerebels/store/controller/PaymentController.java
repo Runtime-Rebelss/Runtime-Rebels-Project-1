@@ -1,35 +1,48 @@
 package com.runtimerebels.store.controller;
 
+import com.runtimerebels.store.dao.CartRepository;
+import com.runtimerebels.store.dao.OrderRepository;
 import com.runtimerebels.store.dao.AddressRepository;
-import com.runtimerebels.store.models.Address;
 import com.runtimerebels.store.models.dto.CheckoutRequest;
-import com.stripe.model.Customer;
+import com.runtimerebels.store.models.dto.PaymentRequest;
+import com.runtimerebels.store.models.dto.PaymentResponse;
+import com.runtimerebels.store.services.PaymentService;
+import com.runtimerebels.store.models.Address;
 import com.stripe.model.checkout.Session;
-import com.stripe.param.CustomerCreateParams;
 import com.stripe.param.checkout.SessionCreateParams;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
+import com.stripe.model.PaymentIntent;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * REST controller for handling Stripe payment operations.
  * Creates Stripe Checkout Sessions based on frontend requests
  * and configures shipping, billing, and customer options.
- *
  * Base URL: /api/payments
  *
  * @see com.runtimerebels.store.models.dto.CheckoutRequest
- * @author Haley Kenney
+ * @author Haley Kenney, and Henry Locke
  */
 @RestController
 @RequestMapping("/api/payments")
 public class PaymentController {
+
+    @Autowired
+    private CartRepository cartRepository;
+
+    @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
+    private AddressRepository addressRepository;
 
     @Value("${frontend.successUrl}")
     private String successUrl;
@@ -37,8 +50,29 @@ public class PaymentController {
     @Value("${frontend.cancelUrl}")
     private String cancelUrl;
 
+    private final PaymentService paymentService;
+
     @Autowired
-    private AddressRepository addressRepository;
+    public PaymentController(PaymentService paymentService) {
+        this.paymentService = paymentService;
+    }
+
+    @PostMapping("/create-payment-intent")
+    public ResponseEntity<PaymentResponse> createPaymentIntent(@RequestBody PaymentRequest paymentRequest) {
+        try {
+            PaymentIntent paymentIntent = paymentService.createPaymentIntent(paymentRequest);
+            PaymentResponse paymentResponse = new PaymentResponse(
+                    paymentIntent.getId(),
+                    paymentIntent.getClientSecret(),
+                    paymentIntent.getAmount(),
+                    paymentIntent.getCurrency(),
+                    paymentIntent.getStatus()
+            );
+            return ResponseEntity.ok(paymentResponse);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).build();
+        }
+    }
 
     /**
      * Creates a new Stripe Checkout Session for the given order request.
@@ -50,142 +84,109 @@ public class PaymentController {
     @PostMapping("/create-checkout-session")
     public ResponseEntity<?> createCheckout(@RequestBody CheckoutRequest req) throws Exception {
 
-        // Build Stripe line items
-        List<SessionCreateParams.LineItem> lineItems = new ArrayList<>();
+        // Build Stripe line items (as raw param maps to avoid typed builder issues)
+        List<Map<String, Object>> lineItems = new ArrayList<>();
         for (var it : req.items()) {
-            SessionCreateParams.LineItem.PriceData.ProductData product =
-                    SessionCreateParams.LineItem.PriceData.ProductData.builder()
-                            .setName(it.name())
-                            .build();
+            Map<String, Object> productData = new HashMap<>();
+            productData.put("name", it.name());
 
-            SessionCreateParams.LineItem.PriceData priceData =
-                    SessionCreateParams.LineItem.PriceData.builder()
-                            .setCurrency(it.currency())
-                            .setUnitAmount(it.unitAmount()) // in cents
-                            .setProductData(product)
-                            .build();
+            Map<String, Object> priceData = new HashMap<>();
+            priceData.put("currency", it.currency());
+            priceData.put("unit_amount", it.unitAmount()); // in cents
+            priceData.put("product_data", productData);
 
-            lineItems.add(
-                    SessionCreateParams.LineItem.builder()
-                            .setQuantity(it.quantity())
-                            .setPriceData(priceData)
-                            .build()
-            );
+            Map<String, Object> lineItem = new HashMap<>();
+            lineItem.put("price_data", priceData);
+            lineItem.put("quantity", it.quantity());
+
+            lineItems.add(lineItem);
         }
 
-        // Shipping options
-        SessionCreateParams.ShippingOption standard =
-                SessionCreateParams.ShippingOption.builder()
-                        .setShippingRateData(
-                                SessionCreateParams.ShippingOption.ShippingRateData.builder()
-                                        .setDisplayName("Standard (5–7 days)")
-                                        .setType(SessionCreateParams.ShippingOption.ShippingRateData.Type.FIXED_AMOUNT)
-                                        .setFixedAmount(
-                                                SessionCreateParams.ShippingOption.ShippingRateData.FixedAmount.builder()
-                                                        .setAmount(799L)
-                                                        .setCurrency("usd")
-                                                        .build()
-                                        )
-                                        .build()
-                        ).build();
+        // Build the top-level params map for Stripe Checkout Session
+        Map<String, Object> params = new HashMap<>();
+        params.put("mode", "payment");
+        params.put("success_url", successUrl);
+        params.put("cancel_url", cancelUrl);
+        params.put("line_items", lineItems);
 
-        SessionCreateParams.ShippingOption expedited =
-                SessionCreateParams.ShippingOption.builder()
-                        .setShippingRateData(
-                                SessionCreateParams.ShippingOption.ShippingRateData.builder()
-                                        .setDisplayName("Expedited (2–3 days)")
-                                        .setType(SessionCreateParams.ShippingOption.ShippingRateData.Type.FIXED_AMOUNT)
-                                        .setFixedAmount(
-                                                SessionCreateParams.ShippingOption.ShippingRateData.FixedAmount.builder()
-                                                        .setAmount(1499L)
-                                                        .setCurrency("usd")
-                                                        .build()
-                                        )
-                                        .build()
-                        ).build();
+        // Require billing address and contact info
+        params.put("billing_address_collection", "required");
 
-        // Build the checkout session parameters
-        SessionCreateParams.Builder paramsBuilder = SessionCreateParams.builder()
-                .setUiMode(SessionCreateParams.UiMode.EMBEDDED)
-                .setMode(SessionCreateParams.Mode.PAYMENT)
-                .setSuccessUrl(successUrl)
-                .setCancelUrl(cancelUrl)
-                .addAllLineItem(lineItems)
+        // Shipping address collection
+        Map<String, Object> shippingAddressCollection = new HashMap<>();
+        List<String> allowed = new ArrayList<>();
+        allowed.add("US");
+        shippingAddressCollection.put("allowed_countries", allowed);
+        params.put("shipping_address_collection", shippingAddressCollection);
 
-                // Add shipping choices
-                .addShippingOption(standard)
-                .addShippingOption(expedited)
+        // Shipping options (as raw maps)
+        List<Map<String, Object>> shippingOptions = new ArrayList<>();
 
-                // Request contact info
-                .setPhoneNumberCollection(
-                        SessionCreateParams.PhoneNumberCollection.builder().setEnabled(true).build()
-                )
+        Map<String, Object> standard = new HashMap<>();
+        Map<String, Object> standardRateData = new HashMap<>();
+        standardRateData.put("display_name", "Standard (5–7 days)");
+        standardRateData.put("type", "fixed_amount");
+        Map<String, Object> standardFixed = new HashMap<>();
+        standardFixed.put("amount", 799);
+        standardFixed.put("currency", "usd");
+        standardRateData.put("fixed_amount", standardFixed);
+        standard.put("shipping_rate_data", standardRateData);
+        shippingOptions.add(standard);
 
-                // Get customer email at checkout
-                .setCustomerCreation(SessionCreateParams.CustomerCreation.ALWAYS)
-                .setSubmitType(SessionCreateParams.SubmitType.PAY);
+        Map<String, Object> expedited = new HashMap<>();
+        Map<String, Object> expeditedRateData = new HashMap<>();
+        expeditedRateData.put("display_name", "Expedited (2–3 days)");
+        expeditedRateData.put("type", "fixed_amount");
+        Map<String, Object> expeditedFixed = new HashMap<>();
+        expeditedFixed.put("amount", 1499);
+        expeditedFixed.put("currency", "usd");
+        expeditedRateData.put("fixed_amount", expeditedFixed);
+        expedited.put("shipping_rate_data", expeditedRateData);
+        shippingOptions.add(expedited);
 
-        // If there is an addressId
-        boolean b = req.customerEmail() != null && !req.customerEmail().isBlank();
+        params.put("shipping_options", shippingOptions);
+
+        // Request contact info fields directly from Stripe
+        Map<String, Object> phoneNumberCollection = new HashMap<>();
+        phoneNumberCollection.put("enabled", true);
+        params.put("phone_number_collection", phoneNumberCollection);
+
+        // Ask Stripe to collect the customer's email at checkout
+        params.put("customer_creation", "always");
+        params.put("submit_type", "pay");
+
+        // include email if already known (logged-in users)
+        if (req.customerEmail() != null && !req.customerEmail().isBlank()) {
+            params.put("customer_email", req.customerEmail());
+        }
+
+        // If an addressId was provided, fetch the address and prefill shipping details
         if (req.addressId() != null && !req.addressId().isBlank()) {
-            Address address = addressRepository.findById(req.addressId())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Address"));
+            addressRepository.findById(req.addressId()).ifPresent(addr -> {
+                try {
+                    Map<String, Object> addrMap = new HashMap<>();
+                    addrMap.put("line1", addr.getAddress());
+                    addrMap.put("line2", addr.getUnit());
+                    addrMap.put("city", addr.getCity());
+                    addrMap.put("state", addr.getState());
+                    addrMap.put("postal_code", addr.getZipCode());
+                    addrMap.put("country", (addr.getCountry() == null || addr.getCountry().isBlank()) ? "US" : addr.getCountry());
 
-            CustomerCreateParams.Builder customerBuilder = CustomerCreateParams.builder();
-            if (b) {
-                customerBuilder.setEmail(req.customerEmail());
-                // prefill email in checkout
-                paramsBuilder.setCustomerEmail(req.customerEmail());
-            }
+                    Map<String, Object> shipping = new HashMap<>();
+                    shipping.put("name", addr.getName());
+                    shipping.put("phone", addr.getPhoneNumber());
+                    shipping.put("address", addrMap);
 
-            if (address.getName() != null) customerBuilder.setName(address.getName());
-            if (address.getPhoneNumber() != null) customerBuilder.setPhone(address.getPhoneNumber());
-
-            customerBuilder.setAddress(
-                    CustomerCreateParams.Address.builder()
-                            .setLine1(address.getAddress())
-                            .setCity(address.getCity())
-                            .setState(address.getState())
-                            .setPostalCode(address.getZipCode())
-                            .setCountry(address.getCountry())
-                            .build()
-            );
-
-            customerBuilder.setShipping(
-                    CustomerCreateParams.Shipping.builder()
-                            .setName(address.getName())
-                            .setPhone(address.getPhoneNumber())
-                            .setAddress(
-                                    CustomerCreateParams.Shipping.Address.builder()
-                                            .setLine1(address.getAddress())
-                                            .setCity(address.getCity())
-                                            .setState(address.getState())
-                                            .setPostalCode(address.getZipCode())
-                                            .setCountry(address.getCountry())
-                                            .build()
-                            )
-                            .build()
-            );
-
-            Customer customer = Customer.create(customerBuilder.build());
-            paramsBuilder.setCustomer(customer.getId());
-
-        } else {
-            // No address provided
-            paramsBuilder.setShippingAddressCollection(
-                    SessionCreateParams.ShippingAddressCollection.builder()
-                            .addAllowedCountry(SessionCreateParams.ShippingAddressCollection.AllowedCountry.US)
-                            .build()
-            );
-
-            // If email provided, prefill it
-            if (b) {
-                paramsBuilder.setCustomerEmail(req.customerEmail());
-            }
+                    params.put("shipping", shipping);
+                } catch (Exception e) {
+                    // swallowing errors to avoid failing checkout creation
+                    System.err.println("Failed to attach shipping info to Stripe session: " + e.getMessage());
+                }
+            });
         }
 
-        // Create the session
-        Session session = Session.create(paramsBuilder.build());
+        // Create the session using a raw params map to be compatible across stripe-java versions
+        Session session = Session.create(params);
 
         System.out.println("Stripe Checkout session created for: " + req.customerEmail());
 

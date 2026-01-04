@@ -1,10 +1,11 @@
-import React, {useState, useEffect, useRef} from 'react';
-import {useNavigate, useLocation, Link} from 'react-router-dom';
-import Navbar from '../components/Navbar';
+import React, {useEffect, useRef, useState} from 'react';
+import {useLocation, useNavigate} from 'react-router-dom';
+import Navbar from '../components/Navbar.jsx';
 import Checkout from '../components/Checkout.jsx';
 import Cookies from "js-cookie"
 import cartHandler from "../lib/cartHandler.js";
 import cartLib from "../lib/cart.js";
+import checkoutLib from "../lib/checkout.js";
 
 const hasSaved = new Set();
 
@@ -14,11 +15,13 @@ const CheckoutPage = () => {
     const hasRunRef = useRef(false); //  prevents double saves
     const location = useLocation();
     const [cartItems, setCartItems] = useState([]);
+    const ignoreNextCartUpdatedRef = useRef(false);
 
     const userId = Cookies.get("userId");
 
     const {handleUpdateQuantity, handleRemove} = cartHandler({
         setCartItems,
+        ignoreNextCartUpdatedRef,
     });
 
     useEffect(() => {
@@ -61,17 +64,34 @@ const CheckoutPage = () => {
             }
         };
         load(true);
+
+        const onCartUpdated = (ev) => {
+            console.debug('cart-updated event received', ev && ev.detail);
+            // If we set this flag while performing an optimistic update, ignore the incoming event
+            if (ignoreNextCartUpdatedRef.current) {
+                console.debug('Ignoring cart-updated because ignore flag set');
+                ignoreNextCartUpdatedRef.current = false;
+                return;
+            }
+
+            load(false);
+        };
+        window.addEventListener('cart-updated', onCartUpdated);
+
+        return () => {
+            ac.abort();
+            window.removeEventListener('cart-updated', onCartUpdated);
+        };
     }, [userId]);
 
-
-
     return (
-        <div>
+         <div>
             <Navbar/>
             <Checkout
-            cartItems={cartItems}
-            onUpdateQuantity={handleUpdateQuantity}
-            onRemove={handleRemove}
+                cartItems={cartItems}
+                onUpdateQuantity={handleUpdateQuantity}
+                onRemove={handleRemove}
+                handleCheckout={checkoutLib.handleCheckout}
             />
         </div>
     )

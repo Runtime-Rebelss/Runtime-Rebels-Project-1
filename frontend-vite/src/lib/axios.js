@@ -13,7 +13,8 @@ const api = axios.create({
 api.interceptors.request.use((config) => {
     try {
         // Don't attach Authorization header for auth endpoints (login/register/signup/refresh)
-        const skipAuthPaths = ['/auth/login', '/auth/register', '/auth/signup', '/auth/refreshToken', '/auth/refresh', '/payments'];
+        // Note: payments endpoints should receive an Authorization header when a token exists.
+        const skipAuthPaths = ['/auth/login', '/auth/register', '/auth/signup', '/auth/refreshToken', '/auth/refresh'];
         const requestPath = (config.url || '').toString();
         const isAuthRequest = skipAuthPaths.some(p => requestPath.includes(p));
 

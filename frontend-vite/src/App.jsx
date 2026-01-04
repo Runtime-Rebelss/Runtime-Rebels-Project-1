@@ -1,4 +1,5 @@
-import { Routes, Route } from "react-router-dom";
+// javascript
+import { Routes, Route, Outlet } from "react-router-dom";
 
 import ProductPage from "./pages/ProductPage";
 import HomePage from "./pages/HomePage";
@@ -24,6 +25,7 @@ import EditAddressPage from "./pages/auth/EditAddressPage.jsx";
 import CheckoutAddressPage from "./pages/auth/CheckoutAddressPage.jsx";
 
 function App() {
+
     return (
         <div className="relative h-full w-full">
             <div className="absolute inset-0 -z-10 h-full w-full items-center px-5 py-24 bg-base-100" />
@@ -32,6 +34,7 @@ function App() {
                 <Route path="/product/:id" element={<ProductPage />} />
                 <Route path="/cart" element={<CartPage />} />
                 <Route path="/checkout" element={<CheckoutPage />} />
+                <Route path="/checkout/address" element={<CheckoutAddressPage />} />
                 <Route path="/results" element={<ResultsPage />} />
                 <Route path="/order-success" element={<OrderSuccessPage />} />
                 <Route path="/order-cancel" element={<OrderCancelPage />} />
@@ -49,7 +52,6 @@ function App() {
                 <Route path="/account/addresses" element={<AddressesPage />} />
                 <Route path="/account/add/address" element={<AddAddressPage />} />
                 <Route path="/account/edit/address/:id" element={<EditAddressPage />} />
-                <Route path="/checkout/address" element={<CheckoutAddressPage />} />
             </Routes>
         </div>
     );
