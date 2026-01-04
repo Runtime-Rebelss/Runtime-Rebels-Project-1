@@ -5,7 +5,7 @@ import addressService from "../lib/addresses";
 import {useNavigate} from "react-router-dom";
 import Cookies from "js-cookie";
 
-const AddressCard2 = ({address, isDefault = false}) => {
+const AddressCard2 = ({address, isDefault = false, isCheckout = true}) => {
     const navigate = useNavigate();
     const [isUnit, setIsUnit] = useState(false);
     const addressId = address?.id || address?._id || "";
@@ -62,7 +62,7 @@ const AddressCard2 = ({address, isDefault = false}) => {
                         {address.country}
                     </li>
                     <li className="flex items-center">
-                        Phone Number:&nbsp;{address.phoneNumber}
+                        Phone Number:&nbsp;{addressService.formatPhoneNumber(address.phoneNumber)}
                     </li>
                     <div className="mt-auto flex justify-front gap-2">
                         {/* EDIT ADDRESS */}
@@ -102,7 +102,7 @@ const AddressCard2 = ({address, isDefault = false}) => {
                         {address.country}
                     </li>
                     <li className="flex items-center">
-                        Phone Number:&nbsp;{address.phoneNumber}
+                        Phone Number:&nbsp;{addressService.formatPhoneNumber(address.phoneNumber)}
                     </li>
                     <div className="mt-auto flex justify-center gap-2">
                         {/* EDIT ADDRESS */}

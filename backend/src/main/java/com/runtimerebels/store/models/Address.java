@@ -26,4 +26,5 @@ public class Address {
     private String zipCode;
     private String phoneNumber;
     private boolean isDefault;
+    private boolean shipTo;
 }

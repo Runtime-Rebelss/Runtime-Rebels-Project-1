@@ -19,6 +19,11 @@ export async function setDefaultAddress(addressId) {
     return api.put(`/address/default/${addressId}`);
 }
 
+export async function setAddressShipTo(addressId) {
+    window.location.reload();
+    return api.put(`/address/shipTo/${addressId}`);
+}
+
 export async function updateAddress(addressId, data) {
     return api.put(`/address/update/${addressId}`, data);
 }
@@ -32,4 +37,27 @@ export async function removeAddress(addressId) {
     return await api.delete(`/address/delete/${addressId}`);
 }
 
-export default { getAddressById, getDefaultAddressById, getAddressesByUserId, setDefaultAddress, updateAddress, removeAddress };
+export function formatPhoneNumber(phoneNumberString) {
+    // Remove any invalid characters
+    const cleaned = ('' + phoneNumberString).replace(/\D/g, '');
+
+    // Format the number as XXX-XXX-XXXX
+    const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
+
+    if (match) {
+        return `${match[1]}-${match[2]}-${match[3]}`;
+    }
+
+    return phoneNumberString;
+}
+
+export default {
+    getAddressById,
+    getDefaultAddressById,
+    getAddressesByUserId,
+    setDefaultAddress,
+    setAddressShipTo,
+    updateAddress,
+    removeAddress,
+    formatPhoneNumber
+};

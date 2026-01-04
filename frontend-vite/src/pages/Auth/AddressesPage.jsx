@@ -56,7 +56,7 @@ const AddressesPage = () => {
                         </Link>
                     </div>
                     {defaultFirst.map(addr => (
-                        <AddressCard key={addr.id} address={addr} isDefault={addr.default}/>
+                        <AddressCard key={addr.id} address={addr} isDefault={addr.default} isCheckout={false}/>
                     ))}
                 </div>
             </div>

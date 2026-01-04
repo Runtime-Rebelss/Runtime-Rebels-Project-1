@@ -4,25 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Updated Checkout Page">
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/dto/PaymentRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/dto/PaymentResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/services/PaymentService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend-vite/src/components/CheckoutCard.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend-vite/src/components/CheckoutForm.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend-vite/src/pages/PaymentPage.jsx" afterDir="false" />
+    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Added Stripe Payment to checkout page">
+      <change afterPath="$PROJECT_DIR$/frontend-vite/src/components/CheckoutAddresses.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/PaymentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/PaymentController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/AddressController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/AddressController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/Address.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/Address.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/AddressCard2.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/AddressCard2.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/Checkout.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/Checkout.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/Navbar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/Navbar.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/axios.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/lib/axios.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/checkout.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/lib/checkout.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/AccountPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/AccountPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/CartPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/CartPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/CheckoutPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/CheckoutPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/CheckoutForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/CheckoutForm.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/addresses.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/lib/addresses.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/AddressesPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/AddressesPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/CheckoutAddressPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/CheckoutAddressPage.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -336,14 +328,7 @@
       <workItem from="1767306021465" duration="1606000" />
       <workItem from="1767313879169" duration="4926000" />
       <workItem from="1767386226599" duration="9193000" />
-    </task>
-    <task id="LOCAL-00037" summary="Added cookies based authToken">
-      <option name="closed" value="true" />
-      <created>1764448709748</created>
-      <option name="number" value="00037" />
-      <option name="presentableId" value="LOCAL-00037" />
-      <option name="project" value="LOCAL" />
-      <updated>1764448709748</updated>
+      <workItem from="1767560259415" duration="9152000" />
     </task>
     <task id="LOCAL-00038" summary="Fixed duplication issue with orders and refactored code for OrderPage, CheckoutPage, and CartPage">
       <option name="closed" value="true" />
@@ -729,7 +714,15 @@
       <option name="project" value="LOCAL" />
       <updated>1767215026229</updated>
     </task>
-    <option name="localTasksCounter" value="86" />
+    <task id="LOCAL-00086" summary="Added Stripe Payment to checkout page">
+      <option name="closed" value="true" />
+      <created>1767560288805</created>
+      <option name="number" value="00086" />
+      <option name="presentableId" value="LOCAL-00086" />
+      <option name="project" value="LOCAL" />
+      <updated>1767560288806</updated>
+    </task>
+    <option name="localTasksCounter" value="87" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -797,7 +790,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added Admin code" />
     <MESSAGE value="Updated messages in SignupPage" />
     <MESSAGE value="Switched User authorization to cookies" />
     <MESSAGE value="Added first and last name field" />
@@ -822,7 +814,8 @@
     <MESSAGE value="Refactored the Cart, created CartCard, CartSummary, and CartContent" />
     <MESSAGE value="Added CheckoutAddressPage" />
     <MESSAGE value="Updated Checkout Page" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated Checkout Page" />
+    <MESSAGE value="Added Stripe Payment to checkout page" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added Stripe Payment to checkout page" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>

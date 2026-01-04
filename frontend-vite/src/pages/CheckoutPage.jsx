@@ -2,6 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
 import Navbar from '../components/Navbar.jsx';
 import Checkout from '../components/Checkout.jsx';
+import CheckoutAddresses from '../components/CheckoutAddresses.jsx';
 import Cookies from "js-cookie"
 import cartHandler from "../lib/cartHandler.js";
 import cartLib from "../lib/cart.js";
@@ -84,9 +85,17 @@ const CheckoutPage = () => {
         };
     }, [userId]);
 
+        <AddressCard key={addr.id} address={addr} isDefault={addr.default} isCheckout={false}/>
+    ))}
+
     return (
          <div>
             <Navbar/>
+             {defaultFirst.map(addr => (
+
+                 <CheckoutAddresses
+
+                 />
             <Checkout
                 cartItems={cartItems}
                 onUpdateQuantity={handleUpdateQuantity}

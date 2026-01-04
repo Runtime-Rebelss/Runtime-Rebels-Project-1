@@ -72,17 +72,35 @@ public class AddressController {
             }
             // Set the selected address as default
             address.setDefault(true);
+            address.setShipTo(true);
             Address updatedAddress = addressRepository.save(address);
             return ResponseEntity.ok(updatedAddress);
         }
         return ResponseEntity.notFound().build();
     }
+    // Set address as shipping address
+    @PutMapping("/shipTo/{addressId}")
+    public ResponseEntity<Address> shipToAddress(@PathVariable String addressId) {
+        Optional<Address> opt = addressRepository.findById(addressId);
+        // Check if address exists
+        if (opt.isPresent()) {
+            Address address = opt.get();
+            // Set address as shipping address
+            address.setShipTo(true);
+            address.setDefault(false);
+            Address updatedAddress = addressRepository.save(address);
+            return ResponseEntity.ok(updatedAddress);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
     // Creates a new address for a user
     @PostMapping("/add/{userId}")
     public ResponseEntity<Address> AddAddress(@PathVariable String userId, @RequestBody Address address) {
         address.setUserId(userId);
         Address savedAddress = addressRepository.save(address);
         address.setDefault(false);
+        address.setShipTo(false);
         // Return new address
         return ResponseEntity.status(HttpStatus.CREATED).body(savedAddress);
     }

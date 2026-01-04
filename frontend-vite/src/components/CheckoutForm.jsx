@@ -28,6 +28,7 @@ const CheckoutForm = ({clientSecret, amount}) => {
         const {error: stripeError, paymentIntent} = await stripe.confirmCardPayment(clientSecret, {
             payment_method: {
                 card: cardElement
+
             },
         });
 
@@ -40,7 +41,12 @@ const CheckoutForm = ({clientSecret, amount}) => {
     }
 
     const paymentElementOptions = {
-        layout: "accordion"
+        layout: {
+            type: "accordion",
+            defaultCollapsed: false,
+            radios: true,
+            spacedAccordionItems: true,
+        }
     }
 
     return (
