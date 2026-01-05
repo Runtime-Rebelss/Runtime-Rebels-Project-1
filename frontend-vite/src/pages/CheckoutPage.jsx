@@ -7,18 +7,28 @@ import Cookies from "js-cookie"
 import cartHandler from "../lib/cartHandler.js";
 import cartLib from "../lib/cart.js";
 import checkoutLib from "../lib/checkout.js";
+import addressService, {getDefaultAddressById} from "../lib/addresses.js";
+import api from "../lib/axios.js";
+import toast from "react-hot-toast";
 
 const hasSaved = new Set();
 
 const CheckoutPage = () => {
     const [loading, setLoading] = useState(false);
+    const [address, setAddress] = useState([]);
+    const addressId = address?.id || address?._id || "";
     const navigate = useNavigate();
     const hasRunRef = useRef(false); //  prevents double saves
     const location = useLocation();
     const [cartItems, setCartItems] = useState([]);
     const ignoreNextCartUpdatedRef = useRef(false);
+    const [isVis, setIsVis] = useState(false);
 
     const userId = Cookies.get("userId");
+
+    const toggleVisibility = () => {
+        setIsVis(!isVis);
+    }
 
     const {handleUpdateQuantity, handleRemove} = cartHandler({
         setCartItems,
@@ -85,18 +95,32 @@ const CheckoutPage = () => {
         };
     }, [userId]);
 
-        <AddressCard key={addr.id} address={addr} isDefault={addr.default} isCheckout={false}/>
-    ))}
+    useEffect(() => {
+        const fetchAddress = async () => {
+            try {
+                const response = await api.get(`/address/user/${userId}`);
+                setAddress(response.data);
+            } catch (error) {
+                console.error("Error fetching address:", error);
+                toast.error("Failed to load address!");
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchAddress();
+    }, [userId]);
+
+    const defaultAddress = address.find(addr => addr.default === true);
 
     return (
-         <div>
+        <div>
             <Navbar/>
-             {defaultFirst.map(addr => (
-
-                 <CheckoutAddresses
-
-                 />
-            <Checkout
+            <CheckoutAddresses
+                address={defaultAddress}
+                isDefault={false}
+                isCheckout={true}
+                />
+                <Checkout
                 cartItems={cartItems}
                 onUpdateQuantity={handleUpdateQuantity}
                 onRemove={handleRemove}

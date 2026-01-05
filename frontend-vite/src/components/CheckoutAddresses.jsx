@@ -1,8 +1,7 @@
-import {Link} from "react-router-dom";
+import {useNavigate, Link} from "react-router-dom";
 import React, {useState} from "react";
-import toast from "react-hot-toast";
+
 import addressService from "../lib/addresses";
-import {useNavigate} from "react-router-dom";
 import Cookies from "js-cookie";
 
 const CheckoutAddresses = ({address, isDefault = false, isCheckout = true}) => {
@@ -11,38 +10,13 @@ const CheckoutAddresses = ({address, isDefault = false, isCheckout = true}) => {
     const addressId = address?.id || address?._id || "";
     const [showConfirm, setShowConfirm] = useState(false);
     const [isVis, setIsVis] = useState(false);
+    const userId = Cookies.get("userId");
 
     const toggleVisibility = () => {
         setIsVis(!isVis);
     }
 
     const fullName = Cookies.get("fullName");
-
-    const defaultFirst = address.slice();
-
-    // When button "set default" is clicked, move that address to the front of the list
-    defaultFirst.sort((a, b) => b.default - a.default);
-
-    useEffect(() => {
-        const userId = Cookies.get("userId");
-        if (!userId) return;
-
-        let cancelled = false;
-        (async () => {
-            try {
-                const resp = await addressService.getAddressesByUserId(userId);
-                const addrs = resp?.data ?? [];
-                const def = addrs.find(a => a?.isDefault || a?.is_default || a?.default) || addrs[0] || null;
-                if (!cancelled) setAddress(def);
-            } catch (err) {
-                console.warn("Failed to load addresses", err);
-            }
-        })();
-
-        return () => {
-            cancelled = true;
-        };
-    }, []);
 
     const renderAddressLine = (addr) => {
         if (!addr) return null;
@@ -57,7 +31,8 @@ const CheckoutAddresses = ({address, isDefault = false, isCheckout = true}) => {
     }
 
     return (
-        <div>
+        <div className="container mx-auto px-4 py-8">
+            {/* DELIVERY NAME */}
             {!isVis &&
                 <>
                     <div className="flex justify-between items-center ">
@@ -80,10 +55,28 @@ const CheckoutAddresses = ({address, isDefault = false, isCheckout = true}) => {
                     </div>
                 </>
             }
+            {/* CHANGE ADDRESS - COLLAPSIBLE - Create a map here for it */}
+            {isVis &&
+                <div className="collapse collapse-open bg-base-100 border border-base-300">
+                    <input type="checkbox" name="my-accordion-2"/>
+                    <div className="collapse-title font-semibold">Select a Delivery Address</div>
+                    <div className="collapse-content text-sm">
+                        <label className="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="account-choice" className="radio radio-accent"/>
+                            <div className="flex flex-col">
+                                <li className="flex font-semibold items-center">{address?.name || fullName}</li>
+                                {/* ADDRESS LINE - Need to map it here */}
+                                <li className="flex items-center">{renderAddressLine(address)}</li>
+                                <li className="flex items-center">Phone
+                                    number: {addressService.formatPhoneNumber(address?.phoneNumber || "N/A")}</li>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            }
         </div>
-            )
-    }
-
+    )
+}
 
 
 export default CheckoutAddresses;
