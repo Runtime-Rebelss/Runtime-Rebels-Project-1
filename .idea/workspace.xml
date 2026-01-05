@@ -4,12 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Added Stripe Payment to checkout page">
+    <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Updated address code for checkout">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/AddressController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/AddressController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/Checkout.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/Checkout.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/CheckoutAddresses.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/CheckoutAddresses.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/addresses.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/lib/addresses.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/AddressesPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/AddressesPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/CheckoutAddressPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/CheckoutAddressPage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/CheckoutPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/CheckoutPage.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -324,15 +324,8 @@
       <workItem from="1767306021465" duration="1606000" />
       <workItem from="1767313879169" duration="4926000" />
       <workItem from="1767386226599" duration="9193000" />
-      <workItem from="1767560259415" duration="17367000" />
-    </task>
-    <task id="LOCAL-00039" summary="Fixed duplication issue with orders and refactored code for OrderPage, CheckoutPage, and CartPage">
-      <option name="closed" value="true" />
-      <created>1764457784631</created>
-      <option name="number" value="00039" />
-      <option name="presentableId" value="LOCAL-00039" />
-      <option name="project" value="LOCAL" />
-      <updated>1764457784631</updated>
+      <workItem from="1767560259415" duration="17665000" />
+      <workItem from="1767639393711" duration="8383000" />
     </task>
     <task id="LOCAL-00040" summary="Merged main into ordering-henry">
       <option name="closed" value="true" />
@@ -718,7 +711,15 @@
       <option name="project" value="LOCAL" />
       <updated>1767570024998</updated>
     </task>
-    <option name="localTasksCounter" value="88" />
+    <task id="LOCAL-00088" summary="Updated address code for checkout">
+      <option name="closed" value="true" />
+      <created>1767583230766</created>
+      <option name="number" value="00088" />
+      <option name="presentableId" value="LOCAL-00088" />
+      <option name="project" value="LOCAL" />
+      <updated>1767583230766</updated>
+    </task>
+    <option name="localTasksCounter" value="89" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -786,7 +787,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Updated messages in SignupPage" />
     <MESSAGE value="Switched User authorization to cookies" />
     <MESSAGE value="Added first and last name field" />
     <MESSAGE value="Updated Account Page" />
@@ -811,7 +811,8 @@
     <MESSAGE value="Added CheckoutAddressPage" />
     <MESSAGE value="Updated Checkout Page" />
     <MESSAGE value="Added Stripe Payment to checkout page" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added Stripe Payment to checkout page" />
+    <MESSAGE value="Updated address code for checkout" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated address code for checkout" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>

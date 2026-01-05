@@ -2,9 +2,7 @@ import api from "./axios";
 import Cookies from "js-cookie"
 
 export async function getAddressById(addressId) {
-    const {data} = api.get(`/address/${addressId}`);
-    // Returns one address
-    return data;
+    return api.get(`/address/${addressId}`);
 }
 
 export async function getDefaultAddressById(addressId) {

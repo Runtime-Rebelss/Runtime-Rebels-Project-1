@@ -7,8 +7,7 @@ import Cookies from "js-cookie"
 import cartHandler from "../lib/cartHandler.js";
 import cartLib from "../lib/cart.js";
 import checkoutLib from "../lib/checkout.js";
-import addressService, {getDefaultAddressById} from "../lib/addresses.js";
-import api from "../lib/axios.js";
+import addressService from "../lib/addresses.js";
 import toast from "react-hot-toast";
 
 const hasSaved = new Set();
@@ -16,7 +15,6 @@ const hasSaved = new Set();
 const CheckoutPage = () => {
     const [loading, setLoading] = useState(false);
     const [address, setAddress] = useState([]);
-    const addressId = address?.id || address?._id || "";
     const navigate = useNavigate();
     const hasRunRef = useRef(false); //  prevents double saves
     const location = useLocation();
@@ -98,7 +96,7 @@ const CheckoutPage = () => {
     useEffect(() => {
         const fetchAddress = async () => {
             try {
-                const response = await api.get(`/address/user/${userId}`);
+                const response = await addressService.getAddressesByUserId(userId);
                 setAddress(response.data);
             } catch (error) {
                 console.error("Error fetching address:", error);
@@ -111,21 +109,28 @@ const CheckoutPage = () => {
     }, [userId]);
 
     const defaultAddress = address.find(addr => addr.default === true);
+    const defaultFirst = address.slice();
+
+    // When button "set default" is clicked, move that address to the front of the list
+    defaultFirst.sort((a, b) => b.default - a.default);
 
     return (
-        <div>
+        <div className="checkout-page">
             <Navbar/>
-            <CheckoutAddresses
-                address={defaultAddress}
-                isDefault={false}
-                isCheckout={true}
-                />
-                <Checkout
-                cartItems={cartItems}
-                onUpdateQuantity={handleUpdateQuantity}
-                onRemove={handleRemove}
-                handleCheckout={checkoutLib.handleCheckout}
-            />
+            <main className="checkout-container">
+                <section className="checkout-form">
+                    <CheckoutAddresses
+                        address={defaultAddress}
+                        addresses={address}
+                    />
+                    <Checkout
+                        cartItems={cartItems}
+                        onUpdateQuantity={handleUpdateQuantity}
+                        onRemove={handleRemove}
+                        handleCheckout={checkoutLib.handleCheckout}
+                    />
+                </section>
+            </main>
         </div>
     )
 

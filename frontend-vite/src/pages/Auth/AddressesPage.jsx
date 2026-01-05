@@ -16,7 +16,7 @@ const AddressesPage = () => {
     useEffect(() => {
         const fetchAddress = async () => {
             try {
-                const response = await api.get(`/address/user/${userId}`);
+                const response = await addressService.getAddressesByUserId(userId);
                 setAddress(response.data);
             } catch (error) {
                 console.error("Error fetching address:", error);
