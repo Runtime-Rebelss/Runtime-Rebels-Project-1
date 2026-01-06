@@ -158,6 +158,7 @@ const AccountPage = () => {
                                 </button>
                             </div>
                         </section>
+<<<<<<< HEAD
                         {/* YOUR ADDRESSES */}
                         <section
                             className="card bg-base-200 shadow-md hover:shadow-lg transition cursor-pointer"
@@ -173,6 +174,8 @@ const AccountPage = () => {
                                 </button>
                             </div>
                         </section>
+=======
+>>>>>>> parent of 82cec3d (Added new Address code for account page)
                     </div>
                 )}
             </main>

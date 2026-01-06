@@ -18,9 +18,12 @@ import AddProductPage from "./pages/AddProductPage.jsx";
 import UserInfoPage from "./pages/auth/UserInfoPage";
 import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
 import EnterEmailPage from "./pages/auth/EmailPage";
+<<<<<<< HEAD
 import AddressesPage from "./pages/auth/AddressesPage";
 import AddAddressPage from "./pages/auth/AddAddressPage.jsx";
 import EditAddressPage from "./pages/auth/EditAddressPage.jsx";
+=======
+>>>>>>> parent of 82cec3d (Added new Address code for account page)
 
 function App() {
     return (
@@ -45,9 +48,12 @@ function App() {
                 <Route path="/account/manage" element={<UserInfoPage />} />
                 <Route path="/reset-password" element={<ResetPasswordPage />} />
                 <Route path="/email-reset-password" element={<EnterEmailPage />} />
+<<<<<<< HEAD
                 <Route path="/account/addresses" element={<AddressesPage />} />
                 <Route path="/account/add/address" element={<AddAddressPage />} />
                 <Route path="/account/edit/address/:id" element={<EditAddressPage />} />
+=======
+>>>>>>> parent of 82cec3d (Added new Address code for account page)
             </Routes>
         </div>
     );

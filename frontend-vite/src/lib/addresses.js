@@ -5,15 +5,6 @@ export async function getAddressById(addressId) {
     return api.get(`/address/${addressId}`);
 }
 
-export async function getDefaultAddressById(addressId) {
-    return api.get(`/address/default/${addressId}`);
-}
-
-export async function getAddressesByUserId(userId) {
-    if (!userId) return null;
-    return api.get(`/address/user/${encodeURIComponent(userId)}`);
-}
-
 export async function setDefaultAddress(addressId) {
     window.location.reload();
     return api.put(`/address/default/${addressId}`);
@@ -32,4 +23,4 @@ export async function removeAddress(addressId) {
     return await api.delete(`/address/delete/${addressId}`);
 }
 
-export default { getAddressById, getDefaultAddressById, getAddressesByUserId, setDefaultAddress, updateAddress, removeAddress };
+export default { getAddressById, setDefaultAddress, updateAddress, removeAddress };

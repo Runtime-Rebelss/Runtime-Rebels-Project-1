@@ -74,8 +74,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 || request.getServletPath().equals("/api/auth/login")
                 || request.getServletPath().equals("/api/auth/logout")
                 || request.getServletPath().equals("/api/auth/token")
-                || request.getServletPath().startsWith("/api/payments/")
-                || request.getServletPath().startsWith("/api/payments")
                 || request.getServletPath().startsWith("/api/payments/confirm")
                 || request.getServletPath().startsWith("/api/orders")
                 || request.getServletPath().startsWith("/api/carts")
