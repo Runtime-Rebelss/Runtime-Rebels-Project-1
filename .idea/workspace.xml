@@ -5,11 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Updated address code for checkout">
+      <change afterPath="$PROJECT_DIR$/frontend-vite/src/components/CheckoutSummary.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-vite/src/components/EditAddress.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/CartContent.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/CartContent.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/CheckoutAddresses.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/CheckoutAddresses.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/addresses.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/lib/addresses.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/AddressesPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/AddressesPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/CheckoutAddressPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/CheckoutAddressPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/EditAddressPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/EditAddressPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/CartPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/CartPage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/CheckoutPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/CheckoutPage.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -325,15 +327,7 @@
       <workItem from="1767313879169" duration="4926000" />
       <workItem from="1767386226599" duration="9193000" />
       <workItem from="1767560259415" duration="17665000" />
-      <workItem from="1767639393711" duration="8383000" />
-    </task>
-    <task id="LOCAL-00040" summary="Merged main into ordering-henry">
-      <option name="closed" value="true" />
-      <created>1764459897133</created>
-      <option name="number" value="00040" />
-      <option name="presentableId" value="LOCAL-00040" />
-      <option name="project" value="LOCAL" />
-      <updated>1764459897133</updated>
+      <workItem from="1767639393711" duration="11935000" />
     </task>
     <task id="LOCAL-00041" summary="Fixed conflict issues">
       <option name="closed" value="true" />
@@ -719,7 +713,15 @@
       <option name="project" value="LOCAL" />
       <updated>1767583230766</updated>
     </task>
-    <option name="localTasksCounter" value="89" />
+    <task id="LOCAL-00089" summary="Updated address code for checkout">
+      <option name="closed" value="true" />
+      <created>1767650669436</created>
+      <option name="number" value="00089" />
+      <option name="presentableId" value="LOCAL-00089" />
+      <option name="project" value="LOCAL" />
+      <updated>1767650669436</updated>
+    </task>
+    <option name="localTasksCounter" value="90" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

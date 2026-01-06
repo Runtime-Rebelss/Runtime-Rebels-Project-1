@@ -9,6 +9,7 @@ import cartLib from "../lib/cart.js";
 import checkoutLib from "../lib/checkout.js";
 import addressService from "../lib/addresses.js";
 import toast from "react-hot-toast";
+import CheckoutSummary from "../components/CheckoutSummary.jsx";
 
 const hasSaved = new Set();
 
@@ -117,20 +118,40 @@ const CheckoutPage = () => {
     return (
         <div className="checkout-page">
             <Navbar/>
-            <main className="checkout-container">
-                <section className="checkout-form">
-                    <CheckoutAddresses
-                        address={defaultAddress}
-                        addresses={address}
-                    />
-                    <Checkout
-                        cartItems={cartItems}
-                        onUpdateQuantity={handleUpdateQuantity}
-                        onRemove={handleRemove}
-                        handleCheckout={checkoutLib.handleCheckout}
-                    />
-                </section>
-            </main>
+            <div className="container mx-auto px-4 py-8">
+                <main className="checkout-container">
+                    <div className="mb-6 text-center">
+                    <h1 className="text-3xl font-semibold inline-flex items-center justify-center">
+                        Checkout
+                    </h1>
+                    </div>
+                    <section className="checkout-form">
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                            <div className="lg:col-span-2">
+                                <CheckoutAddresses
+                                    address={defaultAddress}
+                                    addresses={address}
+                                />
+                                <Checkout
+                                    cartItems={cartItems}
+                                    onUpdateQuantity={handleUpdateQuantity}
+                                    onRemove={handleRemove}
+                                    handleCheckout={checkoutLib.handleCheckout}
+                                />
+                            </div>
+                            <div className="lg:col-span-1">
+                                <CheckoutSummary
+                                    items={cartItems}
+                                    loading={loading}
+                                    onCheckout={checkoutLib.handleCheckout}
+                                    onContinue={() => navigate('/')}
+                                    userId={userId}
+                                />
+                            </div>
+                        </div>
+                    </section>
+                </main>
+            </div>
         </div>
     )
 

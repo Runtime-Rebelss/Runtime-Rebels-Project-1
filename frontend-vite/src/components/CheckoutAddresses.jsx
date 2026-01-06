@@ -82,7 +82,7 @@ const CheckoutAddresses = ({address, addresses = []}) => {
                                             <li className="flex items-center">{renderAddressLine(addr)}</li>
                                             <li className="flex items-center">Phone
                                                 number: {addressService.formatPhoneNumber(addr?.phoneNumber || "N/A")}</li>
-                                            <button className="link link-hover flex">Edit Address</button>
+                                            <button className="link link-hover flex" onClick={() => setShowConfirm(true)}>Edit Address</button>
                                         </div>
                                     </label>
                                 </React.Fragment>
@@ -91,9 +91,28 @@ const CheckoutAddresses = ({address, addresses = []}) => {
                     </div>
                 </div>
             )}
+            {/* CONFIRM DELETE MODAL */}
+            {showConfirm && (
+                <div className="fixed inset-0 flex items-center justify-center z-50">
+                    <div className="bg-white p-6 rounded-xl shadow-xl w-80 text-center">
+                        <h3 className="text-lg font-semibold">
+                            Show Edit Address Pop up
+                        </h3>
+                        <div className="mt-4 flex justify-center gap-3">
+                            <button
+                                className="btn btn-soft"
+                                onClick={() => setShowConfirm(false)}
+                            >
+                                Cancel
+                            </button>
+                            <button className="btn btn-error">
+                                Yes, Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
-
-
 export default CheckoutAddresses;

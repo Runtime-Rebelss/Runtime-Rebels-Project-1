@@ -84,7 +84,7 @@ const CartPage = () => {
     }, [userId]);
 
     return (
-        <div className="min-h-screen bg-base-200">
+        <div>
             <Navbar/>
             <div className="container mx-auto px-4 py-8">
                 <div className="mb-6 text-center">
@@ -109,7 +109,7 @@ const CartPage = () => {
                             onRemove={handleRemove}
                         />
                     </div>
-
+                    {/* CART SUMMARY - Right Side */}
                     <div className="lg:col-span-1">
                         <CartSummary
                             items={cartItems}

@@ -29,7 +29,7 @@ const CartContent = ({
 
     return (
         <div>
-            <div className="card bg-base-100 border">
+            <div className="card bg-base-100 border border-base-300">
                 <div className="card-body p-0">
                     <div className="overflow-x-auto">
                         <table className="table table-compact">
