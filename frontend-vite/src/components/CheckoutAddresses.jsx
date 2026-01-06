@@ -40,7 +40,7 @@ const CheckoutAddresses = ({address, addresses = []}) => {
             {/* DELIVERY NAME */}
             {!isVis &&
                 <>
-                    <div className="flex justify-between items-center ">
+                    <div className="flex justify-between items-center">
                         <h1 className="text-xl font-bold">Delivering to {address?.name || fullName}</h1>
                         <button className="link link-hover link-accent flex-end" onClick={toggleVisibility}>Change
                         </button>
@@ -78,11 +78,13 @@ const CheckoutAddresses = ({address, addresses = []}) => {
                                                />
                                         <div className="flex flex-col">
                                             <li className="flex font-semibold items-center">{addr?.name || fullName}</li>
-                                            {/* ADDRESS LINE - Need to map it here */}
+                                            {/* ADDRESS LINE */}
                                             <li className="flex items-center">{renderAddressLine(addr)}</li>
                                             <li className="flex items-center">Phone
                                                 number: {addressService.formatPhoneNumber(addr?.phoneNumber || "N/A")}</li>
-                                            <button className="link link-hover flex" onClick={() => setShowConfirm(true)}>Edit Address</button>
+                                            <div className="flex justify-between items-center">
+                                            <button className="link link-hover" onClick={() => setShowConfirm(true)}>Edit Address</button>
+                                            </div>
                                         </div>
                                     </label>
                                 </React.Fragment>
