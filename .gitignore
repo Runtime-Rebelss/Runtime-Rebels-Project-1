@@ -5,16 +5,6 @@
 *.iml
 
 # --- Maven (Spring Boot backend) ---
-
-# ============================
-#   Operating System Files
-# ============================
-.DS_Store
-Thumbs.db
-
-# ============================
-#   Java / Spring Boot Backend
-# ============================
 backend/target/
 backend/node_modules/
 

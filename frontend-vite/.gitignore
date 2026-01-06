@@ -6,24 +6,11 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-*.db
-*.sql
-dump/
 
 node_modules
 dist
 dist-ssr
 *.local
-
-# Backend Spring Boot secrets
-application.properties
-application-dev.properties
-application-local.properties
-
-# Frontend React secrets
-.env
-.env.local
-.env.*.local
 
 # Editor directories and files
 .vscode/*
