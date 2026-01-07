@@ -2,6 +2,7 @@ package com.runtimerebels.store.config;
 
 import com.runtimerebels.store.dao.ProductRepository;
 import com.runtimerebels.store.models.Product;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 public class DataSeeder {
 
     @Bean
+    @ConditionalOnProperty(value = "app.seed.enabled", havingValue = "true", matchIfMissing = true)
     CommandLineRunner seedDatabase(ProductRepository repository) {
         return args -> {
             System.out.println("Checking if Fake Store API data needs to be seeded...");
