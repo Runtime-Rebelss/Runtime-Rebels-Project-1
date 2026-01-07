@@ -1,0 +1,28 @@
+# --- IDE ---
+.idea/
+.vscode/
+.github/
+*.iml
+
+# --- Maven (Spring Boot backend) ---
+
+# ============================
+#   Operating System Files
+# ============================
+.DS_Store
+Thumbs.db
+
+# ============================
+#   Java / Spring Boot Backend
+# ============================
+backend/target/
+backend/node_modules/
+
+# --- Node (React frontend) ---
+frontend-vite/node_modules/
+frontend-vite/.env
+frontend-vite/.vite/
+
+# --- OS system files ---
+.DS_Store
+Thumbs.db
