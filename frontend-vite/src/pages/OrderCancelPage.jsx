@@ -15,12 +15,14 @@ const OrderCancelPage = () => {
             navigate("/order-cancel", { replace: true });
         });
 
+        sessionStorage.removeItem("pendingServerOrder");
+
         return () => window.removeEventListener("popstate", () => {});
     }, [navigate]);
 
     return (
         <div className="min-h-screen bg-base-200">
-            <Navbar hideCartCount={true} />
+            <Navbar hideCartCount={false} />
 
             <div className="max-w-4xl mx-auto px-4 py-10 text-center">
                 <div className="bg-red-100 text-red-800 p-4 rounded mb-8">

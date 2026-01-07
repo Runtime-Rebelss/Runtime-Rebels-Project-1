@@ -18,6 +18,9 @@ const SignUpPage = () => {
     const navigate = useNavigate();
     const acRef = useRef(null);
 
+    // When user signs up, they get an email to verify it's a real account (Via backend)
+    // Frontend checks for valid format of email
+
     const extractUserId = (data) =>
         data?.userId || data?.id || data?._id || data?.user?.id || data?.user?._id || null;
 
@@ -129,7 +132,7 @@ const SignUpPage = () => {
 
                             {/* Signup Button */}
                             <button type="submit" className="btn btn-neutral w-full mt-4" disabled={loading}>
-                                {loading ? 'Logging in…' : 'Sign up'}
+                                {loading ? 'Signing up…' : 'Sign up'}
                             </button>
                         </fieldset>
                     </form>

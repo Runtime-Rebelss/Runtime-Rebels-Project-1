@@ -185,8 +185,12 @@ public class AuthController {
 
         User user = userOpt.get();
 
-        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
-            return ResponseEntity.status(401).body(Map.of("message", "Old password incorrect"));
+        // If an oldPassword was supplied, require it to match the current password.
+        // If no oldPassword was supplied, treat this as a password-reset flow and skip the check.
+        if (oldPassword != null && !oldPassword.trim().isEmpty()) {
+            if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+                return ResponseEntity.status(401).body(Map.of("message", "Old password incorrect"));
+            }
         }
 
         if (!newPassword.equals(confirmPassword)) {

@@ -67,6 +67,14 @@ const AccountPage = () => {
         return Array.isArray(products) ? products.length : 0;
     };
 
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center h-screen">
+                <span className="loading loading-spinner loading-xl"></span>
+            </div>
+        );
+    }
+
     return (
         <div>
             <Navbar />
@@ -120,7 +128,6 @@ const AccountPage = () => {
                                 )}
                             </div>
                         </section>
-
                         {/* YOUR ORDERS */}
                         <section
                             className="card bg-base-200 shadow-md hover:shadow-lg transition cursor-pointer"
@@ -136,7 +143,7 @@ const AccountPage = () => {
                                 </button>
                             </div>
                         </section>
-                        {/* Login & Security */}
+                        {/* LOGIN & SECURITY */}
                         <section
                             className="card bg-base-200 shadow-md hover:shadow-lg transition cursor-pointer"
                             onClick={() => (window.location.href = "/account/manage")}

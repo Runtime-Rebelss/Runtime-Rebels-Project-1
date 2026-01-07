@@ -58,7 +58,6 @@ function ProductCard({ product }) {
 
     return (
         <div className="card bg-base-200 shadow-sm hover:shadow-lg transition duration-200">
-
             {/* IMAGE */}
             <div className="w-full h-64 flex items-center justify-center bg-gradient-to-b from-[#f8f1df] to-[#e6d7b6] overflow-hidden rounded-lg">
                 <img

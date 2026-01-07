@@ -44,6 +44,7 @@ public class OrderController {
 
     @Autowired
     private CartRepository cartRepository;
+    
     @Autowired
     private ProductRepository productRepository;
     @Autowired
@@ -168,7 +169,7 @@ public class OrderController {
         cart.setItems(new ArrayList<>());
         cartRepository.save(cart);
 
-        System.out.println("Saved order with ID: " + savedOrder.getOrderId());
+        System.out.println("Saved order with ID: " + savedOrder.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(savedOrder);
     }
 
@@ -188,7 +189,7 @@ public class OrderController {
         order.setQuantity(request.getQuantity());
         order.setTotalPrice(request.getTotalPrice());
         order.setStripeSessionId(request.getStripeSessionId());
-        
+
         if (request.getStripeSessionId() != null) {
             try {
                 Map<String, Object> session = stripeSessionController.getSession(request.getStripeSessionId());

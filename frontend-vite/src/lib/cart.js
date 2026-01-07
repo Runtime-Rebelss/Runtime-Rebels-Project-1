@@ -1,6 +1,6 @@
 import api from "./axios";
-import toast from "react-hot-toast";
 import Cookies from "js-cookie"
+import normalizeItem from "../components/actions/normalizeItem.js";
 
 const GUEST_KEY = "guestCart";
 
@@ -10,31 +10,29 @@ const GUEST_KEY = "guestCart";
 // Creates a guest cart, unique to local host
 export function loadGuestCart() {
     try {
-        const raw = localStorage.getItem(GUEST_KEY);
-        const parsed = raw ? JSON.parse(raw) : {items: []};
-        if (!Array.isArray(parsed.items)) return {items: []};
-        const items = parsed.items
-            .filter(Boolean)
-            .map((it) => ({
-                productId: it.productId ?? it.id ?? it._id ?? '',
-                name: it.name ?? 'Item',
-                price: Number(it.price ?? it.finalPrice ?? it.itemTotal ?? 0),
-                image:
-                    it.image ||
-                    it.imageUrl ||
-                    'https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                quantity: Math.max(1, Number(it.quantity ?? 1)),
-            }))
-            .filter((it) => it.productId);
-        return {items};
+        const raw = JSON.parse(localStorage.getItem(GUEST_KEY));
+        const items = Array.isArray(raw?.items) ? raw.items : [];
+
+        return {
+            items: items
+                .filter(Boolean)
+                .map((it) => normalizeItem({
+                    productId: it.productId || it.id,
+                    name: it.name,
+                    image: it.image || it.imageUrl,
+                    price: Number(it.price ?? it.finalPrice ?? it.itemTotal),
+                    quantity: Number(it.quantity || 1),
+                })
+                )
+                .filter(it => it.productId),
+        };
     } catch {
         return {items: []};
     }
 }
 
-export function saveGuestCart(data) {
-    const items = Array.isArray(data) ? data : data.items;
-    localStorage.setItem(GUEST_KEY, JSON.stringify({items}));
+export const saveGuestCart = (items) => {
+    localStorage.setItem(GUEST_KEY, JSON.stringify({ items: Array.isArray(items) ? items : items.items}));
 }
 
 /**
@@ -45,10 +43,7 @@ export function saveGuestCart(data) {
 export async function loadServerCart(userId, signal) {
     if (!userId) return [];
 
-    const {data: cart} = await api.get(
-        `/carts/${encodeURIComponent(userId)}`,
-        {signal}
-    );
+    const {data: cart} = await api.get(`/carts/${encodeURIComponent(userId)}`, {signal});
 
     if (Array.isArray(cart?.items)) {
         const items = cart.items
@@ -133,8 +128,17 @@ export async function loadServerCart(userId, signal) {
 
 /**
  * Add item to cart (guest or signed-in user).
+ * Supports either addToCart({userId, productId, ...}) or addToCart(productId, quantity, userId, name, price, image)
  */
-export async function addToCart({userId, productId, name, price, quantity = 1, image = ""}) {
+export async function addToCart(...args) {
+    let opts = {};
+    if (args.length === 1 && typeof args[0] === 'object') opts = args[0];
+    else {
+        const [productId, quantity = 1, userId, name = '', price = 0, image = ''] = args;
+        opts = { productId, quantity, userId, name, price, image };
+    }
+    const { userId, productId, name, price, quantity = 1, image = "" } = opts;
+
     if (!productId) throw new Error("Product Id is required");
 
     if (!userId) {
@@ -174,7 +178,7 @@ export async function addToCart({userId, productId, name, price, quantity = 1, i
             productId
         )}&quantity=${encodeURIComponent(
             qty
-        )}&totalPrice=${encodeURIComponent(totalPrice)}`
+        )}`
     );
 
     try {
@@ -186,31 +190,55 @@ export async function addToCart({userId, productId, name, price, quantity = 1, i
     return {source: "server", data: res.data};
 }
 
-export async function updateQuantity({productId, quantity}) {
+/**
+ * updateQuantity supports updateQuantity({productId, quantity, userId}) or updateQuantity(productId, quantity, userId)
+ */
+export async function updateQuantity(...args) {
+    let productId, quantity, userId;
+    if (args.length === 1 && typeof args[0] === 'object') {
+        ({ productId, quantity, userId } = args[0]);
+    } else {
+        [productId, quantity, userId] = args;
+    }
+
     if (!productId) throw new Error("Product Id is required");
 
-    let qty = Number(quantity);
-    if (!Number.isFinite(qty)) qty = 1;
-    if (qty < 0) qty = 0;
+    const uid = userId || Cookies.get("userId");
+    const qty = Number(quantity);
+    if (!Number.isFinite(qty)) throw new Error("Invalid quantity");
+    if (qty < 0) throw new Error("Invalid quantity");
 
+    if (uid) {
+        // server-side update
+        await api.put(`/carts/update`, null, { params: { userId: uid, productId, quantity: qty}});
+        try { window.dispatchEvent(new CustomEvent("cart-updated", {detail: {source: "server"}})); } catch {}
+        return {source: "server"};
+    }
+
+    // Guest cart update
     const cart = loadGuestCart();
     const items = Array.isArray(cart.items) ? [...cart.items] : [];
 
-    const idx = items.findIndex(it => it.productId === productId);
-    if (idx === -1) return;
+    const idx = items.findIndex(it => it.productId === productId || it.id === productId);
+    if (idx === -1) return {source: "guest", items};
 
     if (qty === 0) items.splice(idx, 1);
     else items[idx].quantity = qty;
 
-    saveGuestCart({items});
+    saveGuestCart(items);
 
-    window.dispatchEvent(new Event("cart-updated"));
+    try { window.dispatchEvent(new Event("cart-updated")); } catch {}
+    return {source: "guest", items};
 }
 
 /**
- * Remove an item from a signed-in user's cart.
+ * Remove an item (guest or signed-in user).
+ * Supports removeItem(productId) or removeItem({productId})
  */
-export async function removeItem(productId) {
+export async function removeItem(...args) {
+    let productId;
+    if (args.length === 1 && typeof args[0] === 'object') productId = args[0].productId;
+    else productId = args[0];
     if (!productId) return;
 
     const userId = Cookies.get("userId");
@@ -224,11 +252,26 @@ export async function removeItem(productId) {
         // Save guest cart
         saveGuestCart(filtered);
         // Update navbar
-        window.dispatchEvent(new Event("cart-updated"));
+        try { window.dispatchEvent(new Event("cart-updated")); } catch {}
+        return {source: "guest", items: filtered};
+    }
+    // Server Code
+    try {
+        await api.delete(`/carts/remove`, { params: { userId, productId } });
+        try { window.dispatchEvent(new CustomEvent("cart-updated", {detail: {source: "server"}})); } catch {}
+        return {source: "server"};
+    } catch (err) {
+        try {
+            await api.put(`/carts/update`, null, { params: { userId, productId, quantity: 0 } });
+            try { window.dispatchEvent(new CustomEvent("cart-updated", {detail: {source: "server"}})); } catch {}
+            return {source: "server"};
+        } catch (err2) {
+            throw err2;
+        }
     }
 }
 
-// Method to handle checking out
+// Method to handle checkout
 export async function handleCheckout(userId, signal) {
     const userEmail = Cookies.get("userEmail");
 
@@ -239,25 +282,31 @@ export async function handleCheckout(userId, signal) {
         localStorage.setItem("pendingGuestOrder", JSON.stringify(items));
 
         const cartItems = items.map(item => ({
-                name: item.name,
-                unitAmount: Math.round(item.price * 100),
-                currency: "usd",
-                quantity: item.quantity,
+            name: item.name,
+            unitAmount: Math.round(item.price * 100),
+            currency: "usd",
+            quantity: item.quantity,
         }));
 
         const response = await api.post("/payments/create-checkout-session", {
             items: cartItems,
             customerEmail: Cookies.get("userEmail") || null,
+            metadata: {
+                checkoutType: "guest",
+                userId: "guest",
+            },
             savePaymentMethod: false,
         }, {signal});
+
         return response.data.url;
     }
 
+    // Server-side user
     const serverItems = await loadServerCart(userId, signal);
 
     // Save the order info
-    localStorage.removeItem("pendingServerOrder");
-    localStorage.setItem("pendingServerOrder", JSON.stringify(serverItems));
+    sessionStorage.removeItem("pendingServerOrder");
+    sessionStorage.setItem("pendingServerOrder", JSON.stringify(serverItems));
 
     const cartItems = serverItems.map(item => ({
         name: item.name,
@@ -269,21 +318,38 @@ export async function handleCheckout(userId, signal) {
     const response = await api.post("/payments/create-checkout-session", {
         items: cartItems,
         customerEmail: userEmail,
+        metadata: {
+            checkoutType: "server",
+            userId: userId || "guest",
+        },
         savePaymentMethod: true,
     }, {signal});
 
     return response.data.url;
 }
 
-export const clearGuestCart = () => {
-    if (!isGuest) return;
-    const ok = window.confirm('Clear your guest cart? This will remove all items stored on this device.');
-    if (!ok) return;
-    cartLib.saveGuestCart([]);
-    setCartItems([]);
-};
+export function clearGuestCart(shouldConfirm = true) {
+    if (shouldConfirm) {
+        const ok = window.confirm('Clear your guest cart? This will remove all items stored on this device.');
+        if (!ok) return false;
+    }
+    localStorage.removeItem(GUEST_KEY);
+    try { window.dispatchEvent(new Event("cart-updated")); } catch {}
+    return true;
+}
+
+export function calcTotal(items) {
+    return items.reduce((s, it) => s + (Number(it.price) || 0) * (Number(it.quantity) || 0), 0);
+}
 
 export default {
-    loadGuestCart, saveGuestCart, loadServerCart, addToCart, updateQuantity,
-    removeItem, handleCheckout, clearGuestCart,
+    loadGuestCart,
+    saveGuestCart,
+    loadServerCart,
+    addToCart,
+    updateQuantity,
+    removeItem,
+    handleCheckout,
+    clearGuestCart,
+    calcTotal,
 };

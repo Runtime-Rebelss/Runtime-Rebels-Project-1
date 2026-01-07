@@ -10,13 +10,9 @@ const UserInfo = () => {
 
     const [email, setEmail] = useState("");
     const [fullName, setFullName] = useState("");
-    const [oldPassword, setOldPassword] = useState("");
-    const [newPassword, setNewPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
 
     const [editName, setEditName] = useState(true);
     const [editEmail, setEditEmail] = useState(true);
-    const [editPassword, setEditPassword] = useState(true);
 
     // Do the login page, but make the button update instead of logging in
     useEffect(() => {
@@ -79,20 +75,19 @@ const UserInfo = () => {
     return (
         <div className="flex justify-center py-8">
             <div className="space-y-12 w-full max-w-md">
-                {/* Update Name */}
+                {/* UPDATE NAME */}
                 <fieldset className="fieldset bg-base-200 border p-4 rounded-box">
                     <label className="label font-bold text-lg">Full Name</label>
-
                     <div className="join">
                         <input
-                            className="input outline join-item w-full"
+                            className="input rounded outline join-item w-full"
                             disabled={editName}
                             value={fullName}
                             onChange={(e) => setFullName(e.target.value)}
                             placeholder="First Last"
                         />
                         <button
-                            className="btn join-item"
+                            className="btn btn-ghost join-item"
                             onClick={() => setEditName(!editName)}
                         >
                             edit
@@ -109,8 +104,7 @@ const UserInfo = () => {
                         </button>
                     )}
                 </fieldset>
-
-                {/* Update Email */}
+                {/* UPDATE EMAIL */}
                 <fieldset className="fieldset bg-base-200 border p-4 rounded-box">
                     <label className="label font-bold text-lg">Email</label>
 
@@ -139,8 +133,6 @@ const UserInfo = () => {
                         </button>
                     )}
                 </fieldset>
-                {/* Update Password */}
-                <ResetPassword/>
             </div>
         </div>
     );

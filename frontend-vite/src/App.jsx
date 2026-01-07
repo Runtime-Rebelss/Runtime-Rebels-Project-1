@@ -1,9 +1,9 @@
-import { Routes, Route } from "react-router-dom";
+// javascript
+import { Routes, Route, Outlet } from "react-router-dom";
 
 import ProductPage from "./pages/ProductPage";
 import HomePage from "./pages/HomePage";
 import CartPage from "./pages/CartPage";
-import CheckoutPage from "./pages/CheckoutPage.jsx";
 import ResultsPage from "./pages/ResultsPage";
 import OrderSuccessPage from "./pages/OrderSuccessPage.jsx";
 import OrderCancelPage from "./pages/OrderCancelPage.jsx";
@@ -13,13 +13,14 @@ import SignUpPage from "./pages/Auth/SignUpPage.jsx";
 import OrderDetailsPage from "./pages/OrderDetailsPage";
 import AdminPage from "./pages/auth/AdminPage";
 import AccountPage from "./pages/AccountPage";
-import EditProductPage from "./pages/EditProductPage";
+import EditProductPage from "./pages/auth/EditProductPage";
 import AddProductPage from "./pages/AddProductPage.jsx";
 import UserInfoPage from "./pages/auth/UserInfoPage";
 import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
 import EnterEmailPage from "./pages/auth/EmailPage";
 
 function App() {
+
     return (
         <div className="relative h-full w-full">
             <div className="absolute inset-0 -z-10 h-full w-full items-center px-5 py-24 bg-base-100" />
@@ -27,7 +28,6 @@ function App() {
                 <Route path="/" element={<HomePage />} />
                 <Route path="/product/:id" element={<ProductPage />} />
                 <Route path="/cart" element={<CartPage />} />
-                <Route path="/checkout" element={<CheckoutPage />} />
                 <Route path="/results" element={<ResultsPage />} />
                 <Route path="/order-success" element={<OrderSuccessPage />} />
                 <Route path="/order-cancel" element={<OrderCancelPage />} />

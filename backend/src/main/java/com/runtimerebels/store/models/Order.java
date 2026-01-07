@@ -25,7 +25,6 @@ import java.util.List;
 @Builder
 @Document(collection = "orders")
 public class Order {
-
     @Id
     private String id;
 
@@ -36,7 +35,6 @@ public class Order {
     private List<Integer> quantity;
     private List<BigDecimal> totalPrice;
     private OrderStatus orderStatus;
-    private String orderId;
     private Date createdAt;
     private String confirmationNumber;
     private Date processAt;
