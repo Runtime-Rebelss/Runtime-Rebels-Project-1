@@ -27,6 +27,11 @@ public class Product {
     private String externalId;
     private String sku;
     private List<String> categories;
+    /**
+     * Semantic embedding vector for Atlas Vector Search.
+     * Generated from product text (name/description/categories).
+     */
+    private List<Double> embedding;
 
     /**
      * Gets the product ID.
@@ -165,5 +170,21 @@ public class Product {
     */
     public void setCategories(List<String> categories) {
         this.categories = categories;
+    }
+
+    /**
+     * Gets the embedding vector.
+     * @return embedding vector, or null if not generated
+     */
+    public List<Double> getEmbedding() {
+        return embedding;
+    }
+
+    /**
+     * Sets the embedding vector.
+     * @param embedding embedding vector
+     */
+    public void setEmbedding(List<Double> embedding) {
+        this.embedding = embedding;
     }
 }

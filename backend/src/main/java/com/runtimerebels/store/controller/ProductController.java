@@ -1,21 +1,24 @@
 package com.runtimerebels.store.controller;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.runtimerebels.store.dao.ProductRepository;
 import com.runtimerebels.store.models.Product;
+import com.runtimerebels.store.search.EmbeddingService;
+import org.bson.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.beans.factory.ObjectProvider;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 /**
  * ProductController - REST API for managing products.
  * Can create, fetch, update, and delete products.
@@ -38,14 +41,29 @@ import java.util.Collections;
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
+    private static final Logger log = LoggerFactory.getLogger(ProductController.class);
+    private static final String FIELD_CATEGORIES = "categories";
+
     private final ProductRepository productRepository;
     private final MongoTemplate mongoTemplate;
+    private final EmbeddingService embeddingService;
+
+    @Value("${atlas.vector.index:product_embedding}")
+    private String atlasVectorIndex;
+
+    @Value("${atlas.vector.path:embedding}")
+    private String atlasVectorPath;
 
 
     @Autowired
-    public ProductController(ProductRepository productRepository, MongoTemplate mongoTemplate) {
+    public ProductController(
+            ProductRepository productRepository,
+            MongoTemplate mongoTemplate,
+            ObjectProvider<EmbeddingService> embeddingServiceProvider
+    ) {
         this.productRepository = productRepository;
         this.mongoTemplate = mongoTemplate;
+        this.embeddingService = embeddingServiceProvider.getIfAvailable();
     }
 
     /**
@@ -87,15 +105,28 @@ public class ProductController {
     @GetMapping("/results")
     public ResponseEntity<List<Product>> searchProducts(
         @RequestParam(name="categories", required = false) List<String> categories,
-        @RequestParam(name="search", required = false) String searchTerm
+        @RequestParam(name="search", required = false) String searchTerm,
+        @RequestParam(name="mode", required = false, defaultValue = "lexical") String mode,
+        @RequestParam(name="limit", required = false, defaultValue = "60") int limit
     ) {
+
+      // Semantic search path (Atlas Vector Search)
+      if ("semantic".equalsIgnoreCase(mode) && searchTerm != null && !searchTerm.isBlank()) {
+          try {
+              List<Product> semantic = semanticSearch(categories, searchTerm, limit);
+              return ResponseEntity.ok(semantic);
+          } catch (Exception e) {
+              // Fail open: if embeddings aren't configured or Atlas index is missing, fall back to lexical search.
+              log.warn("Semantic search unavailable; falling back to lexical. Reason: {}", e.getMessage());
+          }
+      }
 
       List<Criteria> criteriaList = new ArrayList<>();
 
       // If categories were supplied, match documents that have ALL of them (intersection)
       if (categories != null && 
         !categories.isEmpty()) {
-          criteriaList.add(Criteria.where("categories").all(categories));
+                    criteriaList.add(Criteria.where(FIELD_CATEGORIES).all(categories));
       }
 
       // If a search term is supplied, do a case-insensitive regex search across relevant fields
@@ -107,7 +138,7 @@ public class ProductController {
           Criteria searchCriteria = new Criteria().orOperator(
               Criteria.where("name").regex(regex),
               Criteria.where("slug").regex(regex),
-              Criteria.where("categories").regex(regex)
+              Criteria.where(FIELD_CATEGORIES).regex(regex)
           );
           criteriaList.add(searchCriteria);
       }
@@ -117,9 +148,74 @@ public class ProductController {
           qObj.addCriteria(new Criteria().andOperator(criteriaList.toArray(new Criteria[0])));
       }
 
+      if (limit > 0) {
+          qObj.limit(Math.min(limit, 200));
+      }
+
       List<Product> products = mongoTemplate.find(qObj, Product.class);
 
       return ResponseEntity.ok(products);
+    }
+
+    private List<Product> semanticSearch(List<String> categories, String searchTerm, int limit) {
+        if (embeddingService == null || !embeddingService.isEnabled()) {
+            throw new IllegalStateException("Embeddings API not configured");
+        }
+
+        int safeLimit = limit <= 0 ? 60 : Math.min(limit, 200);
+        int numCandidates = Math.max(100, safeLimit * 10);
+
+        List<Double> queryVector = embeddingService.embed(searchTerm);
+
+        Document vectorStage = new Document("$vectorSearch",
+                new Document("index", atlasVectorIndex)
+                        .append("path", atlasVectorPath)
+                        .append("queryVector", queryVector)
+                        .append("numCandidates", numCandidates)
+                        .append("limit", safeLimit)
+        );
+
+        // Optional filter: enforce category intersection (all categories)
+        if (categories != null && !categories.isEmpty()) {
+            vectorStage.get("$vectorSearch", Document.class)
+                    .append("filter", new Document(FIELD_CATEGORIES, new Document("$all", categories)));
+        }
+
+        List<Document> pipeline = new ArrayList<>();
+        pipeline.add(vectorStage);
+
+        // Include score metadata, but still return normal Product objects
+        pipeline.add(new Document("$project", new Document("score", new Document("$meta", "vectorSearchScore"))
+                .append("_id", 1)
+                .append("id", 1)
+                .append("name", 1)
+                .append("description", 1)
+                .append("price", 1)
+                .append("imageUrl", 1)
+                .append("slug", 1)
+                .append("externalId", 1)
+                .append("sku", 1)
+                .append("categories", 1)
+                .append("embedding", 1)
+        ));
+
+        List<Document> docs = mongoTemplate
+                .getCollection("products")
+                .aggregate(pipeline)
+                .into(new ArrayList<>());
+
+        return docs.stream()
+                .map(d -> {
+                    // Prefer converting from Mongo's internal _id to the Product.id field.
+                    Object mongoId = d.get("_id");
+                    if (mongoId != null && d.get("id") == null) {
+                        d.put("id", mongoId.toString());
+                    }
+                    d.remove("_id");
+                    d.remove("score");
+                    return mongoTemplate.getConverter().read(Product.class, d);
+                })
+                .toList();
     }
 
     /**

@@ -34,9 +34,18 @@ function useFetchProducts(inputParams, setProducts, setLoading, overrides = {}) 
      */
     const fetchProducts = async () => {
         try {
+            // Clone params so we can safely add derived fields without mutating memoized state.
+            const params = new URLSearchParams(mergedParams);
+
+            // When the user is doing a text search, prefer semantic search.
+            // (Category-only browsing stays lexical.)
+            if (params.has('search') && !params.has('mode')) {
+                params.set('mode', 'semantic');
+            }
+
             // If mergedParams has any entries, request /products/results with the query string,
             // otherwise request the base /products endpoint.
-            const qs = mergedParams ? mergedParams.toString() : '';
+            const qs = params ? params.toString() : '';
             const url = qs ? `/products/results?${qs}` : '/products';
             console.log(url);
             const response = await api.get(url);
