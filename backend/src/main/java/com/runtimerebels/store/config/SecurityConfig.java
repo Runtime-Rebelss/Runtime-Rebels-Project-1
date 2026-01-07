@@ -80,7 +80,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration c = new CorsConfiguration();
         // CRITICAL: Ensure this exactly matches your frontend URL
-        c.setAllowedOrigins(List.of("http://localhost:5173"));
+        c.setAllowedOrigins(List.of("https://runtime-rebelss.github.io/Runtime-Rebels-Project-1/"));
         c.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         c.setAllowedHeaders(List.of("*"));
         c.setAllowCredentials(true); // This tells the browser it's okay
