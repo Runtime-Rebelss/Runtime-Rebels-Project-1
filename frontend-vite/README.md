@@ -7,6 +7,16 @@ Welcome to landing page for our generated documentation!
 2. Make sure backend is up and running or else no products will load when starting the frontend!
 3. Run: `npm run dev`
 
+## Backend API (localhost vs deployed)
+This app reads the backend base URL from `VITE_API_BASE_URL`.
+
+- Dev (`npm run dev`) uses [frontend-vite/.env.development](frontend-vite/.env.development) (defaults to `http://localhost:8080/api`).
+- Prod build (`npm run build` / `npm run deploy`) uses [frontend-vite/.env.production](frontend-vite/.env.production) (defaults to Render).
+
+You can also override temporarily:
+- `VITE_API_BASE_URL=http://localhost:8080/api npm run dev`
+- `VITE_API_BASE_URL=https://scamazon-backend.onrender.com/api npm run build`
+
 ## Architecture Overview
 This project is for our COMP 380 class. Team members include Frank Gonzalez, Haley Kenney, Henry Locke, and Alexander Nima.
 

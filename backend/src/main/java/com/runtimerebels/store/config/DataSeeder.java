@@ -10,6 +10,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -50,6 +51,12 @@ public class DataSeeder {
                         p.setDescription(description);
                         p.setPrice(BigDecimal.valueOf(price));
                         p.setImageUrl(imageUrl);
+                        if (category != null && !category.isBlank()) {
+                            p.setCategories(List.of(category.toLowerCase()));
+                        }
+                        if (name != null && !name.isBlank()) {
+                            p.setSlug(name.toLowerCase().trim().replaceAll("[^a-z0-9]+", "-").replaceAll("(^-|-$)", ""));
+                        }
                         repository.save(p);
                         System.out.println("Added: " + name + " (" + category + ")");
                     }

@@ -1,7 +1,16 @@
 import axios from "axios";
 
+const defaultBaseURL = import.meta.env.DEV
+    ? "http://localhost:8080/api"
+    : "https://scamazon-backend.onrender.com/api";
+
+// Set via Vite env vars:
+// - .env.development / .env.production
+// - or shell: VITE_API_BASE_URL=... npm run dev|build
+const baseURL = import.meta.env.VITE_API_BASE_URL || defaultBaseURL;
+
 const api = axios.create({
-    baseURL : "https://scamazon-backend.onrender.com/api",
+    baseURL,
     withCredentials : true,
     headers: {
         'Content-Type': 'application/json',

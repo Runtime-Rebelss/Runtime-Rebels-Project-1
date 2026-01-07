@@ -161,6 +161,25 @@ class ProductControllerTest {
     }
 
     @Test
+    @DisplayName("GET /api/products/results expands 'shoe' to include 'sneaker' in regex")
+    void searchProducts_searchOnly_expandsShoeSynonyms() throws Exception {
+        List<Product> results = Arrays.asList(makeProduct("s2", "Sneakers"));
+        given(mongoTemplate.find(any(Query.class), eq(Product.class))).willReturn(results);
+
+        mockMvc.perform(get("/api/products/results").param("search", "shoe").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].id", is("s2")));
+
+        ArgumentCaptor<Query> cap = ArgumentCaptor.forClass(Query.class);
+        verify(mongoTemplate).find(cap.capture(), eq(Product.class));
+        String q = cap.getValue().getQueryObject().toJson().toLowerCase();
+
+        org.junit.jupiter.api.Assertions.assertEquals(true, q.contains("shoe"), "Expected query to contain 'shoe'. Actual: " + q);
+        org.junit.jupiter.api.Assertions.assertEquals(true, q.contains("sneaker"), "Expected query to contain 'sneaker'. Actual: " + q);
+    }
+
+    @Test
     @DisplayName("GET /api/products/results with categories and search term combined")
     void searchProducts_categoriesAndSearch() throws Exception {
         List<Product> results = Arrays.asList(makeProduct("cs1", "CombinedProd"));
