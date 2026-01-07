@@ -259,7 +259,7 @@ const Navbar = ({hideCart = false, hideCartCount = false}) => {
                             {categories.map((cat) => (
                                 <li key={cat} className="whitespace-nowrap">
                                     <Link
-                                        to={`/results?${buildMergedParams(searchParams, {
+                                        to={`/results?${buildMergedParams(undefined, {
                                             categories: [formatString(cat)],
                                         }).toString()}`}
                                         className="font-semibold hover:text-primary transition"
