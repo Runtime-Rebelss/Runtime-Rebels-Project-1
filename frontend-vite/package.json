@@ -1,5 +1,6 @@
 {
   "name": "frontend-vite",
+  "homepage": "https://Runtime-Rebelss.github.io/Runtime-Rebels-Project-1/",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,6 +10,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@stripe/react-stripe-js": "^5.4.1",
@@ -20,6 +23,7 @@
     "deep-email-validator": "^0.1.21",
     "flowbite": "^3.1.2",
     "flowbite-react": "^0.12.9",
+    "gh-pages": "^6.3.0",
     "js-cookie": "^3.0.5",
     "lucide-react": "^0.544.0",
     "react": "^19.1.1",
