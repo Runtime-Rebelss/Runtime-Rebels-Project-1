@@ -5,7 +5,7 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig(({ mode }) => ({
     // GitHub Pages project site base URL: https://<user>.github.io/Runtime-Rebels-Project-1/
     // Keep dev server working at '/', but build for the Pages sub-path.
-    base: mode === 'production' ? '/Runtime-Rebels-Project-1/' : '/',
+    base: '/Runtime-Rebels-Project-1/',
     plugins: [
         react(),
         tailwindcss()
