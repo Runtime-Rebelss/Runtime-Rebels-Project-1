@@ -25,7 +25,12 @@ public class WebConfig {
             @Override
             public void addCorsMappings(@NonNull CorsRegistry registry) {
                 registry.addMapping("/api/**")
-                        .allowedOrigins("https://runtime-rebelss.github.io/Runtime-Rebels-Project-1/") // Frontend URL
+                        // NOTE: CORS "origins" must NOT include a path (only scheme + host + optional port).
+                        // GitHub Pages for a project site runs at origin https://runtime-rebelss.github.io
+                        .allowedOriginPatterns(
+                                "http://localhost:*",
+                                "https://runtime-rebelss.github.io"
+                        )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true)

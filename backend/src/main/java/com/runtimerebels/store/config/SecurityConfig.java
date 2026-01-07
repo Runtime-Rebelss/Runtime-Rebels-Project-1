@@ -15,7 +15,10 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import java.util.List;
+import java.util.stream.Stream;
 
 @Configuration
 @EnableWebSecurity
@@ -24,6 +27,13 @@ public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
+
+    /**
+     * Comma-separated list of allowed browser origins.
+     * Example: https://runtime-rebelss.github.io,http://localhost:5173
+     */
+    @Value("${app.cors.allowed-origins:https://runtime-rebelss.github.io,http://localhost:5173}")
+    private String corsAllowedOrigins;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -79,8 +89,13 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration c = new CorsConfiguration();
-        // CRITICAL: Ensure this exactly matches your frontend URL
-        c.setAllowedOrigins(List.of("https://runtime-rebelss.github.io/Runtime-Rebels-Project-1/"));
+        // CORS "origins" must not include a path; they must match the browser Origin header exactly.
+        // Use env var/property to override on Render.
+        List<String> allowedOrigins = Stream.of(corsAllowedOrigins.split(","))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .toList();
+        c.setAllowedOrigins(allowedOrigins);
         c.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         c.setAllowedHeaders(List.of("*"));
         c.setAllowCredentials(true); // This tells the browser it's okay
