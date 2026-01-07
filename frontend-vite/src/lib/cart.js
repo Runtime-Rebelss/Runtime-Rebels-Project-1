@@ -1,6 +1,5 @@
 import api from "./axios";
 import Cookies from "js-cookie"
-import addressLib from "./addresses.js";
 import normalizeItem from "../components/actions/normalizeItem.js";
 
 const GUEST_KEY = "guestCart";
@@ -276,23 +275,6 @@ export async function removeItem(...args) {
 export async function handleCheckout(userId, signal) {
     const userEmail = Cookies.get("userEmail");
 
-    let addressId = null;
-    if (userId) {
-        try {
-            const resp = await addressLib.getAddressesByUserId(userId);
-            const addrs = resp?.data ?? [];
-            const def = addrs.find(a => a?.isDefault) || null;
-            addressId = def?.id ?? def?._id ?? null;
-        } catch (err) {
-            try {
-                const resp2 = await addressLib.getDefaultAddressById(userId);
-                addressId = resp2?.data?.id ?? resp2?.data?._id ?? null;
-            } catch (err2) {
-                addressId = null;
-            }
-        }
-    }
-
     if (!userId) {
         const {items} = loadGuestCart();
         // Save the order info as an array of items (OrderSuccessPage expects an array)
@@ -300,25 +282,26 @@ export async function handleCheckout(userId, signal) {
         localStorage.setItem("pendingGuestOrder", JSON.stringify(items));
 
         const cartItems = items.map(item => ({
-                name: item.name,
-                unitAmount: Math.round(item.price * 100),
-                currency: "usd",
-                quantity: item.quantity,
+            name: item.name,
+            unitAmount: Math.round(item.price * 100),
+            currency: "usd",
+            quantity: item.quantity,
         }));
 
         const response = await api.post("/payments/create-checkout-session", {
             items: cartItems,
             customerEmail: Cookies.get("userEmail") || null,
             metadata: {
-                checkoutType: userId ? "server" : "guest",
-                userId: userId || "guest",
-                addressId: addressId || null,
+                checkoutType: "guest",
+                userId: "guest",
             },
             savePaymentMethod: false,
         }, {signal});
+
         return response.data.url;
     }
 
+    // Server-side user
     const serverItems = await loadServerCart(userId, signal);
 
     // Save the order info
@@ -335,9 +318,8 @@ export async function handleCheckout(userId, signal) {
     const response = await api.post("/payments/create-checkout-session", {
         items: cartItems,
         customerEmail: userEmail,
-        addressId: addressId || null,
         metadata: {
-            checkoutType: userId ? "server" : "guest",
+            checkoutType: "server",
             userId: userId || "guest",
         },
         savePaymentMethod: true,

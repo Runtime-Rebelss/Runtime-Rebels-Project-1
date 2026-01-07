@@ -52,10 +52,32 @@ public class StripeSessionController {
             Map<String, Object> shipping = new HashMap<>();
             shipping.put("name", session.getShippingDetails().getName());
 
+            // include phone if present on shipping details
+            try {
+                if (session.getShippingDetails().getPhone() != null) {
+                    shipping.put("phone", session.getShippingDetails().getPhone());
+                }
+            } catch (Exception ignored) {
+            }
+
             Map<String, Object> addr = new HashMap<>();
             addr.put("line1", session.getShippingDetails().getAddress().getLine1());
-            addr.put("city", session.getShippingDetails().getAddress().getCity());
-            addr.put("state", session.getShippingDetails().getAddress().getState());
+            // line2 may be null
+            try {
+                addr.put("line2", session.getShippingDetails().getAddress().getLine2());
+            } catch (Exception ignored) {}
+            try {
+                addr.put("postal_code", session.getShippingDetails().getAddress().getPostalCode());
+            } catch (Exception ignored) {}
+            try {
+                addr.put("country", session.getShippingDetails().getAddress().getCountry());
+            } catch (Exception ignored) {}
+            try {
+                addr.put("city", session.getShippingDetails().getAddress().getCity());
+            } catch (Exception ignored) {}
+            try {
+                addr.put("state", session.getShippingDetails().getAddress().getState());
+            } catch (Exception ignored) {}
 
             shipping.put("address", addr);
             response.put("shipping_details", shipping);

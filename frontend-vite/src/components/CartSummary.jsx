@@ -18,22 +18,10 @@ const CartSummary = ({items = [], onCheckout, onContinue, loading = false, userI
                         Shipping and total calculated at checkout.
                     </p>
                     <div className="card-actions mt-4">
-                        {userId ? (
-                        <Link to="/checkout" className="w-full">
-                        <button
-                            className="btn btn-primary w-full"
-                            disabled={!Array.isArray(items) || items.length === 0 || loading}
-                        >
-                            {loading ? 'Processing…' : 'Proceed to Checkout'}
-                        </button>
-                        </Link>
-                        ) : (
                         <button
                             className="btn btn-primary w-full"
                             onClick={() => onCheckout ? onCheckout() : null}>Pay with Stripe
                             </button>
-                    )}
-
                         <button
                             className="btn btn-outline w-full"
                             onClick={() => onContinue ? onContinue() : null}

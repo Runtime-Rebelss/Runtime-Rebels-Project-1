@@ -2,15 +2,8 @@ package com.runtimerebels.store.controller;
 
 import com.runtimerebels.store.dao.CartRepository;
 import com.runtimerebels.store.dao.OrderRepository;
-import com.runtimerebels.store.dao.AddressRepository;
 import com.runtimerebels.store.models.dto.CheckoutRequest;
-import com.runtimerebels.store.models.dto.PaymentRequest;
-import com.runtimerebels.store.models.dto.PaymentResponse;
-import com.runtimerebels.store.services.PaymentService;
-import com.runtimerebels.store.models.Address;
 import com.stripe.model.checkout.Session;
-import com.stripe.param.checkout.SessionCreateParams;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -41,38 +34,11 @@ public class PaymentController {
     @Autowired
     private OrderRepository orderRepository;
 
-    @Autowired
-    private AddressRepository addressRepository;
-
     @Value("${frontend.successUrl}")
     private String successUrl;
 
     @Value("${frontend.cancelUrl}")
     private String cancelUrl;
-
-    private final PaymentService paymentService;
-
-    @Autowired
-    public PaymentController(PaymentService paymentService) {
-        this.paymentService = paymentService;
-    }
-
-    @PostMapping("/create-payment-intent")
-    public ResponseEntity<PaymentResponse> createPaymentIntent(@RequestBody PaymentRequest paymentRequest) {
-        try {
-            PaymentIntent paymentIntent = paymentService.createPaymentIntent(paymentRequest);
-            PaymentResponse paymentResponse = new PaymentResponse(
-                    paymentIntent.getId(),
-                    paymentIntent.getClientSecret(),
-                    paymentIntent.getAmount(),
-                    paymentIntent.getCurrency(),
-                    paymentIntent.getStatus()
-            );
-            return ResponseEntity.ok(paymentResponse);
-        } catch (Exception e) {
-            return ResponseEntity.status(500).build();
-        }
-    }
 
     /**
      * Creates a new Stripe Checkout Session for the given order request.
@@ -154,36 +120,6 @@ public class PaymentController {
         // Ask Stripe to collect the customer's email at checkout
         params.put("customer_creation", "always");
         params.put("submit_type", "pay");
-
-        // include email if already known (logged-in users)
-        if (req.customerEmail() != null && !req.customerEmail().isBlank()) {
-            params.put("customer_email", req.customerEmail());
-        }
-
-        // If an addressId was provided, fetch the address and prefill shipping details
-        if (req.addressId() != null && !req.addressId().isBlank()) {
-            addressRepository.findById(req.addressId()).ifPresent(addr -> {
-                try {
-                    Map<String, Object> addrMap = new HashMap<>();
-                    addrMap.put("line1", addr.getAddress());
-                    addrMap.put("line2", addr.getUnit());
-                    addrMap.put("city", addr.getCity());
-                    addrMap.put("state", addr.getState());
-                    addrMap.put("postal_code", addr.getZipCode());
-                    addrMap.put("country", (addr.getCountry() == null || addr.getCountry().isBlank()) ? "US" : addr.getCountry());
-
-                    Map<String, Object> shipping = new HashMap<>();
-                    shipping.put("name", addr.getName());
-                    shipping.put("phone", addr.getPhoneNumber());
-                    shipping.put("address", addrMap);
-
-                    params.put("shipping", shipping);
-                } catch (Exception e) {
-                    // swallowing errors to avoid failing checkout creation
-                    System.err.println("Failed to attach shipping info to Stripe session: " + e.getMessage());
-                }
-            });
-        }
 
         // Create the session using a raw params map to be compatible across stripe-java versions
         Session session = Session.create(params);

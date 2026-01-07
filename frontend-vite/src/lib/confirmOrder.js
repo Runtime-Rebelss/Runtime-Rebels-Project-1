@@ -33,23 +33,45 @@ export async function confirmOrder({
     const params = new URLSearchParams(window.location.search);
     const sessionId = params.get("session_id");
 
+    // Try to fetch Stripe session (if present) once and reuse below
+    let stripeSession = null;
+    if (sessionId) {
+        try {
+            const stripeRes = await fetch(`http://localhost:8080/api/stripe/session/${sessionId}`);
+            stripeSession = await stripeRes.json();
+            // console.debug('Stripe session loaded in confirmOrder', stripeSession);
+        } catch (err) {
+            console.warn('Failed to fetch Stripe session:', err);
+            stripeSession = null;
+        }
+    }
+
+    // Normalize shipping/customer from stripeSession if available
+    const shipping = stripeSession?.shipping_details || {};
+    const address = shipping?.address || {};
+    const stripeDelivery = {
+        deliveryName: shipping?.name || stripeSession?.customer_details?.name || fullName || 'Guest',
+        deliveryContact: stripeSession?.customer_details?.phone || shipping?.phone || '',
+        deliveryAddress: address?.line1 || '',
+        deliveryAddress2: address?.line2 || '',
+        deliveryCity: address?.city || '',
+        deliveryState: address?.state || '',
+        deliveryPostalCode: address?.postal_code || address?.postalCode || '',
+        deliveryCountry: address?.country || '',
+    };
+
     let guestEmail = userEmail;
     let guestName = fullName;
 
     if (!userId && sessionId && (!userEmail || userEmail === "Valued Customer")) {
         try {
-            const stripeRes = await fetch(
-                `http://localhost:8080/api/stripe/session/${sessionId}`
-            );
-            const stripeSession = await stripeRes.json();
-            guestEmail =
-                stripeSession["customer_email"] ||
-                stripeSession.customer_details?.email ||
-                userEmail;
-            guestName =
-                stripeSession.shipping_details?.name ||
-                stripeSession.customer_details?.name ||
-                fullName;
+            // If we fetched stripeSession above, reuse it; otherwise fetch again
+            const stripe = stripeSession || (await (await fetch(`http://localhost:8080/api/stripe/session/${sessionId}`)).json());
+            const stripeSessionEmail = stripe["customer_email"] || stripe.customer_details?.email;
+            const stripeSessionName = stripe.shipping_details?.name || stripe.customer_details?.name;
+
+            guestEmail = stripeSessionEmail || guestEmail;
+            guestName = stripeSessionName || guestName;
 
             if (guestEmail && guestEmail !== "guest") {
                 Cookies.set("userEmail", guestEmail);
@@ -110,6 +132,15 @@ export async function confirmOrder({
             quantity: normalizedItems.map((it) => it.quantity),
             totalPrice: normalizedItems.map((it) => it.price * it.quantity),
             stripeSessionId: sessionId,
+            // include shipping info from stripe if available
+            deliveryName: stripeDelivery.deliveryName,
+            deliveryContact: stripeDelivery.deliveryContact,
+            deliveryAddress: stripeDelivery.deliveryAddress,
+            deliveryAddress2: stripeDelivery.deliveryAddress2,
+            deliveryCity: stripeDelivery.deliveryCity,
+            deliveryState: stripeDelivery.deliveryState,
+            deliveryPostalCode: stripeDelivery.deliveryPostalCode,
+            deliveryCountry: stripeDelivery.deliveryCountry,
         };
 
         // SAVE TO BACKEND
@@ -125,6 +156,15 @@ export async function confirmOrder({
                 (s, it) => s + it.price * it.quantity,
                 0
             ),
+            // store the delivery fields locally too so Success page can show them
+            deliveryName: guestPayload.deliveryName,
+            deliveryContact: guestPayload.deliveryContact,
+            deliveryAddress: guestPayload.deliveryAddress,
+            deliveryAddress2: guestPayload.deliveryAddress2,
+            deliveryCity: guestPayload.deliveryCity,
+            deliveryState: guestPayload.deliveryState,
+            deliveryPostalCode: guestPayload.deliveryPostalCode,
+            deliveryCountry: guestPayload.deliveryCountry,
         };
 
         const existing = orderLib.readLocalOrders() || [];
@@ -242,6 +282,15 @@ export async function confirmOrder({
         paymentStatus: "Paid",
         orderStatus: "PENDING",
         createdAt: new Date().toISOString(),
+        // include shipping info from stripe if present
+        deliveryName: stripeDelivery.deliveryName,
+        deliveryContact: stripeDelivery.deliveryContact,
+        deliveryAddress: stripeDelivery.deliveryAddress,
+        deliveryAddress2: stripeDelivery.deliveryAddress2,
+        deliveryCity: stripeDelivery.deliveryCity,
+        deliveryState: stripeDelivery.deliveryState,
+        deliveryPostalCode: stripeDelivery.deliveryPostalCode,
+        deliveryCountry: stripeDelivery.deliveryCountry,
     };
 
     const created = await api.post(`/orders/create/${userId}`, orderPayload);

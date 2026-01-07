@@ -5,8 +5,50 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="490eb471-27ba-452a-a743-0abb1600bcb9" name="Changes" comment="Updated address code for checkout">
+      <change afterPath="$PROJECT_DIR$/frontend-vite/src/components/ForgotPasswordCard.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/CheckoutAddresses.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/CheckoutAddresses.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/AddressController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/OrderController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/PaymentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/PaymentController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/StripeSessionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/controller/StripeSessionController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/dao/AddressRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/Address.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/dto/CartItemResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/dto/CartResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/dto/PaymentRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/models/dto/PaymentResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/runtimerebels/store/services/PaymentService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/AddressCard.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/AddressCard2.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/CartContent.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/CartContent.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/CartSummary.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/CartSummary.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/Checkout.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/CheckoutAddresses.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/CheckoutCard.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/CheckoutForm.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/CheckoutSummary.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/EditAddress.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/OrderCard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/OrderCard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/ResetPassword.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/ResetPassword.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/components/UserInfo.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/components/UserInfo.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/addresses.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/cart.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/lib/cart.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/checkout.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/lib/checkout.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/lib/confirmOrder.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/lib/confirmOrder.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/AccountPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/AccountPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/AddAddressPage.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/AddressesPage.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/CheckoutAddressPage.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/EditAddressPage.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/UserInfoPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/Auth/UserInfoPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/CartPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-vite/src/pages/CartPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/CheckoutPage.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-vite/src/pages/PaymentPage.jsx" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,7 +136,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Spring Boot.ShoppingCartApplication.executor": "Run",
     "Spring Boot.StoreApplication.executor": "Run",
-    "git-widget-placeholder": "addresses-henry",
+    "git-widget-placeholder": "Refactored-Cart-henry",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/wlock/OneDrive/Documents/Runtime-Rebels-Final/Runtime-Rebels-Project-1/backend/src/main/java/com/runtimerebels/store/services",

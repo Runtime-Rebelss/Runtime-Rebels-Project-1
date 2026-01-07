@@ -94,36 +94,6 @@ const AccountPage = () => {
                     </p>
                 ) : (
                     <div className="grid gap-6 md:grid-cols-2">
-                        {/* LOGIN & SECURITY */}
-                        <section
-                            className="card bg-base-200 shadow-md hover:shadow-lg transition cursor-pointer"
-                            onClick={() => (window.location.href = "/account/manage")}
-                        >
-                            <div className="card-body">
-                                <h2 className="card-title">Login & Security</h2>
-                                <p className="text-sm text-base-content/70">
-                                    Edit login, and name
-                                </p>
-                                <button className="btn btn-primary btn-sm mt-3 w-fit">
-                                    View Login
-                                </button>
-                            </div>
-                        </section>
-                        {/* YOUR ADDRESSES */}
-                        <section
-                            className="card bg-base-200 shadow-md hover:shadow-lg transition cursor-pointer"
-                            onClick={() => (window.location.href = "/account/addresses")}
-                        >
-                            <div className="card-body">
-                                <h2 className="card-title">Your Addresses</h2>
-                                <p className="text-sm text-base-content/70">
-                                    Edit and view your addresses
-                                </p>
-                                <button className="btn btn-primary btn-sm mt-3 w-fit">
-                                    View Addresses
-                                </button>
-                            </div>
-                        </section>
                         {/* YOUR PAYMENTS */}
                         <section className="card bg-base-200 shadow-md hover:shadow-lg transition">
                             <div className="card-body">
@@ -170,6 +140,21 @@ const AccountPage = () => {
                                 </p>
                                 <button className="btn btn-primary btn-sm mt-3 w-fit">
                                     View Orders
+                                </button>
+                            </div>
+                        </section>
+                        {/* LOGIN & SECURITY */}
+                        <section
+                            className="card bg-base-200 shadow-md hover:shadow-lg transition cursor-pointer"
+                            onClick={() => (window.location.href = "/account/manage")}
+                        >
+                            <div className="card-body">
+                                <h2 className="card-title">Login & Security</h2>
+                                <p className="text-sm text-base-content/70">
+                                    Edit login, and name
+                                </p>
+                                <button className="btn btn-primary btn-sm mt-3 w-fit">
+                                    View Login
                                 </button>
                             </div>
                         </section>

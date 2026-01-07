@@ -1,13 +1,10 @@
 import React from "react";
-import { Link } from "react-router";
-import toast from "react-hot-toast";
 import orderLib from "../lib/orders.js";
-import orderService from "../lib/orderService";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import Cookies from "js-cookie";
 
 
-function OrderCard({ order, detailsPage = false }) {
+function OrderCard({order, detailsPage = false}) {
     const navigate = useNavigate();
     const orderId = order?.id || order?._id || "unknown-id";
     const orderDate = orderLib.fmtDate(order?.createdAt || order?.date || Date.now());
@@ -21,7 +18,8 @@ function OrderCard({ order, detailsPage = false }) {
         <div
             className="card bg-base-100 border border-base-300 overflow-hidden"
         >
-            <div className="bg-base-200/60 border border-base-300 px-4 py-3 grid grid-cols-1 md:grid-cols-4 gap-2 text-sm">
+            <div
+                className="bg-base-200/60 border border-base-300 px-4 py-3 grid grid-cols-1 md:grid-cols-4 gap-2 text-sm">
                 <div>
                     <div className="font-medium">Order Placed</div>
                     <div className="opacity-70">
@@ -35,16 +33,15 @@ function OrderCard({ order, detailsPage = false }) {
                 <div>
                     <div className="font-medium">Ship to</div>
                     {/* Add Address stuff here, pull from order address */}
-                    <div className="opacity-70 tooltip tooltip-bottom" data-tip={fullName + order.deliveryAddress}>
-                        {fullName
-                            || (order.shipTo?.fullName && order.shipTo.fullName !== "Guest Checkout" ? order.shipTo.fullName : "Guest")}
-                    </div>
+                    {fullName || (order.shipTo?.fullName && order.shipTo.fullName
+                    !== "Guest Checkout" ? order.shipTo.fullName : "Guest")}
                 </div>
                 <div className="md:text-right">
                     <div className="font-medium">Order ID</div>
                     <div className="opacity-70">{orderId}</div>
                     {detailsPage === false ? (
-                        <button className="text-primary-600 text-sm hover:underline text-gray-900" onClick={() => navigate(`/details/${orderId}`)}> View Order Details</button>
+                        <button className="text-primary-600 text-sm hover:underline text-gray-900"
+                                onClick={() => navigate(`/details/${orderId}`)}> View Order Details</button>
                     ) : null}
                 </div>
             </div>
@@ -60,7 +57,7 @@ function OrderCard({ order, detailsPage = false }) {
                                 src={it.imageUrl || it.image}
                                 alt={it.name}
                                 className="max-w-full max-h-full object-contain"
-                                style={{ filter: "drop-shadow(0px 1px 2px rgba(0,0,0,0.12))" }}
+                                style={{filter: "drop-shadow(0px 1px 2px rgba(0,0,0,0.12))"}}
                             />
                         </div>
                         <div className="flex-1 min-w-0">

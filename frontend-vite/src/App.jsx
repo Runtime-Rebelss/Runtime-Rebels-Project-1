@@ -4,7 +4,6 @@ import { Routes, Route, Outlet } from "react-router-dom";
 import ProductPage from "./pages/ProductPage";
 import HomePage from "./pages/HomePage";
 import CartPage from "./pages/CartPage";
-import CheckoutPage from "./pages/CheckoutPage.jsx";
 import ResultsPage from "./pages/ResultsPage";
 import OrderSuccessPage from "./pages/OrderSuccessPage.jsx";
 import OrderCancelPage from "./pages/OrderCancelPage.jsx";
@@ -19,10 +18,6 @@ import AddProductPage from "./pages/AddProductPage.jsx";
 import UserInfoPage from "./pages/auth/UserInfoPage";
 import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
 import EnterEmailPage from "./pages/auth/EmailPage";
-import AddressesPage from "./pages/auth/AddressesPage";
-import AddAddressPage from "./pages/auth/AddAddressPage.jsx";
-import EditAddressPage from "./pages/auth/EditAddressPage.jsx";
-import CheckoutAddressPage from "./pages/auth/CheckoutAddressPage.jsx";
 
 function App() {
 
@@ -33,8 +28,6 @@ function App() {
                 <Route path="/" element={<HomePage />} />
                 <Route path="/product/:id" element={<ProductPage />} />
                 <Route path="/cart" element={<CartPage />} />
-                <Route path="/checkout" element={<CheckoutPage />} />
-                <Route path="/checkout/address" element={<CheckoutAddressPage />} />
                 <Route path="/results" element={<ResultsPage />} />
                 <Route path="/order-success" element={<OrderSuccessPage />} />
                 <Route path="/order-cancel" element={<OrderCancelPage />} />
@@ -49,9 +42,6 @@ function App() {
                 <Route path="/account/manage" element={<UserInfoPage />} />
                 <Route path="/reset-password" element={<ResetPasswordPage />} />
                 <Route path="/email-reset-password" element={<EnterEmailPage />} />
-                <Route path="/account/addresses" element={<AddressesPage />} />
-                <Route path="/account/add/address" element={<AddAddressPage />} />
-                <Route path="/account/edit/address/:id" element={<EditAddressPage />} />
             </Routes>
         </div>
     );

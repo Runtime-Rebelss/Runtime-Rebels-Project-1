@@ -7,6 +7,7 @@ import orderLib from "../../lib/orders.js";
 import orderService from "../../lib/orderService";
 import Cookies from "js-cookie"
 import UserInfo from "../../components/UserInfo";
+import ResetPassword from "../../components/ResetPassword.jsx";
 
 const UserInfoPage = () => {
     return (
@@ -18,6 +19,8 @@ const UserInfoPage = () => {
                 </h1>
                 <div className="container mx-auto px-4 py-8">
                     <UserInfo/>
+                    {/* UPDATE PASSWORD */}
+                    <ResetPassword/>
                 </div>
             </div>
         </div>

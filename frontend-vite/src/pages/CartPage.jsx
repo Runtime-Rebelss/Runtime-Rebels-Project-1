@@ -1,7 +1,6 @@
 import React, {useEffect, useState, useRef} from 'react'
 import Navbar from '../components/Navbar';
 import cartLib from "../lib/cart.js";
-import checkoutLib from "../lib/checkout.js";
 import Cookies from "js-cookie"
 import CartContent from '../components/CartContent.jsx';
 import CartSummary from '../components/CartSummary.jsx';
@@ -21,7 +20,18 @@ const CartPage = () => {
     const {handleUpdateQuantity, handleRemove} = cartHandler({
         setCartItems,
         ignoreNextCartUpdatedRef,
+        getUserId: () => Cookies.get("userId"),
     });
+
+    const handleCheckout = async () => {
+        try {
+            const url = await cartLib.handleCheckout(Cookies.get("userId"));
+            if (url) window.location.href = url;
+        } catch (err) {
+            console.error('Checkout failed', err);
+            alert('Failed to start checkout. Please try again.');
+        }
+    };
 
     useEffect(() => {
         const ac = new AbortController();
@@ -114,7 +124,7 @@ const CartPage = () => {
                         <CartSummary
                             items={cartItems}
                             loading={loading}
-                            onCheckout={checkoutLib.handleCheckout}
+                            onCheckout={handleCheckout}
                             onContinue={() => navigate('/')}
                             userId={userId}
                         />

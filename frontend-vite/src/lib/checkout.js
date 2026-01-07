@@ -100,24 +100,7 @@ export const handleCheckout = async () => {
         const customerEmail = Cookies.get('userEmail') || null;
         const body = { items: payloadItems, customerEmail };
 
-        // If logged in, include addressId (default or first) so backend can prefill Stripe customer/shipping
-        if (userId) {
-            try {
-                const { data: addresses } = await api.get(`/address/user/${encodeURIComponent(userId)}`);
-                if (Array.isArray(addresses) && addresses.length > 0) {
-                    const defaultAddr = addresses.find(a => a.default) || addresses[0];
-                    body.addressId = defaultAddr?.id ?? defaultAddr?._id ?? null;
-                }
-            } catch (err) {
-                console.warn('Unable to fetch addresses for checkout', err);
-            }
-
-            // If we still don't have an addressId, ask user to set one and stop
-            if (!body.addressId) {
-                alert('Please add and set a default shipping address in your account before checking out.');
-                return;
-            }
-        }
+        // Previously address lookup blocked checkout. Address management removed; proceed without addressId.
 
         const response = await api.post('/payments/create-checkout-session', body);
         const {url} = response.data;
