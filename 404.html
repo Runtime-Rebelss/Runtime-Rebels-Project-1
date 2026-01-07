@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scamazon</title>
+    <!--
+      GitHub Pages SPA fallback:
+      Redirects deep links (e.g. /Runtime-Rebels-Project-1/order-success)
+      to /Runtime-Rebels-Project-1/?/order-success so the SPA router can handle it.
+
+      Based on the widely-used "spa-github-pages" approach.
+    -->
+    <script type="text/javascript">
+      (function () {
+        var l = globalThis.location;
+        // Keep 1 path segment for GitHub Pages project sites: /<repo-name>/
+        var pathSegmentsToKeep = 1;
+
+        l.replace(
+          l.protocol +
+            '//' +
+            l.hostname +
+            (l.port ? ':' + l.port : '') +
+            l.pathname
+              .split('/')
+              .slice(0, 1 + pathSegmentsToKeep)
+              .join('/') +
+            '/?/' +
+            l.pathname
+              .split('/')
+              .slice(1 + pathSegmentsToKeep)
+              .join('/')
+              .replaceAll('&', '~and~') +
+            (l.search ? '&' + l.search.slice(1).replaceAll('&', '~and~') : '') +
+            l.hash
+        );
+      })();
+    </script>
+  </head>
+  <body></body>
+</html>

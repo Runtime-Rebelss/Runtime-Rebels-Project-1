@@ -5,6 +5,25 @@
     <link rel="icon" type="image/svg+xml" href="/Runtime-Rebels-Project-1/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Scamazon</title>
+    <!--
+      GitHub Pages SPA deep-link support.
+      Works with the companion /public/404.html redirect.
+    -->
+    <script type="text/javascript">
+      (function (l) {
+        if (l.search && l.search.length > 1 && l.search[1] === '/') {
+          var decoded = l.search
+            .slice(1)
+            .split('&')
+            .map(function (s) {
+              return s.replaceAll('~and~', '&');
+            })
+            .join('?');
+
+          globalThis.history.replaceState(null, '', l.pathname.slice(0, -1) + decoded + l.hash);
+        }
+      })(globalThis.location);
+    </script>
     <script type="module" crossorigin src="/Runtime-Rebels-Project-1/assets/index-BzdTnDie.js"></script>
     <link rel="stylesheet" crossorigin href="/Runtime-Rebels-Project-1/assets/index-B0xDGKR7.css">
   </head>
