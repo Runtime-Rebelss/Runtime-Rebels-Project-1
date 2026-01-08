@@ -29,7 +29,12 @@ public class WebConfig {
                         // GitHub Pages for a project site runs at origin https://runtime-rebelss.github.io
                         .allowedOriginPatterns(
                                 "http://localhost:*",
-                                "https://runtime-rebelss.github.io"
+                                "https://runtime-rebelss.github.io",
+                                "116.203.129.16",
+                                "116.203.134.67",
+                                "23.88.105.37",
+                                "128.140.8.200",
+                                "91.99.23.109"
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")

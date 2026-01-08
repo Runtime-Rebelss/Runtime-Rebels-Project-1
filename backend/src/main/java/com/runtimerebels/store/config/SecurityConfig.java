@@ -32,7 +32,7 @@ public class SecurityConfig {
      * Comma-separated list of allowed browser origins.
      * Example: https://runtime-rebelss.github.io,http://localhost:5173
      */
-    @Value("${app.cors.allowed-origins:https://runtime-rebelss.github.io,http://localhost:5173}")
+    @Value("${app.cors.allowed-origins:https://runtime-rebelss.github.io,http://localhost:5173,http://116.203.129.16,http://116.203.134.67,http://23.88.105.37,http://128.140.8.200,http://91.99.23.109}")
     private String corsAllowedOrigins;
 
     @Bean
@@ -42,7 +42,9 @@ public class SecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .cors(c -> c.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        // 1. CRITICAL: Explicitly allow the POST method for login first
+                        // 1. CRITICAL: Public health endpoint for cron jobs (no auth required)
+                        .requestMatchers(HttpMethod.GET, "/health").permitAll()
+                        // 2. CRITICAL: Explicitly allow the POST method for login first
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/signup").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/api/auth/email").permitAll()
