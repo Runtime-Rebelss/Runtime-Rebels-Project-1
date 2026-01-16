@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "name": "Henry Locke",
+    "github": "https://github.com/Hlocke124",
+    "linkedin": "https://www.linkedin.com/in/henry-locke-40a1662a2/",
+    "avatar": "assets/henrylocke.jpg"
+  },
+  {
+    "id": 2,
+    "name": "Frank Gonzalez",
+    "github": "https://github.com/FrankG37265",
+    "linkedin": "s",
+    "avatar": "https://avatars.githubusercontent.com/u/64822328?v=4"
+  },
+  {
+    "id": 3,
+    "name": "Haley Kenney",
+    "github": "https://github.com/haleykenney",
+    "linkedin": "r",
+    "avatar": "https://avatars.githubusercontent.com/u/105803964?v=4"
+  }
+]
