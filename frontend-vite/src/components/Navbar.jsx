@@ -249,12 +249,13 @@ const Navbar = ({hideCart = false, hideCartCount = false}) => {
                 </form>
             </div>
 
-            {/* ROW 2/3: centered categories bar, spaced more on large screens */}
+            {/* ROW 2/3: centered categories bar and end about page, spaced more on large screens */}
             <div className="border-t border-base-200">
-                <div className="px-4">
+                <div className="w-full flex items-center gap-4 px-4 py-2">
+                    {/* CATEGORIES */}
                     <nav className="w-full flex justify-center">
                         <ul
-                            className="flex gap-4 md:gap-8 xl:gap-12 py-2 text-sm md:text-base overflow-x-auto md:-ml-6"
+                            className="flex gap-4 md:gap-8 xl:gap-12 text-sm md:text-base overflow-x-auto md:-ml-6"
                         >
                             {categories.map((cat) => (
                                 <li key={cat} className="whitespace-nowrap">
@@ -270,6 +271,12 @@ const Navbar = ({hideCart = false, hideCartCount = false}) => {
                             ))}
                         </ul>
                     </nav>
+                    {/* ABOUT PAGE LINK */}
+                    <div className="flex justify-end">
+                        <Link to="/about" className="font-semibold hover:text-primary transition">
+                            About
+                        </Link>
+                    </div>
                 </div>
             </div>
         </div>
