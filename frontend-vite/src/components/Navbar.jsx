@@ -21,6 +21,8 @@ const Navbar = ({hideCart = false, hideCartCount = false}) => {
     const [cartCount, setCartCount] = useState(0);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
+    const userId = Cookies.get("userId");
+    const adminEmail = Cookies.get("adminEmail");
 
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
@@ -47,7 +49,6 @@ const Navbar = ({hideCart = false, hideCartCount = false}) => {
 
     // Initial load
     useEffect(() => {
-        const userId = Cookies.get("userId");
         const ac = new AbortController();
 
         (async () => {
@@ -72,7 +73,6 @@ const Navbar = ({hideCart = false, hideCartCount = false}) => {
     // Update count when cart changes
     useEffect(() => {
         const handler = async () => {
-            const userId = Cookies.get("userId");
             if (!userId) {
                 setCartCount(countFromGuest());
                 return;
@@ -131,9 +131,6 @@ const Navbar = ({hideCart = false, hideCartCount = false}) => {
         }
     };
 
-    const userEmail = Cookies.get("userEmail");
-    const adminEmail = Cookies.get("adminEmail");
-
     return (
         <div className="bg-base-100 shadow-sm sticky top-0 z-50 flex flex-col">
             {/* ROW 1: logo + (desktop) search + orders/account/cart */}
@@ -172,7 +169,7 @@ const Navbar = ({hideCart = false, hideCartCount = false}) => {
                     </Link>
 
                     {
-                        userEmail ? (
+                        userId ? (
                                 <div className="dropdown dropdown-hover">
                                     <div tabIndex={0} role="button" className="btn btn-ghost link-hover">
                                         <User/>
